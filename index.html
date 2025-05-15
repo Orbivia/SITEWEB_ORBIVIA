@@ -17,7 +17,7 @@
     header {
       background: rgb(231,161,22);
       color: white;
-      padding: 1rem;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -25,18 +25,12 @@
     }
 
     @keyframes slide-down {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .logo {
-      height: 40px;
+      height: 60px;
     }
 
     .logo-link {
@@ -75,11 +69,35 @@
       to { opacity: 1; }
     }
 
+    .steps, .values {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .step, .value {
+      background: white;
+      border-left: 6px solid rgb(231,161,22);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    .step h3, .value h3 {
+      margin-top: 0;
+    }
+
     footer {
       text-align: center;
       padding: 1rem;
       background: rgb(231,161,22);
       color: white;
+    }
+
+    a.email {
+      color: white;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -98,17 +116,59 @@
   </header>
 
   <main>
-    <h1>Expertise R&D – Électronique · Mécanique · Réglementaire</h1>
-    <p>
-      Orbivia accompagne les porteurs de projets innovants à toutes les étapes, de la preuve de concept jusqu’à l’industrialisation.
-    </p>
-    <p>
-      Nos prestations couvrent le développement électronique, la mécanique embarquée, les aspects réglementaires et normatifs, ainsi que la validation terrain.
-    </p>
+    <h1>Des services sur mesure pour vos projets technologiques</h1>
+
+    <div class="steps">
+      <div class="step">
+        <h3>Analyse du besoin</h3>
+        <p>Nous vous aidons à cibler votre besoin et les compétences techniques requises pour constituer un cahier des charges structuré.</p>
+      </div>
+      <div class="step">
+        <h3>Prototypage</h3>
+        <p>Nous vous accompagnons dans la réalisation d'une preuve de concept fonctionnelle et exploitable.</p>
+      </div>
+      <div class="step">
+        <h3>Validation</h3>
+        <p>Nous mettons en place des tests adaptés pour garantir la fiabilité de votre système vis-à-vis des exigences définies.</p>
+      </div>
+      <div class="step">
+        <h3>Pré-industrialisation</h3>
+        <p>Optimisation technique et économique de votre concept pour anticiper la production et la conformité réglementaire.</p>
+      </div>
+      <div class="step">
+        <h3>Certification</h3>
+        <p>Accompagnement aux essais réglementaires (sécurité électrique, CEM, biocompatibilité...) et constitution du dossier technique.</p>
+      </div>
+      <div class="step">
+        <h3>Industrialisation</h3>
+        <p>Mise en relation avec notre réseau de partenaires pour produire votre solution dans les meilleures conditions.</p>
+      </div>
+    </div>
+
+    <h2>Nos engagements</h2>
+
+    <div class="values">
+      <div class="value">
+        <h3>💸 Tarif compétitif</h3>
+        <p>Nous rendons le développement accessible à tous les porteurs de projets avec des tarifs justes.</p>
+      </div>
+      <div class="value">
+        <h3>⚡ Réactivité</h3>
+        <p>Notre atelier et nos partenaires nous permettent de prototyper rapidement vos idées.</p>
+      </div>
+      <div class="value">
+        <h3>🤝 Sérénité</h3>
+        <p>Nous travaillons par livrables, pas par heures : chaque mission est menée jusqu’à son terme.</p>
+      </div>
+      <div class="value">
+        <h3>🔍 Transparence</h3>
+        <p>Devis clairs, livrables définis, dépenses expliquées : vous gardez le contrôle.</p>
+      </div>
+    </div>
   </main>
 
   <footer>
-    © Orbivia – Tous droits réservés
+    Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 </body>
 </html>

@@ -1,3 +1,5 @@
+
+/* Base styles (déjà utilisés dans les pages) */
 body {
   font-family: sans-serif;
   margin: 0;
@@ -8,36 +10,86 @@ body {
 }
 
 header {
-  background: #20232a;
+  background: rgb(231,161,22);
   color: white;
-  padding: 1rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo {
-  height: 40px;
+  height: 60px;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
 }
 
 nav ul {
   list-style: none;
   display: flex;
   gap: 1rem;
+  margin: 0;
+  padding: 0;
 }
 
 nav a {
   color: white;
   text-decoration: none;
+  padding: 0.5rem;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 4px;
 }
 
-main {
-  padding: 2rem;
+nav a:hover {
+  background: white;
+  color: rgb(231,161,22);
 }
 
 footer {
   text-align: center;
   padding: 1rem;
-  background: #20232a;
+  background: rgb(231,161,22);
   color: white;
+}
+
+a.email {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav ul {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  nav a {
+    display: block;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .contact-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .gallery-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .steps, .values {
+    grid-template-columns: 1fr !important;
+    padding: 0 1rem;
+  }
 }

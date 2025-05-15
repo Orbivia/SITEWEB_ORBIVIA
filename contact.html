@@ -5,6 +5,55 @@
   <title>Contact - Orbivia</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      background: rgb(231,161,22);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slide-down 0.6s ease-out;
+    }
+
+    .logo {
+      height: 60px;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem;
+      transition: background 0.3s, color 0.3s;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      background: white;
+      color: rgb(231,161,22);
+    }
+
     .contact-container {
       display: flex;
       flex-wrap: wrap;
@@ -35,7 +84,7 @@
     }
 
     .contact-form button {
-      background-color: #20232a;
+      background-color: rgb(231,161,22);
       color: white;
       padding: 0.75rem 1.5rem;
       border: none;
@@ -45,18 +94,31 @@
     }
 
     .contact-form button:hover {
-      background-color: #444950;
+      background-color: #d6951d;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: rgb(231,161,22);
+      color: white;
+    }
+
+    a.email {
+      color: white;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="img/logo.png" alt="Logo Orbivia" class="logo">
+    <a href="index.html" class="logo-link">
+      <img src="img/logo.png" alt="Logo Orbivia" class="logo">
+    </a>
     <nav>
       <ul>
         <li><a href="index.html">Accueil</a></li>
         <li><a href="realisations.html">Réalisations</a></li>
-        <li><a href="equipements.html">Équipements</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
@@ -66,7 +128,7 @@
     <h1>Contactez-nous</h1>
     <div class="contact-container">
       <div class="contact-form">
-        <form action="mailto:contact@orbivia.fr" method="POST" enctype="text/plain">
+        <form action="mailto:pierre.charlier@orbivia.fr" method="POST" enctype="text/plain">
           <input type="text" name="name" placeholder="Votre nom" required>
           <input type="email" name="email" placeholder="Votre email" required>
           <textarea name="message" rows="6" placeholder="Votre message" required></textarea>
@@ -76,13 +138,13 @@
       <div class="contact-info">
         <h2>Orbivia</h2>
         <p>30 rue Jules Guesde<br>59390 Lys-lez-Lannoy</p>
-        <p>Email : <a href="mailto:contact@orbivia.fr">contact@orbivia.fr</a></p>
+        <p>Email : <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a></p>
       </div>
     </div>
   </main>
 
   <footer>
-    © Orbivia – Tous droits réservés
+    Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 </body>
 </html>
