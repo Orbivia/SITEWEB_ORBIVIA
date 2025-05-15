@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Réalisations - Orbivia</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .gallery-item {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .gallery-caption {
+      padding: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="img/logo.png" alt="Logo Orbivia" class="logo">
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="realisations.html">Réalisations</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Nos Réalisations</h1>
+    <div class="gallery-container">
+
+      <div class="gallery-item">
+        <img src="img/KeyDuino.png" alt="KeyDuino">
+        <div class="gallery-caption">KeyDuino</div>
+      </div>
+      <div class="gallery-item">
+        <img src="img/OzOne.jpg" alt="OzOne">
+        <div class="gallery-caption">OzOne</div>
+      </div>
+      <div class="gallery-item">
+        <img src="img/Videobook.png" alt="Videobook">
+        <div class="gallery-caption">Videobook</div>
+      </div>
+      <div class="gallery-item">
+        <img src="img/Photobooth.jpg" alt="Photobooth">
+        <div class="gallery-caption">Photobooth</div>
+      </div>
+      <div class="gallery-item">
+        <img src="img/Audiobook.jpg" alt="Audiobook">
+        <div class="gallery-caption">Audiobook</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © Orbivia – Tous droits réservés
+  </footer>
+</body>
+</html>
