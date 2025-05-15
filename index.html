@@ -88,7 +88,7 @@
     }
 
     .timeline-icon {
-      font-size: 2rem;
+      font-size: 1.2rem;
       line-height: 1;
       color: rgb(231,161,22);
     }
@@ -166,7 +166,65 @@
         padding: 0 1rem;
       }
     }
-  </style>
+  
+.valeurs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.valeur-item {
+  background: white;
+  border-left: 6px solid rgb(231,161,22);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+
+.valeurs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 0 2rem;
+}
+.valeur-item {
+  background: white;
+  border-left: 6px solid rgb(231,161,22);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+
+.timeline {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: white;
+  border-left: 6px solid rgb(231,161,22);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.timeline-icon {
+  font-size: 2rem;
+  color: rgb(231,161,22);
+}
+
+</style>
 </head>
 <body>
   <header>
@@ -183,6 +241,12 @@
   </header>
 
   <main>
+
+    <section style="padding: 1rem 2rem;">
+      <h1>Bienvenue chez Orbivia</h1>
+      <p>Nous sommes un bureau d’études pluridisciplinaire spécialisé en R&D. Nous accompagnons les porteurs de projets innovants, de la première idée jusqu’à l’industrialisation, en électronique, mécanique et réglementation.</p>
+    </section>
+
     <div class="timeline">
       <div class="timeline-item slide-in">
         <div class="timeline-icon">①</div>
@@ -227,24 +291,35 @@
         </div>
       </div>
     </div>
-  </main>
+  
+<section class="valeurs" style="margin-top: 3rem;">
+  <h2 style="text-align:center;">✨ Nos valeurs</h2>
+  <div class="valeurs-grid">
+    <div class="valeur-item">
+      <h3>💸 Tarif compétitif</h3>
+      <p>Nous sommes soucieux de rendre accessible le développement pour tous les porteurs de projet.</p>
+    </div>
+    <div class="valeur-item">
+      <h3>⚡ Réactivité</h3>
+      <p>Nous sommes équipés de matériel de R&D et de partenaires permettant de prototyper rapidement vos développements.</p>
+    </div>
+    <div class="valeur-item">
+      <h3>🤝 Sérénité</h3>
+      <p>Chez nous, nous parlons en projet, et pas en volume horaire. Nous avons à cœur de finaliser chaque prestation afin de garantir la satisfaction client.</p>
+    </div>
+    <div class="valeur-item">
+      <h3>🔍 Transparence</h3>
+      <p>Nous vous proposons un devis clair, focalisé sur les livrables, vous offrant une transparence sur les différents postes de dépense.</p>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
+</main>
+
+  
+  <footer style="background: rgb(231,161,22); color: white; text-align: center; padding: 1rem;">
+    Contact : <a href="mailto:pierre.charlier@orbivia.fr" style="color: white; text-decoration: underline;">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 
-  <script>
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    });
-
-    document.querySelectorAll('.slide-in').forEach(el => {
-      observer.observe(el);
-    });
-  </script>
 </body>
 </html>

@@ -1,157 +1,315 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Réalisations - Orbivia</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
+<meta charset="utf-8"/>
+<title>Réalisations - Orbivia</title>
+<link href="css/style.css" rel="stylesheet"/>
+<style>
     body {
       font-family: sans-serif;
-      margin: 0;
-      padding: 0;
       background: #f9f9f9;
-      color: #333;
     }
-
-    header {
-      background: rgb(231,161,22);
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      animation: slide-down 0.6s ease-out;
-    }
-
-    .logo {
-      height: 60px;
-    }
-
-    .logo-link {
-      display: flex;
-      align-items: center;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1rem;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 0.5rem;
-      transition: background 0.3s, color 0.3s;
-      border-radius: 4px;
-    }
-
-    nav a:hover {
-      background: white;
-      color: rgb(231,161,22);
-    }
-
-    main {
-      padding: 2rem;
-      animation: fade-in 1s ease;
-    }
-
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
     .gallery-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      padding: 2rem;
     }
-
     .gallery-item {
       background: white;
-      border-left: 6px solid rgb(231,161,22);
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      transition: transform 0.3s;
+      border-left: 4px solid rgb(231,161,22);
+      padding: 0.5rem;
+      border-radius: 6px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      text-align: center;
     }
-
-    .gallery-item:hover {
-      transform: scale(1.03);
-    }
-
     .gallery-item img {
-      width: 100%;
+      max-width: 100%;
       height: auto;
-      display: block;
       border-radius: 4px;
     }
-
     .gallery-caption {
-      margin-top: 0.5rem;
       font-weight: bold;
-      text-align: center;
+      margin-top: 0.5rem;
     }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: rgb(231,161,22);
-      color: white;
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
     }
-
-    a.email {
-      color: white;
-      text-decoration: underline;
+    .popup-content {
+      background: white;
+      margin: 10% auto;
+      padding: 2rem;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 8px;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-link">
-      <img src="img/logo.png" alt="Logo Orbivia" class="logo">
-    </a>
-    <nav>
-      <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="realisations.html">Réalisations</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+<header style="background: rgb(231,161,22); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+<a href="index.html">
+<img alt="Logo Orbivia" src="img/logo.png" style="height: 50px;"/>
+</a>
+<nav>
+<a href="index.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Accueil</a>
+<a href="realisations.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Réalisations</a>
+<a href="contact.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Contact</a>
+</nav>
+</header>
 
-  <main>
-    <h1>Nos Réalisations</h1>
-    <div class="gallery-container">
 
-      <div class="gallery-item">
-        <img src="img/KeyDuino.png" alt="KeyDuino">
-        <div class="gallery-caption">KeyDuino</div>
-      </div>
-      <div class="gallery-item">
-        <img src="img/OzOne.jpg" alt="OzOne">
-        <div class="gallery-caption">OzOne</div>
-      </div>
-      <div class="gallery-item">
-        <img src="img/Videobook.png" alt="Videobook">
-        <div class="gallery-caption">Videobook</div>
-      </div>
-      <div class="gallery-item">
-        <img src="img/Photobooth.jpg" alt="Photobooth">
-        <div class="gallery-caption">Photobooth</div>
-      </div>
-      <div class="gallery-item">
-        <img src="img/Audiobook.jpg" alt="Audiobook">
-        <div class="gallery-caption">Audiobook</div>
-      </div>
-    </div>
-  </main>
+<a href="contact.html"><img alt="Logo Orbivia" src="img/logo.png" style="display: block; margin: 1rem auto; max-height: 100px;"/></a>
 
-  <footer>
-    Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
+<main>
+<h1 style="text-align:center;">Nos Réalisations</h1>
+<div class="gallery-container">
+<div class="gallery-item" onclick="openPopup('popup0')">
+<img alt="AudioBook" src="img/AudioBook.jpg"/>
+<div class="gallery-caption">AudioBook</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup1')">
+<img alt="Banc3D" src="img/Banc3D.jpg"/>
+<div class="gallery-caption">Banc3D</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup2')">
+<img alt="Capsule" src="img/Capsule.jpg"/>
+<div class="gallery-caption">Capsule</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup3')">
+<img alt="ClefPPG" src="img/ClefPPG.jpg"/>
+<div class="gallery-caption">ClefPPG</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup4')">
+<img alt="CompteurTours" src="img/CompteurTours.jpg"/>
+<div class="gallery-caption">CompteurTours</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup5')">
+<img alt="ECGReader" src="img/ECGReader.jpg"/>
+<div class="gallery-caption">ECGReader</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup6')">
+<img alt="KeyDuinoNano" src="img/KeyDuinoNano.jpg"/>
+<div class="gallery-caption">KeyDuinoNano</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup7')">
+<img alt="KeyDuino" src="img/KeyDuino.jpg"/>
+<div class="gallery-caption">KeyDuino</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup8')">
+<img alt="LIDAR" src="img/LIDAR.jpg"/>
+<div class="gallery-caption">LIDAR</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup9')">
+<img alt="NFCMatcher" src="img/NFCMatcher.jpg"/>
+<div class="gallery-caption">NFCMatcher</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup10')">
+<img alt="NFCRing" src="img/NFCRing.jpg"/>
+<div class="gallery-caption">NFCRing</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup11')">
+<img alt="OzOne" src="img/OzOne.jpg"/>
+<div class="gallery-caption">OzOne</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup12')">
+<img alt="PhotoboothV2" src="img/PhotoboothV2.jpg"/>
+<div class="gallery-caption">PhotoboothV2</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup13')">
+<img alt="PhotoboothV1" src="img/PhotoboothV1.jpg"/>
+<div class="gallery-caption">PhotoboothV1</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup14')">
+<img alt="Sculpture3D" src="img/Sculpture3D.jpg"/>
+<div class="gallery-caption">Sculpture3D</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup15')">
+<img alt="StethoPassif" src="img/STETHOSCOPE PASSIF.png"/>
+<div class="gallery-caption">StethoPassif</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup16')">
+<img alt="Stethoscope" src="img/Stethoscope.jpg"/>
+<div class="gallery-caption">Stethoscope</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup17')">
+<img alt="TableNFC" src="img/TableNFC.jpg"/>
+<div class="gallery-caption">TableNFC</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup18')">
+<img alt="Torkeo" src="img/Torkeo.jpg"/>
+<div class="gallery-caption">Torkeo</div>
+</div>
+<div class="gallery-item" onclick="openPopup('popup19')">
+<img alt="Videobook" src="img/Videobook.jpg"/>
+<div class="gallery-caption">Videobook</div>
+</div>
+</div>
+<div class="popup" id="popup0">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup0')">×</span>
+<h2>AudioBook</h2>
+<p>Réalisation de livres d’or audio à partir de téléphones anciens. Toute l’électronique a été repensée pour offrir une qualité sonore optimale et une ergonomie intuitive.</p>
+</div>
+</div>
+<div class="popup" id="popup1">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup1')">×</span>
+<h2>Banc3D</h2>
+<p>Étude et fabrication d’un banc en béton imprimé en 3D, inspiré d’un design en forme de peigne, pour allier robustesse, originalité et fonctionnalité urbaine.</p>
+</div>
+</div>
+<div class="popup" id="popup2">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup2')">×</span>
+<h2>Capsule</h2>
+<p>Capsule temporelle numérique permettant d’enregistrer un message vidéo et de le transmettre automatiquement à une date programmée dans le futur.</p>
+</div>
+</div>
+<div class="popup" id="popup3">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup3')">×</span>
+<h2>ClefPPG</h2>
+<p>Capteur de rythme cardiaque économique basé sur la photopléthysmographie (PPG), compact et adapté aux solutions portables.</p>
+</div>
+</div>
+<div class="popup" id="popup4">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup4')">×</span>
+<h2>CompteurTours</h2>
+<p>Capteur de rotation pour roue de rongeur. Utilisé en clinique vétérinaire pour évaluer l'activité et le bien-être de l’animal lors de séjours prolongés.</p>
+</div>
+</div>
+<div class="popup" id="popup5">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup5')">×</span>
+<h2>ECGReader</h2>
+<p>Conception d’un capteur ECG portable connecté en Bluetooth. Idéal pour des applications de télémédecine et de suivi cardiaque personnel.</p>
+</div>
+</div>
+<div class="popup" id="popup6">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup6')">×</span>
+<h2>KeyDuinoNano</h2>
+<p>Mini lecteur NFC pensé pour les intégrations discrètes et les projets nécessitant un encombrement minimal.</p>
+</div>
+</div>
+<div class="popup" id="popup7">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup7')">×</span>
+<h2>KeyDuino</h2>
+<p>Lecteur NFC basé sur la célèbre plateforme Arduino, pensé pour l’expérimentation, l’apprentissage ou les applications sécurisées.</p>
+</div>
+</div>
+<div class="popup" id="popup8">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup8')">×</span>
+<h2>LIDAR</h2>
+<p>Développement d’un capteur LIDAR portable adaptable sur drone pour la détection d'obstacles et la cartographie 3D légère.</p>
+</div>
+</div>
+<div class="popup" id="popup9">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup9')">×</span>
+<h2>NFCMatcher</h2>
+<p>Système de calibration automatique d’antennes NFC pour optimiser les performances de lecture selon l’environnement et l’étiquette.</p>
+</div>
+</div>
+<div class="popup" id="popup10">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup10')">×</span>
+<h2>NFCRing</h2>
+<p>Prototype fonctionnel d’un système NFC miniaturisé destiné à être intégré dans une bague pour des applications d’identification ou de contrôle d’accès.</p>
+</div>
+</div>
+<div class="popup" id="popup11">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup11')">×</span>
+<h2>OzOne</h2>
+<p>Lecteur NFC connecté en Wi-Fi permettant un contrôle d’accès sécurisé, configurable à distance.</p>
+</div>
+</div>
+<div class="popup" id="popup12">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup12')">×</span>
+<h2>PhotoboothV2</h2>
+<p>Borne à selfie compacte et transportable, pensée pour être déployée facilement partout en France. Intégration hardware/software sur mesure.</p>
+</div>
+</div>
+<div class="popup" id="popup13">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup13')">×</span>
+<h2>PhotoboothV1</h2>
+<p>Première version de notre borne photo, robuste et ergonomique, pensée pour l’événementiel et la location.</p>
+</div>
+</div>
+<div class="popup" id="popup14">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup14')">×</span>
+<h2>Sculpture3D</h2>
+<p>Conception d’un dôme urbain imprimé en 3D béton, combinant esthétique architecturale et réflexion sur l’espace public.</p>
+</div>
+</div>
+<div class="popup" id="popup15">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup15')">×</span>
+<h2>StethoPassif</h2>
+<p>Projet biomimétique de stéthoscope passif, inspiré de la cochlée humaine, pour capter les vibrations internes sans électronique embarquée.</p>
+</div>
+</div>
+<div class="popup" id="popup16">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup16')">×</span>
+<h2>Stethoscope</h2>
+<p>Stéthoscope électronique Bluetooth avec amplification audio et transmission en temps réel pour usage médical ou pédagogique.</p>
+</div>
+</div>
+<div class="popup" id="popup17">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup17')">×</span>
+<h2>TableNFC</h2>
+<p>Table lumineuse interactive changeant de couleur via des cartes NFC. Idéal pour des installations artistiques ou des environnements connectés.</p>
+</div>
+</div>
+<div class="popup" id="popup18">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup18')">×</span>
+<h2>Torkeo</h2>
+<p>Dispositif porté au cou capable de mesurer plusieurs constantes physiologiques. Pensé pour le suivi des troubles cognitifs type démence.</p>
+</div>
+</div>
+<div class="popup" id="popup19">
+<div class="popup-content">
+<span class="close" onclick="closePopup('popup19')">×</span>
+<h2>Videobook</h2>
+<p>Livres d’or vidéo interactifs, permettant aux invités de laisser un message personnalisé. Design rétro et interface intuitive.</p>
+</div>
+</div>
+</main>
+<script>
+    function openPopup(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+    function closePopup(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+  </script>
+<footer style="background: rgb(231,161,22); color: white; text-align: center; padding: 1rem;">
+    Contact : <a href="mailto:pierre.charlier@orbivia.fr" style="color: white; text-decoration: underline;">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 </body>
 </html>
