@@ -73,92 +73,342 @@
 </header>
 
 
-<a href="contact.html"><img alt="Logo Orbivia" src="img/logo.png" style="display: block; margin: 1rem auto; max-height: 100px;"/></a>
-
 <main>
-<h1 style="text-align:center;">Nos Réalisations</h1>
-<div class="gallery-container">
-<div class="gallery-item" onclick="openPopup('popup0')">
-<img alt="AudioBook" src="img/Audiobook.jpg"/>
-<div class="gallery-caption">AudioBook</div>
+<section style="padding: 4rem 2rem 2rem 2rem; background-color: #ffffff; text-align: center;">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Un aperçu de nos projets</h1>
+    <p style="font-size: 1.1rem; color: #444; line-height: 1.8;">
+      Orbivia accompagne des projets technologiques concrets, allant de l'idée jusqu’au produit industrialisable. 
+      Voici quelques exemples de réalisations : 
+    </p>
+  </div>
+</section>
+
+
+
+<div class="gallery-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 3rem 2rem; max-width: 1200px; margin: 0 auto;">
+
+  <div class="gallery-item" onclick="openPopup('popup0')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/Audiobook.jpg" alt="AudioBook" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">AudioBook</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup1')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/Banc3D.jpg" alt="Banc3D" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Banc3D</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup2')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/CAPSULE.jpg" alt="Capsule" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Capsule</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup3')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/ClefPPG.jpg" alt="ClefPPG" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">ClefPPG</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup4')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/CompteurTours.jpg" alt="CompteurTours" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">CompteurTours</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup5')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/ECGReader.jpg" alt="ECGReader" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">ECGReader</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup6')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/KeyDuinoNano.jpg" alt="KeyDuinoNano" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">KeyDuinoNano</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup7')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/KeyDuino.jpg" alt="KeyDuino" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">KeyDuino</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup8')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/LIDAR.jpg" alt="LIDAR" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">LIDAR</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup9')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/NFCMatcher.jpg" alt="NFCMatcher" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">NFCMatcher</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup10')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/NFCRing.jpg" alt="NFCRing" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">NFCRing</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup11')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/OzOne.jpg" alt="OzOne" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">OzOne</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup12')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/PhotoboothV2.jpg" alt="PhotoboothV2" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">PhotoboothV2</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup13')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/PhotoboothV1.jpg" alt="PhotoboothV1" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">PhotoboothV1</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup14')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/Sculpture3D.jpg" alt="Sculpture3D" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Sculpture3D</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup15')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/StethoscopePassif.jpg" alt="StethoPassif" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">StethoPassif</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup16')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/STETHOSCOPE.jpg" alt="Stethoscope" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Stethoscope</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup17')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/TableNFC.jpg" alt="TableNFC" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">TableNFC</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup18')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/Torkeo.jpg" alt="Torkeo" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Torkeo</h3>
+    </div>
+  </div>
+    
+
+  <div class="gallery-item" onclick="openPopup('popup19')" style="
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+    <img src="img/VIDEOBOOK.jpg" alt="Videobook" style="width: 100%; display: block;"/>
+    <div style="padding: 1rem;">
+      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Videobook</h3>
+    </div>
+  </div>
+    
 </div>
-<div class="gallery-item" onclick="openPopup('popup1')">
-<img alt="Banc3D" src="img/Banc3D.jpg"/>
-<div class="gallery-caption">Banc3D</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup2')">
-<img alt="Capsule" src="img/CAPSULE.jpg"/>
-<div class="gallery-caption">Capsule</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup3')">
-<img alt="ClefPPG" src="img/ClefPPG.jpg"/>
-<div class="gallery-caption">ClefPPG</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup4')">
-<img alt="CompteurTours" src="img/CompteurTours.jpg"/>
-<div class="gallery-caption">CompteurTours</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup5')">
-<img alt="ECGReader" src="img/ECGReader.jpg"/>
-<div class="gallery-caption">ECGReader</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup6')">
-<img alt="KeyDuinoNano" src="img/KeyDuinoNano.jpg"/>
-<div class="gallery-caption">KeyDuinoNano</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup7')">
-<img alt="KeyDuino" src="img/KeyDuino.jpg"/>
-<div class="gallery-caption">KeyDuino</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup8')">
-<img alt="LIDAR" src="img/LIDAR.jpg"/>
-<div class="gallery-caption">LIDAR</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup9')">
-<img alt="NFCMatcher" src="img/NFCMatcher.jpg"/>
-<div class="gallery-caption">NFCMatcher</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup10')">
-<img alt="NFCRing" src="img/NFCRing.jpg"/>
-<div class="gallery-caption">NFCRing</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup11')">
-<img alt="OzOne" src="img/OzOne.jpg"/>
-<div class="gallery-caption">OzOne</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup12')">
-<img alt="PhotoboothV2" src="img/PhotoboothV2.jpg"/>
-<div class="gallery-caption">PhotoboothV2</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup13')">
-<img alt="PhotoboothV1" src="img/PhotoboothV1.jpg"/>
-<div class="gallery-caption">PhotoboothV1</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup14')">
-<img alt="Sculpture3D" src="img/Sculpture3D.jpg"/>
-<div class="gallery-caption">Sculpture3D</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup15')">
-<img alt="StethoPassif" src="img/STETHOSCOPE PASSIF.png"/>
-<div class="gallery-caption">StethoPassif</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup16')">
-<img alt="Stethoscope" src="img/STETHOSCOPE.jpg"/>
-<div class="gallery-caption">Stethoscope</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup17')">
-<img alt="TableNFC" src="img/TableNFC.jpg"/>
-<div class="gallery-caption">TableNFC</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup18')">
-<img alt="Torkeo" src="img/Torkeo.jpg"/>
-<div class="gallery-caption">Torkeo</div>
-</div>
-<div class="gallery-item" onclick="openPopup('popup19')">
-<img alt="Videobook" src="img/VIDEOBOOK.jpg"/>
-<div class="gallery-caption">Videobook</div>
-</div>
-</div>
+
 <div class="popup" id="popup0">
 <div class="popup-content">
 <span class="close" onclick="closePopup('popup0')">×</span>
@@ -267,7 +517,7 @@
 <div class="popup" id="popup15">
 <div class="popup-content">
 <span class="close" onclick="closePopup('popup15')">×</span>
-<h2>StethoPassif</h2>
+<h2>StethoscopePassif</h2>
 <p>Projet biomimétique de stéthoscope passif, inspiré de la cochlée humaine, pour capter les vibrations internes sans électronique embarquée.</p>
 </div>
 </div>
