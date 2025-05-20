@@ -1,57 +1,147 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Réalisations - Orbivia</title>
-<link href="css/style.css" rel="stylesheet"/>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Réalisations - Orbivia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --orbivia-yellow: rgb(231,161,22);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background: var(--orbivia-yellow);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    .logo-title {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+    .logo-title img {
+      height: 60px;
+      margin-right: 1rem;
+    }
+    .burger {
+      display: none;
+      font-size: 1.5rem;
+      color: white;
+      cursor: pointer;
+    }
+    nav {
+      display: flex;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem;
+      margin: 0 1rem;
+      font-weight: bold;
+      transition: background 0.3s, color 0.3s;
+      border-radius: 4px;
+    }
+    nav a:hover,
+    nav a.active {
+      background: white;
+      color: var(--orbivia-yellow);
+    }
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        background: var(--orbivia-yellow);
+        position: absolute;
+        right: 1rem;
+        top: 70px;
+        padding: 1rem;
+        border-radius: 6px;
+        z-index: 10;
+      }
+      nav.open {
+        display: flex;
+      }
+      .burger {
+        display: block;
+      }
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin: 2rem 0 1rem;
     }
     .gallery-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 2rem;
     }
     .gallery-item {
       background: white;
-      border-left: 4px solid rgb(231,161,22);
-      padding: 0.5rem;
-      border-radius: 6px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      border-left: 5px solid transparent;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: transform 0.3s, border-left 0.3s;
       cursor: pointer;
-      text-align: center;
+    }
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      border-left: 5px solid var(--orbivia-yellow);
     }
     .gallery-item img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 4px;
+      width: 100%;
+      display: block;
     }
-    .gallery-caption {
-      font-weight: bold;
-      margin-top: 0.5rem;
+    .gallery-item h3 {
+      padding: 1rem;
+      margin: 0;
+      font-size: 1.2rem;
+      color: #333;
     }
     .popup {
       display: none;
       position: fixed;
       z-index: 999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
     }
     .popup-content {
       background: white;
       margin: 10% auto;
       padding: 2rem;
-      width: 90%;
       max-width: 600px;
       border-radius: 8px;
       position: relative;
+      text-align: center;
+    }
+    .popup-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 1rem;
     }
     .close {
       position: absolute;
@@ -63,529 +153,97 @@
   </style>
 </head>
 <body>
-<header style="background: rgb(231,161,22); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-<a href="index.html">
-<img alt="Logo Orbivia" src="img/logo.png" style="height: 50px;"/>
-</a>
-<nav>
-<a href="index.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Accueil</a>
-<a href="realisations.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Réalisations</a>
-<a href="contact.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Contact</a>
-</nav>
-</header>
-
-
-<main>
-<section style="padding: 4rem 2rem 2rem 2rem; background-color: #ffffff; text-align: center;">
-  <div style="max-width: 900px; margin: 0 auto;">
-    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Un aperçu de nos projets</h1>
-    <p style="font-size: 1.1rem; color: #444; line-height: 1.8;">
-      Orbivia accompagne des projets technologiques concrets, allant de l'idée jusqu’au produit industrialisable. 
-      Voici quelques exemples de réalisations : 
-    </p>
-  </div>
-</section>
-
-
-
-<div class="gallery-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 3rem 2rem; max-width: 1200px; margin: 0 auto;">
-
-  <div class="gallery-item" onclick="openPopup('popup0')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/Audiobook.jpg" alt="AudioBook" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">AudioBook</h3>
+  <header>
+    <a href="index.html" class="logo-title">
+      <img src="img/logo.png" alt="Logo Orbivia">
+      Orbivia
+    </a>
+    <div class="burger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
     </div>
-  </div>
-    
+    <nav id="main-nav">
+      <a href="index.html">Accueil</a>
+      <a href="realisations.html" class="active">Réalisations</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
 
-  <div class="gallery-item" onclick="openPopup('popup1')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/Banc3D.jpg" alt="Banc3D" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Banc3D</h3>
-    </div>
-  </div>
-    
+  <main>
+    <h2 class="section-title">Nos Réalisations</h2>
+    <div class="gallery-container" id="gallery"></div>
+  </main>
 
-  <div class="gallery-item" onclick="openPopup('popup2')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/CAPSULE.jpg" alt="Capsule" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Capsule</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup3')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/ClefPPG.jpg" alt="ClefPPG" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">ClefPPG</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup4')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/CompteurTours.jpg" alt="CompteurTours" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">CompteurTours</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup5')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/ECGReader.jpg" alt="ECGReader" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">ECGReader</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup6')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/KeyDuinoNano.jpg" alt="KeyDuinoNano" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">KeyDuinoNano</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup7')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/KeyDuino.jpg" alt="KeyDuino" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">KeyDuino</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup8')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/LIDAR.jpg" alt="LIDAR" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">LIDAR</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup9')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/NFCMatcher.jpg" alt="NFCMatcher" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">NFCMatcher</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup10')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/NFCRing.jpg" alt="NFCRing" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">NFCRing</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup11')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/OzOne.jpg" alt="OzOne" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">OzOne</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup12')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/PhotoboothV2.jpg" alt="PhotoboothV2" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">PhotoboothV2</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup13')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/PhotoboothV1.jpg" alt="PhotoboothV1" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">PhotoboothV1</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup14')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/Sculpture3D.jpg" alt="Sculpture3D" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Sculpture3D</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup15')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/StethoscopePassif.jpg" alt="StethoPassif" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">StethoPassif</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup16')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/STETHOSCOPE.jpg" alt="Stethoscope" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Stethoscope</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup17')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/TableNFC.jpg" alt="TableNFC" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">TableNFC</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup18')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/Torkeo.jpg" alt="Torkeo" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Torkeo</h3>
-    </div>
-  </div>
-    
-
-  <div class="gallery-item" onclick="openPopup('popup19')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/VIDEOBOOK.jpg" alt="Videobook" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Videobook</h3>
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+      <img id="popup-img" src="" alt="Projet">
+      <h2 id="popup-title"></h2>
+      <p id="popup-desc"></p>
     </div>
   </div>
 
+  <script>
+    const projets = [
+      { title: "AudioBook", img: "img/Projets/Audiobook.jpg", desc: "Réalisation de livres d’or audio à partir de téléphones anciens." },
+      { title: "Banc3D", img: "img/Projets/Banc3D.jpg", desc: "Banc imprimé 3D en béton inspiré d’un peigne urbain." },
+      { title: "Capsule", img: "img/Projets/CAPSULE.jpg", desc: "Capsule temporelle numérique à message différé." },
+      { title: "ClefPPG", img: "img/Projets/ClefPPG.jpg", desc: "Capteur de rythme cardiaque PPG compact." },
+      { title: "CompteurTours", img: "img/Projets/CompteurTours.jpg", desc: "Compteur de rotation pour roue de rongeur en clinique." },
+      { title: "ECGReader", img: "img/Projets/ECGReader.jpg", desc: "Capteur ECG Bluetooth pour télémédecine." },
+      { title: "KeyDuinoNano", img: "img/Projets/KeyDuinoNano.jpg", desc: "Mini lecteur NFC ultra compact." },
+      { title: "KeyDuino", img: "img/Projets/KeyDuino.jpg", desc: "Lecteur NFC basé Arduino pour makers." },
+      { title: "LIDAR", img: "img/Projets/LIDAR.jpg", desc: "Capteur LIDAR portable pour drones." },
+      { title: "NFCMatcher", img: "img/Projets/NFCMatcher.jpg", desc: "Calibrateur automatique d’antenne NFC." },
+      { title: "NFCRing", img: "img/Projets/NFCRing.jpg", desc: "Bague connectée NFC pour identification." },
+      { title: "OzOne", img: "img/Projets/OzOne.jpg", desc: "Contrôle d'accès NFC connecté Wi-Fi." },
+      { title: "PhotoboothV1", img: "img/Projets/PhotoboothV1.jpg", desc: "Première version de borne photo événementielle." },
+      { title: "PhotoboothV2", img: "img/Projets/PhotoboothV2.jpg", desc: "Version compacte et transportable de la borne selfie." },
+      { title: "Sculpture3D", img: "img/Projets/Sculpture3D.jpg", desc: "Dôme urbain 3D en béton pour espaces publics." },
+      { title: "StethoPassif", img: "img/Projets/StethoscopePassif.jpg", desc: "Stéthoscope biomimétique passif sans électronique." },
+      { title: "Stethoscope", img: "img/Projets/STETHOSCOPE.jpg", desc: "Stéthoscope Bluetooth amplifié pour enseignement." },
+      { title: "TableNFC", img: "img/Projets/TableNFC.jpg", desc: "Table connectée avec contrôle NFC." },
+      { title: "Torkeo", img: "img/Projets/Torkeo.jpg", desc: "Dispositif au cou pour suivi de troubles cognitifs." },
+      { title: "Videobook", img: "img/Projets/VIDEOBOOK.jpg", desc: "Livre d’or vidéo rétro pour événements." },
+      { title: "Notaboo", img: "img/Projets/Notaboo.png", desc: "Toilettes portatives pour personnes en situation de handicap." }
+    ];
 
-  <div class="gallery-item" onclick="openPopup('popup20')" style="
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-    <img src="img/Projets/Notaboo.png" alt="Notaboo" style="width: 100%; display: block;"/>
-    <div style="padding: 1rem;">
-      <h3 style="margin: 0; font-size: 1.1rem; color: #333;">Notaboo</h3>
-    </div>
-  </div>
-    
-</div>
+    const container = document.getElementById('gallery');
+    const popup = document.getElementById('popup');
+    const popupImg = document.getElementById('popup-img');
+    const popupTitle = document.getElementById('popup-title');
+    const popupDesc = document.getElementById('popup-desc');
 
-<div class="popup" id="popup0">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup0')">×</span>
-<h2>AudioBook</h2>
-<p>Réalisation de livres d’or audio à partir de téléphones anciens. Toute l’électronique a été repensée pour offrir une qualité sonore optimale et une ergonomie intuitive.</p>
-</div>
-</div>
-<div class="popup" id="popup1">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup1')">×</span>
-<h2>Banc3D</h2>
-<p>Étude et fabrication d’un banc en béton imprimé en 3D, inspiré d’un design en forme de peigne, pour allier robustesse, originalité et fonctionnalité urbaine.</p>
-</div>
-</div>
-<div class="popup" id="popup2">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup2')">×</span>
-<h2>Capsule</h2>
-<p>Capsule temporelle numérique permettant d’enregistrer un message vidéo et de le transmettre automatiquement à une date programmée dans le futur.</p>
-</div>
-</div>
-<div class="popup" id="popup3">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup3')">×</span>
-<h2>ClefPPG</h2>
-<p>Capteur de rythme cardiaque économique basé sur la photopléthysmographie (PPG), compact et adapté aux solutions portables.</p>
-</div>
-</div>
-<div class="popup" id="popup4">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup4')">×</span>
-<h2>CompteurTours</h2>
-<p>Capteur de rotation pour roue de rongeur. Utilisé en clinique vétérinaire pour évaluer l'activité et le bien-être de l’animal lors de séjours prolongés.</p>
-</div>
-</div>
-<div class="popup" id="popup5">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup5')">×</span>
-<h2>ECGReader</h2>
-<p>Conception d’un capteur ECG portable connecté en Bluetooth. Idéal pour des applications de télémédecine et de suivi cardiaque personnel.</p>
-</div>
-</div>
-<div class="popup" id="popup6">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup6')">×</span>
-<h2>KeyDuinoNano</h2>
-<p>Mini lecteur NFC pensé pour les intégrations discrètes et les projets nécessitant un encombrement minimal.</p>
-</div>
-</div>
-<div class="popup" id="popup7">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup7')">×</span>
-<h2>KeyDuino</h2>
-<p>Lecteur NFC basé sur la célèbre plateforme Arduino, pensé pour l’expérimentation, l’apprentissage ou les applications sécurisées.</p>
-</div>
-</div>
-<div class="popup" id="popup8">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup8')">×</span>
-<h2>LIDAR</h2>
-<p>Développement d’un capteur LIDAR portable adaptable sur drone pour la détection d'obstacles et la cartographie 3D légère.</p>
-</div>
-</div>
-<div class="popup" id="popup9">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup9')">×</span>
-<h2>NFCMatcher</h2>
-<p>Système de calibration automatique d’antennes NFC pour optimiser les performances de lecture selon l’environnement et l’étiquette.</p>
-</div>
-</div>
-<div class="popup" id="popup10">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup10')">×</span>
-<h2>NFCRing</h2>
-<p>Prototype fonctionnel d’un système NFC miniaturisé destiné à être intégré dans une bague pour des applications d’identification ou de contrôle d’accès.</p>
-</div>
-</div>
-<div class="popup" id="popup11">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup11')">×</span>
-<h2>OzOne</h2>
-<p>Lecteur NFC connecté en Wi-Fi permettant un contrôle d’accès sécurisé, configurable à distance.</p>
-</div>
-</div>
-<div class="popup" id="popup12">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup12')">×</span>
-<h2>PhotoboothV2</h2>
-<p>Borne à selfie compacte et transportable, pensée pour être déployée facilement partout en France. Intégration hardware/software sur mesure.</p>
-</div>
-</div>
-<div class="popup" id="popup13">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup13')">×</span>
-<h2>PhotoboothV1</h2>
-<p>Première version de notre borne photo, robuste et ergonomique, pensée pour l’événementiel et la location.</p>
-</div>
-</div>
-<div class="popup" id="popup14">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup14')">×</span>
-<h2>Sculpture3D</h2>
-<p>Conception d’un dôme urbain imprimé en 3D béton, combinant esthétique architecturale et réflexion sur l’espace public.</p>
-</div>
-</div>
-<div class="popup" id="popup15">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup15')">×</span>
-<h2>StethoscopePassif</h2>
-<p>Projet biomimétique de stéthoscope passif, inspiré de la cochlée humaine, pour capter les vibrations internes sans électronique embarquée.</p>
-</div>
-</div>
-<div class="popup" id="popup16">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup16')">×</span>
-<h2>Stethoscope</h2>
-<p>Stéthoscope électronique Bluetooth avec amplification audio et transmission en temps réel pour usage médical ou pédagogique.</p>
-</div>
-</div>
-<div class="popup" id="popup17">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup17')">×</span>
-<h2>TableNFC</h2>
-<p>Table lumineuse interactive changeant de couleur via des cartes NFC. Idéal pour des installations artistiques ou des environnements connectés.</p>
-</div>
-</div>
-<div class="popup" id="popup18">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup18')">×</span>
-<h2>Torkeo</h2>
-<p>Dispositif porté au cou capable de mesurer plusieurs constantes physiologiques. Pensé pour le suivi des troubles cognitifs type démence.</p>
-</div>
-</div>
-<div class="popup" id="popup19">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup19')">×</span>
-<h2>Videobook</h2>
-<p>Livres d’or vidéo interactifs, permettant aux invités de laisser un message personnalisé. Design rétro et interface intuitive.</p>
-</div>
-</div>
-<div class="popup" id="popup20">
-<div class="popup-content">
-<span class="close" onclick="closePopup('popup20')">×</span>
-<h2>Notaboo</h2>
-<p>Notaboo est un système de toilettes portatif et autonome destiné aux personnes en situation de handicap.</p>
-</div>
-</div>
+    projets.forEach((proj) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
+      item.addEventListener('click', () => openPopup(proj));
+      container.appendChild(item);
+    });
 
-
-</main>
-<script>
-    function openPopup(id) {
-      document.getElementById(id).style.display = 'block';
+    function openPopup(proj) {
+      popupImg.src = proj.img;
+      popupTitle.textContent = proj.title;
+      popupDesc.textContent = proj.desc;
+      popup.style.display = 'block';
     }
-    function closePopup(id) {
-      document.getElementById(id).style.display = 'none';
+
+    function closePopup() {
+      popup.style.display = 'none';
+    }
+
+    popup.addEventListener('click', (e) => {
+      if (!document.querySelector('.popup-content').contains(e.target)) {
+        closePopup();
+      }
+    });
+
+    function toggleMenu() {
+      document.getElementById('main-nav').classList.toggle('open');
     }
   </script>
-<footer style="background: rgb(231,161,22); color: white; text-align: center; padding: 1rem;">
+
+  <footer style="background: var(--orbivia-yellow); color: white; text-align: center; padding: 1rem;">
     Contact : <a href="mailto:pierre.charlier@orbivia.fr" style="color: white; text-decoration: underline;">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 </body>

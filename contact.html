@@ -3,109 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>Contact - Orbivia</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    :root {
+      --orbivia-yellow: rgb(231,161,22);
+    }
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding: 0;
-      line-height: 1.6;
       background: #f9f9f9;
       color: #333;
     }
-
     header {
-      background: rgb(231,161,22);
+      background: var(--orbivia-yellow);
       color: white;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      animation: slide-down 0.6s ease-out;
+      position: relative;
     }
-
-    .logo {
+    header img {
       height: 60px;
+      margin-right: 1rem;
     }
-
-    .logo-link {
+    .logo-title {
+      font-size: 1.8rem;
+      font-weight: bold;
       display: flex;
       align-items: center;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
+      text-decoration: none;
+      color: white;
       gap: 1rem;
-      margin: 0;
-      padding: 0;
     }
-
+    .burger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+    }
+    nav {
+      display: flex;
+    }
     nav a {
       color: white;
       text-decoration: none;
       padding: 0.5rem;
+      margin: 0 1rem;
+      font-weight: bold;
       transition: background 0.3s, color 0.3s;
       border-radius: 4px;
     }
-
-    nav a:hover {
+    nav a:hover,
+    nav a.active {
       background: white;
-      color: rgb(231,161,22);
+      color: var(--orbivia-yellow);
     }
-
-    .contact-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        background: var(--orbivia-yellow);
+        position: absolute;
+        right: 1rem;
+        top: 70px;
+        padding: 1rem;
+        border-radius: 6px;
+        z-index: 10;
+      }
+      nav.open {
+        display: flex;
+      }
+      .burger {
+        display: block;
+      }
+    }
+    main {
       padding: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
-
-    .contact-form {
-      flex: 1;
-      min-width: 300px;
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
     }
-
     .contact-info {
-      flex: 1;
-      min-width: 300px;
-      background-color: #f0f0f0;
+      background: white;
       padding: 2rem;
       border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      text-align: center;
     }
-
-    .contact-form input, .contact-form textarea {
-      width: 100%;
-      padding: 0.75rem;
+    .contact-info h2 {
       margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
     }
-
-    .contact-form button {
-      background-color: rgb(231,161,22);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
+    .contact-info p {
+      line-height: 1.8;
     }
-
-    .contact-form button:hover {
-      background-color: #d6951d;
-    }
-
     footer {
       text-align: center;
       padding: 1rem;
-      background: rgb(231,161,22);
+      background: var(--orbivia-yellow);
       color: white;
     }
-
     a.email {
       color: white;
       text-decoration: underline;
@@ -113,33 +115,38 @@
   </style>
 </head>
 <body>
-<header style="background: rgb(231,161,22); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-<a href="index.html">
-<img alt="Logo Orbivia" src="img/logo.png" style="height: 50px;"/>
-</a>
-<nav>
-<a href="index.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Accueil</a>
-<a href="realisations.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Réalisations</a>
-<a href="contact.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Contact</a>
-</nav>
-</header>
-
+  <header>
+    <a href="index.html" class="logo-title">
+      <img src="img/logo.png" alt="Logo Orbivia" />
+      Orbivia
+    </a>
+    <div class="burger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="realisations.html">Réalisations</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </header>
 
   <main>
     <h1>Contactez-nous</h1>
-
-      <div class="contact-info">
-        <h2>Orbivia</h2>
-        <p>30 rue Jules Guesde<br>59390 Lys-lez-Lannoy</p>
-        <p>Email : <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a></p>
-      </div>
+    <div class="contact-info">
+      <h2>Orbivia</h2>
+      <p>30 rue Jules Guesde<br>59390 Lys-lez-Lannoy</p>
+      <p>Email : <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a></p>
     </div>
   </main>
 
-  
-  <footer style="background: rgb(231,161,22); color: white; text-align: center; padding: 1rem;">
-    Contact : <a href="mailto:pierre.charlier@orbivia.fr" style="color: white; text-decoration: underline;">pierre.charlier@orbivia.fr</a> – © Orbivia
+  <footer>
+    Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 
+  <script>
+    function toggleMenu() {
+      document.querySelector('nav').classList.toggle('open');
+    }
+  </script>
 </body>
 </html>

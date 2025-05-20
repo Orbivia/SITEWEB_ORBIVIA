@@ -1,335 +1,326 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Orbivia - R&D</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    :root {
+      --orbivia-yellow: rgb(231,161,22);
+    }
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       line-height: 1.6;
       background: #f9f9f9;
       color: #333;
+      scroll-behavior: smooth;
     }
-
     header {
-      background: rgb(231,161,22);
+      background: var(--orbivia-yellow);
       color: white;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       animation: slide-down 0.6s ease-out;
+      position: relative;
     }
-
-    @keyframes slide-down {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .logo {
+    header img {
       height: 60px;
+      margin-right: 1rem;
     }
-
-    .logo-link {
+    header .logo-title {
+      font-size: 1.8rem;
+      font-weight: bold;
       display: flex;
       align-items: center;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
+      color: white;
       gap: 1rem;
-      margin: 0;
-      padding: 0;
     }
-
+    .burger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+    }
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        background: var(--orbivia-yellow);
+        padding: 1rem;
+        position: absolute;
+        right: 1rem;
+        top: 70px;
+        border-radius: 6px;
+        z-index: 10;
+      }
+      nav.open {
+        display: flex;
+      }
+      .burger {
+        display: block;
+      }
+    }
     nav a {
       color: white;
       text-decoration: none;
       padding: 0.5rem;
+      margin: 0 1rem;
+      font-weight: bold;
       transition: background 0.3s, color 0.3s;
       border-radius: 4px;
     }
-
-    nav a:hover {
+    nav a:hover,
+    nav a.active {
       background: white;
-      color: rgb(231,161,22);
+      color: var(--orbivia-yellow);
     }
-
     main {
       padding: 2rem;
-      animation: fade-in 1s ease;
     }
-
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes fade-in-up {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-
-    .timeline {
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .timeline-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      background: white;
-      border-left: 6px solid rgb(231,161,22);
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    }
-
-    .timeline-icon {
-      font-size: 1.2rem;
-      line-height: 1;
-      color: rgb(231,161,22);
-    }
-
-    .slide-in {
+    .fade-in-up {
       opacity: 0;
-      transform: translateX(-30px);
+      transform: translateY(20px);
       transition: opacity 0.6s ease-out, transform 0.6s ease-out;
     }
-
-    .slide-in.visible {
+    .fade-in-up.visible {
       opacity: 1;
-      transform: translateX(0);
+      transform: translateY(0);
     }
-
-    .steps, .values {
+    h1 span {
+      animation: fade-in-up 1s ease-out;
+      display: inline-block;
+    }
+    section {
+      margin-bottom: 4rem;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: #222;
+    }
+    .timeline {
+      max-width: 900px;
+      margin: 0 auto;
+      border-left: 3px solid var(--orbivia-yellow);
+      position: relative;
+    }
+    .timeline-step {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .timeline-step::before {
+      content: attr(data-step);
+      position: absolute;
+      left: -1.1rem;
+      top: 0;
+      background: var(--orbivia-yellow);
+      color: white;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .valeurs-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-
-    .step, .value {
+    .valeur-item {
       background: white;
-      border-left: 6px solid rgb(231,161,22);
-      padding: 1rem;
+      border-left: 5px solid var(--orbivia-yellow);
       border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: box-shadow 0.3s, border 0.3s, transform 0.3s;
     }
-
-    .step h3, .value h3 {
-      margin-top: 0;
+    .valeur-item:hover {
+      box-shadow: 0 0 12px rgba(231,161,22, 0.4);
+      transform: scale(1.03);
     }
-
+    .valeur-item h3 {
+      transition: color 0.3s;
+    }
+    .valeur-item:hover h3 {
+      color: var(--orbivia-yellow);
+    }
+    .valeur-item i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--orbivia-yellow);
+    }
+    .cta {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: #f9f9f9;
+    }
+    .cta a {
+      background: var(--orbivia-yellow);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .cta a:hover {
+      background: #d4970f;
+    }
+    .partners {
+      background-color: #fff;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .partners img {
+      max-width: 600px;
+      width: 90%;
+      height: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    .partners img:hover {
+      transform: scale(1.02);
+    }
     footer {
       text-align: center;
       padding: 1rem;
-      background: rgb(231,161,22);
+      background: var(--orbivia-yellow);
       color: white;
     }
-
     a.email {
       color: white;
       text-decoration: underline;
     }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.5rem;
-      }
-
-      nav a {
-        display: block;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      .timeline-item {
-        flex-direction: column;
-      }
-
-      .timeline-icon {
-        align-self: center;
-      }
-
-      .steps, .values {
-        grid-template-columns: 1fr !important;
-        padding: 0 1rem;
-      }
-    }
-  
-.valeurs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-.valeur-item {
-  background: white;
-  border-left: 6px solid rgb(231,161,22);
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-}
-
-
-.valeurs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-  padding: 0 2rem;
-}
-.valeur-item {
-  background: white;
-  border-left: 6px solid rgb(231,161,22);
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-}
-
-
-.timeline {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 0 2rem;
-}
-
-.timeline-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  background: white;
-  border-left: 6px solid rgb(231,161,22);
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-.timeline-icon {
-  font-size: 2rem;
-  color: rgb(231,161,22);
-}
-
-</style>
+  </style>
 </head>
 <body>
-<header style="background: rgb(231,161,22); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-<a href="index.html">
-<img alt="Logo Orbivia" src="img/logo.png" style="height: 50px;"/>
+  <header>
+    <a href="index.html" class="logo-title" style="text-decoration: none; color: white;">
+  <img src="img/logo.png" alt="Logo Orbivia" />
+  Orbivia
 </a>
-<nav>
-<a href="index.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Accueil</a>
-<a href="realisations.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Réalisations</a>
-<a href="contact.html" style="margin: 0 1rem; color: white; font-weight: bold; text-decoration: none;">Contact</a>
-</nav>
-</header>
-
+    <div class="burger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+    <nav>
+      <a href="index.html" class="active">Accueil</a>
+      <a href="realisations.html">Réalisations</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
 
   <main>
+    <section style="text-align: center;">
+      <div style="max-width: 900px; margin: 0 auto;">
+        <h1 style="font-size: 2.8rem; margin-bottom: 1.5rem;">
+          Bienvenue chez <span style="color: var(--orbivia-yellow);">Orbivia</span>
+        </h1>
+        <p style="font-size: 1.2rem; color: #444; line-height: 1.8;">
+          Bureau d’études pluridisciplinaire spécialisé en <strong>R&D</strong>, nous accompagnons les porteurs de projets innovants de l'idée jusqu’à l’<strong>industrialisation</strong>.
+        </p>
+      </div>
+    </section>
 
-<section style="padding: 4rem 2rem; background-color: #f9f9f9; text-align: center;">
-  <div style="max-width: 900px; margin: 0 auto;">
-    <h1 style="font-size: 2.8rem; margin-bottom: 1.5rem;">Bienvenue chez <span style="color: #E7A116;">Orbivia</span></h1>
-    <p style="font-size: 1.2rem; color: #444; line-height: 1.8;">
-      Bureau d’études pluridisciplinaire spécialisé en <strong>R&D</strong>, nous accompagnons les porteurs de projets innovants de l'idée jusqu’à l’<strong>industrialisation</strong>.<br/>
-    </p>
-  </div>
-</section>
+    <section>
+      <h2 class="section-title">Notre démarche</h2>
+      <div class="timeline">
+        <div class="timeline-step fade-in-up" data-step="1">
+          <h3>Analyse du besoin</h3>
+          <p>Ciblage des besoins et rédaction d’un cahier des charges structuré avec expertise technique.</p>
+        </div>
+        <div class="timeline-step fade-in-up" data-step="2">
+          <h3>Prototypage</h3>
+          <p>Conception d’une preuve de concept fonctionnelle et réaliste pour valider les choix initiaux.</p>
+        </div>
+        <div class="timeline-step fade-in-up" data-step="3">
+          <h3>Validation</h3>
+          <p>Tests adaptés aux exigences du projet pour garantir robustesse et conformité technique.</p>
+        </div>
+        <div class="timeline-step fade-in-up" data-step="4">
+          <h3>Pré-industrialisation</h3>
+          <p>Optimisation technique et économique pour faciliter l’industrialisation et la mise en conformité.</p>
+        </div>
+        <div class="timeline-step fade-in-up" data-step="5">
+          <h3>Certification</h3>
+          <p>Accompagnement aux essais normatifs (CEM, sécurité...) et montage du dossier technique.</p>
+        </div>
+        <div class="timeline-step fade-in-up" data-step="6">
+          <h3>Industrialisation</h3>
+          <p>Mise en production via notre réseau de partenaires fiables et spécialisés.</p>
+        </div>
+      </div>
+    </section>
 
+    <section>
+      <h2 class="section-title">Nos valeurs</h2>
+      <div class="valeurs-grid">
+        <div class="valeur-item">
+          <i class="fas fa-euro-sign"></i>
+          <h3>Tarif compétitif</h3>
+          <p>Développement accessible à tous grâce à une tarification adaptée.</p>
+        </div>
+        <div class="valeur-item">
+          <i class="fas fa-bolt"></i>
+          <h3>Réactivité</h3>
+          <p>Prototypage rapide et efficace grâce à nos moyens internes.</p>
+        </div>
+        <div class="valeur-item">
+          <i class="fas fa-handshake"></i>
+          <h3>Sérénité</h3>
+          <p>Nous nous engageons sur les livrables, pas à l'heure.</p>
+        </div>
+      </div>
+    </section>
 
-<section style="padding: 4rem 2rem; background: #ffffff;">
-  <h2 style="text-align:center; font-size: 2.5rem; margin-bottom: 3rem;">Notre démarche</h2>
-  <div style="max-width: 900px; margin: 0 auto; position: relative; border-left: 3px solid #E7A116;">
-    
-    <div style="margin-bottom: 2.5rem; padding-left: 2rem; position: relative;">
-      <div style="position: absolute; left: -1.1rem; top: 0; background: #E7A116; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</div>
-      <h3 style="margin: 0 0 0.5rem 0;">Analyse du besoin</h3>
-      <p style="color: #555;">Ciblage des besoins et rédaction d’un cahier des charges structuré avec expertise technique.</p>
-    </div>
+    <section class="cta">
+      <h2>Un projet en tête ?</h2>
+      <p>Contactez-nous pour en discuter</p>
+      <a href="contact.html">Nous contacter</a>
+    </section>
 
-    <div style="margin-bottom: 2.5rem; padding-left: 2rem; position: relative;">
-      <div style="position: absolute; left: -1.1rem; top: 0; background: #E7A116; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</div>
-      <h3 style="margin: 0 0 0.5rem 0;">Prototypage</h3>
-      <p style="color: #555;">Conception d’une preuve de concept fonctionnelle et réaliste pour valider les choix initiaux.</p>
-    </div>
+    <section class="partners">
+      <h2>Ils nous font confiance</h2>
+      <img src="img/Partenaires.png" alt="Partenaires" />
+    </section>
+  </main>
 
-    <div style="margin-bottom: 2.5rem; padding-left: 2rem; position: relative;">
-      <div style="position: absolute; left: -1.1rem; top: 0; background: #E7A116; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</div>
-      <h3 style="margin: 0 0 0.5rem 0;">Validation</h3>
-      <p style="color: #555;">Tests adaptés aux exigences du projet pour garantir robustesse et conformité technique.</p>
-    </div>
-
-    <div style="margin-bottom: 2.5rem; padding-left: 2rem; position: relative;">
-      <div style="position: absolute; left: -1.1rem; top: 0; background: #E7A116; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">4</div>
-      <h3 style="margin: 0 0 0.5rem 0;">Pré-industrialisation</h3>
-      <p style="color: #555;">Optimisation technique et économique pour faciliter l’industrialisation et la mise en conformité.</p>
-    </div>
-
-    <div style="margin-bottom: 2.5rem; padding-left: 2rem; position: relative;">
-      <div style="position: absolute; left: -1.1rem; top: 0; background: #E7A116; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">5</div>
-      <h3 style="margin: 0 0 0.5rem 0;">Certification</h3>
-      <p style="color: #555;">Accompagnement aux essais normatifs (CEM, sécurité...) et montage du dossier technique.</p>
-    </div>
-
-    <div style="margin-bottom: 0; padding-left: 2rem; position: relative;">
-      <div style="position: absolute; left: -1.1rem; top: 0; background: #E7A116; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">6</div>
-      <h3 style="margin: 0 0 0.5rem 0;">Industrialisation</h3>
-      <p style="color: #555;">Mise en production via notre réseau de partenaires fiables et spécialisés.</p>
-    </div>
-
-  </div>
-</section>
-  
-<section class="valeurs" style="padding: 4rem 2rem; background-color: #f9f9f9;">
-  <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 2rem;">Nos valeurs</h2>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
-    
-    <div style="background: white; border-left: 5px solid #E7A116; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-      <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Tarif compétitif</h3>
-      <p style="color: #555;">Nous rendons le développement accessible à tous les porteurs de projet grâce à une tarification adaptée.</p>
-    </div>
-
-    <div style="background: white; border-left: 5px solid #E7A116; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-      <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Réactivité</h3>
-      <p style="color: #555;">Notre équipement interne et notre réseau de partenaires nous permettent un prototypage rapide et efficace.</p>
-    </div>
-
-    <div style="background: white; border-left: 5px solid #E7A116; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-      <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Sérénité</h3>
-      <p style="color: #555;">Nous nous engageons sur des projets, pas des heures, avec l'objectif clair d'atteindre vos livrables en toute sérénité.</p>
-    </div>
-
-    <div style="background: white; border-left: 5px solid #E7A116; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-      <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Transparence</h3>
-      <p style="color: #555;">Des devis détaillés, axés sur les livrables, vous assurent une totale clarté sur les coûts engagés.</p>
-    </div>
-
-  </div>
-</section>
-
-
-</main>
-
-  
-  <footer style="background: rgb(231,161,22); color: white; text-align: center; padding: 1rem;">
-    Contact : <a href="mailto:pierre.charlier@orbivia.fr" style="color: white; text-decoration: underline;">pierre.charlier@orbivia.fr</a> – © Orbivia
+  <footer>
+    Contact : <a class="email" href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 
+  <script>
+    function toggleMenu() {
+      document.querySelector('nav').classList.toggle('open');
+    }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
