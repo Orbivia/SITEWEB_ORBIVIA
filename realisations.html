@@ -151,6 +151,22 @@
       font-size: 24px;
       cursor: pointer;
     }
+    .popup-content a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--orbivia-yellow);
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.popup-content a:hover {
+  background-color: #cf9310;
+  transform: translateY(-2px);
+}
   </style>
 </head>
 <body>
@@ -314,7 +330,7 @@ const projets = [
     function openPopup(proj) {
       popupImg.src = proj.img;
       popupTitle.textContent = proj.title;
-      popupDesc.textContent = proj.desc;
+      popupDesc.innerHTML = proj.desc.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">Voir le projet</a>');
       popup.style.display = 'block';
     }
 
