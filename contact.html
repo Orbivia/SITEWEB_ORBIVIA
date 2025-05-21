@@ -6,9 +6,7 @@
   <title>Contact - Orbivia</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    :root {
-      --orbivia-yellow: rgb(231,161,22);
-    }
+    :root { --orbivia-yellow: rgb(231,161,22); }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
@@ -22,7 +20,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
     }
     header img {
       height: 60px;
@@ -37,12 +34,6 @@
       color: white;
       gap: 1rem;
     }
-    .burger {
-      display: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: white;
-    }
     nav {
       display: flex;
     }
@@ -52,32 +43,12 @@
       padding: 0.5rem;
       margin: 0 1rem;
       font-weight: bold;
-      transition: background 0.3s, color 0.3s;
       border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
     }
-    nav a:hover,
-    nav a.active {
+    nav a:hover, nav a.active {
       background: white;
       color: var(--orbivia-yellow);
-    }
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        background: var(--orbivia-yellow);
-        position: absolute;
-        right: 1rem;
-        top: 70px;
-        padding: 1rem;
-        border-radius: 6px;
-        z-index: 10;
-      }
-      nav.open {
-        display: flex;
-      }
-      .burger {
-        display: block;
-      }
     }
     main {
       padding: 2rem;
@@ -89,14 +60,13 @@
       font-size: 2.5rem;
       margin-bottom: 2rem;
     }
-    .contact-info {
-      background: #fff;
+    .contact-info, .contact-form {
+      background: white;
       padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       max-width: 600px;
       margin: 0 auto 2rem auto;
-      line-height: 1.6;
     }
     .contact-info h2 {
       margin-top: 0;
@@ -104,17 +74,6 @@
     .contact-info a {
       color: var(--orbivia-yellow);
       text-decoration: none;
-    }
-    .contact-info a:hover {
-      text-decoration: underline;
-    }
-    .contact-form {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      max-width: 600px;
-      margin: 0 auto;
     }
     .contact-form label {
       display: block;
@@ -130,11 +89,6 @@
       border-radius: 6px;
       font-size: 1rem;
     }
-    .contact-form input.error,
-    .contact-form textarea.error {
-      border: 2px solid red;
-      background-color: #ffe6e6;
-    }
     .contact-form button {
       margin-top: 1.5rem;
       background: var(--orbivia-yellow);
@@ -148,6 +102,35 @@
     }
     .contact-form button:hover {
       background: #d49614;
+    }
+    .popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .popup-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .popup-content h2 {
+      color: var(--orbivia-yellow);
+    }
+    .popup-content button {
+      margin-top: 1rem;
+      background: var(--orbivia-yellow);
+      border: none;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
     }
     footer {
       text-align: center;
@@ -167,9 +150,6 @@
       <img src="img/logo.png" alt="Logo Orbivia" />
       Orbivia
     </a>
-    <div class="burger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
     <nav>
       <a href="index.html">Accueil</a>
       <a href="realisations.html">Réalisations</a>
@@ -199,85 +179,71 @@
     </div>
 
     <div class="contact-form">
-      <form onsubmit="sendMail(event)">
+      <form id="contactForm">
         <label for="name">Nom</label>
-        <input type="text" id="name" name="name" placeholder="Jean Dupont">
+        <input type="text" id="name" name="name" required>
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="jean.dupont@email.com">
+        <input type="email" id="email" name="email" required>
 
         <label for="message">Message</label>
-        <textarea id="message" name="message" rows="6" placeholder="Votre message..."></textarea>
+        <textarea id="message" name="message" rows="6" required></textarea>
+
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
 
         <button type="submit">Envoyer</button>
-
-        <p id="confirmation-message" style="display:none; color: green; margin-top: 1rem;">
-          Merci, votre messagerie va s’ouvrir. Vous pouvez finaliser l’envoi.
-        </p>
-        <p id="error-message" style="display:none; color: red; margin-top: 1rem;">
-          Merci de remplir tous les champs avec des données valides.
-        </p>
       </form>
     </div>
   </main>
+
+  <div class="popup" id="popup-success">
+    <div class="popup-content">
+      <h2>Merci !</h2>
+      <p>Votre message a bien été envoyé.</p>
+      <button onclick="closePopup()">Fermer</button>
+    </div>
+  </div>
+
+  <div class="popup" id="popup-error">
+    <div class="popup-content">
+      <h2>Erreur</h2>
+      <p>Une erreur s'est produite. Veuillez réessayer.</p>
+      <button onclick="closePopup()">Fermer</button>
+    </div>
+  </div>
 
   <footer>
     Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 
   <script>
-    function toggleMenu() {
-      document.querySelector('nav').classList.toggle('open');
+    function closePopup() {
+      document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
     }
 
-    function sendMail(event) {
-      event.preventDefault();
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-      const nameField = document.getElementById('name');
-      const emailField = document.getElementById('email');
-      const messageField = document.getElementById('message');
+      const form = e.target;
+      const data = new FormData(form);
 
-      const name = nameField.value.trim();
-      const email = emailField.value.trim();
-      const message = messageField.value.trim();
-
-      const confirmation = document.getElementById('confirmation-message');
-      const error = document.getElementById('error-message');
-
-      [nameField, emailField, messageField].forEach(field => field.classList.remove('error'));
-
-      let hasError = false;
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!name) {
-        nameField.classList.add('error');
-        hasError = true;
-      }
-      if (!email || !emailRegex.test(email)) {
-        emailField.classList.add('error');
-        hasError = true;
-      }
-      if (!message) {
-        messageField.classList.add('error');
-        hasError = true;
-      }
-
-      if (hasError) {
-        error.textContent = "Merci de remplir tous les champs avec des données valides.";
-        error.style.display = 'block';
-        confirmation.style.display = 'none';
-        return;
-      }
-
-      error.style.display = 'none';
-      confirmation.style.display = 'block';
-
-      const subject = `Contact depuis orbivia.fr de ${encodeURIComponent(name)}`;
-      const body = `Nom : ${name}\nEmail : ${email}\n\n${message}`;
-
-      window.location.href = `mailto:pierre.charlier@orbivia.fr?subject=${subject}&body=${encodeURIComponent(body)}`;
-    }
+      fetch("https://fabform.io/f/zYKMbp", {
+        method: "POST",
+        body: data
+      })
+      .then(res => {
+        if (res.ok) {
+          form.reset();
+          document.getElementById("popup-success").style.display = "flex";
+        } else {
+          document.getElementById("popup-error").style.display = "flex";
+        }
+      })
+      .catch(() => {
+        document.getElementById("popup-error").style.display = "flex";
+      });
+    });
   </script>
 </body>
 </html>
