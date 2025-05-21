@@ -121,22 +121,21 @@
     .info-box a:hover {
       text-decoration: underline;
     }
-    .email-invite {
+    .message-button {
+      display: inline-block;
       margin-top: 2rem;
-      font-size: 1.1rem;
-      background: #fef8ee;
-      padding: 1.2rem;
-      border-left: 4px solid var(--orbivia-yellow);
-      border-radius: 6px;
-      line-height: 1.6;
-    }
-    .email-invite a {
+      padding: 0.8rem 1.6rem;
+      background: var(--orbivia-yellow);
+      color: white;
       font-weight: bold;
-      color: var(--orbivia-yellow);
-      text-decoration: none;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      font-size: 1.1rem;
+      transition: background 0.3s ease;
     }
-    .email-invite a:hover {
-      text-decoration: underline;
+    .message-button:hover {
+      background: #d49614;
     }
     footer {
       text-align: center;
@@ -183,12 +182,9 @@
         <p><strong>Email :</strong><br>
           <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a>
         </p>
-        <div class="email-invite">
-          Vous avez un projet ou une idée à concrétiser ?  
-          <br><span>Écrivez-nous à</span>
-          <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a>
-          <span>, nous serons ravis d’en discuter avec vous.</span>
-        </div>
+        <button class="message-button" onclick="location.href='mailto:pierre.charlier@orbivia.fr'">
+          Écrire un message
+        </button>
       </div>
     </div>
   </main>
