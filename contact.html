@@ -22,6 +22,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
     header img {
       height: 60px;
@@ -36,6 +37,12 @@
       color: white;
       gap: 1rem;
     }
+    .burger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+    }
     nav {
       display: flex;
     }
@@ -48,11 +55,30 @@
       transition: background 0.3s, color 0.3s;
       border-radius: 4px;
     }
-    nav a:hover, nav a.active {
+    nav a:hover,
+    nav a.active {
       background: white;
       color: var(--orbivia-yellow);
     }
-
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        background: var(--orbivia-yellow);
+        position: absolute;
+        right: 1rem;
+        top: 70px;
+        padding: 1rem;
+        border-radius: 6px;
+        z-index: 10;
+      }
+      nav.open {
+        display: flex;
+      }
+      .burger {
+        display: block;
+      }
+    }
     main {
       padding: 2rem;
       max-width: 1000px;
@@ -62,6 +88,25 @@
       text-align: center;
       font-size: 2.5rem;
       margin-bottom: 2rem;
+    }
+    .contact-info {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+    .contact-info h2 {
+      margin-top: 0;
+    }
+    .contact-info a {
+      color: var(--orbivia-yellow);
+      text-decoration: none;
+    }
+    .contact-info a:hover {
+      text-decoration: underline;
     }
     .contact-form {
       background: white;
@@ -104,39 +149,6 @@
     .contact-form button:hover {
       background: #d49614;
     }
-
-    .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .popup-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    }
-    .popup-content h2 {
-      margin-bottom: 1rem;
-    }
-    .popup-content button {
-      margin-top: 1rem;
-      background: var(--orbivia-yellow);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
     footer {
       text-align: center;
       padding: 1rem;
@@ -155,6 +167,9 @@
       <img src="img/logo.png" alt="Logo Orbivia" />
       Orbivia
     </a>
+    <div class="burger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
     <nav>
       <a href="index.html">Accueil</a>
       <a href="realisations.html">Réalisations</a>
@@ -165,86 +180,104 @@
   <main>
     <h1>Contactez-nous</h1>
 
+    <div class="contact-info">
+      <h2>Coordonnées</h2>
+      <p><strong>Adresse :</strong><br>
+        30 rue Jules Guesde<br>
+        59390 Lys-lez-Lannoy
+      </p>
+      <p><strong>Email :</strong><br>
+        <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a>
+      </p>
+      <div style="margin-top: 1rem; border-radius: 8px; overflow: hidden;">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2532.7025097498944!2d3.1916883!3d50.6975003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c30eebadcb40cb%3A0x8721793f9e50b1d4!2s30%20Rue%20Jules%20Guesde%2C%2059390%20Lys-lez-Lannoy!5e0!3m2!1sfr!2sfr!4v1716292382303!5m2!1sfr!2sfr"
+          width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+
     <div class="contact-form">
-      <form id="contact-form">
+      <form onsubmit="sendMail(event)">
         <label for="name">Nom</label>
-        <input type="text" id="name" name="name" placeholder="Jean Dupont" required>
+        <input type="text" id="name" name="name" placeholder="Jean Dupont">
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="jean.dupont@email.com" required>
+        <input type="email" id="email" name="email" placeholder="jean.dupont@email.com">
 
         <label for="message">Message</label>
-        <textarea id="message" name="message" rows="6" placeholder="Votre message..." required></textarea>
-
-        <input type="hidden" name="_captcha" value="false">
+        <textarea id="message" name="message" rows="6" placeholder="Votre message..."></textarea>
 
         <button type="submit">Envoyer</button>
+
+        <p id="confirmation-message" style="display:none; color: green; margin-top: 1rem;">
+          Merci, votre messagerie va s’ouvrir. Vous pouvez finaliser l’envoi.
+        </p>
+        <p id="error-message" style="display:none; color: red; margin-top: 1rem;">
+          Merci de remplir tous les champs avec des données valides.
+        </p>
       </form>
     </div>
   </main>
-
-  <!-- Popup de confirmation -->
-  <div class="popup" id="confirmation-popup">
-    <div class="popup-content">
-      <h2>Merci !</h2>
-      <p>Votre message a bien été envoyé.</p>
-      <button onclick="closePopup()">Fermer</button>
-    </div>
-  </div>
 
   <footer>
     Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
   </footer>
 
   <script>
-    function closePopup() {
-      document.getElementById('confirmation-popup').style.display = 'none';
+    function toggleMenu() {
+      document.querySelector('nav').classList.toggle('open');
     }
 
-    document.getElementById("contact-form").addEventListener("submit", function(e) {
-      e.preventDefault();
+    function sendMail(event) {
+      event.preventDefault();
 
-      const nameField = document.getElementById("name");
-      const emailField = document.getElementById("email");
-      const messageField = document.getElementById("message");
+      const nameField = document.getElementById('name');
+      const emailField = document.getElementById('email');
+      const messageField = document.getElementById('message');
 
       const name = nameField.value.trim();
       const email = emailField.value.trim();
       const message = messageField.value.trim();
 
-      const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-      let valid = true;
+      const confirmation = document.getElementById('confirmation-message');
+      const error = document.getElementById('error-message');
 
-      [nameField, emailField, messageField].forEach(f => f.classList.remove("error"));
+      [nameField, emailField, messageField].forEach(field => field.classList.remove('error'));
 
-      if (!name) { nameField.classList.add("error"); valid = false; }
-      if (!email || !emailRegex.test(email)) { emailField.classList.add("error"); valid = false; }
-      if (!message) { messageField.classList.add("error"); valid = false; }
+      let hasError = false;
 
-      if (!valid) return;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("message", message);
-      formData.append("_captcha", "false");
+      if (!name) {
+        nameField.classList.add('error');
+        hasError = true;
+      }
+      if (!email || !emailRegex.test(email)) {
+        emailField.classList.add('error');
+        hasError = true;
+      }
+      if (!message) {
+        messageField.classList.add('error');
+        hasError = true;
+      }
 
-      fetch("https://fabform.io/f/-zYKMbp", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => {
-        if (response.ok) {
-          document.getElementById("contact-form").reset();
-          document.getElementById("confirmation-popup").style.display = "flex";
-        } else {
-          alert("Une erreur est survenue. Veuillez réessayer.");
-        }
-      })
-      .catch(() => {
-        alert("Impossible d’envoyer le message.");
-      });
-    });
+      if (hasError) {
+        error.textContent = "Merci de remplir tous les champs avec des données valides.";
+        error.style.display = 'block';
+        confirmation.style.display = 'none';
+        return;
+      }
+
+      error.style.display = 'none';
+      confirmation.style.display = 'block';
+
+      const subject = `Contact depuis orbivia.fr de ${encodeURIComponent(name)}`;
+      const body = `Nom : ${name}\nEmail : ${email}\n\n${message}`;
+
+      window.location.href = `mailto:pierre.charlier@orbivia.fr?subject=${subject}&body=${encodeURIComponent(body)}`;
+    }
   </script>
 </body>
 </html>
