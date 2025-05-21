@@ -144,16 +144,6 @@
     .contact-form button:hover {
       background: #d49614;
     }
-    .message {
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    .success {
-      color: green;
-    }
-    .error {
-      color: red;
-    }
     footer {
       text-align: center;
       padding: 1rem;
@@ -194,7 +184,6 @@
       <p><strong>Email :</strong><br>
         <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a>
       </p>
-
       <div style="margin-top: 1rem; border-radius: 8px; overflow: hidden;">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2532.7025097498944!2d3.1916883!3d50.6975003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c30eebadcb40cb%3A0x8721793f9e50b1d4!2s30%20Rue%20Jules%20Guesde%2C%2059390%20Lys-lez-Lannoy!5e0!3m2!1sfr!2sfr!4v1716292382303!5m2!1sfr!2sfr"
@@ -205,18 +194,24 @@
     </div>
 
     <div class="contact-form">
-      <form id="contact-form" action="https://formspree.io/f/moqgzwvp" method="POST">
+      <form onsubmit="sendMail(event)">
         <label for="name">Nom</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name">
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="_replyto" required>
+        <input type="email" id="email" name="email">
 
         <label for="message">Message</label>
-        <textarea id="message" name="message" rows="6" required></textarea>
+        <textarea id="message" name="message" rows="6"></textarea>
 
         <button type="submit">Envoyer</button>
-        <p id="form-message" class="message"></p>
+
+        <p id="confirmation-message" style="display:none; color: green; margin-top: 1rem;">
+          Merci, votre messagerie va s’ouvrir. Vous pouvez finaliser l’envoi.
+        </p>
+        <p id="error-message" style="display:none; color: red; margin-top: 1rem;">
+          Merci de remplir tous les champs avant d’envoyer.
+        </p>
       </form>
     </div>
   </main>
@@ -230,44 +225,30 @@
       document.querySelector('nav').classList.toggle('open');
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const form = document.getElementById("contact-form");
-      const messageEl = document.getElementById("form-message");
+    function sendMail(event) {
+      event.preventDefault();
 
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
 
-        const name = form.name.value.trim();
-        const email = form.email.value.trim();
-        const message = form.message.value.trim();
+      const confirmation = document.getElementById('confirmation-message');
+      const error = document.getElementById('error-message');
 
-        if (!name || !email || !message) {
-          messageEl.textContent = "Veuillez remplir tous les champs.";
-          messageEl.className = "message error";
-          return;
-        }
+      if (!name || !email || !message) {
+        error.style.display = 'block';
+        confirmation.style.display = 'none';
+        return;
+      }
 
-        fetch(form.action, {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json'
-          },
-          body: new FormData(form)
-        }).then(response => {
-          if (response.ok) {
-            form.reset();
-            messageEl.textContent = "Merci pour votre message !";
-            messageEl.className = "message success";
-          } else {
-            messageEl.textContent = "Une erreur est survenue. Veuillez réessayer.";
-            messageEl.className = "message error";
-          }
-        }).catch(() => {
-          messageEl.textContent = "Impossible d’envoyer le message. Vérifiez votre connexion.";
-          messageEl.className = "message error";
-        });
-      });
-    });
+      error.style.display = 'none';
+      confirmation.style.display = 'block';
+
+      const subject = `Contact depuis orbivia.fr de ${encodeURIComponent(name)}`;
+      const body = `Nom : ${name}\nEmail : ${email}\n\n${message}`;
+
+      window.location.href = `mailto:pierre.charlier@orbivia.fr?subject=${subject}&body=${encodeURIComponent(body)}`;
+    }
   </script>
 </body>
 </html>
