@@ -184,29 +184,118 @@
   </div>
 
   <script>
-    const projets = [
-      { title: "AudioBook", img: "img/Projets/Audiobook.jpg", desc: "Réalisation de livres d’or audio à partir de téléphones anciens." },
-      { title: "Banc3D", img: "img/Projets/Banc3D.jpg", desc: "Banc imprimé 3D en béton inspiré d’un peigne urbain." },
-      { title: "Capsule", img: "img/Projets/CAPSULE.jpg", desc: "Capsule temporelle numérique à message différé." },
-      { title: "ClefPPG", img: "img/Projets/ClefPPG.jpg", desc: "Capteur de rythme cardiaque PPG compact." },
-      { title: "CompteurTours", img: "img/Projets/CompteurTours.jpg", desc: "Compteur de rotation pour roue de rongeur en clinique." },
-      { title: "ECGReader", img: "img/Projets/ECGReader.jpg", desc: "Capteur ECG Bluetooth pour télémédecine." },
-      { title: "KeyDuinoNano", img: "img/Projets/KeyDuinoNano.jpg", desc: "Mini lecteur NFC ultra compact." },
-      { title: "KeyDuino", img: "img/Projets/KeyDuino.jpg", desc: "Lecteur NFC basé Arduino pour makers." },
-      { title: "LIDAR", img: "img/Projets/LIDAR.jpg", desc: "Capteur LIDAR portable pour drones." },
-      { title: "NFCMatcher", img: "img/Projets/NFCMatcher.jpg", desc: "Calibrateur automatique d’antenne NFC." },
-      { title: "NFCRing", img: "img/Projets/NFCRing.jpg", desc: "Bague connectée NFC pour identification." },
-      { title: "OzOne", img: "img/Projets/OzOne.jpg", desc: "Contrôle d'accès NFC connecté Wi-Fi." },
-      { title: "PhotoboothV1", img: "img/Projets/PhotoboothV1.jpg", desc: "Première version de borne photo événementielle." },
-      { title: "PhotoboothV2", img: "img/Projets/PhotoboothV2.jpg", desc: "Version compacte et transportable de la borne selfie." },
-      { title: "Sculpture3D", img: "img/Projets/Sculpture3D.jpg", desc: "Dôme urbain 3D en béton pour espaces publics." },
-      { title: "StethoPassif", img: "img/Projets/StethoscopePassif.jpg", desc: "Stéthoscope biomimétique passif sans électronique." },
-      { title: "Stethoscope", img: "img/Projets/STETHOSCOPE.jpg", desc: "Stéthoscope Bluetooth amplifié pour enseignement." },
-      { title: "TableNFC", img: "img/Projets/TableNFC.jpg", desc: "Table connectée avec contrôle NFC." },
-      { title: "Torkeo", img: "img/Projets/Torkeo.jpg", desc: "Dispositif au cou pour suivi de troubles cognitifs." },
-      { title: "Videobook", img: "img/Projets/VIDEOBOOK.jpg", desc: "Livre d’or vidéo rétro pour événements." },
-      { title: "Notaboo", img: "img/Projets/Notaboo.png", desc: "Toilettes portatives pour personnes en situation de handicap." }
-    ];
+ 
+
+const projets = [
+  {
+    title: "AudioBook",
+    img: "img/Projets/AudioBook.jpg",
+    desc: "Livre d’or audio conçu à partir de téléphones anciens, offrant une expérience nostalgique et interactive. En savoir plus : https://www.laforgeasouvenirs.fr/"
+  },
+  {
+    title: "Banc3D",
+    img: "img/Projets/Banc3D.jpg",
+    desc: "Banc urbain imprimé en 3D béton, au design inspiré d’un peigne. En savoir plus : https://www.constructions-3d.com/fr/maxiprinter"
+  },
+  {
+    title: "Capsule",
+    img: "img/Projets/CAPSULE.jpg",
+    desc: "Capsule temporelle numérique permettant l’envoi différé de messages vidéo. Plus d'infos : https://www.laforgeasouvenirs.fr/"
+  },
+  {
+    title: "ClefPPG",
+    img: "img/Projets/ClefPPG.jpg",
+    desc: "Capteur de fréquence cardiaque économique basé sur la photopléthysmographie (PPG)."
+  },
+  {
+    title: "CompteurTours",
+    img: "img/Projets/CompteurTours.jpg",
+    desc: "Compteur de rotation pour roue de rongeur, utilisé en clinique vétérinaire pour évaluer le stress animal."
+  },
+  {
+    title: "ECGReader",
+    img: "img/Projets/ECGReader.jpg",
+    desc: "Capteur ECG connecté en Bluetooth, idéal pour la télémédecine et le suivi personnel."
+  },
+  {
+    title: "KeyDuinoNano",
+    img: "img/Projets/KeyDuinoNano.jpg",
+    desc: "Mini lecteur NFC ultra compact, adapté aux projets embarqués. Plus d'infos : https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr"
+  },
+  {
+    title: "KeyDuino",
+    img: "img/Projets/KeyDuino.jpg",
+    desc: "Lecteur NFC open source basé sur Arduino, conçu pour les makers. Plus d'infos : https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr"
+  },
+  {
+    title: "LIDAR",
+    img: "img/Projets/LIDAR.jpg",
+    desc: "Capteur LIDAR portable compatible avec drones pour la détection d’obstacles et la cartographie."
+  },
+  {
+    title: "NFCMatcher",
+    img: "img/Projets/NFCMatcher.jpg",
+    desc: "Dispositif de calibration automatique d’antennes NFC pour des performances de lecture optimales."
+  },
+  {
+    title: "NFCRing",
+    img: "img/Projets/NFCRing.jpg",
+    desc: "Bague NFC connectée pour l’identification et le contrôle d’accès. Plus d'infos : https://nfcring.com/"
+  },
+  {
+    title: "OzOne",
+    img: "img/Projets/OZONE.jpg",
+    desc: "Système de contrôle d’accès NFC connecté en Wi-Fi, configurable à distance."
+  },
+  {
+    title: "PhotoboothV1",
+    img: "img/Projets/PhotoboothV1.jpg",
+    desc: "Première version d’une borne photo événementielle, robuste et intuitive. Plus d'infos : https://www.laforgeasouvenirs.fr/"
+  },
+  {
+    title: "PhotoboothV2",
+    img: "img/Projets/PhotoboothV2.jpg",
+    desc: "Version optimisée de notre borne photo transportable pour événements. Plus d'infos : https://www.laforgeasouvenirs.fr/"
+  },
+  {
+    title: "Sculpture3D",
+    img: "img/Projets/Sculpture3D.jpg",
+    desc: "Dôme architectural imprimé en béton 3D, pensé pour valoriser l’espace public."
+  },
+  {
+    title: "AcCorps",
+    img: "img/Projets/StethoscopePassif.jpg",
+    desc: "Stéthoscope passif biomimétique, inspiré de la cochlée humaine. Présenté à Biomim’expo : https://biomimexpo.com/"
+  },
+  {
+    title: "Stethoscope",
+    img: "img/Projets/Stethoscope.jpg",
+    desc: "Stéthoscope électronique Bluetooth avec amplification audio, conçu pour l’enseignement et la télémédecine."
+  },
+  {
+    title: "TableNFC",
+    img: "img/Projets/TableNFC.jpg",
+    desc: "Table lumineuse interactive contrôlée par cartes NFC, idéale pour environnements connectés."
+  },
+  {
+    title: "Torkeo",
+    img: "img/Projets/Torkeo.jpg",
+    desc: "Dispositif porté au cou pour le suivi de constantes physiologiques, pensé pour les troubles cognitifs."
+  },
+  {
+    title: "Videobook",
+    img: "img/Projets/VideoBook.jpg",
+    desc: "Livre d’or vidéo au design rétro, pour immortaliser les moments forts d’un événement. Plus d'infos : https://www.laforgeasouvenirs.fr/"
+  },
+  {
+    title: "Notaboo",
+    img: "img/Projets/Notaboo.png",
+    desc: "Toilettes portatives autonomes, accessibles aux personnes en situation de handicap. Plus d'infos : https://notaboo.solutions/"
+  }
+];
+
+
+    
 
     const container = document.getElementById('gallery');
     const popup = document.getElementById('popup');
