@@ -89,18 +89,41 @@
       font-size: 2.5rem;
       margin-bottom: 2rem;
     }
-    .contact-info {
+    .contact-form {
       background: white;
       padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
     }
-    .contact-info h2 {
-      margin-bottom: 1rem;
+    .contact-form label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
     }
-    .contact-info p {
-      line-height: 1.8;
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .contact-form button {
+      margin-top: 1.5rem;
+      background: var(--orbivia-yellow);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .contact-form button:hover {
+      background: #d49614;
     }
     footer {
       text-align: center;
@@ -132,10 +155,22 @@
 
   <main>
     <h1>Contactez-nous</h1>
-    <div class="contact-info">
-      <h2>Orbivia</h2>
-      <p>30 rue Jules Guesde<br>59390 Lys-lez-Lannoy</p>
-      <p>Email : <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a></p>
+    <div class="contact-form">
+      <form onsubmit="sendMail(event)">
+        <label for="name">Nom</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="6" required></textarea>
+
+        <button type="submit">Envoyer</button>
+        <p id="confirmation-message" style="display:none; color: green; margin-top: 1rem;">
+          Merci, votre messagerie va s’ouvrir. Vous pouvez finaliser l’envoi.
+        </p>
+      </form>
     </div>
   </main>
 
@@ -146,6 +181,20 @@
   <script>
     function toggleMenu() {
       document.querySelector('nav').classList.toggle('open');
+    }
+
+    function sendMail(event) {
+      event.preventDefault();
+      const name = encodeURIComponent(document.getElementById('name').value);
+      const email = encodeURIComponent(document.getElementById('email').value);
+      const message = encodeURIComponent(document.getElementById('message').value);
+
+      const subject = `Contact depuis orbivia.fr de ${name}`;
+      const body = `Nom : ${decodeURIComponent(name)}\nEmail : ${decodeURIComponent(email)}\n\n${decodeURIComponent(message)}`;
+
+      document.getElementById('confirmation-message').style.display = 'block';
+
+      window.location.href = `mailto:pierre.charlier@orbivia.fr?subject=${subject}&body=${body}`;
     }
   </script>
 </body>
