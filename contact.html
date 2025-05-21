@@ -130,6 +130,11 @@
       border-radius: 6px;
       font-size: 1rem;
     }
+    .contact-form input.error,
+    .contact-form textarea.error {
+      border: 2px solid red;
+      background-color: #ffe6e6;
+    }
     .contact-form button {
       margin-top: 1.5rem;
       background: var(--orbivia-yellow);
@@ -228,14 +233,36 @@
     function sendMail(event) {
       event.preventDefault();
 
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
+      const nameField = document.getElementById('name');
+      const emailField = document.getElementById('email');
+      const messageField = document.getElementById('message');
+
+      const name = nameField.value.trim();
+      const email = emailField.value.trim();
+      const message = messageField.value.trim();
 
       const confirmation = document.getElementById('confirmation-message');
       const error = document.getElementById('error-message');
 
-      if (!name || !email || !message) {
+      // Reset styles
+      [nameField, emailField, messageField].forEach(field => field.classList.remove('error'));
+
+      let hasError = false;
+
+      if (!name) {
+        nameField.classList.add('error');
+        hasError = true;
+      }
+      if (!email) {
+        emailField.classList.add('error');
+        hasError = true;
+      }
+      if (!message) {
+        messageField.classList.add('error');
+        hasError = true;
+      }
+
+      if (hasError) {
         error.style.display = 'block';
         confirmation.style.display = 'none';
         return;
