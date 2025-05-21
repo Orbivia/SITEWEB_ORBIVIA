@@ -144,6 +144,16 @@
     .contact-form button:hover {
       background: #d49614;
     }
+    .message {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
     footer {
       text-align: center;
       padding: 1rem;
@@ -195,20 +205,18 @@
     </div>
 
     <div class="contact-form">
-      <form onsubmit="sendMail(event)">
+      <form id="contact-form" action="https://formspree.io/f/moqgzwvp" method="POST">
         <label for="name">Nom</label>
         <input type="text" id="name" name="name" required>
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="_replyto" required>
 
         <label for="message">Message</label>
         <textarea id="message" name="message" rows="6" required></textarea>
 
         <button type="submit">Envoyer</button>
-        <p id="confirmation-message" style="display:none; color: green; margin-top: 1rem;">
-          Merci, votre messagerie va s’ouvrir. Vous pouvez finaliser l’envoi.
-        </p>
+        <p id="form-message" class="message"></p>
       </form>
     </div>
   </main>
@@ -222,19 +230,44 @@
       document.querySelector('nav').classList.toggle('open');
     }
 
-    function sendMail(event) {
-      event.preventDefault();
-      const name = encodeURIComponent(document.getElementById('name').value);
-      const email = encodeURIComponent(document.getElementById('email').value);
-      const message = encodeURIComponent(document.getElementById('message').value);
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("contact-form");
+      const messageEl = document.getElementById("form-message");
 
-      const subject = `Contact depuis orbivia.fr de ${name}`;
-      const body = `Nom : ${decodeURIComponent(name)}\nEmail : ${decodeURIComponent(email)}\n\n${decodeURIComponent(message)}`;
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-      document.getElementById('confirmation-message').style.display = 'block';
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const message = form.message.value.trim();
 
-      window.location.href = `mailto:pierre.charlier@orbivia.fr?subject=${subject}&body=${body}`;
-    }
+        if (!name || !email || !message) {
+          messageEl.textContent = "Veuillez remplir tous les champs.";
+          messageEl.className = "message error";
+          return;
+        }
+
+        fetch(form.action, {
+          method: "POST",
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: new FormData(form)
+        }).then(response => {
+          if (response.ok) {
+            form.reset();
+            messageEl.textContent = "Merci pour votre message !";
+            messageEl.className = "message success";
+          } else {
+            messageEl.textContent = "Une erreur est survenue. Veuillez réessayer.";
+            messageEl.className = "message error";
+          }
+        }).catch(() => {
+          messageEl.textContent = "Impossible d’envoyer le message. Vérifiez votre connexion.";
+          messageEl.className = "message error";
+        });
+      });
+    });
   </script>
 </body>
 </html>
