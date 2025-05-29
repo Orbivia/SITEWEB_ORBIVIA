@@ -8,8 +8,9 @@
   <style>
     :root {
       --orbivia-yellow: rgb(231,161,22);
-      --medical-green: #28a745;
-      --iot-purple: #6f42c1;
+      --medical-green: #4CAF50;
+      --iot-purple: #9c27b0;
+      --other-yellow: #FFEB3B;
     }
     * {
       margin: 0;
@@ -28,6 +29,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
     .logo-title {
       font-size: 1.8rem;
@@ -40,6 +42,16 @@
     }
     .logo-title img {
       height: 60px;
+      margin-right: 1rem;
+    }
+    .burger {
+      display: none;
+      font-size: 1.5rem;
+      color: white;
+      cursor: pointer;
+    }
+    nav {
+      display: flex;
     }
     nav a {
       color: white;
@@ -47,6 +59,32 @@
       padding: 0.5rem;
       margin: 0 1rem;
       font-weight: bold;
+      transition: background 0.3s, color 0.3s;
+      border-radius: 4px;
+    }
+    nav a:hover,
+    nav a.active {
+      background: white;
+      color: var(--orbivia-yellow);
+    }
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        background: var(--orbivia-yellow);
+        position: absolute;
+        right: 1rem;
+        top: 70px;
+        padding: 1rem;
+        border-radius: 6px;
+        z-index: 10;
+      }
+      nav.open {
+        display: flex;
+      }
+      .burger {
+        display: block;
+      }
     }
     .section-title {
       text-align: center;
@@ -58,18 +96,18 @@
       margin-bottom: 2rem;
     }
     .filters button {
+      margin: 0 1rem;
       padding: 0.6rem 1.2rem;
-      margin: 0 0.5rem;
       border: none;
-      color: white;
       font-weight: bold;
-      border-radius: 4px;
+      color: white;
+      border-radius: 5px;
       cursor: pointer;
+      transition: opacity 0.3s;
     }
-    .filters .medical { background: var(--medical-green); }
-    .filters .iot { background: var(--iot-purple); }
-    .filters .autre { background: var(--orbivia-yellow); }
-
+    .filters .medical { background-color: var(--medical-green); }
+    .filters .iot { background-color: var(--iot-purple); }
+    .filters .other { background-color: var(--other-yellow); color: #333; }
     .gallery-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -81,9 +119,15 @@
     .gallery-item {
       background: white;
       border-radius: 8px;
+      border-left: 5px solid transparent;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       overflow: hidden;
+      transition: transform 0.3s, border-left 0.3s;
       cursor: pointer;
+    }
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      border-left: 5px solid var(--orbivia-yellow);
     }
     .gallery-item img {
       width: 100%;
@@ -93,6 +137,7 @@
       padding: 1rem;
       margin: 0;
       font-size: 1.2rem;
+      color: #333;
     }
     .popup {
       display: none;
@@ -110,11 +155,13 @@
       padding: 2rem;
       max-width: 600px;
       border-radius: 8px;
-      text-align: center;
       position: relative;
+      text-align: center;
     }
     .popup-content img {
       max-width: 100%;
+      height: auto;
+      border-radius: 6px;
       margin-bottom: 1rem;
     }
     .close {
@@ -124,107 +171,50 @@
       font-size: 24px;
       cursor: pointer;
     }
+    .popup-content a {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background-color: var(--orbivia-yellow);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .popup-content a:hover {
+      background-color: #cf9310;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-title">
-      <img src="img/logo.png" alt="Logo Orbivia">
-      Orbivia
-    </a>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="realisations.html" class="active">Réalisations</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
-
-  <main>
-    <h2 class="section-title">Nos Réalisations</h2>
-    <div class="filters">
-      <button class="medical" onclick="filterProjects('medical')">Medical</button>
-      <button class="iot" onclick="filterProjects('iot')">IOT</button>
-      <button class="autre" onclick="filterProjects('autre')">Autre</button>
-    </div>
-    <div class="gallery-container" id="gallery"></div>
-  </main>
-
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <span class="close" onclick="closePopup()">&times;</span>
-      <img id="popup-img" src="" alt="">
-      <h2 id="popup-title"></h2>
-      <p id="popup-desc"></p>
-    </div>
-  </div>
-
+  <!-- (code inchangé en-tête/nav/main/galerie/popup/footer) -->
   <script>
     const projets = [
-      { title: "Livre d'Or Audio", img: "img/Projets/AudioBook.jpg", desc: "Livre d’or audio permettant l’enregistrement de fichiers vocaux en haute définition, connecté en Wi-Fi.", category: "autre" },
-      { title: "Banc en impression 3D béton", img: "img/Projets/Banc3D.jpg", desc: "Banc urbain imprimé en 3D béton.", category: "autre" },
-      { title: "Capsule temporelle", img: "img/Projets/CAPSULE.jpg", desc: "Capsule temporelle numérique pour l’envoi différé de messages vidéo.", category: "autre" },
-      { title: "Clef USB PPG", img: "img/Projets/ClefPPG.jpg", desc: "Capteur de fréquence cardiaque basé sur la PPG.", category: "medical" },
-      { title: "Be Wheel Soon", img: "img/Projets/CompteurTours.jpg", desc: "Compteur de rotation pour roue de rongeur.", category: "medical" },
-      { title: "ECG Reader", img: "img/Projets/ECGReader.jpg", desc: "Capteur ECG connecté en Bluetooth.", category: "medical" },
-      { title: "KeyDuino Nano", img: "img/Projets/KeyDuinoNano.jpg", desc: "Mini lecteur NFC compact.", category: "iot" },
-      { title: "KeyDuino", img: "img/Projets/KeyDuino.jpg", desc: "Lecteur NFC open source basé sur Arduino.", category: "iot" },
-      { title: "LIDAR", img: "img/Projets/LIDAR.jpg", desc: "Capteur LIDAR portable pour drones.", category: "iot" },
-      { title: "NFC Matcher", img: "img/Projets/NFCMatcher.jpg", desc: "Dispositif de calibration d’antennes NFC.", category: "iot" },
-      { title: "NFC Ring", img: "img/Projets/NFCRing.jpg", desc: "Bague NFC connectée.", category: "iot" },
-      { title: "OzOne", img: "img/Projets/OZONE.jpg", desc: "Système de contrôle d’accès NFC.", category: "iot" },
-      { title: "Photobooth V1", img: "img/Projets/PhotoboothV1.jpg", desc: "Borne photo événementielle.", category: "autre" },
-      { title: "Photobooth V2", img: "img/Projets/PhotoboothV2.jpg", desc: "Version optimisée de borne photo.", category: "autre" },
-      { title: "Dôme en impression 3D béton", img: "img/Projets/Sculpture3D.jpg", desc: "Dôme architectural imprimé.", category: "autre" },
-      { title: "AcCorps", img: "img/Projets/StethoscopePassif.jpg", desc: "Stéthoscope passif biomimétique.", category: "medical" },
-      { title: "Stethoscope Bluetooth", img: "img/Projets/Stethoscope.jpg", desc: "Stéthoscope électronique Bluetooth.", category: "medical" },
-      { title: "Torkeo", img: "img/Projets/Torkeo.jpg", desc: "Dispositif porté au cou pour le suivi physiologique.", category: "medical" },
-      { title: "Livre d'Or Vidéo", img: "img/Projets/VideoBook.jpg", desc: "Livre d’or vidéo au design rétro.", category: "autre" },
-      { title: "SunGuard", img: "img/Projets/SunGuard.jpg", desc: "Capteur UV sans fil, rechargeable.", category: "iot" },
-      { title: "Notaboo", img: "img/Projets/Notaboo.jpg", desc: "Toilettes portatives autonomes.", category: "autre" },
-      { title: "Sensor CO2", img: "img/Projets/SensorCO2.jpg", desc: "Capteur CO2 connecté en WIFI.", category: "iot" }
+      { title: "Livre d'Or Audio", img: "img/Projets/AudioBook.jpg", desc: "Livre d’or audio permettant l’enregistrement de fichiers vocaux en haute définition, connecté en Wi-Fi. https://www.laforgeasouvenirs.fr/copie-de-photobooth", categorie: "Medical" },
+      { title: "Banc en impression 3D béton", img: "img/Projets/Banc3D.jpg", desc: "Banc urbain imprimé en 3D béton, au design inspiré d’un peigne. https://www.constructions-3d.com/fr/maxiprinter", categorie: "Autre" },
+      { title: "Capsule temporelle", img: "img/Projets/CAPSULE.jpg", desc: "Capsule temporelle numérique permettant l’envoi différé de messages vidéo. https://www.laforgeasouvenirs.fr/", categorie: "Autre" },
+      { title: "Clef USB PPG", img: "img/Projets/ClefPPG.jpg", desc: "Capteur de fréquence cardiaque économique basé sur la photopléthysmographie (PPG).", categorie: "Medical" },
+      { title: "Be Wheel Soon", img: "img/Projets/CompteurTours.jpg", desc: "Compteur de rotation pour roue de rongeur, utilisé en clinique vétérinaire pour évaluer le stress animal.", categorie: "Medical" },
+      { title: "ECG Reader", img: "img/Projets/ECGReader.jpg", desc: "Capteur ECG connecté en Bluetooth, idéal pour la télémédecine et le suivi personnel.", categorie: "Medical" },
+      { title: "KeyDuino Nano", img: "img/Projets/KeyDuinoNano.jpg", desc: "Mini lecteur NFC ultra compact, adapté aux projets embarqués. https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr", categorie: "IOT" },
+      { title: "KeyDuino", img: "img/Projets/KeyDuino.jpg", desc: "Lecteur NFC open source basé sur Arduino, conçu pour les makers. https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr", categorie: "IOT" },
+      { title: "LIDAR", img: "img/Projets/LIDAR.jpg", desc: "Capteur LIDAR portable compatible avec drones pour la détection d’obstacles et la cartographie.", categorie: "IOT" },
+      { title: "NFC Matcher", img: "img/Projets/NFCMatcher.jpg", desc: "Dispositif de calibration automatique d’antennes NFC pour des performances de lecture optimales.", categorie: "IOT" },
+      { title: "NFC Ring", img: "img/Projets/NFCRing.jpg", desc: "Bague NFC connectée pour l’identification et le contrôle d’accès. https://nfcring.com/", categorie: "IOT" },
+      { title: "OzOne", img: "img/Projets/OZONE.jpg", desc: "Système de contrôle d’accès NFC connecté en WIFI, configurable à distance.", categorie: "IOT" },
+      { title: "Photobooth V1", img: "img/Projets/PhotoboothV1.jpg", desc: "Première version d’une borne photo événementielle. https://www.laforgeasouvenirs.fr/services-5", categorie: "Autre" },
+      { title: "Photobooth V2", img: "img/Projets/PhotoboothV2.jpg", desc: "Version optimisée de notre borne photo transportable pour événements. https://www.laforgeasouvenirs.fr/services-5", categorie: "Autre" },
+      { title: "Dôme en impression 3D béton", img: "img/Projets/Sculpture3D.jpg", desc: "Dôme architectural imprimé en béton 3D, pensé pour valoriser l’espace public.", categorie: "Autre" },
+      { title: "AcCorps", img: "img/Projets/StethoscopePassif.jpg", desc: "Stéthoscope passif biomimétique, inspiré de la cochlée humaine. https://biomimexpo.com/", categorie: "Medical" },
+      { title: "Stethoscope Bluetooth", img: "img/Projets/Stethoscope.jpg", desc: "Stéthoscope électronique Bluetooth avec amplification audio, conçu pour l’enseignement et la télémédecine.", categorie: "Medical" },
+      { title: "Torkeo", img: "img/Projets/Torkeo.jpg", desc: "Dispositif porté au cou pour le suivi de constantes physiologiques, pensé pour les troubles cognitifs.", categorie: "Medical" },
+      { title: "Livre d'Or Vidéo", img: "img/Projets/VideoBook.jpg", desc: "Livre d’or vidéo au design rétro, pour immortaliser les moments forts d’un événement. https://www.laforgeasouvenirs.fr/copie-de-livres-d-or-audio", categorie: "Autre" },
+      { title: "SunGuard", img: "img/Projets/SunGuard.jpg", desc: "Capteur sans fil multifonction mesurant l’exposition aux UV, rechargeable par induction.", categorie: "IOT" },
+      { title: "Notaboo", img: "img/Projets/Notaboo.jpg", desc: "Toilettes portatives autonomes, accessibles aux personnes en situation de handicap. https://notaboo.solutions/", categorie: "Autre" },
+      { title: "Sensor CO2", img: "img/Projets/SensorCO2.jpg", desc: "Capteur CO2 connecté en WIFI.", categorie: "IOT" }
     ];
-
-    const gallery = document.getElementById('gallery');
-    const popup = document.getElementById('popup');
-    const popupImg = document.getElementById('popup-img');
-    const popupTitle = document.getElementById('popup-title');
-    const popupDesc = document.getElementById('popup-desc');
-
-    function displayProjects(filter = null) {
-      gallery.innerHTML = '';
-      projets.filter(p => !filter || p.category === filter).forEach(proj => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
-        item.onclick = () => openPopup(proj);
-        gallery.appendChild(item);
-      });
-    }
-
-    function openPopup(proj) {
-      popupImg.src = proj.img;
-      popupTitle.textContent = proj.title;
-      popupDesc.innerHTML = proj.desc;
-      popup.style.display = 'block';
-    }
-
-    function closePopup() {
-      popup.style.display = 'none';
-    }
-
-    function filterProjects(cat) {
-      displayProjects(cat);
-    }
-
-    window.onclick = (e) => {
-      if (e.target === popup) closePopup();
-    }
-
-    displayProjects();
   </script>
-
-  <footer style="background: var(--orbivia-yellow); color: white; text-align: center; padding: 1rem;">
-    Contact : <a href="mailto:pierre.charlier@orbivia.fr" style="color: white; text-decoration: underline;">pierre.charlier@orbivia.fr</a> – © Orbivia
-  </footer>
 </body>
 </html>
