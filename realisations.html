@@ -8,6 +8,8 @@
   <style>
     :root {
       --orbivia-yellow: rgb(231,161,22);
+      --medical-green: #28a745;
+      --iot-purple: #6f42c1;
     }
     * {
       margin: 0;
@@ -26,7 +28,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
     }
     .logo-title {
       font-size: 1.8rem;
@@ -40,74 +41,34 @@
     .logo-title img {
       height: 60px;
     }
-    .burger {
-      display: none;
-      font-size: 1.5rem;
-      color: white;
-      cursor: pointer;
-    }
-    nav {
-      display: flex;
-    }
     nav a {
       color: white;
       text-decoration: none;
       padding: 0.5rem;
       margin: 0 1rem;
       font-weight: bold;
-      transition: background 0.3s, color 0.3s;
-      border-radius: 4px;
-    }
-    nav a:hover,
-    nav a.active {
-      background: white;
-      color: var(--orbivia-yellow);
-    }
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        background: var(--orbivia-yellow);
-        position: absolute;
-        right: 1rem;
-        top: 70px;
-        padding: 1rem;
-        border-radius: 6px;
-        z-index: 10;
-      }
-      nav.open {
-        display: flex;
-      }
-      .burger {
-        display: block;
-      }
     }
     .section-title {
       text-align: center;
       font-size: 2.5rem;
       margin: 2rem 0 1rem;
     }
-    .filter-buttons {
+    .filters {
       text-align: center;
-      margin: 2rem 0;
+      margin-bottom: 2rem;
     }
-    .btn {
+    .filters button {
+      padding: 0.6rem 1.2rem;
+      margin: 0 0.5rem;
       border: none;
-      padding: 0.8rem 1.5rem;
-      margin: 0.5rem;
-      font-weight: bold;
-      border-radius: 30px;
-      cursor: pointer;
       color: white;
-      transition: background 0.3s, transform 0.2s;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-    .filter-all { background-color: #555; }
-    .filter-medical { background-color: #3cb371; }
-    .filter-iot { background-color: #6a0dad; }
-    .filter-autre { background-color: var(--orbivia-yellow); color: #333; }
+    .filters .medical { background: var(--medical-green); }
+    .filters .iot { background: var(--iot-purple); }
+    .filters .autre { background: var(--orbivia-yellow); }
 
     .gallery-container {
       display: grid;
@@ -120,15 +81,9 @@
     .gallery-item {
       background: white;
       border-radius: 8px;
-      border-left: 5px solid transparent;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       overflow: hidden;
-      transition: transform 0.3s, border-left 0.3s;
       cursor: pointer;
-    }
-    .gallery-item:hover {
-      transform: translateY(-5px);
-      border-left: 5px solid var(--orbivia-yellow);
     }
     .gallery-item img {
       width: 100%;
@@ -138,7 +93,6 @@
       padding: 1rem;
       margin: 0;
       font-size: 1.2rem;
-      color: #333;
     }
     .popup {
       display: none;
@@ -156,13 +110,11 @@
       padding: 2rem;
       max-width: 600px;
       border-radius: 8px;
-      position: relative;
       text-align: center;
+      position: relative;
     }
     .popup-content img {
       max-width: 100%;
-      height: auto;
-      border-radius: 6px;
       margin-bottom: 1rem;
     }
     .close {
@@ -172,21 +124,6 @@
       font-size: 24px;
       cursor: pointer;
     }
-    .popup-content a {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      background-color: var(--orbivia-yellow);
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .popup-content a:hover {
-      background-color: #cf9310;
-      transform: translateY(-2px);
-    }
   </style>
 </head>
 <body>
@@ -195,10 +132,7 @@
       <img src="img/logo.png" alt="Logo Orbivia">
       Orbivia
     </a>
-    <div class="burger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
-    <nav id="main-nav">
+    <nav>
       <a href="index.html">Accueil</a>
       <a href="realisations.html" class="active">Réalisations</a>
       <a href="contact.html">Contact</a>
@@ -207,11 +141,10 @@
 
   <main>
     <h2 class="section-title">Nos Réalisations</h2>
-    <div class="filter-buttons">
-      <button class="btn filter-all" onclick="filtrerProjets('Tous')">Tous</button>
-      <button class="btn filter-medical" onclick="filtrerProjets('Medical')">Medical</button>
-      <button class="btn filter-iot" onclick="filtrerProjets('IOT')">IOT</button>
-      <button class="btn filter-autre" onclick="filtrerProjets('Autre')">Autre</button>
+    <div class="filters">
+      <button class="medical" onclick="filterProjects('medical')">Medical</button>
+      <button class="iot" onclick="filterProjects('iot')">IOT</button>
+      <button class="autre" onclick="filterProjects('autre')">Autre</button>
     </div>
     <div class="gallery-container" id="gallery"></div>
   </main>
@@ -219,7 +152,7 @@
   <div class="popup" id="popup">
     <div class="popup-content">
       <span class="close" onclick="closePopup()">&times;</span>
-      <img id="popup-img" src="" alt="Projet">
+      <img id="popup-img" src="" alt="">
       <h2 id="popup-title"></h2>
       <p id="popup-desc"></p>
     </div>
@@ -227,27 +160,51 @@
 
   <script>
     const projets = [
-      { title: "Livre d'Or Audio", img: "img/Projets/AudioBook.jpg", desc: "Livre d’or audio haute définition connecté en Wi-Fi. https://www.laforgeasouvenirs.fr", categorie: "Autre" },
-      { title: "Clef USB PPG", img: "img/Projets/ClefPPG.jpg", desc: "Capteur de fréquence cardiaque PPG.", categorie: "Medical" },
-      { title: "LIDAR", img: "img/Projets/LIDAR.jpg", desc: "LIDAR portable compatible drone.", categorie: "IOT" },
-      { title: "Photobooth V1", img: "img/Projets/PhotoboothV1.jpg", desc: "Borne photo V1. https://www.laforgeasouvenirs.fr/services-5", categorie: "Autre" },
-      { title: "ECG Reader", img: "img/Projets/ECGReader.jpg", desc: "ECG connecté Bluetooth pour télémédecine.", categorie: "Medical" },
-      { title: "KeyDuino", img: "img/Projets/KeyDuino.jpg", desc: "Lecteur NFC open source. https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr", categorie: "IOT" },
-      { title: "AcCorps", img: "img/Projets/StethoscopePassif.jpg", desc: "Stéthoscope biomimétique. https://biomimexpo.com/", categorie: "Medical" },
-      { title: "Sensor CO2", img: "img/Projets/SensorCO2.jpg", desc: "Capteur CO2 connecté Wi-Fi.", categorie: "IOT" },
-      { title: "Notaboo", img: "img/Projets/Notaboo.jpg", desc: "Toilettes portatives autonomes. https://notaboo.solutions/", categorie: "Medical" }
+      { title: "Livre d'Or Audio", img: "img/Projets/AudioBook.jpg", desc: "Livre d’or audio permettant l’enregistrement de fichiers vocaux en haute définition, connecté en Wi-Fi.", category: "autre" },
+      { title: "Banc en impression 3D béton", img: "img/Projets/Banc3D.jpg", desc: "Banc urbain imprimé en 3D béton.", category: "autre" },
+      { title: "Capsule temporelle", img: "img/Projets/CAPSULE.jpg", desc: "Capsule temporelle numérique pour l’envoi différé de messages vidéo.", category: "autre" },
+      { title: "Clef USB PPG", img: "img/Projets/ClefPPG.jpg", desc: "Capteur de fréquence cardiaque basé sur la PPG.", category: "medical" },
+      { title: "Be Wheel Soon", img: "img/Projets/CompteurTours.jpg", desc: "Compteur de rotation pour roue de rongeur.", category: "medical" },
+      { title: "ECG Reader", img: "img/Projets/ECGReader.jpg", desc: "Capteur ECG connecté en Bluetooth.", category: "medical" },
+      { title: "KeyDuino Nano", img: "img/Projets/KeyDuinoNano.jpg", desc: "Mini lecteur NFC compact.", category: "iot" },
+      { title: "KeyDuino", img: "img/Projets/KeyDuino.jpg", desc: "Lecteur NFC open source basé sur Arduino.", category: "iot" },
+      { title: "LIDAR", img: "img/Projets/LIDAR.jpg", desc: "Capteur LIDAR portable pour drones.", category: "iot" },
+      { title: "NFC Matcher", img: "img/Projets/NFCMatcher.jpg", desc: "Dispositif de calibration d’antennes NFC.", category: "iot" },
+      { title: "NFC Ring", img: "img/Projets/NFCRing.jpg", desc: "Bague NFC connectée.", category: "iot" },
+      { title: "OzOne", img: "img/Projets/OZONE.jpg", desc: "Système de contrôle d’accès NFC.", category: "iot" },
+      { title: "Photobooth V1", img: "img/Projets/PhotoboothV1.jpg", desc: "Borne photo événementielle.", category: "autre" },
+      { title: "Photobooth V2", img: "img/Projets/PhotoboothV2.jpg", desc: "Version optimisée de borne photo.", category: "autre" },
+      { title: "Dôme en impression 3D béton", img: "img/Projets/Sculpture3D.jpg", desc: "Dôme architectural imprimé.", category: "autre" },
+      { title: "AcCorps", img: "img/Projets/StethoscopePassif.jpg", desc: "Stéthoscope passif biomimétique.", category: "medical" },
+      { title: "Stethoscope Bluetooth", img: "img/Projets/Stethoscope.jpg", desc: "Stéthoscope électronique Bluetooth.", category: "medical" },
+      { title: "Torkeo", img: "img/Projets/Torkeo.jpg", desc: "Dispositif porté au cou pour le suivi physiologique.", category: "medical" },
+      { title: "Livre d'Or Vidéo", img: "img/Projets/VideoBook.jpg", desc: "Livre d’or vidéo au design rétro.", category: "autre" },
+      { title: "SunGuard", img: "img/Projets/SunGuard.jpg", desc: "Capteur UV sans fil, rechargeable.", category: "iot" },
+      { title: "Notaboo", img: "img/Projets/Notaboo.jpg", desc: "Toilettes portatives autonomes.", category: "autre" },
+      { title: "Sensor CO2", img: "img/Projets/SensorCO2.jpg", desc: "Capteur CO2 connecté en WIFI.", category: "iot" }
     ];
 
-    const container = document.getElementById('gallery');
+    const gallery = document.getElementById('gallery');
     const popup = document.getElementById('popup');
     const popupImg = document.getElementById('popup-img');
     const popupTitle = document.getElementById('popup-title');
     const popupDesc = document.getElementById('popup-desc');
 
+    function displayProjects(filter = null) {
+      gallery.innerHTML = '';
+      projets.filter(p => !filter || p.category === filter).forEach(proj => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
+        item.onclick = () => openPopup(proj);
+        gallery.appendChild(item);
+      });
+    }
+
     function openPopup(proj) {
       popupImg.src = proj.img;
       popupTitle.textContent = proj.title;
-      popupDesc.innerHTML = proj.desc.replace(/(https?:\/\/[^\s]+)/g, '<br><a href="$1" target="_blank">Voir le projet</a>');
+      popupDesc.innerHTML = proj.desc;
       popup.style.display = 'block';
     }
 
@@ -255,30 +212,15 @@
       popup.style.display = 'none';
     }
 
-    popup.addEventListener('click', (e) => {
-      if (!document.querySelector('.popup-content').contains(e.target)) {
-        closePopup();
-      }
-    });
-
-    function toggleMenu() {
-      document.getElementById('main-nav').classList.toggle('open');
+    function filterProjects(cat) {
+      displayProjects(cat);
     }
 
-    function filtrerProjets(categorie) {
-      container.innerHTML = '';
-      const filtres = categorie === 'Tous' ? projets : projets.filter(p => p.categorie === categorie);
-      filtres.forEach((proj) => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
-        item.addEventListener('click', () => openPopup(proj));
-        container.appendChild(item);
-      });
+    window.onclick = (e) => {
+      if (e.target === popup) closePopup();
     }
 
-    // Init
-    filtrerProjets('Tous');
+    displayProjects();
   </script>
 
   <footer style="background: var(--orbivia-yellow); color: white; text-align: center; padding: 1rem;">
