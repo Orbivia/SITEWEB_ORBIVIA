@@ -39,7 +39,6 @@
     }
     .logo-title img {
       height: 60px;
-      margin-right: 1rem;
     }
     .burger {
       display: none;
@@ -88,12 +87,28 @@
       font-size: 2.5rem;
       margin: 2rem 0 1rem;
     }
-    <div style="text-align: center; margin-top: 1rem;">
-    <button onclick="filtrerProjets('Tous')" style="margin: 0.5rem;">Tous</button>
-    <button onclick="filtrerProjets('Medical')" style="margin: 0.5rem;">Medical</button>
-    <button onclick="filtrerProjets('IOT')" style="margin: 0.5rem;">IOT</button>
-    <button onclick="filtrerProjets('Autre')" style="margin: 0.5rem;">Autre</button>
-    </div>
+    .filter-buttons {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .btn {
+      border: none;
+      padding: 0.8rem 1.5rem;
+      margin: 0.5rem;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .filter-all { background-color: #555; }
+    .filter-medical { background-color: #3cb371; }
+    .filter-iot { background-color: #6a0dad; }
+    .filter-autre { background-color: var(--orbivia-yellow); color: #333; }
+
     .gallery-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -158,21 +173,20 @@
       cursor: pointer;
     }
     .popup-content a {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  background-color: var(--orbivia-yellow);
-  color: white;
-  font-weight: bold;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background 0.3s, transform 0.3s;
-}
-
-.popup-content a:hover {
-  background-color: #cf9310;
-  transform: translateY(-2px);
-}
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background-color: var(--orbivia-yellow);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .popup-content a:hover {
+      background-color: #cf9310;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -193,6 +207,12 @@
 
   <main>
     <h2 class="section-title">Nos Réalisations</h2>
+    <div class="filter-buttons">
+      <button class="btn filter-all" onclick="filtrerProjets('Tous')">Tous</button>
+      <button class="btn filter-medical" onclick="filtrerProjets('Medical')">Medical</button>
+      <button class="btn filter-iot" onclick="filtrerProjets('IOT')">IOT</button>
+      <button class="btn filter-autre" onclick="filtrerProjets('Autre')">Autre</button>
+    </div>
     <div class="gallery-container" id="gallery"></div>
   </main>
 
@@ -206,153 +226,23 @@
   </div>
 
   <script>
- 
-
-const projets = [
-  {
-    title: "Livre d'Or Audio",
-    img: "img/Projets/AudioBook.jpg",
-    desc: "Livre d’or audio permettant l’enregistrement de fichiers vocaux en haute définition, connecté en Wi-Fi. https://www.laforgeasouvenirs.fr/copie-de-photobooth"
-    categorie: "Autre"
-  },
-  {
-    title: "Banc en impression 3D béton",
-    img: "img/Projets/Banc3D.jpg",
-    desc: "Banc urbain imprimé en 3D béton, au design inspiré d’un peigne. https://www.constructions-3d.com/fr/maxiprinter"
-    categorie: "Autre"
-  },
-  {
-    title: "Capsule temporelle",
-    img: "img/Projets/CAPSULE.jpg",
-    desc: "Capsule temporelle numérique permettant l’envoi différé de messages vidéo. https://www.laforgeasouvenirs.fr/"
-    categorie: "Autre"
-  },
-  {
-    title: "Clef USB PPG",
-    img: "img/Projets/ClefPPG.jpg",
-    desc: "Capteur de fréquence cardiaque économique basé sur la photopléthysmographie (PPG)."
-    categorie: "Medical"
-  },
-  {
-    title: "Be Wheel Soon",
-    img: "img/Projets/CompteurTours.jpg",
-    desc: "Compteur de rotation pour roue de rongeur, utilisé en clinique vétérinaire pour évaluer le stress animal."
-    categorie: "IOT"
-  },
-  {
-    title: "ECG Reader",
-    img: "img/Projets/ECGReader.jpg",
-    desc: "Capteur ECG connecté en Bluetooth, idéal pour la télémédecine et le suivi personnel."
-    categorie: "Medical"
-  },
-  {
-    title: "KeyDuino Nano",
-    img: "img/Projets/KeyDuinoNano.jpg",
-    desc: "Mini lecteur NFC ultra compact, adapté aux projets embarqués. https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr"
-    categorie: "IOT"
-  },
-  {
-    title: "KeyDuino",
-    img: "img/Projets/KeyDuino.jpg",
-    desc: "Lecteur NFC open source basé sur Arduino, conçu pour les makers. https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr"
-    categorie: "IOT"
-  },
-  {
-    title: "LIDAR",
-    img: "img/Projets/LIDAR.jpg",
-    desc: "Capteur LIDAR portable compatible avec drones pour la détection d’obstacles et la cartographie."
-    categorie: "Autre"
-  },
-  {
-    title: "NFC Matcher",
-    img: "img/Projets/NFCMatcher.jpg",
-    desc: "Dispositif de calibration automatique d’antennes NFC pour des performances de lecture optimales."
-    categorie: "IOT"
-  },
-  {
-    title: "OzOne",
-    img: "img/Projets/OZONE.jpg",
-    desc: "Système de contrôle d’accès NFC connecté en WIFI, configurable à distance."
-    categorie: "IOT"
-  },
-  {
-    title: "Photobooth V1",
-    img: "img/Projets/PhotoboothV1.jpg",
-    desc: "Première version d’une borne photo événementielle. https://www.laforgeasouvenirs.fr/services-5"
-    categorie: "Autre"
-  },
-  {
-    title: "Stethoscope Bluetooth",
-    img: "img/Projets/Stethoscope.jpg",
-    desc: "Stéthoscope électronique Bluetooth avec amplification audio, conçu pour l’enseignement et la télémédecine."
-    categorie: "Medical"
-  },
-  {
-    title: "Photobooth V2",
-    img: "img/Projets/PhotoboothV2.jpg",
-    desc: "Version optimisée de notre borne photo transportable pour événements. https://www.laforgeasouvenirs.fr/services-5"
-    categorie: "Autre"
-  },
-  {
-    title: "NFC Ring",
-    img: "img/Projets/NFCRing.jpg",
-    desc: "Bague NFC connectée pour l’identification et le contrôle d’accès. https://nfcring.com/"
-    categorie: "IOT"
-  },    
-  {
-    title: "Dôme en impression 3D béton",
-    img: "img/Projets/Sculpture3D.jpg",
-    desc: "Dôme architectural imprimé en béton 3D, pensé pour valoriser l’espace public."
-    categorie: "Autre"
-  },
-  {
-    title: "AcCorps",
-    img: "img/Projets/StethoscopePassif.jpg",
-    desc: "Stéthoscope passif biomimétique, inspiré de la cochlée humaine. https://biomimexpo.com/"
-    categorie: "Medical"
-  },
-  {
-    title: "Torkeo",
-    img: "img/Projets/Torkeo.jpg",
-    desc: "Dispositif porté au cou pour le suivi de constantes physiologiques, pensé pour les troubles cognitifs."
-    categorie: "Medical"
-  },
-  {
-    title: "Livre d'Or Vidéo",
-    img: "img/Projets/VideoBook.jpg",
-    desc: "Livre d’or vidéo au design rétro, pour immortaliser les moments forts d’un événement. https://www.laforgeasouvenirs.fr/copie-de-livres-d-or-audio"
-    categorie: "Autre"
-  },
-  {
-    title: "SunGuard",
-    img: "img/Projets/SunGuard.jpg",
-    desc: "Capteur sans fil multifonction mesurant l’exposition aux UV, rechargeable par induction."
-    categorie: "IOT"
-  },
-  {
-    title: "Notaboo",
-    img: "img/Projets/Notaboo.jpg",
-    desc: "Toilettes portatives autonomes, accessibles aux personnes en situation de handicap. https://notaboo.solutions/"
-    categorie: "Medical"
-  },
-  {
-    title: "Sensor CO2",
-    img: "img/Projets/SensorCO2.jpg",
-    desc: "Capteur CO2 connecté en WIFI."
-    categorie: "IOT"
-  }
-];
-
-
-    
+    const projets = [
+      { title: "Livre d'Or Audio", img: "img/Projets/AudioBook.jpg", desc: "Livre d’or audio haute définition connecté en Wi-Fi. https://www.laforgeasouvenirs.fr", categorie: "Autre" },
+      { title: "Clef USB PPG", img: "img/Projets/ClefPPG.jpg", desc: "Capteur de fréquence cardiaque PPG.", categorie: "Medical" },
+      { title: "LIDAR", img: "img/Projets/LIDAR.jpg", desc: "LIDAR portable compatible drone.", categorie: "IOT" },
+      { title: "Photobooth V1", img: "img/Projets/PhotoboothV1.jpg", desc: "Borne photo V1. https://www.laforgeasouvenirs.fr/services-5", categorie: "Autre" },
+      { title: "ECG Reader", img: "img/Projets/ECGReader.jpg", desc: "ECG connecté Bluetooth pour télémédecine.", categorie: "Medical" },
+      { title: "KeyDuino", img: "img/Projets/KeyDuino.jpg", desc: "Lecteur NFC open source. https://www.kickstarter.com/projects/1535978353/keyduino?lang=fr", categorie: "IOT" },
+      { title: "AcCorps", img: "img/Projets/StethoscopePassif.jpg", desc: "Stéthoscope biomimétique. https://biomimexpo.com/", categorie: "Medical" },
+      { title: "Sensor CO2", img: "img/Projets/SensorCO2.jpg", desc: "Capteur CO2 connecté Wi-Fi.", categorie: "IOT" },
+      { title: "Notaboo", img: "img/Projets/Notaboo.jpg", desc: "Toilettes portatives autonomes. https://notaboo.solutions/", categorie: "Medical" }
+    ];
 
     const container = document.getElementById('gallery');
     const popup = document.getElementById('popup');
     const popupImg = document.getElementById('popup-img');
     const popupTitle = document.getElementById('popup-title');
     const popupDesc = document.getElementById('popup-desc');
-
-    filtrerProjets('Tous');
 
     function openPopup(proj) {
       popupImg.src = proj.img;
@@ -376,17 +266,19 @@ const projets = [
     }
 
     function filtrerProjets(categorie) {
-  container.innerHTML = ''; // Clear gallery
-  const filtres = categorie === 'Tous' ? projets : projets.filter(p => p.categorie === categorie);
-  filtres.forEach((proj) => {
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
-    item.addEventListener('click', () => openPopup(proj));
-    container.appendChild(item);
-  });
-}
-    
+      container.innerHTML = '';
+      const filtres = categorie === 'Tous' ? projets : projets.filter(p => p.categorie === categorie);
+      filtres.forEach((proj) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
+        item.addEventListener('click', () => openPopup(proj));
+        container.appendChild(item);
+      });
+    }
+
+    // Init
+    filtrerProjets('Tous');
   </script>
 
   <footer style="background: var(--orbivia-yellow); color: white; text-align: center; padding: 1rem;">
