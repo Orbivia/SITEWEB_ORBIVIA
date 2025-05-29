@@ -346,7 +346,11 @@ const projets = [
 
 
   const container = document.getElementById('gallery');
-
+const popup = document.getElementById('popup');
+const popupImg = document.getElementById('popup-img');
+const popupTitle = document.getElementById('popup-title');
+const popupDesc = document.getElementById('popup-desc');
+    
 function renderProjects(category = 'All') {
   container.innerHTML = ''; // reset
   projets
@@ -365,10 +369,7 @@ function filterProjects(category) {
 }
 
 // Initial render
-const popup = document.getElementById('popup');
-const popupImg = document.getElementById('popup-img');
-const popupTitle = document.getElementById('popup-title');
-const popupDesc = document.getElementById('popup-desc');
+
 
 renderProjects();
   
