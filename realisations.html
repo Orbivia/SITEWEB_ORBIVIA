@@ -352,13 +352,7 @@ const projets = [
     const popupTitle = document.getElementById('popup-title');
     const popupDesc = document.getElementById('popup-desc');
 
-    projets.forEach((proj) => {
-      const item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = <img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>;
-      item.addEventListener('click', () => openPopup(proj));
-      container.appendChild(item);
-    });
+    filtrerProjets('Tous');
 
     function openPopup(proj) {
       popupImg.src = proj.img;
@@ -380,6 +374,19 @@ const projets = [
     function toggleMenu() {
       document.getElementById('main-nav').classList.toggle('open');
     }
+
+    function filtrerProjets(categorie) {
+  container.innerHTML = ''; // Clear gallery
+  const filtres = categorie === 'Tous' ? projets : projets.filter(p => p.categorie === categorie);
+  filtres.forEach((proj) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
+    item.addEventListener('click', () => openPopup(proj));
+    container.appendChild(item);
+  });
+}
+    
   </script>
 
   <footer style="background: var(--orbivia-yellow); color: white; text-align: center; padding: 1rem;">
