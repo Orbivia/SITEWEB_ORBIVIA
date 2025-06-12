@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Panoptès AI, le traducteur vocal portable et connecté via BLE, conçu pour les interactions multilingues en temps réel.">
   <title>Panoptès AI - Détail du Projet</title>
   <style>
     :root {
@@ -33,6 +34,7 @@
       padding: 0.5rem 1rem;
       border-radius: 6px;
       transition: background 0.3s, color 0.3s;
+      cursor: pointer;
     }
     a.back-link:hover {
       background: var(--orbivia-yellow);
@@ -65,6 +67,7 @@
       border-radius: 6px;
       margin-top: 1rem;
       transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
     }
     .cta-link:hover {
       background-color: #cf9310;
@@ -73,10 +76,10 @@
   </style>
 </head>
 <body>
-  <main>
+  <main role="main">
     <a href="../realisations.html" class="back-link">← Retour aux projets</a>
     <h1>Panoptès AI, le traducteur vocal temps réel</h1>
-    <img src="../img/Projets/panoptes/AssistantVocal.webp" alt="Panoptès AI" class="hero-img">
+    <img src="../img/Projets/panoptes/Panoptes_3D.webp" alt="Panoptès AI" class="hero-img" loading="lazy">
 
     <section>
       <h2>Analyse du besoin</h2>
@@ -84,73 +87,45 @@
         Objectif : concevoir un traducteur vocal ultra-réactif, sous forme de pendentif, connecté à ChatGPT via Bluetooth Low Energy (BLE). Le dispositif doit offrir une autonomie de deux jours, intégrer un haut-parleur suffisamment puissant, présenter un design simple et élégant, et ne pas dépasser un coût de production de 40 € en série de 100 unités.
       </p>
       <p>
-        C’était le défi ambitieux que posait le projet Panoptes AI, développé dans le cadre d’une preuve de concept à présenter lors d’appels à projets. L’objectif : obtenir des financements pour structurer une équipe autour de la vision du client (confidentielle à ce stade).
+        C’était le défi ambitieux que posait le projet Panoptès AI, développé dans le cadre d’une preuve de concept à présenter lors d’appels à projets. L’objectif : obtenir des financements pour structurer une équipe autour de la vision du client (confidentielle à ce stade).
       </p>
-      <p>Les principales difficultés rencontrées :</p>
-      <ul>
-        <li>l’autonomie énergétique, malgré un échange vocal constant via BLE,</li>
-        <li>la connectivité avec ChatGPT pour la traduction,</li>
-        <li>le budget de développement restreint,</li>
-        <li>la miniaturisation, indispensable à la portabilité.</li>
-      </ul>
+      <p>
+        Parmi les principales difficultés : garantir une autonomie suffisante malgré l’échange vocal constant via BLE, assurer une connectivité fluide avec ChatGPT, respecter un budget restreint et réussir la miniaturisation pour une portabilité optimale.
+      </p>
     </section>
 
     <section>
       <h2>Prototypage</h2>
       <p>
-        La première phase de R&D s’est appuyée sur un ESP32, choisi pour son excellent rapport fonctionnalités/prix. En plus de gérer le BLE, sa connectivité Wi-Fi laisse envisager une future version autonome. Une carte électronique sur mesure a été développée en intégrant directement un module ESP32 XIAO. Ce choix présente plusieurs avantages :
+        La première phase de R&D s’est appuyée sur un ESP32, choisi pour son excellent rapport fonctionnalités/prix. En plus de gérer le BLE, sa connectivité Wi-Fi laisse envisager une future version autonome. Une carte électronique sur mesure a été développée, intégrant un module ESP32 XIAO. Ce choix a permis de réduire les coûts de production, de faciliter l’assemblage en série et de simplifier les démarches réglementaires grâce à la certification FCC et CE du module.
       </p>
-      <ul>
-        <li>réduction des coûts pour les faibles volumes de production,</li>
-        <li>facilité d’assemblage en série,</li>
-        <li>simplification des démarches réglementaires, grâce à la certification FCC et CE du module.</li>
-      </ul>
-      <img src="../img/Projets/panoptes/Panoptes_ELEC.webp" alt="Carte électronique sur mesure" class="hero-img">
+      <img src="../img/Projets/panoptes/Panoptes_ELEC.webp" alt="Carte électronique sur mesure" class="hero-img" loading="lazy">
     </section>
 
     <section>
       <h2>Optimisation du design</h2>
       <p>
-        Le système de recharge, initialement envisagé par induction, a été remplacé par un connecteur magnétique compact, plus économique, tout en préservant l’élégance du design.
+        Le système de recharge, initialement prévu par induction, a été remplacé par un connecteur magnétique compact, plus économique, sans compromettre l’élégance du produit. Une conception 3D rapide, quelques vis, une batterie de 600 mAh, un haut-parleur, un microphone et un codec audio ont permis d’assembler un système pleinement fonctionnel.
       </p>
+      <img src="../img/Projets/panoptes/Panoptes_ASSEMBLY.webp" alt="Assemblage du système" class="hero-img" loading="lazy">
       <p>
-        Un peu de conception 3D, quelques vis, une batterie de 600 mAh, un haut-parleur, un microphone, un codec audio, et le système devient pleinement fonctionnel.
+        Une fois le design validé, la version finale a été modélisée en 3D en vue d’une industrialisation. Une impression 3D en SLA a permis de valider l’intégration physique et l’encombrement, ouvrant la voie à une pré-série de validation.
       </p>
-      <img src="../img/Projets/panoptes/Panoptes_ASSEMBLY.webp" alt="Assemblage du système" class="hero-img">
-      <p>
-        Une fois le design retenu, nous avons modélisé la version finale en 3D en vue d’une industrialisation.
-      </p>
-      <img src="../img/Projets/panoptes/Panoptes_3D.webp" alt="Modélisation 3D du dispositif" class="hero-img">
-      <p>
-        Une impression 3D rapide en SLA a permis de valider l’intégration physique et l’encombrement du dispositif, ouvrant la voie à une pré-série de validation.
-      </p>
-      <img src="../img/Projets/panoptes/Panoptes_3DPRINT.webp" alt="Impression 3D résine" class="hero-img">
+      <img src="../img/Projets/panoptes/Panoptes_3DPRINT.webp" alt="Impression 3D résine" class="hero-img" loading="lazy">
     </section>
 
     <section>
       <h2>Préindustrialisation</h2>
       <p>
-        Le design final vise un aspect métallisé, tout en conservant un poids réduit, un coût bas et la transparence aux ondes Bluetooth. L’usinage métallique étant exclu, la solution retenue repose sur une impression 3D avec finition “vacuum electroplating”. Cette technique assure une bonne adhésion du revêtement métallisé, à un coût maîtrisé.
+        Le design final vise un aspect métallisé, tout en conservant un poids réduit, un coût bas et la transparence aux ondes Bluetooth. L’usinage métallique étant exclu, une impression 3D avec finition “vacuum electroplating” a été retenue. Cette technique garantit une bonne adhésion du revêtement à coût maîtrisé. Plusieurs rendus photoréalistes ont été proposés au client pour orienter les choix esthétiques.
       </p>
-      <p>
-        Plusieurs rendus 3D photoréalistes ont été proposés au client pour l’accompagner dans le choix final du design.
-      </p>
-      <img src="../img/Projets/panoptes/Panoptes_DESIGN.webp" alt="Proposition de couleurs et de finitions" class="hero-img">
+      <img src="../img/Projets/panoptes/Panoptes_DESIGN.webp" alt="Proposition de couleurs et de finitions" class="hero-img" loading="lazy">
     </section>
 
     <section>
       <h2>Conclusion</h2>
       <p>
-        Le projet Panoptes AI réunit tous les ingrédients d’un produit innovant :
-      </p>
-      <ul>
-        <li>un design épuré,</li>
-        <li>une technologie portable et connectée,</li>
-        <li>un concept simple,</li>
-        <li>un fort potentiel d’usage.</li>
-      </ul>
-      <p>
-        Ce projet a relevé des défis à la fois électroniques, mécaniques et logiciels — un véritable challenge multidisciplinaire.
+        Panoptès AI réunit tous les ingrédients d’un produit innovant : un design épuré, une technologie portable et connectée, un concept simple et un fort potentiel d’usage. Ce projet a permis de relever des défis à la fois électroniques, mécaniques et logiciels — un véritable challenge multidisciplinaire.
       </p>
       <p>
         Le système sera prochainement présenté sur Kickstarter. Restez connectés !
