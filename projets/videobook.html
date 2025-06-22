@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vidéobook - Détail du Projet</title>
+  <style>
+    :root {
+      --orbivia-yellow: rgb(231,161,22);
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    a.back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: var(--orbivia-yellow);
+      font-weight: bold;
+      text-decoration: none;
+      border: 2px solid var(--orbivia-yellow);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background 0.3s, color 0.3s;
+    }
+    a.back-link:hover {
+      background: var(--orbivia-yellow);
+      color: white;
+    }
+    h1 {
+      font-size: 2rem;
+      color: var(--orbivia-yellow);
+      margin-bottom: 1rem;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+    h2 {
+      color: var(--orbivia-yellow);
+      margin-bottom: 0.5rem;
+    }
+    .hero-img {
+      width: 100%;
+      border-radius: 10px;
+      margin: 1rem 0 2rem;
+    }
+    .cta-link {
+      display: inline-block;
+      background-color: var(--orbivia-yellow);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .cta-link:hover {
+      background-color: #cf9310;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="../realisations.html" class="back-link">← Retour aux projets</a>
+    <h1>Vidéobook pour La Forge à Souvenirs</h1>
+    <img src="../img/Projets/Videobook.webp" alt="Illustration du vidéobook" class="hero-img">
+
+    <section>
+      <h2>Analyse du besoin</h2>
+      <p>Le projet visait à concevoir un dispositif destiné aux événements festifs (mariages, baptêmes, anniversaires) permettant aux invités d’enregistrer un message vidéo en toute simplicité. L’objectif était de dépasser les limites du livre d’or papier, souvent impersonnel, peu lisible et rédigé sans spontanéité.</p>
+      <p>L’usage devait être naturel : l’invité décroche un combiné, un message d’accueil apparaît à l’écran, puis le système lance automatiquement l’enregistrement.</p>
+      <p>Le système devait être compact pour faciliter son envoi partout en France, offrir une autonomie d’au moins 48 heures, et arborer un design simple et rétro, évoquant un téléphone d’époque et incitant à l’interaction.</p>
+    </section>
+
+    <section>
+      <h2>Prototypage</h2>
+      <p>Le cœur du système repose sur un smartphone. Ce choix, loin d’être un raccourci, s’est imposé comme le meilleur compromis entre qualité d’image, compacité et intégration. Un Samsung A51 a été sélectionné, notamment pour l’excellente qualité de sa caméra frontale et son écran lumineux.</p>
+      <p>Une couche d’électronique sur mesure a été ajoutée pour permettre la détection du décroché et du raccroché. Cette activation est perçue par l’application comme une sortie de veille, ce qui permet de préserver l’autonomie.</p>
+      <p>Cette carte commande également des LED COB, choisies pour leur lumière diffuse, douce et agréable afin d’éclairer les utilisateurs lors de l’enregistrement vidéo.</p>
+      <img src="../img/Projets/videobook/Videobook_ELEC.webp" alt="Carte électronique du vidéobook" class="hero-img">
+      <p>L’application a été développée sous Android Studio par un partenaire. Elle lance un message d’introduction, affiche un compte à rebours accompagné d’un retour caméra, puis enregistre automatiquement la vidéo en Full HD. Pour éviter de vider la batterie du système en cas d’oubli de raccrochage, un timer de sécurité de 10 minutes a été implémenté. Il coupe l’alimentation du smartphone et éteint les LEDs.</p>
+      <p>L’application est verrouillée en mode KIOSK : il est impossible d’en sortir sans mot de passe, empêchant toute mauvaise manipulation et sécurisant l’application.</p>
+      <p>Concernant l’habillage physique du système, deux options ont été envisagées. La première consistait à concevoir une structure entièrement personnalisée, imprimée en 3D, à partir de matériaux plastiques. La seconde, plus économique et surtout plus charmante, consistait à détourner un ancien téléphone. C’est cette seconde voie qui a été retenue. Une réplique en bois d’un téléphone à pièces de 1912 a été sélectionnée. Elle présentait l’esthétique idéale, rétro et conviviale, tout en offrant suffisamment de volume pour intégrer les composants.</p>
+      <p>Des ajustements ont été nécessaires pour intégrer proprement le smartphone et la carte électronique. Une pièce sur mesure a été dessinée, puis imprimée en 3D SLA.</p>
+      <img src="../img/Projets/videobook/Videobook_3D.webp" alt="Intégration 3D du smartphone dans le vidéobook" class="hero-img">
+      <p>Une découpe du boîtier d’origine et un peu de peinture ont permis d’obtenir une finition propre et fidèle au design original.</p>
+      <img src="../img/Projets/videobook/Videobook_WOOD.webp" alt="Boîtier en bois du vidéobook" class="hero-img">
+    </section>
+
+    <section>
+      <h2>Prévalidation</h2>
+      <p>Après une série de tests techniques en atelier pour s’assurer de la conformité du dispositif au cahier des charges, le vidéobook a été mis à l’épreuve sur le terrain. Quatre groupes de bêta-testeurs ont eu l’opportunité d’utiliser gratuitement le système lors de leur mariage. En plus des retours d’expérience utilisateurs, des photos d’utilisation réelle ont été prises afin d’enrichir les supports de communication.</p>
+      <img src="../img/Projets/videobook/Videobook_USA.webp" alt="Utilisation terrain du vidéobook" class="hero-img">
+      <p>Ces tests n’ont entraîné aucune modification majeure. L’interface a été jugée intuitive et plaisante. Seule une correction mineure a été apportée : l’augmentation de la puissance lumineuse des LEDs afin d’améliorer le rendu dans des environnements sombres.</p>
+    </section>
+
+    <section>
+      <h2>Préindustrialisation</h2>
+      <p>Suite au succès de cette première phase, deux modèles complets ont été assemblés selon la version validée. Baptisés Jules et Édouard, ces exemplaires rendent hommage aux aïeux de notre partenaire, tout en incarnant l’esprit vintage et le caractère singulier du projet.</p>
+      <img src="../img/Projets/videobook/Videobook_ASSEMBLY.webp" alt="Assemblage des vidéobooks Jules et Édouard" class="hero-img">
+    </section>
+
+    <section>
+      <h2>Conclusion</h2>
+      <p>À l’image du photobooth, ce vidéobook est le fruit d’une collaboration étroite entre Orbivia et La Forge à Souvenirs. Le projet a fait l’objet d’une proposition de brevet intitulée « Système et méthode permettant d’enregistrer des messages audio et vidéo pour des événements spéciaux ». Orbivia a pris en charge l’intégralité de la rédaction technique ainsi que les modalités de dépôt en présoumission.</p>
+      <img src="../img/Projets/videobook/Videobook_PATENT.webp" alt="Illustration du dépôt de brevet" class="hero-img">
+      <p>Les deux dispositifs sont aujourd’hui proposés à la location partout en France. Ils permettent de capturer des souvenirs sincères, vivants et authentiques.</p>
+      <a href="https://www.laforgeasouvenirs.fr/copie-de-livres-d-or-audio" class="cta-link" target="_blank">Louer un vidéobook</a>
+    </section>
+  </main>
+</body>
+</html>
