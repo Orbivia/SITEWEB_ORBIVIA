@@ -74,43 +74,45 @@
 </head>
 <body>
   <main>
-    <a href="videobook.html" class="back-link">← Voir aussi le Vidéobook</a>
+    <a href="../realisations.html" class="back-link">← Retour aux projets</a>
     <h1>Capsule Temporelle pour La Forge à Souvenirs</h1>
-    <img src="../img/Projets/videobook/capsule_webp/b74e23f2-ec37-4438-b5ff-bc9989fbf317.webp" alt="Vue 3D capsule" class="hero-img">
+    <img src="../img/Projets/CAPSULE.webp" alt="La capsule" class="hero-img">
 
     <section>
       <h2>Concept</h2>
-      <p>Ce dispositif permet aux invités de laisser un message vidéo destiné à être révélé à une date ultérieure précise. L’objectif : faire revivre l’émotion de l’événement (mariage, baptême, anniversaire) même plusieurs années plus tard. Jusqu'à 3 ans de stockage sont possibles.</p>
-      <p>Chaque message est enregistré dans une capsule numérique, et la date d'envoi est choisie par l'invité lui-même au moment de l'enregistrement. Cela peut être par exemple un an après l'événement, permettant des messages du type :</p>
-      <blockquote>« Salut, ça fait un an que j’ai enregistré ce message… je me doute qu’à cette date vous avez sûrement déjà agrandi la famille Profitez bien, et souvenez-vous de cette journée incroyable ! »</blockquote>
-      <p>Une solution de diffusion automatisée a été développée sous Google Apps Script : elle permet d'envoyer automatiquement le lien vidéo à l'adresse mail prévue, au jour prévu. Un mail personnalisé, un lien sécurisé, et le message ressurgit dans le temps.</p>
+      <p>Ce dispositif permet aux invités de laisser un message vidéo destiné à être révélé à une date ultérieure précise. L’objectif : raviver l’émotion de l’événement (mariage, baptême, anniversaire) plusieurs années plus tard. Jusqu'à 3 ans de stockage sont possibles.</p>
+      <p>Chaque message est enregistré dans une capsule numérique. L'invité choisit lui-même la date d’envoi lors de l’enregistrement. Exemple : un an après l’événement, pour des messages du type :</p>
+      <blockquote>« Salut, ça fait un an que j’ai enregistré ce message… je me doute qu’à cette date vous avez sûrement déjà agrandi la famille. Profitez bien, et souvenez-vous de cette journée incroyable ! »</blockquote>
+      <p>La diffusion des messages est automatisée grâce à Google Apps Script : un lien vidéo sécurisé est envoyé à la date prévue, accompagné d’un mail personnalisé.</p>
     </section>
 
     <section>
       <h2>Conception et Développement</h2>
-      <p>Le décroché est détecté grâce à des capteurs magnétiques, évitant les pièces mécaniques fragiles. Ce choix augmente la fiabilité et la durabilité du système.</p>
-      <p>Le système repose sur un smartphone Android (Samsung A51) associé à une carte électronique personnalisée qui détecte le décroché, allume les LED COB et déclenche l'application Android. Un timer coupe l'alimentation après 10 minutes d'inactivité pour préserver la batterie.</p>
-      <img src="../img/Projets/videobook/capsule_webp/505ee70b-bc5a-4269-8f2f-980b8f462591.webp" alt="Vue technique capsule" class="hero-img">
-      <p>L'utilisateur est guidé par une vidéo d'introduction, puis filme son message. Celui-ci est stocké en interne, et à la fin de l'enregistrement, l'invité peut choisir une date à laquelle le message sera envoyé automatiquement.</p>
+      <p>Le décroché est détecté par capteur magnétique, supprimant les pièces mécaniques fragiles et améliorant la fiabilité. Le cœur du système repose sur un smartphone Android (Samsung A51) associé à une carte électronique sur mesure.</p>
+      <p>Celle-ci détecte le décroché, allume les LED COB et déclenche l’application Android. Un timer coupe l’alimentation après 10 minutes d’inactivité pour préserver la batterie.</p>
+      <img src="../img/Projets/capsule/Capsule_ELEC.webp" alt="Vue technique capsule" class="hero-img">
+      <p>Une vidéo d’introduction guide l’utilisateur. Ensuite, il enregistre son message, qui est stocké localement. À la fin, il sélectionne une date d’envoi différé.</p>
     </section>
 
-    
-      <img src="../img/Projets/capsule/Capsule_3DPRINT.webp" alt="Pièce imprimée en 3D SLA" class="hero-img">
+    <section>
+      <h2>Design et Fabrication</h2>
+      <p>Le design s'inspire d’un ancien combiné téléphonique. L’objectif était de créer un objet intuitif et engageant, simple, rétro et surtout compact pour faciliter le transport.</p>
       <img src="../img/Projets/capsule/Capsule_DESIGN.webp" alt="Vue design de la capsule" class="hero-img">
+      <p>La plaque frontale du système est en réalité un PCB. Ce choix présente un double avantage : une finition argentée nette et élégante, et une intégration directe des connexions électroniques. Une solution à la fois esthétique et économique.</p>
+      <p>Le boîtier a été imprimé en 3D résine (SLA), un choix motivé par la qualité de finition, la solidité, mais aussi le poids final du système, qui assure une bonne stabilité. Ce rendu est bien plus massif et stable que ce qu’aurait permis une impression filament.</p>
+      <img src="../img/Projets/capsule/Capsule_3DPRINT.webp" alt="Pièce imprimée en 3D SLA" class="hero-img">
+      <p>Le système a été pensé dès le départ pour être low cost, facile à produire, et facilement réplicable. Il peut être expédié dans toute la France à faible coût, avec une logistique simple.</p>
       <img src="../img/Projets/capsule/Capsule_FINAL.webp" alt="Produit final dans sa valise de transport" class="hero-img">
-      <img src="../img/Projets/capsule/Capsule_ELEC.webp" alt="Capsule en fonctionnement avec rétroéclairage" class="hero-img">
-      <p>Le design s'inspire d'un ancien combiné téléphonique. Une structure imprimée en 3D permet de loger les composants tout en offrant une esthétique soignée et rétro.</p>
-      <img src="../img/Projets/videobook/capsule_webp/abd9dd85-06ed-4f16-ab95-d28a9cb2dfb4.webp" alt="Zoom sur la capsule" class="hero-img">
-      <img src="../img/Projets/videobook/capsule_webp/5796e2b0-725a-4086-ae59-0f2b458b157e.webp" alt="Impression 3D de la structure" class="hero-img">
-      <img src="../img/Projets/videobook/capsule_webp/39190ce0-deed-4bc9-a567-81f57390ee3e.webp" alt="Modélisation 3D sur PrusaSlicer" class="hero-img">
-      <img src="../img/Projets/videobook/capsule_webp/50ed8a32-39a6-4b35-9deb-75c4aa268602.webp" alt="Impression finale" class="hero-img">
     </section>
 
     <section>
       <h2>Prochaine étape</h2>
-      <p>La capsule temporelle n'est pas encore disponible à la location, mais sa diffusion est imminente. L'ensemble du projet a été conçu pour être facilement réplicable et expédié dans toute la France.</p>
-      <img src="../img/Projets/videobook/capsule_webp/aff5186a-b2bf-4938-b2ca-c1c073234e88.webp" alt="Prototype final sur fond jaune" class="hero-img">
+      <p>La capsule temporelle n’est pas encore disponible à la location, mais sa diffusion est imminente. Des tests utilisateurs sont en cours pour valider l’ergonomie du système, affiner l’expérience d’enregistrement, et garantir la fiabilité des envois différés.</p>
+      <p>Une campagne de pré-lancement est en préparation. Elle visera les organisateurs d'événements, les agences de mariage et les particuliers souhaitant offrir une expérience mémorable à leurs invités.</p>
+      <p>Si vous êtes intéressé par la location ou la distribution du produit, n'hésitez pas à nous contacter pour être tenu informé du lancement.</p>
     </section>
+
+    <a href="https://www.laforgeasouvenirs.fr/copie-de-livres-d-or-audio" class="cta-link" target="_blank">Louer un vidéobook</a>
   </main>
 </body>
 </html>
