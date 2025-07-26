@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capsule Temporelle - Détail du Projet</title>
+  <style>
+    :root {
+      --orbivia-yellow: rgb(231,161,22);
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    a.back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: var(--orbivia-yellow);
+      font-weight: bold;
+      text-decoration: none;
+      border: 2px solid var(--orbivia-yellow);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background 0.3s, color 0.3s;
+    }
+    a.back-link:hover {
+      background: var(--orbivia-yellow);
+      color: white;
+    }
+    h1 {
+      font-size: 2rem;
+      color: var(--orbivia-yellow);
+      margin-bottom: 1rem;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+    h2 {
+      color: var(--orbivia-yellow);
+      margin-bottom: 0.5rem;
+    }
+    .hero-img {
+      width: 100%;
+      border-radius: 10px;
+      margin: 1rem 0 2rem;
+    }
+    .cta-link {
+      display: inline-block;
+      background-color: var(--orbivia-yellow);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .cta-link:hover {
+      background-color: #cf9310;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="videobook.html" class="back-link">← Voir aussi le Vidéobook</a>
+    <h1>Capsule Temporelle pour La Forge à Souvenirs</h1>
+    <img src="../img/Projets/videobook/capsule_webp/b74e23f2-ec37-4438-b5ff-bc9989fbf317.webp" alt="Vue 3D capsule" class="hero-img">
+
+    <section>
+      <h2>Concept</h2>
+      <p>Ce dispositif permet aux invités de laisser un message vidéo destiné à être révélé à une date ultérieure précise. L’objectif : faire revivre l’émotion de l’événement (mariage, baptême, anniversaire) même plusieurs années plus tard. Jusqu'à 3 ans de stockage sont possibles.</p>
+      <p>Chaque message est enregistré dans une capsule numérique, et la date d'envoi est choisie par l'invité lui-même au moment de l'enregistrement. Cela peut être par exemple un an après l'événement, permettant des messages du type :</p>
+      <blockquote>« Salut, ça fait un an que j’ai enregistré ce message… je me doute qu’à cette date vous avez sûrement déjà agrandi la famille Profitez bien, et souvenez-vous de cette journée incroyable ! »</blockquote>
+      <p>Une solution de diffusion automatisée a été développée sous Google Apps Script : elle permet d'envoyer automatiquement le lien vidéo à l'adresse mail prévue, au jour prévu. Un mail personnalisé, un lien sécurisé, et le message ressurgit dans le temps.</p>
+    </section>
+
+    <section>
+      <h2>Conception et Développement</h2>
+      <p>Le décroché est détecté grâce à des capteurs magnétiques, évitant les pièces mécaniques fragiles. Ce choix augmente la fiabilité et la durabilité du système.</p>
+      <p>Le système repose sur un smartphone Android (Samsung A51) associé à une carte électronique personnalisée qui détecte le décroché, allume les LED COB et déclenche l'application Android. Un timer coupe l'alimentation après 10 minutes d'inactivité pour préserver la batterie.</p>
+      <img src="../img/Projets/videobook/capsule_webp/505ee70b-bc5a-4269-8f2f-980b8f462591.webp" alt="Vue technique capsule" class="hero-img">
+      <p>L'utilisateur est guidé par une vidéo d'introduction, puis filme son message. Celui-ci est stocké en interne, et à la fin de l'enregistrement, l'invité peut choisir une date à laquelle le message sera envoyé automatiquement.</p>
+    </section>
+
+    
+      <img src="../img/Projets/capsule/Capsule_3DPRINT.webp" alt="Pièce imprimée en 3D SLA" class="hero-img">
+      <img src="../img/Projets/capsule/Capsule_DESIGN.webp" alt="Vue design de la capsule" class="hero-img">
+      <img src="../img/Projets/capsule/Capsule_FINAL.webp" alt="Produit final dans sa valise de transport" class="hero-img">
+      <img src="../img/Projets/capsule/Capsule_ELEC.webp" alt="Capsule en fonctionnement avec rétroéclairage" class="hero-img">
+      <p>Le design s'inspire d'un ancien combiné téléphonique. Une structure imprimée en 3D permet de loger les composants tout en offrant une esthétique soignée et rétro.</p>
+      <img src="../img/Projets/videobook/capsule_webp/abd9dd85-06ed-4f16-ab95-d28a9cb2dfb4.webp" alt="Zoom sur la capsule" class="hero-img">
+      <img src="../img/Projets/videobook/capsule_webp/5796e2b0-725a-4086-ae59-0f2b458b157e.webp" alt="Impression 3D de la structure" class="hero-img">
+      <img src="../img/Projets/videobook/capsule_webp/39190ce0-deed-4bc9-a567-81f57390ee3e.webp" alt="Modélisation 3D sur PrusaSlicer" class="hero-img">
+      <img src="../img/Projets/videobook/capsule_webp/50ed8a32-39a6-4b35-9deb-75c4aa268602.webp" alt="Impression finale" class="hero-img">
+    </section>
+
+    <section>
+      <h2>Prochaine étape</h2>
+      <p>La capsule temporelle n'est pas encore disponible à la location, mais sa diffusion est imminente. L'ensemble du projet a été conçu pour être facilement réplicable et expédié dans toute la France.</p>
+      <img src="../img/Projets/videobook/capsule_webp/aff5186a-b2bf-4938-b2ca-c1c073234e88.webp" alt="Prototype final sur fond jaune" class="hero-img">
+    </section>
+  </main>
+</body>
+</html>
