@@ -57,83 +57,58 @@
       </p>
 
       <p>
-        L'enjeu est particulièrement fort pour les dispositifs de santé soumis à la norme IEC 60601-1-2. Une perturbation électromagnétique malveillante peut altérer les données d’un capteur vital ou provoquer le dysfonctionnement d'un automate de soin.
+        L'AEGIS-RF a été conçu pour identifier et prévenir des menaces concrètes avant qu'elles ne soient exploitées, telles que :
       </p>
-
-      <p>L’objectif était de créer un appareil capable d'évaluer la résilience réelle de ces systèmes :</p>
       <ul>
-        <li>couverture spectrale totale (70 MHz à 6 GHz),</li>
-        <li>compact et portable pour des interventions sur site,</li>
-        <li>autonomie de plus de 8 heures sur batterie,</li>
-        <li>capacité de simuler des scénarios de menaces complexes (Pentest),</li>
-        <li>conception robuste pour les environnements complexes.</li>
+        <li><strong>Espionnage industriel :</strong> Interception de flux de données non chiffrés provenant de capteurs de production, empêchant le vol de secrets de fabrication.</li>
+        <li><strong>Infiltration de sites sensibles :</strong> Exploitation de vulnérabilités sur les contrôles d'accès (badges, portails) via des attaques par rejeu.</li>
+        <li><strong>Sécurité biomédicale :</strong> Manipulation à distance de dispositifs critiques soumis à la norme IEC 60601-1-2 (pompes à insuline, moniteurs), évitant tout arrêt de service malveillant.</li>
+        <li><strong>Sabotage de sécurité :</strong> Neutralisation par brouillage des détecteurs d'incendie ou d'intrusion sans fil.</li>
       </ul>
+
+      <p>L’objectif est de fournir un appareil capable d'évaluer la résilience de ces systèmes sur une plage de 70 MHz à 6 GHz, tout en garantissant une autonomie de plus de 8 heures pour des interventions sur site.</p>
     </section>
 
     <section>
-      <h2>Architecture SDR</h2>
+      <h2>Conception et Architecture</h2>
 
       <p>
-        Pour offrir une telle polyvalence, nous avons opté pour une architecture Software Defined Radio (SDR) de pointe. Contrairement aux récepteurs classiques, le traitement du signal est réalisé en temps réel directement sur FPGA.
-      </p>
-
-      <p>
-        Le cœur du système repose sur un SoC Zynq7020 associé à un transceiver AD9363 (firmware V0.38). Cette configuration permet un fonctionnement en Full Duplex (double émission/réception) sur l'ensemble de la plage de fréquences.
-      </p>
-
-      <p>
-        Le pilotage logiciel est assuré par un Raspberry Pi 5 sous une version modifiée de Kali Linux, garantissant l'accès aux outils de cybersécurité offensive.
+        Pour offrir une telle polyvalence, nous avons opté pour une architecture Software Defined Radio (SDR) de pointe. Le cœur du système repose sur un SoC Zynq7020 associé à un transceiver AD9363, permettant un fonctionnement en Full Duplex sur l'ensemble du spectre. Le pilotage logiciel est assuré par un Raspberry Pi 5 sous une version modifiée de Kali Linux, garantissant l'accès aux outils de cybersécurité offensive les plus performants.
       </p>
 
       <img src="../img/Projets/aegisrf/Aegis_SIMU.webp"
-           alt="Kali Linux avec le SRDANGEL"
+           alt="Interface logicielle de l'unité"
            class="hero-img" loading="lazy">
-    </section>
-
-    <section>
-      <h2>Prototypage & Design</h2>
 
       <p>
-        L'intégration de composants à haute densité énergétique dans un volume restreint a nécessité une conception mécanique rigoureuse. L'architecture interne a été réalisée en impression 3D sur mesure afin d'adapter parfaitement le châssis aux différents modules RF et cartes électroniques.
+        L'architecture interne a été réalisée en impression 3D sur mesure afin d'adapter parfaitement le châssis aux différents modules RF et cartes électroniques. 
       </p>
+      
       <p>
-        En raison des fortes puissances mises en jeu par les amplificateurs de 2W et 4W, une attention particulière a été portée à la dissipation thermique. Un système de refroidissement actif a été intégré pour garantir la stabilité des fréquences et la longévité des composants.
+        En raison des fortes puissances mises en jeu par les amplificateurs de 2W et 4W (gains de 23dB et 40dB), une attention particulière a été portée à la dissipation thermique. Un système de refroidissement actif a été intégré pour garantir la stabilité des fréquences et la longévité des composants lors des sessions d'audit intensives.
       </p>
-      <p>
-        La mallette finale permet de réaliser des audits concrets, tels que :
-      </p>
-      <ul>
-        <li><strong>Attaques par Rejeu :</strong> Capture et réémission de commandes de contrôle.</li>
-        <li><strong>Brouillage Sélectif :</strong> Neutralisation chirurgicale de signaux d'alerte.</li>
-        <li><strong>Déni de Service RF :</strong> Saturation ciblée pour tester la mise en sécurité des équipements.</li>
-      </ul>
 
       <img src="../img/Projets/aegisrf/Aegis_3D.webp"
-           alt="Conception mécanique et impression 3D de la mallette"
+           alt="Conception mécanique interne"
            class="hero-img" loading="lazy">
     </section>
 
     <section>
-      <h2>Fabrication & Validation</h2>
+      <h2>Conclusion</h2>
 
       <p>
-        L'unité intègre des étages d'amplification spécifiques calibrés lors de la fabrication : un module de 4W (gain 40dB) pour le Sub-GHz et un module de 2W (gain 23dB) pour la bande 2.4 GHz.
+        L'unité intègre des étages d'amplification spécifiques calibrés pour couvrir aussi bien le Sub-GHz que la bande 2.4 GHz. Le résultat est un outil de diagnostic totalement autonome permettant aux ingénieurs et responsables sécurité de confronter leurs équipements à la réalité du terrain. 
       </p>
 
       <p>
-        Le système a été validé lors de campagnes d'essais simulant des intrusions sur des réseaux IoT industriels et des tests de conformité sur des dispositifs médicaux. La gestion de l'autonomie a été confirmée avec un cycle d'utilisation réel dépassant les 8 heures.
-      </p>
-
-      <p>
-        Résultat : un outil de diagnostic totalement autonome permettant aux ingénieurs et responsables sécurité de confronter leurs équipements à la réalité du terrain pour une protection proactive des systèmes critiques.
+        En simulant des attaques par rejeu, des brouillages sélectifs ou des dénis de service RF, l'AEGIS-RF assure une protection proactive des systèmes critiques et une validation concrète des protocoles de sécurité en environnement réel.
       </p>
 
       <img src="../img/Projets/aegisrf/Aegis_DESIGN.webp"
-           alt="Unité AEGIS-RF finalisée en situation de test"
+           alt="Unité AEGIS-RF finalisée"
            class="hero-img" loading="lazy">
     </section>
 
   </main>
 </body>
-
 </html>
