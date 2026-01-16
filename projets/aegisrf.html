@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AEGIS-RF, l'unité mobile d'audit SDR et de Pentest radio conçue pour la sécurisation des infrastructures critiques et la conformité médicale.">
+  <title>AEGIS-RF - Détail du Projet</title>
+
+  <style>
+    :root { --orbivia-yellow: rgb(231,161,22); }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9; color: #333;
+      margin: 0; padding: 0;
+    }
+    main {
+      max-width: 900px; margin: 2rem auto; padding: 2rem;
+      background: white; border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    a.back-link {
+      display: inline-block; margin-bottom: 1.5rem;
+      color: var(--orbivia-yellow); font-weight: bold;
+      text-decoration: none; border: 2px solid var(--orbivia-yellow);
+      padding: 0.5rem 1rem; border-radius: 6px;
+      transition: 0.3s; cursor: pointer;
+    }
+    a.back-link:hover { background: var(--orbivia-yellow); color: white; }
+    h1 { font-size: 2rem; color: var(--orbivia-yellow); margin-bottom: 1rem; }
+    h2 { color: var(--orbivia-yellow); margin-bottom: 0.5rem; }
+    section { margin-bottom: 2rem; }
+    .hero-img {
+      width: 100%; border-radius: 10px;
+      margin: 1rem 0 2rem;
+    }
+    ul { padding-left: 1.2rem; }
+    li { margin-bottom: 0.5rem; }
+  </style>
+</head>
+
+<body>
+  <main role="main">
+
+    <a href="../realisations.html" class="back-link">← Retour aux projets</a>
+
+    <h1>AEGIS-RF, l’unité mobile d’audit RF</h1>
+
+    <img src="../img/Projets/AEGIS_RF.webp" 
+         alt="AEGIS-RF - Unité de Pentest Radio" 
+         class="hero-img" loading="lazy">
+
+    <section>
+      <h2>Analyse du besoin</h2>
+
+      <p>
+        La vulnérabilité des protocoles sans fil est devenue un enjeu majeur pour l'industrie et le secteur médical. Aujourd'hui, la surface d'attaque d'une entreprise ne s'arrête plus à ses prises Ethernet : la multiplication des objets connectés (IoT) et des automates industriels crée des failles invisibles mais critiques.
+      </p>
+
+      <p>
+        L'enjeu est particulièrement fort pour les dispositifs de santé soumis à la norme IEC 60601-1-2. Une perturbation électromagnétique malveillante peut altérer les données d’un capteur vital ou provoquer le dysfonctionnement d'un automate de soin.
+      </p>
+
+      <p>L’objectif était de créer un appareil capable d'évaluer la résilience réelle de ces systèmes :</p>
+      <ul>
+        <li>couverture spectrale totale (70 MHz à 6 GHz),</li>
+        <li>compact et portable pour des interventions sur site,</li>
+        <li>autonomie de plus de 8 heures sur batterie,</li>
+        <li>capacité de simuler des scénarios de menaces complexes (Pentest),</li>
+        <li>conception robuste pour les environnements complexes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Architecture SDR</h2>
+
+      <p>
+        Pour offrir une telle polyvalence, nous avons opté pour une architecture Software Defined Radio (SDR) de pointe. Contrairement aux récepteurs classiques, le traitement du signal est réalisé en temps réel directement sur FPGA.
+      </p>
+
+      <p>
+        Le cœur du système repose sur un SoC Zynq7020 associé à un transceiver AD9363 (firmware V0.38). Cette configuration permet un fonctionnement en Full Duplex (double émission/réception) sur l'ensemble de la plage de fréquences.
+      </p>
+
+      <p>
+        Le pilotage logiciel est assuré par un Raspberry Pi 5 sous une version modifiée de Kali Linux, garantissant l'accès aux outils de cybersécurité offensive.
+      </p>
+
+      <img src="../img/Projets/aegis/Aegis_SIMU.webp"
+           alt="Kali Linux avec le SRDANGEL"
+           class="hero-img" loading="lazy">
+    </section>
+
+    <section>
+      <h2>Prototypage & Design</h2>
+
+      <p>
+        L'intégration de composants à haute densité énergétique dans un volume restreint a nécessité une conception mécanique rigoureuse. L'architecture interne a été réalisée en impression 3D sur mesure afin d'adapter parfaitement le châssis aux différents modules RF et cartes électroniques.
+      </p>
+      <p>
+        En raison des fortes puissances mises en jeu par les amplificateurs de 2W et 4W, une attention particulière a été portée à la dissipation thermique. Un système de refroidissement actif a été intégré pour garantir la stabilité des fréquences et la longévité des composants.
+      </p>
+      <p>
+        La mallette finale permet de réaliser des audits concrets, tels que :
+      </p>
+      <ul>
+        <li><strong>Attaques par Rejeu :</strong> Capture et réémission de commandes de contrôle.</li>
+        <li><strong>Brouillage Sélectif :</strong> Neutralisation chirurgicale de signaux d'alerte.</li>
+        <li><strong>Déni de Service RF :</strong> Saturation ciblée pour tester la mise en sécurité des équipements.</li>
+      </ul>
+
+      <img src="../img/Projets/aegis/Aegis_3D.webp"
+           alt="Conception mécanique et impression 3D de la mallette"
+           class="hero-img" loading="lazy">
+    </section>
+
+    <section>
+      <h2>Fabrication & Validation</h2>
+
+      <p>
+        L'unité intègre des étages d'amplification spécifiques calibrés lors de la fabrication : un module de 4W (gain 40dB) pour le Sub-GHz et un module de 2W (gain 23dB) pour la bande 2.4 GHz.
+      </p>
+
+      <p>
+        Le système a été validé lors de campagnes d'essais simulant des intrusions sur des réseaux IoT industriels et des tests de conformité sur des dispositifs médicaux. La gestion de l'autonomie a été confirmée avec un cycle d'utilisation réel dépassant les 8 heures.
+      </p>
+
+      <p>
+        Résultat : un outil de diagnostic totalement autonome permettant aux ingénieurs et responsables sécurité de confronter leurs équipements à la réalité du terrain pour une protection proactive des systèmes critiques.
+      </p>
+
+      <img src="../img/Projets/aegis/Aegis_DESIGN.webp"
+           alt="Unité AEGIS-RF finalisée en situation de test"
+           class="hero-img" loading="lazy">
+    </section>
+
+  </main>
+</body>
+</html>
