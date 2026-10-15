@@ -1,50 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="LUXOHM, le testeur d’infla sécurisé, basse consommation et low-cost, conçu pour les environnements terrain exigeants.">
-  <title>LUXOHM - Détail du Projet</title>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Luxohm — Réalisation Orbivia</title><meta name="description" content="Développer un testeur électrique compact adapté aux contraintes du terrain."><link rel="icon" href="../img/logo.webp"><link rel="stylesheet" href="../css/style.css?v=20261015-polish"><link rel="stylesheet" href="../css/project.css?v=20261015-polish"><script src="../js/site.js" defer></script></head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="header">
+<a class="brand" href="../index.html">
+<img src="../img/logo.webp" alt="" width="44" height="44">Orbivia<span>Recherche & développement</span>
+</a>
+<button class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale"><a href="../index.html#expertises">Expertises</a>
+<a href="../index.html">Accueil</a>
+<a href="../realisations.html" aria-current="page">Réalisations</a>
+<a href="../contact.html" class="nav-cta">Parlons de votre projet →</a>
+</nav>
+</header><main id="contenu" class="project-main"><div class="wrap"><a class="project-back" href="../realisations.html">← Toutes les réalisations</a><section class="project-intro"><div><span class="eyebrow">Électronique basse consommation · Terrain</span><h1>Luxohm<span class="accent">.</span></h1><p class="intro">Développer un testeur électrique compact adapté aux contraintes du terrain.</p><div class="tech-tags"><span>SPICE</span><span>EAGLE</span><span>Basse consommation</span><span>Encapsulation</span></div></div><figure><img src="../img/Projets/luxohm/Luxohm_ELEC.webp" alt="Luxohm, projet Orbivia" fetchpriority="high"></figure></section><section class="project-summary" aria-label="Le projet en bref"><article><span class="eyebrow">Le besoin</span><p>Développer un testeur électrique compact adapté aux contraintes du terrain.</p></article><article><span class="eyebrow">L’intervention</span><p>Simulation, conception électronique, intégration mécanique et assemblage des prototypes.</p></article><article><span class="eyebrow">Le résultat</span><p>Une première série de dix unités pour vérifier le processus de fabrication et poursuivre les essais.</p></article></section><div class="project-reading"><nav class="project-toc" aria-label="Dans cette réalisation"><span>Le projet en détail</span><a href="#etape-1">Analyse du besoin</a><a href="#etape-2">Simulation</a><a href="#etape-3">Prototypage</a><a href="#etape-4">Fabrication</a><a href="#etape-5">Tests & validation</a></nav><div class="project-article">
 
-  <style>
-    :root { --orbivia-yellow: rgb(231,161,22); }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9; color: #333;
-      margin: 0; padding: 0;
-    }
-    main {
-      max-width: 900px; margin: 2rem auto; padding: 2rem;
-      background: white; border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    a.back-link {
-      display: inline-block; margin-bottom: 1.5rem;
-      color: var(--orbivia-yellow); font-weight: bold;
-      text-decoration: none; border: 2px solid var(--orbivia-yellow);
-      padding: 0.5rem 1rem; border-radius: 6px;
-      transition: 0.3s; cursor: pointer;
-    }
-    a.back-link:hover { background: var(--orbivia-yellow); color: white; }
-    h1 { font-size: 2rem; color: var(--orbivia-yellow); margin-bottom: 1rem; }
-    h2 { color: var(--orbivia-yellow); margin-bottom: 0.5rem; }
-    section { margin-bottom: 2rem; }
-    .hero-img {
-      width: 100%; border-radius: 10px;
-      margin: 1rem 0 2rem;
-    }
-  </style>
-<link rel="stylesheet" href="../css/project.css">
-</head>
 
-<body>
-  <main role="main">
 
-    <a href="../realisations.html" class="back-link">← Retour aux projets</a>
 
-    <h1>LUXOHM, le testeur d’infla sécurisé</h1>
     <section>
-      <h2>Analyse du besoin</h2>
+      <h2 id="etape-1">Analyse du besoin</h2>
 
       <p>
         Les inflammateurs pyrotechniques (ou “infla”) sont de petits composants conçus pour déclencher une charge explosive lorsqu’un courant électrique précis les traverse. Ils sont utilisés dans les effets spéciaux, le BTP (tir de mine, démolition contrôlée), ou encore dans des systèmes de sécurité ou militaires.
@@ -73,7 +43,7 @@
     <!-- ------------------------------------------------------------------ -->
 
     <section>
-      <h2>Simulation</h2>
+      <h2 id="etape-2">Simulation</h2>
 
       <p>
         Avant toute fabrication, le système a été entièrement simulé sous SPICE afin de garantir un courant de test inférieur à 30 µA, soit plus de 5000 fois inférieur au seuil d’inflammation.
@@ -87,7 +57,7 @@
         L’architecture repose sur un comparateur ultra basse consommation, et un fusible de sécurité protège contre toute défaillance.
       </p>
 
-      <img src="../img/Projets/luxohm/Luxohm_SIMU.webp"
+      <img loading="lazy" src="../img/Projets/luxohm/Luxohm_SIMU.webp"
            alt="Simulation du courant de test sous SPICE"
            class="hero-img" loading="lazy">
     </section>
@@ -97,7 +67,7 @@
     <!-- ------------------------------------------------------------------ -->
 
     <section>
-      <h2>Prototypage</h2>
+      <h2 id="etape-3">Prototypage</h2>
 
       <p>
         Le design retenu est compact et robuste, sous la forme d’un médaillon intégrant deux zones de contact destinées au test des inflas. Le capot supérieur, usiné en laiton puis soudé directement sur le PCB, assure une excellente tenue mécanique et une protection renforcée contre les déformations ou les chocs.
@@ -112,7 +82,7 @@
         La carte électronique a été conçue sous EAGLE :
       </p>
 
-      <img src="../img/Projets/luxohm/Luxohm_ELEC.webp"
+      <img loading="lazy" src="../img/Projets/luxohm/Luxohm_ELEC.webp"
            alt="Conception électronique sous Eagle"
            class="hero-img" loading="lazy">
     </section>
@@ -122,7 +92,7 @@
 <!-- ------------------------------------------------------------------ -->
 
 <section>
-  <h2>Fabrication</h2>
+  <h2 id="etape-4">Fabrication</h2>
 
   <p>
     Une première série de 10 unités a été produite afin de valider l’ensemble du processus industriel et de réaliser des essais terrain. Les boîtiers sont usinés par un partenaire spécialisé, assurant une précision mécanique élevée ainsi qu’une excellente résistance aux chocs et contraintes extérieures.
@@ -136,7 +106,7 @@
     L’électronique finie est ensuite encapsulée dans une résine étanche, offrant une protection durable contre l’humidité, les vibrations et les manipulations répétées en environnement terrain.
   </p>
 
-  <img src="../img/Projets/luxohm/Luxohm_PCBA.webp"
+  <img loading="lazy" src="../img/Projets/luxohm/Luxohm_PCBA.webp"
        alt="Assemblage et encapsulation des PCB du testeur LUXOHM"
        class="hero-img" loading="lazy">
 </section>
@@ -147,10 +117,10 @@
 <!-- ------------------------------------------------------------------ -->
 
 <section>
-  <h2>Tests & validation</h2>
+  <h2 id="etape-5">Tests & validation</h2>
 
   <p>
-    Des mesures électriques ont été réalisées sur plusieurs modèles d’inflas afin de confirmer les résultats obtenus en simulation. Le courant de test mesuré reste systématiquement inférieur à 30 µA, soit une marge de sécurité supérieure à ×5000 par rapport aux seuils d’inflammation rapportés dans la littérature. 
+    Des mesures électriques ont été réalisées sur plusieurs modèles d’inflas afin de confirmer les résultats obtenus en simulation. Le courant de test mesuré reste systématiquement inférieur à 30 µA, soit une marge de sécurité supérieure à ×5000 par rapport aux seuils d’inflammation rapportés dans la littérature.
   </p>
 
   <p>
@@ -165,15 +135,15 @@
     Crédit photo : Luxfactory
   </p>
 
-  <img src="../img/Projets/luxohm/Luxohm_FEU.webp"
+  <img loading="lazy" src="../img/Projets/luxohm/Luxohm_FEU.webp"
        alt="Essais terrain du système LUXOHM lors d’un feu pyrotechnique"
        class="hero-img" loading="lazy">
 </section>
 
 
-  </main>
-</body>
-</html>
-
-
-
+  </div></div><section class="cta"><div><span class="eyebrow">Un projet similaire ?</span><h2>Parlons de votre besoin.</h2><p>Une idée, une difficulté technique ou un prototype à faire évoluer.</p></div><a class="button" href="../contact.html">Prendre contact →</a></section></div></main><footer>
+<a class="brand" href="../index.html">Orbivia<span>De l’idée au concret.</span>
+</a>
+<a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<span>Wattignies · Métropole lilloise<br>© Orbivia</span>
+</footer></body></html>

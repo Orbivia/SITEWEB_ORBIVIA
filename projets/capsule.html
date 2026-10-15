@@ -1,84 +1,18 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capsule Temporelle - Détail du Projet</title>
-  <style>
-    :root {
-      --orbivia-yellow: rgb(231,161,22);
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-    a.back-link {
-      display: inline-block;
-      margin-bottom: 1.5rem;
-      color: var(--orbivia-yellow);
-      font-weight: bold;
-      text-decoration: none;
-      border: 2px solid var(--orbivia-yellow);
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background 0.3s, color 0.3s;
-    }
-    a.back-link:hover {
-      background: var(--orbivia-yellow);
-      color: white;
-    }
-    h1 {
-      font-size: 2rem;
-      color: var(--orbivia-yellow);
-      margin-bottom: 1rem;
-    }
-    section {
-      margin-bottom: 2rem;
-    }
-    h2 {
-      color: var(--orbivia-yellow);
-      margin-bottom: 0.5rem;
-    }
-    .hero-img {
-      width: 100%;
-      border-radius: 10px;
-      margin: 1rem 0 2rem;
-    }
-    .cta-link {
-      display: inline-block;
-      background-color: var(--orbivia-yellow);
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .cta-link:hover {
-      background-color: #cf9310;
-      transform: translateY(-2px);
-    }
-  </style>
-<link rel="stylesheet" href="../css/project.css">
-</head>
-<body>
-  <main>
-    <a href="../realisations.html" class="back-link">← Retour aux projets</a>
-    <h1>Capsule Temporelle pour La Forge à Souvenirs</h1>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Capsule temporelle — Réalisation Orbivia</title><meta name="description" content="Enregistrer des messages vidéo et programmer leur révélation à une date choisie."><link rel="icon" href="../img/logo.webp"><link rel="stylesheet" href="../css/style.css?v=20261015-polish"><link rel="stylesheet" href="../css/project.css?v=20261015-polish"><script src="../js/site.js" defer></script></head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="header">
+<a class="brand" href="../index.html">
+<img src="../img/logo.webp" alt="" width="44" height="44">Orbivia<span>Recherche & développement</span>
+</a>
+<button class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale"><a href="../index.html#expertises">Expertises</a>
+<a href="../index.html">Accueil</a>
+<a href="../realisations.html" aria-current="page">Réalisations</a>
+<a href="../contact.html" class="nav-cta">Parlons de votre projet →</a>
+</nav>
+</header><main id="contenu" class="project-main"><div class="wrap"><a class="project-back" href="../realisations.html">← Toutes les réalisations</a><section class="project-intro"><div><span class="eyebrow">Électronique · Expérience utilisateur</span><h1>Capsule temporelle<span class="accent">.</span></h1><p class="intro">Enregistrer des messages vidéo et programmer leur révélation à une date choisie.</p><div class="tech-tags"><span>Android</span><span>Capteur magnétique</span><span>PCB de façade</span><span>Impression SLA</span></div></div><figure><img src="../img/Projets/capsule/Capsule_MODEL.webp" alt="Capsule temporelle, projet Orbivia" fetchpriority="high"></figure></section><section class="project-summary" aria-label="Le projet en bref"><article><span class="eyebrow">Le besoin</span><p>Enregistrer des messages vidéo et programmer leur révélation à une date choisie.</p></article><article><span class="eyebrow">L’intervention</span><p>Intégration du smartphone, de la détection magnétique, de l’éclairage et du boîtier imprimé en 3D.</p></article><article><span class="eyebrow">Le résultat</span><p>Un système conçu pour l’enregistrement et l’envoi différé, présenté en phase de tests utilisateurs.</p></article></section><div class="project-reading"><nav class="project-toc" aria-label="Dans cette réalisation"><span>Le projet en détail</span><a href="#etape-1">Concept</a><a href="#etape-2">Conception et Développement</a><a href="#etape-3">Design et Fabrication</a><a href="#etape-4">Prochaine étape</a></nav><div class="project-article">
+
+
     <section>
-      <h2>Concept</h2>
+      <h2 id="etape-1">Concept</h2>
       <p>Ce dispositif permet aux invités de laisser un message vidéo destiné à être révélé à une date ultérieure précise. L’objectif : raviver l’émotion de l’événement (mariage, baptême, anniversaire) plusieurs années plus tard. Jusqu'à 3 ans de stockage sont possibles.</p>
       <p>Chaque message est enregistré dans une capsule numérique. L'invité choisit lui-même la date d’envoi lors de l’enregistrement. Exemple : un an après l’événement, pour des messages du type :</p>
       <blockquote>« Salut, ça fait un an que j’ai enregistré ce message… je me doute qu’à cette date vous avez sûrement déjà agrandi la famille. Profitez bien, et souvenez-vous de cette journée incroyable ! »</blockquote>
@@ -86,34 +20,35 @@
     </section>
 
     <section>
-      <h2>Conception et Développement</h2>
+      <h2 id="etape-2">Conception et Développement</h2>
       <p>Le décroché est détecté par capteur magnétique, supprimant les pièces mécaniques fragiles et améliorant la fiabilité. Le cœur du système repose sur un smartphone Android (Samsung A51) associé à une carte électronique sur mesure.</p>
       <p>Celle-ci détecte le décroché, allume les LED COB et déclenche l’application Android. Un timer coupe l’alimentation après 10 minutes d’inactivité pour préserver la batterie.</p>
-      <img src="../img/Projets/capsule/Capsule_ELEC.webp" alt="Vue technique capsule" class="hero-img">
+      <img loading="lazy" src="../img/Projets/capsule/Capsule_ELEC.webp" alt="Vue technique capsule" class="hero-img">
       <p>Une vidéo d’introduction guide l’utilisateur. Ensuite, il enregistre son message, qui est stocké localement. À la fin, il sélectionne une date d’envoi différé.</p>
     </section>
 
     <section>
-      <h2>Design et Fabrication</h2>
+      <h2 id="etape-3">Design et Fabrication</h2>
       <p>Le design s'inspire d’un ancien combiné téléphonique. L’objectif était de créer un objet intuitif et engageant, simple, rétro et surtout compact pour faciliter le transport.</p>
-      <img src="../img/Projets/capsule/Capsule_DESIGN.webp" alt="Vue design de la capsule" class="hero-img">
+      <img loading="lazy" src="../img/Projets/capsule/Capsule_DESIGN.webp" alt="Vue design de la capsule" class="hero-img">
       <p>La plaque frontale du système est en réalité un PCB. Ce choix présente un double avantage : une finition argentée nette et élégante, et une intégration directe des connexions électroniques. Une solution à la fois esthétique et économique.</p>
       <p>Le boîtier a été imprimé en 3D résine (SLA), un choix motivé par la qualité de finition, la solidité, mais aussi le poids final du système, qui assure une bonne stabilité. Ce rendu est bien plus massif et stable que ce qu’aurait permis une impression filament.</p>
-      <img src="../img/Projets/capsule/Capsule_3D.webp" alt="Pièce imprimée en 3D SLA" class="hero-img">
+      <img loading="lazy" src="../img/Projets/capsule/Capsule_3D.webp" alt="Pièce imprimée en 3D SLA" class="hero-img">
       <p>Le système a été pensé dès le départ pour être low cost, facile à produire, et facilement réplicable. Il peut être expédié dans toute la France à faible coût, avec une logistique simple.</p>
-      <img src="../img/Projets/capsule/Capsule_FINAL.webp" alt="Produit final dans sa valise de transport" class="hero-img">
+      <img loading="lazy" src="../img/Projets/capsule/Capsule_FINAL.webp" alt="Produit final dans sa valise de transport" class="hero-img">
     </section>
 
     <section>
-      <h2>Prochaine étape</h2>
+      <h2 id="etape-4">Prochaine étape</h2>
       <p>La capsule temporelle n’est pas encore disponible à la location, mais sa diffusion est imminente. Des tests utilisateurs sont en cours pour valider l’ergonomie du système, affiner l’expérience d’enregistrement, et garantir la fiabilité des envois différés.</p>
       <p>Une campagne de pré-lancement est en préparation. Elle visera les organisateurs d'événements, les agences de mariage et les particuliers souhaitant offrir une expérience mémorable à leurs invités.</p>
       <p>Si vous êtes intéressé par la location ou la distribution du produit, n'hésitez pas à nous contacter pour être tenu informé du lancement.</p>
     </section>
 
     <a href="https://laforgeasouvenirs.fr/#details-videobook" class="cta-link" target="_blank">Louer un vidéobook</a>
-  </main>
-</body>
-</html>
-
-
+  </div></div><section class="cta"><div><span class="eyebrow">Un projet similaire ?</span><h2>Parlons de votre besoin.</h2><p>Une idée, une difficulté technique ou un prototype à faire évoluer.</p></div><a class="button" href="../contact.html">Prendre contact →</a></section></div></main><footer>
+<a class="brand" href="../index.html">Orbivia<span>De l’idée au concret.</span>
+</a>
+<a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<span>Wattignies · Métropole lilloise<br>© Orbivia</span>
+</footer></body></html>

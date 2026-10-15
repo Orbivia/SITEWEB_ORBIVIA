@@ -1,88 +1,19 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Panoptès AI, le traducteur vocal portable et connecté via BLE, conçu pour les interactions multilingues en temps réel.">
-  <title>Panoptès AI - Détail du Projet</title>
-  <style>
-    :root {
-      --orbivia-yellow: rgb(231,161,22);
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-    a.back-link {
-      display: inline-block;
-      margin-bottom: 1.5rem;
-      color: var(--orbivia-yellow);
-      font-weight: bold;
-      text-decoration: none;
-      border: 2px solid var(--orbivia-yellow);
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background 0.3s, color 0.3s;
-      cursor: pointer;
-    }
-    a.back-link:hover {
-      background: var(--orbivia-yellow);
-      color: white;
-    }
-    h1 {
-      font-size: 2rem;
-      color: var(--orbivia-yellow);
-      margin-bottom: 1rem;
-    }
-    section {
-      margin-bottom: 2rem;
-    }
-    h2 {
-      color: var(--orbivia-yellow);
-      margin-bottom: 0.5rem;
-    }
-    .hero-img {
-      width: 100%;
-      border-radius: 10px;
-      margin: 1rem 0 2rem;
-    }
-    .cta-link {
-      display: inline-block;
-      background-color: var(--orbivia-yellow);
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      transition: background 0.3s, transform 0.3s;
-      cursor: pointer;
-    }
-    .cta-link:hover {
-      background-color: #cf9310;
-      transform: translateY(-2px);
-    }
-  </style>
-<link rel="stylesheet" href="../css/project.css">
-</head>
-<body>
-  <main role="main">
-    <a href="../realisations.html" class="back-link">← Retour aux projets</a>
-    <h1>Panoptès AI, le traducteur vocal temps réel</h1>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Panoptès AI — Réalisation Orbivia</title><meta name="description" content="Explorer un assistant vocal miniature au format pendentif."><link rel="icon" href="../img/logo.webp"><link rel="stylesheet" href="../css/style.css?v=20261015-polish"><link rel="stylesheet" href="../css/project.css?v=20261015-polish"><script src="../js/site.js" defer></script></head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="header">
+<a class="brand" href="../index.html">
+<img src="../img/logo.webp" alt="" width="44" height="44">Orbivia<span>Recherche & développement</span>
+</a>
+<button class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale"><a href="../index.html#expertises">Expertises</a>
+<a href="../index.html">Accueil</a>
+<a href="../realisations.html" aria-current="page">Réalisations</a>
+<a href="../contact.html" class="nav-cta">Parlons de votre projet →</a>
+</nav>
+</header><main id="contenu" class="project-main"><div class="wrap"><a class="project-back" href="../realisations.html">← Toutes les réalisations</a><section class="project-intro"><div><span class="eyebrow">Systèmes embarqués · Design produit</span><h1>Panoptès AI<span class="accent">.</span></h1><p class="intro">Explorer un assistant vocal miniature au format pendentif.</p><div class="tech-tags"><span>ESP32</span><span>Bluetooth LE</span><span>Audio</span><span>Impression SLA</span></div></div><figure><img src="../img/featured/panoptes.webp" alt="Panoptès AI, projet Orbivia" fetchpriority="high"></figure></section><section class="project-summary" aria-label="Le projet en bref"><article><span class="eyebrow">Le besoin</span><p>Explorer un assistant vocal miniature au format pendentif.</p></article><article><span class="eyebrow">L’intervention</span><p>Développement électronique et intégration du microphone, du haut-parleur et de la batterie dans un boîtier compact.</p></article><article><span class="eyebrow">Le résultat</span><p>Une preuve de concept fonctionnelle et une conception mécanique préparée pour la suite du développement.</p></article></section><div class="project-reading"><nav class="project-toc" aria-label="Dans cette réalisation"><span>Le projet en détail</span><a href="#etape-1">Analyse du besoin</a><a href="#etape-2">Prototypage</a><a href="#etape-3">Optimisation du design</a><a href="#etape-4">Préindustrialisation</a><a href="#etape-5">Conclusion</a></nav><div class="project-article">
+
+
 
     <section>
-      <h2>Analyse du besoin</h2>
+      <h2 id="etape-1">Analyse du besoin</h2>
       <p>
         Objectif : concevoir un traducteur vocal ultra-réactif, sous forme de pendentif, connecté à ChatGPT via Bluetooth Low Energy (BLE). Le dispositif doit offrir une autonomie de deux jours, intégrer un haut-parleur suffisamment puissant, présenter un design simple et élégant, et ne pas dépasser un coût de production de 40 € en série de 100 unités.
       </p>
@@ -95,35 +26,35 @@
     </section>
 
     <section>
-      <h2>Prototypage</h2>
+      <h2 id="etape-2">Prototypage</h2>
       <p>
         La première phase de R&D s’est appuyée sur un ESP32, choisi pour son excellent rapport fonctionnalités/prix. En plus de gérer le BLE, sa connectivité Wi-Fi laisse envisager une future version autonome. Une carte électronique sur mesure a été développée, intégrant un module ESP32 XIAO. Ce choix a permis de réduire les coûts de production, de faciliter l’assemblage en série et de simplifier les démarches réglementaires grâce à la certification FCC et CE du module.
       </p>
-      <img src="../img/Projets/panoptes/Panoptes_ELEC.webp" alt="Carte électronique sur mesure" class="hero-img" loading="lazy">
+      <img loading="lazy" src="../img/Projets/panoptes/Panoptes_ELEC.webp" alt="Carte électronique sur mesure" class="hero-img" loading="lazy">
     </section>
 
     <section>
-      <h2>Optimisation du design</h2>
+      <h2 id="etape-3">Optimisation du design</h2>
       <p>
         Le système de recharge, initialement prévu par induction, a été remplacé par un connecteur magnétique compact, plus économique, sans compromettre l’élégance du produit. Une conception 3D rapide, quelques vis, une batterie de 600 mAh, un haut-parleur, un microphone et un codec audio ont permis d’assembler un système pleinement fonctionnel.
       </p>
-      <img src="../img/Projets/panoptes/Panoptes_ASSEMBLY.webp" alt="Assemblage du système" class="hero-img" loading="lazy">
+      <img loading="lazy" src="../img/Projets/panoptes/Panoptes_ASSEMBLY.webp" alt="Assemblage du système" class="hero-img" loading="lazy">
       <p>
         Une fois le design validé, la version finale a été modélisée en 3D en vue d’une industrialisation. Une impression 3D en SLA a permis de valider l’intégration physique et l’encombrement, ouvrant la voie à une pré-série de validation.
       </p>
-      <img src="../img/Projets/panoptes/Panoptes_3DPRINT.webp" alt="Impression 3D résine" class="hero-img" loading="lazy">
+      <img loading="lazy" src="../img/Projets/panoptes/Panoptes_3DPRINT.webp" alt="Impression 3D résine" class="hero-img" loading="lazy">
     </section>
 
     <section>
-      <h2>Préindustrialisation</h2>
+      <h2 id="etape-4">Préindustrialisation</h2>
       <p>
         Le design final vise un aspect métallisé, tout en conservant un poids réduit, un coût bas et la transparence aux ondes Bluetooth. L’usinage métallique étant exclu, une impression 3D avec finition “vacuum electroplating” a été retenue. Cette technique garantit une bonne adhésion du revêtement à coût maîtrisé. Plusieurs rendus photoréalistes ont été proposés au client pour orienter les choix esthétiques.
       </p>
-      <img src="../img/Projets/panoptes/Panoptes_DESIGN.webp" alt="Proposition de couleurs et de finitions" class="hero-img" loading="lazy">
+      <img loading="lazy" src="../img/Projets/panoptes/Panoptes_DESIGN.webp" alt="Proposition de couleurs et de finitions" class="hero-img" loading="lazy">
     </section>
 
     <section>
-      <h2>Conclusion</h2>
+      <h2 id="etape-5">Conclusion</h2>
       <p>
         Panoptès AI réunit tous les ingrédients d’un produit innovant : un design épuré, une technologie portable et connectée, un concept simple et un fort potentiel d’usage. Ce projet a permis de relever des défis à la fois électroniques, mécaniques et logiciels — un véritable challenge multidisciplinaire.
       </p>
@@ -132,7 +63,9 @@
       </p>
       <p><strong>Merci à John pour sa confiance tout au long de cette aventure.</strong></p>
     </section>
-  </main>
-</body>
-</html>
-
+  </div></div><section class="cta"><div><span class="eyebrow">Un projet similaire ?</span><h2>Parlons de votre besoin.</h2><p>Une idée, une difficulté technique ou un prototype à faire évoluer.</p></div><a class="button" href="../contact.html">Prendre contact →</a></section></div></main><footer>
+<a class="brand" href="../index.html">Orbivia<span>De l’idée au concret.</span>
+</a>
+<a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<span>Wattignies · Métropole lilloise<br>© Orbivia</span>
+</footer></body></html>

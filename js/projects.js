@@ -73,7 +73,7 @@ const projets = [
   },
   {
     title: "Aegis Rf Pro",
-    img: "img/Projets/aegisrf/Aegis_DESIGN.webp",
+    img: "img/featured/aegis.webp",
     desc: "Unité mobile de test pour la sécurisation des infrastructures radiofréquences critiques. https://orbivia.fr/projets/aegisrf.html",
     category: "IOT"
   },

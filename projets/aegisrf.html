@@ -1,52 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AEGIS-RF, l'unité mobile d'audit SDR et de Pentest radio conçue pour la sécurisation des infrastructures critiques et la conformité médicale.">
-  <title>AEGIS-RF - Détail du Projet</title>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aegis RF Pro — Réalisation Orbivia</title><meta name="description" content="Concevoir une unité mobile pour l’analyse et les audits radiofréquences sur site."><link rel="icon" href="../img/logo.webp"><link rel="stylesheet" href="../css/style.css?v=20261015-polish"><link rel="stylesheet" href="../css/project.css?v=20261015-polish"><script src="../js/site.js" defer></script></head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="header">
+<a class="brand" href="../index.html">
+<img src="../img/logo.webp" alt="" width="44" height="44">Orbivia<span>Recherche & développement</span>
+</a>
+<button class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale"><a href="../index.html#expertises">Expertises</a>
+<a href="../index.html">Accueil</a>
+<a href="../realisations.html" aria-current="page">Réalisations</a>
+<a href="../contact.html" class="nav-cta">Parlons de votre projet →</a>
+</nav>
+</header><main id="contenu" class="project-main"><div class="wrap"><a class="project-back" href="../realisations.html">← Toutes les réalisations</a><section class="project-intro"><div><span class="eyebrow">Radiofréquences · Instrumentation</span><h1>Aegis RF Pro<span class="accent">.</span></h1><p class="intro">Concevoir une unité mobile pour l’analyse et les audits radiofréquences sur site.</p><div class="tech-tags"><span>SDR</span><span>Raspberry Pi</span><span>Intégration mécanique</span></div></div><figure><img src="../img/featured/aegis.webp" alt="Aegis RF Pro, projet Orbivia" fetchpriority="high"></figure></section><section class="project-summary" aria-label="Le projet en bref"><article><span class="eyebrow">Le besoin</span><p>Concevoir une unité mobile pour l’analyse et les audits radiofréquences sur site.</p></article><article><span class="eyebrow">L’intervention</span><p>Intégration de l’architecture SDR, de son pilotage et du châssis dans une valise transportable.</p></article><article><span class="eyebrow">Le résultat</span><p>Un prototype autonome réunissant écran, commandes, électronique et antennes.</p></article></section><div class="project-reading"><nav class="project-toc" aria-label="Dans cette réalisation"><span>Le projet en détail</span><a href="#etape-1">Analyse du besoin</a><a href="#etape-2">Conception et Architecture</a><a href="#etape-3">Conclusion</a></nav><div class="project-article">
 
-  <style>
-    :root { --orbivia-yellow: rgb(231,161,22); }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9; color: #333;
-      margin: 0; padding: 0;
-    }
-    main {
-      max-width: 900px; margin: 2rem auto; padding: 2rem;
-      background: white; border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    a.back-link {
-      display: inline-block; margin-bottom: 1.5rem;
-      color: var(--orbivia-yellow); font-weight: bold;
-      text-decoration: none; border: 2px solid var(--orbivia-yellow);
-      padding: 0.5rem 1rem; border-radius: 6px;
-      transition: 0.3s; cursor: pointer;
-    }
-    a.back-link:hover { background: var(--orbivia-yellow); color: white; }
-    h1 { font-size: 2rem; color: var(--orbivia-yellow); margin-bottom: 1rem; }
-    h2 { color: var(--orbivia-yellow); margin-bottom: 0.5rem; }
-    section { margin-bottom: 2rem; }
-    .hero-img {
-      width: 100%; border-radius: 10px;
-      margin: 1rem 0 2rem;
-    }
-    ul { padding-left: 1.2rem; }
-    li { margin-bottom: 0.5rem; }
-  </style>
-<link rel="stylesheet" href="../css/project.css">
-</head>
 
-<body>
-  <main role="main">
 
-    <a href="../realisations.html" class="back-link">← Retour aux projets</a>
 
-    <h1>AEGIS-RF, l’unité mobile d’audit RF</h1>   
     <section>
-      <h2>Analyse du besoin</h2>
+      <h2 id="etape-1">Analyse du besoin</h2>
 
       <p>
         La vulnérabilité des protocoles sans fil est devenue un enjeu majeur pour l'industrie et le secteur médical. Aujourd'hui, la surface d'attaque d'une entreprise ne s'arrête plus à ses prises Ethernet : la multiplication des objets connectés (IoT) et des automates industriels crée des failles invisibles mais critiques.
@@ -66,49 +34,48 @@
     </section>
 
     <section>
-      <h2>Conception et Architecture</h2>
+      <h2 id="etape-2">Conception et Architecture</h2>
 
       <p>
         Pour offrir une telle polyvalence, nous avons opté pour une architecture Software Defined Radio (SDR) de pointe. Le cœur du système repose sur un SoC Zynq7020 associé à un transceiver AD9363, permettant un fonctionnement en Full Duplex sur l'ensemble du spectre. Le pilotage logiciel est assuré par un Raspberry Pi 5 sous une version modifiée de Kali Linux, garantissant l'accès aux outils de cybersécurité offensive les plus performants.
       </p>
 
-      <img src="../img/Projets/aegisrf/Aegis_SIMU.webp"
+      <img loading="lazy" src="../img/Projets/aegisrf/Aegis_SIMU.webp"
            alt="Interface logicielle de l'unité"
            class="hero-img" loading="lazy">
 
       <p>
-        L'architecture interne a été réalisée en impression 3D sur mesure afin d'adapter parfaitement le châssis aux différents modules RF et cartes électroniques. 
+        L'architecture interne a été réalisée en impression 3D sur mesure afin d'adapter parfaitement le châssis aux différents modules RF et cartes électroniques.
       </p>
-      
+
       <p>
         En raison des fortes puissances mises en jeu par les amplificateurs de 2W et 4W (gains de 23dB et 40dB), une attention particulière a été portée à la dissipation thermique. Un système de refroidissement actif a été intégré pour garantir la stabilité des fréquences et la longévité des composants lors des sessions d'audit intensives.
       </p>
 
-      <img src="../img/Projets/aegisrf/Aegis_3D.webp"
+      <img loading="lazy" src="../img/Projets/aegisrf/Aegis_3D.webp"
            alt="Conception mécanique interne"
            class="hero-img" loading="lazy">
     </section>
 
     <section>
-      <h2>Conclusion</h2>
+      <h2 id="etape-3">Conclusion</h2>
 
       <p>
-        L'unité intègre des étages d'amplification spécifiques calibrés pour couvrir aussi bien le Sub-GHz que la bande 2.4 GHz. Le résultat est un outil de diagnostic totalement autonome permettant aux ingénieurs et responsables sécurité de confronter leurs équipements à la réalité du terrain. 
+        L'unité intègre des étages d'amplification spécifiques calibrés pour couvrir aussi bien le Sub-GHz que la bande 2.4 GHz. Le résultat est un outil de diagnostic totalement autonome permettant aux ingénieurs et responsables sécurité de confronter leurs équipements à la réalité du terrain.
       </p>
 
       <p>
         En simulant des attaques par rejeu, des brouillages sélectifs ou des dénis de service RF, l'AEGIS-RF assure une protection proactive des systèmes critiques et une validation concrète des protocoles de sécurité en environnement réel.
       </p>
 
-      <img src="../img/Projets/aegisrf/Aegis_DESIGN.webp"
+      <img loading="lazy" src="../img/featured/aegis.webp"
            alt="Unité AEGIS-RF finalisée"
            class="hero-img" loading="lazy">
     </section>
 
-  </main>
-</body>
-</html>
-
-
-
-
+  </div></div><section class="cta"><div><span class="eyebrow">Un projet similaire ?</span><h2>Parlons de votre besoin.</h2><p>Une idée, une difficulté technique ou un prototype à faire évoluer.</p></div><a class="button" href="../contact.html">Prendre contact →</a></section></div></main><footer>
+<a class="brand" href="../index.html">Orbivia<span>De l’idée au concret.</span>
+</a>
+<a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<span>Wattignies · Métropole lilloise<br>© Orbivia</span>
+</footer></body></html>
