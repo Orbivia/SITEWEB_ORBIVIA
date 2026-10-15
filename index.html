@@ -1,340 +1,188 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Orbivia - R&D</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    :root {
-      --orbivia-yellow: rgb(231,161,22);
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-      background: #f9f9f9;
-      color: #333;
-      scroll-behavior: smooth;
-    }
-    header {
-      background: var(--orbivia-yellow);
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      animation: slide-down 0.6s ease-out;
-      position: relative;
-    }
-    header img {
-      height: 60px;
-      margin-right: 1rem;
-    }
-    header .logo-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      color: white;
-      gap: 1rem;
-    }
-    .burger {
-      display: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: white;
-    }
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        gap: 1rem;
-        background: var(--orbivia-yellow);
-        padding: 1rem;
-        position: absolute;
-        right: 1rem;
-        top: 70px;
-        border-radius: 6px;
-        z-index: 10;
-      }
-      nav.open {
-        display: flex;
-      }
-      .burger {
-        display: block;
-      }
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 0.5rem;
-      margin: 0 1rem;
-      font-weight: bold;
-      transition: background 0.3s, color 0.3s;
-      border-radius: 4px;
-    }
-    nav a:hover,
-    nav a.active {
-      background: white;
-      color: var(--orbivia-yellow);
-    }
-    main {
-      padding: 2rem;
-    }
-    @keyframes fade-in-up {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in-up {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .fade-in-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    h1 span {
-      animation: fade-in-up 1s ease-out;
-      display: inline-block;
-    }
-    section {
-      margin-bottom: 4rem;
-    }
-    .section-title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
-      color: #222;
-    }
-    .timeline {
-      max-width: 900px;
-      margin: 0 auto;
-      border-left: 3px solid var(--orbivia-yellow);
-      position: relative;
-    }
-    .timeline-step {
-      position: relative;
-      padding-left: 2rem;
-      margin-bottom: 2.5rem;
-    }
-    .timeline-step::before {
-      content: attr(data-step);
-      position: absolute;
-      left: -1.1rem;
-      top: 0;
-      background: var(--orbivia-yellow);
-      color: white;
-      border-radius: 50%;
-      width: 2rem;
-      height: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    .valeurs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .valeur-item {
-      background: white;
-      border-left: 5px solid var(--orbivia-yellow);
-      border-radius: 8px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      text-align: center;
-      transition: box-shadow 0.3s, border 0.3s, transform 0.3s;
-    }
-    .valeur-item:hover {
-      box-shadow: 0 0 12px rgba(231,161,22, 0.4);
-      transform: scale(1.03);
-    }
-    .valeur-item h3 {
-      transition: color 0.3s;
-    }
-    .valeur-item:hover h3 {
-      color: var(--orbivia-yellow);
-    }
-    .valeur-item i {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: var(--orbivia-yellow);
-    }
-    .cta {
-      text-align: center;
-      padding: 3rem 2rem;
-      background: #f9f9f9;
-    }
-    .cta a {
-      background: var(--orbivia-yellow);
-      color: white;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .cta a:hover {
-      background: #d4970f;
-    }
-    .partners {
-      background-color: #fff;
-      padding: 4rem 2rem;
-      text-align: center;
-    }
-    .partners img {
-      max-width: 600px;
-      width: 90%;
-      height: auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      border-radius: 8px;
-      transition: transform 0.3s;
-    }
-    .partners img:hover {
-      transform: scale(1.02);
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: var(--orbivia-yellow);
-      color: white;
-    }
-    a.email {
-      color: white;
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Orbivia — Bureau d’études & prototypage</title>
+<meta name="description" content="Électronique, systèmes embarqués, traitement du signal et prototypage : Orbivia accompagne vos projets R&D de l’idée au concret.">
+<link rel="icon" href="img/logo.webp">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/site.js" defer>
+</script>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-title" style="text-decoration: none; color: white;">
-  <img src="img/logo.webp" alt="Logo Orbivia" />
-  Orbivia
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="header">
+<a class="brand" href="index.html">
+<img src="img/logo.webp" alt="" width="44" height="44">Orbivia<span>Recherche & développement</span>
 </a>
-    <div class="burger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
-    <nav>
-      <a href="index.html" class="active">Accueil</a>
-      <a href="realisations.html">Réalisations</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
-
-  <main>
-    <section style="text-align: center;">
-      <div style="max-width: 900px; margin: 0 auto;">
-        <h1 style="font-size: 2.8rem; margin-bottom: 1.5rem;">
-          Bienvenue chez <span style="color: var(--orbivia-yellow);">Orbivia</span>
-        </h1>
-        <p style="font-size: 1.2rem; color: #444; line-height: 1.8;">
-          Bureau d’études pluridisciplinaire spécialisé en <strong>R&D</strong>, nous accompagnons les porteurs de projets innovants de l'idée jusqu’à l’<strong>industrialisation</strong>.
-        </p>
-      </div>
-    </section>
-
-<section>
-  <h2 class="section-title">Notre démarche</h2>
-  <div class="timeline">
-
-    <div class="timeline-step fade-in-up" data-step="1">
-      <h3>Analyse du besoin</h3>
-      <p>Identification des contraintes techniques, budgétaires, calendaires et de production. Objectif : poser une base claire et structurée pour le projet.</p>
-      <p><strong>Livrables :</strong> devis détaillé, cahier des charges<br><strong>Coût :</strong> souvent offert</p>
-    </div>
-
-    <div class="timeline-step fade-in-up" data-step="2">
-      <h3>Prototypage</h3>
-      <p>Développement d’une preuve de concept fonctionnelle à l’aide de composants standards (Raspberry Pi, ESP32...) pour valider rapidement les principes techniques.</p>
-      <p><strong>Livrables :</strong> prototype, maquette<br><strong>Coût :</strong> à partir de 250€ </p>
-    </div>
-
-    <div class="timeline-step fade-in-up" data-step="3">
-      <h3>Prévalidation</h3>
-      <p>Tests terrain, retour utilisateur, détection de bugs : cette phase permet de confirmer les choix et d’ajuster le système.</p>
-      <p><strong>Livrables :</strong> rapports de test, retours bêta<br><strong>Coût :</strong> variable selon les types de tests</p>
-    </div>
-
-    <div class="timeline-step fade-in-up" data-step="4">
-      <h3>Optimisation du design</h3>
-      <p>Amélioration du système pour répondre aux contraintes de production et d’assemblage. Plusieurs itérations avec le client.</p>
-      <p><strong>Livrables :</strong> cartes sur mesure, plans mécaniques<br><strong>Coût :</strong> à partir de 1500€</p>
-    </div>
-
-    <div class="timeline-step fade-in-up" data-step="5">
-      <h3>Préindustrialisation</h3>
-      <p>Fabrication pilote via nos partenaires industriels pour valider les processus de production.</p>
-      <p><strong>Livrables :</strong> échantillons, tests industriels<br><strong>Coût :</strong> dépend des procédés et du site de production</p>
-    </div>
-
-    <div class="timeline-step fade-in-up" data-step="6">
-      <h3>Validation finale</h3>
-      <p>Tests de performance, certification, conformité. Le produit est prêt à être lancé en toute confiance.</p>
-      <p><strong>Livrables :</strong> rapports certifiés, dossier technique<br><strong>Coût :</strong> important pour la certification</p>
-    </div>
-
-  </div>
+<button class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale">
+<a href="index.html" aria-current="page">Accueil</a>
+<a href="realisations.html" >Réalisations</a>
+<a href="contact.html" >Contact</a>
+</nav>
+</header>
+<main id="contenu">
+<section class="hero wrap">
+<div>
+<p class="eyebrow">Bureau d’études · R&D · Prototypage</p>
+<h1>De votre idée<br>au <em>prototype<br>fonctionnel.</em>
+</h1>
+<p class="intro">Électronique, systèmes embarqués et conception de produits : un accompagnement concret pour donner vie à vos projets innovants.</p>
+<div class="actions">
+<a class="button" href="contact.html">Parler de mon projet ↗</a>
+<a class="text-link" href="realisations.html">Voir les réalisations →</a>
+</div>
+</div>
+<figure class="hero-visual">
+<img src="img/Projets/luxohm/Luxohm_PCBA.webp" alt="Carte électronique du projet Luxohm développée pour un appareil de terrain" fetchpriority="high">
+<figcaption>
+<span>Du circuit au produit.</span>
+<a href="projets/luxohm.html">Découvrir Luxohm ↗</a>
+</figcaption>
+</figure>
 </section>
-
-
-    <section>
-      <h2 class="section-title">Nos valeurs</h2>
-      <div class="valeurs-grid">
-        <div class="valeur-item">
-          <i class="fas fa-euro-sign"></i>
-          <h3>Tarif compétitif</h3>
-          <p>Développement accessible à tous grâce à une tarification adaptée.</p>
-        </div>
-        <div class="valeur-item">
-          <i class="fas fa-bolt"></i>
-          <h3>Réactivité</h3>
-          <p>Prototypage rapide et efficace grâce à nos moyens internes.</p>
-        </div>
-        <div class="valeur-item">
-          <i class="fas fa-handshake"></i>
-          <h3>Sérénité</h3>
-          <p>Nous nous engageons sur les livrables, pas à l'heure.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta">
-      <h2>Un projet en tête ?</h2>
-      <p>Contactez-nous pour en discuter</p>
-      <a href="contact.html">Nous contacter</a>
-    </section>
-
-    <section class="partners">
-      <h2>Nos partenaires & clients</h2>
-      <img src="img/Partenaires.webp" alt="Partenaires" />
-    </section>
-  </main>
-
-  <footer>
-    Contact : <a class="email" href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a> – © Orbivia
-  </footer>
-
-  <script>
-    function toggleMenu() {
-      document.querySelector('nav').classList.toggle('open');
-    }
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
-  </script>
+<section class="section wrap">
+<div class="section-heading">
+<div>
+<span class="eyebrow">Les savoir-faire</span>
+<h2>La technique au service<br>de votre usage.</h2>
+</div>
+<p>Des compétences complémentaires pour avancer, de la première preuve de concept jusqu’à la préparation de la production.</p>
+</div>
+<div class="expertise-grid">
+<article class="expertise">
+<span class="number">01</span>
+<h3>Électronique</h3>
+<p>Conception de cartes, intégration de capteurs et mise au point de systèmes de mesure.</p>
+</article>
+<article class="expertise">
+<span class="number">02</span>
+<h3>Systèmes embarqués</h3>
+<p>Firmware, objets connectés et interfaces pour relier votre produit à son environnement.</p>
+</article>
+<article class="expertise">
+<span class="number">03</span>
+<h3>Traitement du signal</h3>
+<p>Acquisition, analyse et exploitation des données pour faire émerger une information utile.</p>
+</article>
+<article class="expertise">
+<span class="number">04</span>
+<h3>Prototypage produit</h3>
+<p>Maquettes, impression 3D et intégration mécanique pour tester rapidement les usages.</p>
+</article>
+</div>
+</section>
+<section class="section projects-section">
+<div class="wrap">
+<div class="section-heading">
+<div>
+<span class="eyebrow">Une sélection de projets</span>
+<h2>Des idées devenues concrètes.</h2>
+</div>
+<a class="text-link" href="realisations.html">Toutes les réalisations ↗</a>
+</div>
+<div class="project-grid">
+<a class="project-card" href="projets/luxohm.html">
+<div class="project-image">
+<img src="img/Projets/Luxohm.webp" loading="lazy" alt="Luxohm">
+</div>
+<div class="project-copy">
+<span class="eyebrow">Électronique · Terrain</span>
+<h3>Luxohm <span>↗</span>
+</h3>
+<p>Un testeur électrique compact pensé pour les contraintes du terrain.</p>
+</div>
+</a>
+<a class="project-card" href="projets/panoptes.html">
+<div class="project-image">
+<img src="img/Projets/AssistantVocal.webp" loading="lazy" alt="Panoptès AI">
+</div>
+<div class="project-copy">
+<span class="eyebrow">Embarqué · Objet connecté</span>
+<h3>Panoptès AI <span>↗</span>
+</h3>
+<p>Un traducteur et assistant vocal dans un format portatif.</p>
+</div>
+</a>
+<a class="project-card" href="projets/videobook.html">
+<div class="project-image">
+<img src="img/Projets/VideoBook.webp" loading="lazy" alt="Livre d’or vidéo">
+</div>
+<div class="project-copy">
+<span class="eyebrow">Conception · Intégration</span>
+<h3>Livre d’or vidéo <span>↗</span>
+</h3>
+<p>Un objet au design rétro pour conserver les souvenirs d’un événement.</p>
+</div>
+</a>
+</div>
+</div>
+</section>
+<section class="section wrap">
+<div class="section-heading">
+<div>
+<span class="eyebrow">La méthode Orbivia</span>
+<h2>Un parcours clair.<br>Des avancées tangibles.</h2>
+</div>
+<p>Chaque projet a ses contraintes. Les étapes et les livrables sont définis ensemble, selon votre besoin.</p>
+</div>
+<div class="steps">
+<article>
+<span class="number">01</span>
+<h3>Cadrer</h3>
+<p>Comprendre l’usage, les contraintes et les objectifs avant de concevoir.</p>
+<small>Cahier des charges · Devis</small>
+</article>
+<article>
+<span class="number">02</span>
+<h3>Prototyper</h3>
+<p>Construire une première version et confronter les choix techniques au réel.</p>
+<small>Maquette · Preuve de concept</small>
+</article>
+<article>
+<span class="number">03</span>
+<h3>Tester & affiner</h3>
+<p>Évaluer les performances et intégrer les retours pour améliorer le produit.</p>
+<small>Essais · Itérations</small>
+</article>
+<article>
+<span class="number">04</span>
+<h3>Préparer la production</h3>
+<p>Optimiser la conception et préparer les éléments techniques pour la suite.</p>
+<small>Plans · Dossier technique</small>
+</article>
+</div>
+<div class="commitments">
+<p>
+<strong>Une réponse adaptée</strong>Un périmètre et un budget définis selon votre projet.</p>
+<p>
+<strong>Des échanges directs</strong>Un dialogue technique pour décider et avancer.</p>
+<p>
+<strong>Des livrables définis</strong>Un engagement sur les résultats attendus de la prestation.</p>
+</div>
+</section>
+<section class="partners wrap">
+<span class="eyebrow">Ils font partie de l’aventure</span>
+<h2>Clients & partenaires</h2>
+<img src="img/Partenaires.webp" alt="Les clients et partenaires d’Orbivia" loading="lazy">
+</section>
+<section class="cta wrap">
+<div>
+<span class="eyebrow">Construisons la suite</span>
+<h2>Votre projet commence<br>par une conversation.</h2>
+<p>Une idée, un besoin technique ou un prototype à faire évoluer ?</p>
+</div>
+<a class="button" href="contact.html">Parlons de votre projet <span>↗</span>
+</a>
+</section>
+</main>
+<footer>
+<a class="brand" href="index.html">Orbivia<span>De l’idée au concret.</span>
+</a>
+<a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<span>Wattignies · Métropole lilloise<br>© Orbivia</span>
+</footer>
 </body>
 </html>

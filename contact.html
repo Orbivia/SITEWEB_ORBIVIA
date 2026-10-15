@@ -1,201 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contact - Orbivia</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    :root {
-      --orbivia-yellow: rgb(231,161,22);
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background: #f9f9f9;
-      color: #333;
-    }
-    header {
-      background: var(--orbivia-yellow);
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header img {
-      height: 60px;
-      margin-right: 1rem;
-    }
-    .logo-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: white;
-      gap: 1rem;
-    }
-    .burger {
-      display: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: white;
-    }
-    nav {
-      display: flex;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 0.5rem;
-      margin: 0 1rem;
-      font-weight: bold;
-      border-radius: 4px;
-    }
-    nav a:hover,
-    nav a.active {
-      background: white;
-      color: var(--orbivia-yellow);
-    }
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        background: var(--orbivia-yellow);
-        position: absolute;
-        right: 1rem;
-        top: 70px;
-        padding: 1rem;
-        border-radius: 6px;
-        z-index: 10;
-      }
-      nav.open {
-        display: flex;
-      }
-      .burger {
-        display: block;
-      }
-    }
-    main {
-      padding: 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    h1 {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
-    }
-    .contact-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-    }
-    .map-box, .info-box {
-      flex: 1 1 400px;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    .map-box iframe {
-      width: 100%;
-      height: 300px;
-      border: none;
-      border-radius: 8px;
-    }
-    .info-box p {
-      margin: 1rem 0;
-      font-size: 1.1rem;
-    }
-    .info-box strong {
-      display: inline-block;
-      width: 100px;
-    }
-    .info-box a {
-      color: var(--orbivia-yellow);
-      text-decoration: none;
-    }
-    .info-box a:hover {
-      text-decoration: underline;
-    }
-    .message-button {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.8rem 1.6rem;
-      background: var(--orbivia-yellow);
-      color: white;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      border: none;
-      font-size: 1.1rem;
-      transition: background 0.3s ease;
-    }
-    .message-button:hover {
-      background: #d49614;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: var(--orbivia-yellow);
-      color: white;
-    }
-    a.email {
-      color: white;
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parlons de votre projet — Orbivia</title>
+<meta name="description" content="Contactez Pierre Charlier chez Orbivia pour échanger sur votre projet de R&D, d’électronique ou de prototypage.">
+<link rel="icon" href="img/logo.webp">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/site.js" defer>
+</script>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-title">
-      <img src="img/logo.webp" alt="Logo Orbivia" />
-      Orbivia
-    </a>
-    <div class="burger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="realisations.html">Réalisations</a>
-      <a href="contact.html" class="active">Contact</a>
-    </nav>
-  </header>
-
-  <main>
-    <h1>Contactez-nous</h1>
-    <div class="contact-container">
-      <div class="map-box">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20263.144592769357!2d3.0226090571442885!3d50.59194068362349!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c2d48aa69e2dbf%3A0x7a2e657e7735dbed!2s27%20Rue%20du%20Mar%C3%A9chal%20Boufflers%2C%2059139%20Wattignies!5e0!3m2!1sfr!2sfr!4v1783515730108!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
-        </iframe>
-      </div>
-      <div class="info-box">
-        <p><strong>Adresse :</strong><br>
-          27 rue du Maréchal Boufflers<br>
-          59139 Wattignies
-        </p>
-        <p><strong>Email :</strong><br>
-          <a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr</a>
-        </p>
-        <button class="message-button" onclick="location.href='mailto:pierre.charlier@orbivia.fr'">
-          Écrire un message
-        </button>
-      </div>
-    </div>
-  </main>
-
-  <footer>
-    Contact : <a href="mailto:pierre.charlier@orbivia.fr" class="email">pierre.charlier@orbivia.fr</a> – © Orbivia
-  </footer>
-
-  <script>
-    function toggleMenu() {
-      document.querySelector('nav').classList.toggle('open');
-    }
-  </script>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="header">
+<a class="brand" href="index.html">
+<img src="img/logo.webp" alt="" width="44" height="44">Orbivia<span>Recherche & développement</span>
+</a>
+<button class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale">
+<a href="index.html" >Accueil</a>
+<a href="realisations.html" >Réalisations</a>
+<a href="contact.html" aria-current="page">Contact</a>
+</nav>
+</header>
+<main id="contenu">
+<section class="page-intro wrap">
+<span class="eyebrow">Prenons contact</span>
+<h1>Une idée ?<br>
+<em>Parlons-en.</em>
+</h1>
+<p class="intro">Expliquez votre besoin, votre contexte et ce que vous souhaitez réaliser. Nous pourrons définir ensemble les prochaines étapes.</p>
+</section>
+<section class="contact-grid wrap">
+<div class="contact-card">
+<span class="eyebrow">Votre interlocuteur</span>
+<h2>Pierre Charlier</h2>
+<p>Électronique · Systèmes embarqués · Prototypage</p>
+<a class="contact-email" href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<a class="button" href="mailto:pierre.charlier@orbivia.fr?subject=Parlons%20de%20mon%20projet">Écrire un message ↗</a>
+<div class="contact-help">
+<h3>Pour lancer la discussion</h3>
+<p>Quelques lignes sur votre idée, les fonctions attendues et, si vous les connaissez, vos contraintes de délai et de budget.</p>
+</div>
+</div>
+<div class="location">
+<iframe title="Localisation d’Orbivia à Wattignies" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20263.144592769357!2d3.0226090571442885!3d50.59194068362349!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c2d48aa69e2dbf%3A0x7a2e657e7735dbed!2s27%20Rue%20du%20Mar%C3%A9chal%20Boufflers%2C%2059139%20Wattignies!5e0!3m2!1sfr!2sfr!4v1783515730108!5m2!1sfr!2sfr" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div>
+<span class="eyebrow">Métropole lilloise</span>
+<h3>Basé à Wattignies</h3>
+<p>27 rue du Maréchal Boufflers<br>59139 Wattignies</p>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<a class="brand" href="index.html">Orbivia<span>De l’idée au concret.</span>
+</a>
+<a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<span>Wattignies · Métropole lilloise<br>© Orbivia</span>
+</footer>
 </body>
 </html>
