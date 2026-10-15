@@ -31,3 +31,7 @@ dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 dialog.addEventListener('close',()=>{document.body.classList.remove('modal-open');opener?.focus();});
 render();
+
+// Allow homepage project links to open the matching project directly.
+const requestedProject=new URLSearchParams(location.search).get('projet');
+if(requestedProject){const project=projets.find(p=>p.title===requestedProject);if(project){const index=projets.indexOf(project);openProject(project,gallery.children[index]);}}

@@ -19,7 +19,7 @@ const projets = [
   },
   {
     title: "KeyDuino",
-    img: "img/Projets/KeyDuino.webp",
+    img: "img/featured/keyduino.webp",
     desc: "Lecteur NFC open source basé sur Arduino, conçu pour les makers. https://kickstarter.com/projects/1535978353/keyduino?lang=fr",
     category: "IOT"
   },
@@ -37,7 +37,7 @@ const projets = [
   },
   {
     title: "Panoptès AI",
-    img: "img/Projets/AssistantVocal.webp",
+    img: "img/featured/panoptes.webp",
     desc: "Traducteur et assistant vocal portatif associé à ChatGPT. https://orbivia.fr/projets/panoptes.html",
     category: "IOT"
   },
@@ -73,7 +73,7 @@ const projets = [
   },
   {
     title: "Aegis Rf Pro",
-    img: "img/Projets/AegisRfPro.webp",
+    img: "img/Projets/aegisrf/Aegis_DESIGN.webp",
     desc: "Unité mobile de test pour la sécurisation des infrastructures radiofréquences critiques. https://orbivia.fr/projets/aegisrf.html",
     category: "IOT"
   },
@@ -133,7 +133,7 @@ const projets = [
   },
   {
     title: "Photobooth V2",
-    img: "img/Projets/PhotoboothV2.webp",
+    img: "img/featured/photobooth.webp",
     desc: "Version optimisée de notre borne photo transportable pour événements. https://orbivia.fr/projets/photobooth.html",
     category: "Autre"
   },
