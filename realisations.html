@@ -1,446 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Réalisations - Orbivia</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    :root {
-      --orbivia-yellow: rgb(231,161,22);
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-    }
-    header {
-      background: var(--orbivia-yellow);
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-    }
-    .logo-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: white;
-      gap: 1rem;
-    }
-    .logo-title img {
-      height: 60px;
-      margin-right: 1rem;
-    }
-    .burger {
-      display: none;
-      font-size: 1.5rem;
-      color: white;
-      cursor: pointer;
-    }
-    nav {
-      display: flex;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 0.5rem;
-      margin: 0 1rem;
-      font-weight: bold;
-      transition: background 0.3s, color 0.3s;
-      border-radius: 4px;
-    }
-    nav a:hover,
-    nav a.active {
-      background: white;
-      color: var(--orbivia-yellow);
-    }
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        background: var(--orbivia-yellow);
-        position: absolute;
-        right: 1rem;
-        top: 70px;
-        padding: 1rem;
-        border-radius: 6px;
-        z-index: 10;
-      }
-      nav.open {
-        display: flex;
-      }
-      .burger {
-        display: block;
-      }
-    }
-    .section-title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin: 2rem 0 1rem;
-    }
-    
-    .gallery-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    .gallery-item {
-      background: white;
-      border-radius: 8px;
-      border-left: 5px solid transparent;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      overflow: hidden;
-      transition: transform 0.3s, border-left 0.3s;
-      cursor: pointer;
-    }
-    .gallery-item:hover {
-      transform: translateY(-5px);
-      border-left: 5px solid var(--orbivia-yellow);
-    }
-    .gallery-item img {
-      width: 100%;
-      display: block;
-    }
-    .gallery-item h3 {
-      padding: 1rem;
-      margin: 0;
-      font-size: 1.2rem;
-      color: #333;
-    }
-    .popup {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-    }
-    .popup-content {
-      background: white;
-      margin: 4% auto;
-      padding: 2rem;
-      max-width: 600px;
-      border-radius: 8px;
-      position: relative;
-      text-align: center;
-    }
-    .popup-content img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-    }
-    .close {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 24px;
-      cursor: pointer;
-    }
-    .popup-content a {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  background-color: var(--orbivia-yellow);
-  color: white;
-  font-weight: bold;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background 0.3s, transform 0.3s;
-}
-
-.popup-content a:hover {
-  background-color: #cf9310;
-  transform: translateY(-2px);
-}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Réalisations — Orbivia</title>
+<meta name="description" content="Découvrez les projets Orbivia en électronique, systèmes embarqués, santé et conception de produits.">
+<link rel="icon" href="img/logo.webp">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/site.js" defer>
+</script>
+<script src="js/projects.js" defer>
+</script>
+<script src="js/portfolio.js" defer>
+</script>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-title">
-      <img src="img/logo.webp" alt="Logo Orbivia">
-      Orbivia
-    </a>
-    <div class="burger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
-    <nav id="main-nav">
-      <a href="index.html">Accueil</a>
-      <a href="realisations.html" class="active">Réalisations</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
-
-<main>
-  <h2 class="section-title">Nos Réalisations</h2>
-  <div style="text-align:center; margin-top: 1rem;">
-    <button onclick="filterProjects('All')" style="background:#ccc; border:none; padding:0.5rem 1rem; margin:0.3rem; border-radius:4px; cursor:pointer;">Tous</button>
-    <button onclick="filterProjects('Medical')" style="background:green; color:white; border:none; padding:0.5rem 1rem; margin:0.3rem; border-radius:4px; cursor:pointer;">Medical</button>
-    <button onclick="filterProjects('IOT')" style="background:purple; color:white; border:none; padding:0.5rem 1rem; margin:0.3rem; border-radius:4px; cursor:pointer;">IOT</button>
-    <button onclick="filterProjects('Autre')" style="background:goldenrod; color:white; border:none; padding:0.5rem 1rem; margin:0.3rem; border-radius:4px; cursor:pointer;">Autre</button>
-  </div>
-  <div class="gallery-container" id="gallery"></div>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="header">
+<a class="brand" href="index.html">
+<img src="img/logo.webp" alt="" width="44" height="44">Orbivia<span>Recherche & développement</span>
+</a>
+<button class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale">
+<a href="index.html" >Accueil</a>
+<a href="realisations.html" aria-current="page">Réalisations</a>
+<a href="contact.html" >Contact</a>
+</nav>
+</header>
+<main id="contenu">
+<section class="page-intro wrap">
+<span class="eyebrow">Le savoir-faire en pratique</span>
+<h1>Chaque projet,<br>une nouvelle <em>réponse.</em>
+</h1>
+<p class="intro">Des systèmes de mesure aux objets connectés, explorez une sélection de réalisations et de collaborations.</p>
+</section>
+<section class="wrap portfolio">
+<div class="filters" role="group" aria-label="Filtrer les réalisations">
+<button data-filter="All" aria-pressed="true">Tous les projets</button>
+<button data-filter="Medical" aria-pressed="false">Santé</button>
+<button data-filter="IOT" aria-pressed="false">Objets connectés</button>
+<button data-filter="Autre" aria-pressed="false">Autres projets</button>
+</div>
+<p class="result-count" aria-live="polite" id="result-count">
+</p>
+<div class="project-grid" id="gallery">
+</div>
+</section>
+<section class="cta wrap">
+<div>
+<span class="eyebrow">Construisons la suite</span>
+<h2>Votre projet commence<br>par une conversation.</h2>
+<p>Une idée, un besoin technique ou un prototype à faire évoluer ?</p>
+</div>
+<a class="button" href="contact.html">Parlons de votre projet <span>↗</span>
+</a>
+</section>
 </main>
-
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <span class="close" onclick="closePopup()">&times;</span>
-      <img id="popup-img" src="" alt="Projet">
-      <h2 id="popup-title"></h2>
-      <p id="popup-desc"></p>
-    </div>
-  </div>
-
-  <script>
- 
-
-const projets = [
-  {
-    title: "Livre d'Or Audio",
-    img: "img/Projets/AudioBook.webp",
-    desc: "Livre d’or audio permettant l’enregistrement de fichiers vocaux en haute définition, connecté en Wi-Fi. https://laforgeasouvenirs.fr",
-    category: "Autre"
-  },
-  {
-    title: "Capsule temporelle",
-    img: "img/Projets/CAPSULE.webp",
-    desc: "Capsule temporelle numérique permettant l’envoi différé de messages vidéo.  https://orbivia.fr/projets/capsule.html",
-    category: "Autre"
-  },
-  {
-    title: "Luxohm",
-    img: "img/Projets/Luxohm.webp",
-    desc: "Testeur pyrotechnique garantissant un contrôle électrique sûr et fiable sur le terrain.  https://orbivia.fr/projets/luxohm.html",
-    category: "Autre"
-  },
-  {
-    title: "KeyDuino",
-    img: "img/Projets/KeyDuino.webp",
-    desc: "Lecteur NFC open source basé sur Arduino, conçu pour les makers. https://kickstarter.com/projects/1535978353/keyduino?lang=fr",
-    category: "IOT"
-  },
-  {
-    title: "Clef USB PPG",
-    img: "img/Projets/ClefPPG.webp",
-    desc: "Capteur de fréquence cardiaque économique basé sur la photopléthysmographie (PPG).",
-    category: "Medical"
-  },
-  {
-    title: "Be Wheel Soon",
-    img: "img/Projets/CompteurTours.webp",
-    desc: "Compteur de rotation pour roue de rongeur, utilisé en clinique vétérinaire pour évaluer le stress animal.",
-    category: "IOT"
-  },
-  {
-    title: "Panoptès AI",
-    img: "img/Projets/AssistantVocal.webp",
-    desc: "Traducteur et assistant vocal portatif associé à ChatGPT. https://orbivia.fr/projets/panoptes.html",
-    category: "IOT"
-  },
-  {
-    title: "ECG Reader",
-    img: "img/Projets/ECGReader.webp",
-    desc: "Capteur ECG connecté en Bluetooth, idéal pour la télémédecine et le suivi personnel.",
-    category: "Medical"
-  },
-  {
-    title: "KeyDuino Nano",
-    img: "img/Projets/KeyDuinoNano.webp",
-    desc: "Mini lecteur NFC ultra compact, adapté aux projets embarqués. https://kickstarter.com/projects/1535978353/keyduino?lang=fr",
-    category: "IOT"
-  },
-  {
-    title: "Torkeo",
-    img: "img/Projets/Torkeo.webp",
-    desc: "Dispositif porté au cou pour le suivi de constantes physiologiques, pensé pour les troubles cognitifs.",
-    category: "Medical"
-  },
-  {
-    title: "Hertz Strike",
-    img: "img/Projets/HertzStrike.webp",
-    desc: "Détecteur et brouilleur de drones.",
-    category: "IOT"
-  },
-  {
-    title: "Livre d'Or Vidéo",
-    img: "img/Projets/VideoBook.webp",
-    desc: "Livre d’or vidéo au design rétro, pour immortaliser les moments forts d’un événement. https://orbivia.fr/projets/videobook.html",
-    category: "Autre"
-  },
-  {
-    title: "Aegis Rf Pro",
-    img: "img/Projets/AegisRfPro.webp",
-    desc: "Unité mobile de test pour la sécurisation des infrastructures radiofréquences critiques. https://orbivia.fr/projets/aegisrf.html",
-    category: "IOT"
-  },
-  {
-    title: "SunGuard",
-    img: "img/Projets/SunGuard.webp",
-    desc: "Capteur sans fil multifonction mesurant l’exposition aux UV, rechargeable par induction.",
-    category: "Medical"
-  },
-  {
-    title: "LIDAR",
-    img: "img/Projets/LIDAR.webp",
-    desc: "Capteur LIDAR portable compatible avec drones pour la détection d’obstacles et la cartographie.",
-    category: "Autre"
-  },
-  {
-    title: "Banc en 3D béton",
-    img: "img/Projets/Banc3D.webp",
-    desc: "Banc urbain imprimé en 3D béton, au design inspiré d’un peigne. https://constructions-3d.com/fr/maxiprinter",
-    category: "Autre"
-  },
-  {
-    title: "NFC Matcher",
-    img: "img/Projets/NFCMatcher.webp",
-    desc: "Dispositif de calibration automatique d’antennes NFC pour des performances de lecture optimales.",
-    category: "IOT"
-  },
-  {
-    title: "Airca",
-    img: "img/Projets/Airca.webp",
-    desc: "Lanceur pneumatique pour des spectacle pyrotechniques.",
-    category: "Autre"
-  },
-  {
-    title: "NFC Ring",
-    img: "img/Projets/NFCRing.webp",
-    desc: "Bague NFC connectée pour l’identification et le contrôle d’accès. https://nfcring.com",
-    category: "IOT"
-  },
-  {
-    title: "OzOne",
-    img: "img/Projets/OZONE.webp",
-    desc: "Système de contrôle d’accès NFC connecté en WIFI, configurable à distance.",
-    category: "IOT"
-  },
-  {
-    title: "Photobooth V1",
-    img: "img/Projets/PhotoboothV1.webp",
-    desc: "Première version d’une borne photo événementielle. https://orbivia.fr/projets/photobooth.html",
-    category: "Autre"
-  },
-  {
-    title: "Orchidomètre",
-    img: "img/Projets/Orchidometre.webp",
-    desc: "Instrument de mesure médical utilisé pour mesurer le volume testiculaire imprimé en 3D.",
-    category: "Medical"
-  },
-  {
-    title: "Photobooth V2",
-    img: "img/Projets/PhotoboothV2.webp",
-    desc: "Version optimisée de notre borne photo transportable pour événements. https://orbivia.fr/projets/photobooth.html",
-    category: "Autre"
-  },
-  {
-    title: "Dôme en 3D béton",
-    img: "img/Projets/Sculpture3D.webp",
-    desc: "Dôme architectural imprimé en béton 3D, pensé pour valoriser l’espace public.",
-    category: "Autre"
-  },
-  {
-    title: "AcCorps",
-    img: "img/Projets/StethoscopePassif.webp",
-    desc: "Stéthoscope passif biomimétique, inspiré de la cochlée humaine. https://biomimexpo.com",
-    category: "Medical"
-  },
-  {
-    title: "Stethoscope Bluetooth",
-    img: "img/Projets/Stethoscope.webp",
-    desc: "Stéthoscope électronique Bluetooth avec amplification audio, conçu pour l’enseignement et la télémédecine.",
-    category: "Medical"
-  },
-  {
-    title: "Robot suiveur NFC",
-    img: "img/Projets/FollowBot.webp",
-    desc: "Prototype de robot suiveur pour l'industrie.",
-    category: "Autre"
-  },
-  {
-    title: "Notaboo",
-    img: "img/Projets/Notaboo.webp",
-    desc: "Toilettes portatives autonomes, accessibles aux personnes en situation de handicap. https://helloasso.com/associations/association-notaboo-solutions",
-    category: "Autre"
-  },
-  {
-    title: "Sensor CO2",
-    img: "img/Projets/SensorCO2.webp",
-    desc: "Capteur CO2 connecté en WIFI.",
-    category: "IOT"
-  }
-];
-
-
-  const container = document.getElementById('gallery');
-const popup = document.getElementById('popup');
-const popupImg = document.getElementById('popup-img');
-const popupTitle = document.getElementById('popup-title');
-const popupDesc = document.getElementById('popup-desc');
-    
-function renderProjects(category = 'All') {
-  container.innerHTML = ''; // reset
-  projets
-    .filter(proj => category === 'All' || proj.category === category)
-    .forEach((proj) => {
-      const item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = `<img src="${proj.img}" alt="${proj.title}"><h3>${proj.title}</h3>`;
-      item.addEventListener('click', () => openPopup(proj));
-      container.appendChild(item);
-    });
-}
-
-function filterProjects(category) {
-  renderProjects(category);
-}
-
-// Initial render
-
-
-renderProjects();
-  
-
-
-    function openPopup(proj) {
-      popupImg.src = proj.img;
-      popupTitle.textContent = proj.title;
-      popupDesc.innerHTML = proj.desc.replace(/(https?:\/\/[^\s]+)/g, '<br><a href="$1" target="_blank">Voir le projet</a>');
-      popup.style.display = 'block';
-    }
-
-    function closePopup() {
-      popup.style.display = 'none';
-    }
-
-    popup.addEventListener('click', (e) => {
-      if (!document.querySelector('.popup-content').contains(e.target)) {
-        closePopup();
-      }
-    });
-
-    function toggleMenu() {
-      document.getElementById('main-nav').classList.toggle('open');
-    }
-  </script>
-
-  <footer style="background: var(--orbivia-yellow); color: white; text-align: center; padding: 1rem;">
-    Contact : <a href="mailto:pierre.charlier@orbivia.fr" style="color: white; text-decoration: underline;">pierre.charlier@orbivia.fr</a> – © Orbivia
-  </footer>
+<dialog id="project-dialog" aria-labelledby="dialog-title">
+<button class="close" aria-label="Fermer le projet">✕</button>
+<div class="dialog-layout">
+<img id="dialog-image" alt="">
+<div class="dialog-copy">
+<span class="eyebrow" id="dialog-category">
+</span>
+<h2 id="dialog-title">
+</h2>
+<p id="dialog-description">
+</p>
+<div id="dialog-link">
+</div>
+<a class="text-link" href="contact.html">Échanger sur un projet similaire →</a>
+</div>
+</div>
+</dialog>
+<footer>
+<a class="brand" href="index.html">Orbivia<span>De l’idée au concret.</span>
+</a>
+<a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a>
+<span>Wattignies · Métropole lilloise<br>© Orbivia</span>
+</footer>
 </body>
 </html>
