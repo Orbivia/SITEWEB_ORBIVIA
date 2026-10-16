@@ -13,7 +13,7 @@ const projets = [
   },
   {
     title: "Luxohm",
-    img: "img/Projets/Luxohm.webp",
+    img: "img/featured/luxohm-exploded.webp",
     desc: "Testeur pyrotechnique garantissant un contrôle électrique sûr et fiable sur le terrain.  https://orbivia.fr/projets/luxohm.html",
     category: "Autre"
   },
@@ -73,7 +73,7 @@ const projets = [
   },
   {
     title: "Aegis Rf Pro",
-    img: "img/featured/aegis.webp",
+    img: "img/featured/aegis-exploded.webp",
     desc: "Unité mobile de test pour la sécurisation des infrastructures radiofréquences critiques. https://orbivia.fr/projets/aegisrf.html",
     category: "IOT"
   },
@@ -133,7 +133,7 @@ const projets = [
   },
   {
     title: "Photobooth V2",
-    img: "img/featured/photobooth.webp",
+    img: "img/featured/photobooth-exploded.webp",
     desc: "Version optimisée de notre borne photo transportable pour événements. https://orbivia.fr/projets/photobooth.html",
     category: "Autre"
   },
