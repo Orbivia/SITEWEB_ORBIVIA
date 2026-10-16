@@ -16,3 +16,6 @@
 
 /* Cinq expertises, sans ajouter de texte à l’accueil. */
 @media(min-width:1100px){.expertise-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:22px}.expertise h3{font-size:1.05rem}}
+
+/* Unifier les boutons entre l’accueil et les pages détaillées. */
+.button,.header nav .nav-cta{border-radius:5px}

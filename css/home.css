@@ -1,0 +1,52 @@
+/* Accueil : styles communs aux photos, légendes et sections. */
+.home{background:#fff;color:#171c20}
+.home .header{background:#fff;padding-block:22px;border-bottom:1px solid #ededeb}
+.home .wrap{width:min(1200px,calc(100% - 80px))}
+.home .brand{font-weight:700;letter-spacing:-.035em}.home .brand img{height:38px;width:62px;filter:brightness(0)}
+.home h1,.home h2,.home h3{font-family:inherit;color:#171c20;font-weight:650;letter-spacing:-.045em}
+.home h2{font-size:clamp(1.8rem,3vw,2.7rem);line-height:1.16}
+.home h3{font-size:1.2rem;line-height:1.3;letter-spacing:-.025em}
+.home .accent{color:inherit}
+.home .button{border-radius:5px;background:#edaa11;color:#171c20;font-size:.88rem;padding:14px 24px;gap:28px;box-shadow:none}
+.home .button:hover{background:#f4ba32;transform:none}
+.home .header nav .nav-cta{border-radius:5px;background:#edaa11}
+.home .hero{padding-block:45px 40px;grid-template-columns:.85fr 1.15fr;gap:30px;min-height:0}
+.home .hero h1{font-size:clamp(3.6rem,6vw,6rem);line-height:1.04;letter-spacing:-.065em}
+.home .hero .eyebrow{font-size:.62rem;letter-spacing:.12em;margin-bottom:24px}
+.home .hero .intro{font-size:clamp(1.1rem,1.8vw,1.6rem);line-height:1.5;margin-top:24px;margin-bottom:28px;color:#5e6469}
+.home .hero-product> a{display:block}
+.home .hero-product img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain}
+.home .hero-product figcaption{font-size:.7rem;text-align:right;color:#6a7074;margin-top:8px}
+.home .hero-product figcaption span{display:inline;color:inherit;font-size:inherit}
+.home-section{padding-block:45px}
+.home-heading{display:flex;justify-content:space-between;align-items:baseline;gap:25px;margin-bottom:28px}
+.home .text-link{color:#9a6500;text-decoration:none;font-size:.9rem;font-weight:500}
+.home .text-link:hover{text-decoration:underline;text-underline-offset:5px}
+.home-projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}
+.home-card{margin:0;min-width:0;display:block}
+.home-image{aspect-ratio:4/3;overflow:hidden;border-radius:5px;background:#f3f3f1;margin-bottom:15px}
+.home-image img{width:100%;height:100%;object-fit:cover;display:block;filter:none;mix-blend-mode:normal}
+.home-card p{margin-top:5px;font-size:1rem;line-height:1.5;color:#697075}
+.home-equipment{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.home-equipment .home-image{aspect-ratio:1/1.05}
+.equipment-product img{object-fit:contain;padding:12px}
+.equipment-workshop img{object-position:50% 50%}
+.home-services{display:flex;flex-wrap:wrap;gap:12px 28px;padding-top:26px}
+.home-services a{font-size:.8rem;color:#666e72;text-underline-offset:5px}
+.home-services a:hover{text-decoration:underline}
+.home-regulatory{border-top:1px solid #dededb;border-bottom:1px solid #dededb;margin-top:15px;padding-block:45px}
+.home-regulatory>p{color:#697075;font-size:1.05rem;margin-top:20px;line-height:1.7}
+.home-regulatory>.text-link{display:inline-block;margin-top:20px}
+.home-about{padding-block:45px 55px}
+.home-about .home-person{font-size:1.15rem;color:#333b3f;margin-top:20px}
+.home-about>p:last-child{font-size:.95rem;color:#697075;line-height:1.8;max-width:850px;margin-top:12px}
+.home-contact{background:#edaa11;padding-block:38px}
+.home-contact>.wrap{display:flex;align-items:center;justify-content:space-between;gap:35px}
+.home-contact .button{background:#20272d;color:#fff}
+.home-contact .button:hover{background:#354049}
+.home footer{border:0;padding-block:32px;background:#fff}
+.home footer .brand span{display:none}
+.home a:focus-visible{outline:3px solid #996900;outline-offset:5px}
+@media(max-width:1050px) and (min-width:769px){.home .hero h1{font-size:4.2rem}.home h3{font-size:1.05rem}.home-equipment{gap:18px}.home .header nav{gap:20px}.home .header nav .nav-cta{padding:10px 14px}}
+@media(max-width:768px){.home .wrap{width:calc(100% - 40px)}.home .header{padding:16px 20px}.home .brand img{height:30px;width:45px}.home .header nav{background:#fff}.home .hero{grid-template-columns:1fr;gap:22px;padding-block:32px 20px}.home .hero h1{font-size:clamp(3.4rem,13vw,5rem)}.home .hero .eyebrow{margin-bottom:18px}.home .hero .intro{font-size:1.15rem;margin-top:20px;margin-bottom:22px}.home .hero-product{margin-top:5px}.home .hero-product img{max-height:350px}.home .hero-product figcaption{font-size:.62rem}.home-section{padding-block:32px}.home-heading{display:block;margin-bottom:22px}.home-heading>.text-link{display:inline-block;margin-top:14px}.home-projects{grid-template-columns:1fr;gap:26px}.home h3{font-size:1.15rem}.home-card p{font-size:.9rem}.home-equipment{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}.home-equipment .home-card:last-child{grid-column:1/-1}.home-equipment .home-image{aspect-ratio:4/5}.home-equipment .home-card:last-child .home-image{aspect-ratio:16/9}.home-equipment h3{font-size:.95rem}.home-services{gap:13px 22px;padding-top:24px}.home-services a{font-size:.77rem}.home-regulatory{padding-block:32px;margin-top:4px}.home-regulatory>p{font-size:.95rem}.home-about .home-person{font-size:1.05rem}.home-contact{padding-block:30px}.home-contact>.wrap{display:block}.home-contact .button{margin-top:22px}.home footer{padding:26px 20px}.home footer .brand img{width:42px}}
+@media(prefers-reduced-motion:reduce){.home *{scroll-behavior:auto;transition:none!important}}
