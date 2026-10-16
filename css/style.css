@@ -10,3 +10,6 @@
 
 /* Garder toutes les pièces des vues éclatées visibles. */
 .aegis .project-image img{object-fit:contain;object-position:center;mix-blend-mode:multiply}.projects-section .project-image{aspect-ratio:1.4;background:#fffefa}.projects-section .project-image img{padding:8px}.hero-product>img{max-height:530px}.visual-note{font-size:.65rem;line-height:1.5;text-align:center;color:var(--muted);padding:0 15px 12px}@media(max-width:768px){.hero-product>img{max-height:390px}.projects-section .project-image{aspect-ratio:1.4}}
+
+/* Préserver les fonds et le code couleur des miniatures originales. */
+.portfolio .project-image{aspect-ratio:4/3;background:transparent}.portfolio .project-image img{padding:0;object-fit:contain;mix-blend-mode:normal;filter:none}.portfolio .project-card:hover .project-image img{transform:none}

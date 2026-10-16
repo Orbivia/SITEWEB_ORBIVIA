@@ -13,13 +13,15 @@ const projets = [
   },
   {
     title: "Luxohm",
-    img: "img/featured/luxohm-exploded.webp",
+    img: "img/Projets/Luxohm.webp",
+    detailImg: "img/featured/luxohm-exploded.webp",
     desc: "Testeur pyrotechnique garantissant un contrôle électrique sûr et fiable sur le terrain.  https://orbivia.fr/projets/luxohm.html",
     category: "Autre"
   },
   {
     title: "KeyDuino",
-    img: "img/featured/keyduino.webp",
+    img: "img/Projets/KeyDuino.webp",
+    detailImg: "img/featured/keyduino.webp",
     desc: "Lecteur NFC open source basé sur Arduino, conçu pour les makers. https://kickstarter.com/projects/1535978353/keyduino?lang=fr",
     category: "IOT"
   },
@@ -37,7 +39,8 @@ const projets = [
   },
   {
     title: "Panoptès AI",
-    img: "img/featured/panoptes.webp",
+    img: "img/Projets/AssistantVocal.webp",
+    detailImg: "img/featured/panoptes.webp",
     desc: "Traducteur et assistant vocal portatif associé à ChatGPT. https://orbivia.fr/projets/panoptes.html",
     category: "IOT"
   },
@@ -73,7 +76,8 @@ const projets = [
   },
   {
     title: "Aegis Rf Pro",
-    img: "img/featured/aegis-exploded.webp",
+    img: "img/Projets/AegisRfPro.webp",
+    detailImg: "img/featured/aegis-exploded.webp",
     desc: "Unité mobile de test pour la sécurisation des infrastructures radiofréquences critiques. https://orbivia.fr/projets/aegisrf.html",
     category: "IOT"
   },
@@ -133,7 +137,8 @@ const projets = [
   },
   {
     title: "Photobooth V2",
-    img: "img/featured/photobooth-exploded.webp",
+    img: "img/Projets/PhotoboothV2.webp",
+    detailImg: "img/featured/photobooth-exploded.webp",
     desc: "Version optimisée de notre borne photo transportable pour événements. https://orbivia.fr/projets/photobooth.html",
     category: "Autre"
   },

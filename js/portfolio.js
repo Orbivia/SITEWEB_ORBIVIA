@@ -18,7 +18,7 @@ function render(category='All'){
 }
 function openProject(project,button){
  opener=button;document.querySelector('#dialog-title').textContent=project.title;
- const image=document.querySelector('#dialog-image');image.src=project.img;image.alt=project.title;
+ const image=document.querySelector('#dialog-image');image.src=project.detailImg || project.img;image.alt=project.title;
  document.querySelector('#dialog-category').textContent=labels[project.category];
  document.querySelector('#dialog-description').textContent=description(project);
  const links=document.querySelector('#dialog-link');links.replaceChildren();
