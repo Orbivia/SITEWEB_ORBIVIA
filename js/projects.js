@@ -1,14 +1,32 @@
 const projets = [
+{
+  "title": "Wombly",
+  "img": "img/Projets/wombly.svg",
+  "desc": "Application Android d’enregistrement et de transformation audio locale, pour une écoute plus douce des voix, berceuses et sons familiers. https://orbivia.fr/projets/wombly.html",
+  "category": "Logiciel"
+},
+{
+  "title": "SensorForge",
+  "img": "img/Projets/sensorforge.svg",
+  "desc": "Boîte à outils Android pour explorer les capteurs du téléphone, visualiser les signaux et enregistrer plusieurs sources sur une même base de temps, avec export CSV. https://orbivia.fr/projets/sensorforge.html",
+  "category": "Logiciel"
+},
+{
+  "title": "La Suite",
+  "img": "img/Projets/la-suite.svg",
+  "desc": "Capsule temporelle numérique pour mariages et événements : souvenirs déposés par QR code, personnalisation et découverte immédiate ou différée. Plateforme web et application Android organisateur. https://orbivia.fr/projets/la-suite.html",
+  "category": "Logiciel"
+},
   {
   "title": "PrintLeft",
   "img": "img/Projets/printleft.svg",
   "desc": "Application Android de lecture NFC des consommables photo DNP et Citizen compatibles : consultation des tirages restants, historique local et export CSV / JSON. https://orbivia.fr/projets/printleft.html",
-  "category": "IOT"
+  "category": "Logiciel"
 },
   {
-  "title": "Orbi",
+  "title": "ORBI",
   "img": "img/Projets/orbi.svg",
-  "desc": "Conception de boîtier et modélisation 3D : étude d’un volume circulaire, d’une coque à motifs géométriques et de l’agencement de la façade. Visuel présenté : modèle CAO.",
+  "desc": "Balle vidéobook destinée aux mariages et aux événements, conçue pour filmer l’action au cœur de la fête. Un format de captation vidéo événementielle intégré dans un boîtier circulaire. Visuel présenté : modèle CAO.",
   "category": "Autre"
 },
   {
