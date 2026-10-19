@@ -1,5 +1,17 @@
 const projets = [
   {
+  "title": "PrintLeft",
+  "img": "img/Projets/printleft.svg",
+  "desc": "Application Android de lecture NFC des consommables photo DNP et Citizen compatibles : consultation des tirages restants, historique local et export CSV / JSON. https://orbivia.fr/projets/printleft.html",
+  "category": "IOT"
+},
+  {
+  "title": "Orbi",
+  "img": "img/Projets/orbi.svg",
+  "desc": "Conception de boîtier et modélisation 3D : étude d’un volume circulaire, d’une coque à motifs géométriques et de l’agencement de la façade. Visuel présenté : modèle CAO.",
+  "category": "Autre"
+},
+  {
     title: "Livre d'Or Audio",
     img: "img/Projets/AudioBook.webp",
     desc: "Livre d’or audio permettant l’enregistrement de fichiers vocaux en haute définition, connecté en Wi-Fi. https://laforgeasouvenirs.fr",
