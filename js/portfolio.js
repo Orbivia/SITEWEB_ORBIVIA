@@ -22,6 +22,7 @@ function openProject(project,button){
  document.querySelector('#dialog-category').textContent=labels[project.category];
  document.querySelector('#dialog-description').textContent=description(project);
  const links=document.querySelector('#dialog-link');links.replaceChildren();
+ if(project.visualNote){const note=document.createElement('p');note.className='credit';note.textContent=project.visualNote;links.append(note);}
  const url=project.desc.match(/https?:\/\/[^\s]+/);
  if(url){const link=document.createElement('a');link.href=url[0];link.className='button';link.textContent='Découvrir le projet ↗';if(new URL(url[0]).hostname!=='orbivia.fr'){link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Découvrir le projet (nouvel onglet)');}links.append(link);}
  dialog.showModal();document.body.classList.add('modal-open');
