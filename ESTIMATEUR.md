@@ -1,42 +1,49 @@
-# Estimateur Orbivia — préparation
+# Estimateur de budget Orbivia
 
-Page : `estimer-mon-projet.html`. Compatible avec l’hébergement statique existant, sans dépendance, compte, clé API ni serveur supplémentaire. Aucune IA n’est appelée. Les réponses restent en mémoire et ne sont pas envoyées automatiquement. Le bouton e-mail ouvre la messagerie du visiteur ; il doit encore envoyer son message.
+Page statique : `estimer-mon-projet.html`. Aucun serveur, compte ni service d’IA. Les réponses restent en mémoire de la page jusqu’au rechargement. Copie du récapitulatif, impression/PDF et ouverture de la messagerie ; le visiteur doit envoyer lui-même son message.
 
-## Avant de publier le chiffrage
+## Taux et méthode
 
-Les taux horaires de la capture transmise le 19 octobre 2026 sont intégrés dans `pricing.hourlyRatesHT`. Ils sont interprétés comme HT, dans le contexte de la demande de tarif HT. Aucun TJM ni nombre d’heures par journée n’a été déduit de la colonne TJM, non visible.
+| Catégorie | Taux horaire retenu HT |
+| --- | --- |
+| Expert | 150 € |
+| Ingénieur | 120 € |
+| Technicien | 80 € |
 
-| Catégorie | Taux horaire | Prestations de la grille |
-| --- | --- | --- |
-| Expert | 150 € | Conseil, mesures et tests réglementaires, roadmap R&D, stratégie et choix des partenaires de production, documentation scientifique et réglementaire |
-| Ingénieur | 120 € | Développement mécanique, électronique et logiciel, documentation technique |
-| Technicien | 80 € | Impression 3D, assemblage électronique et intégration produit |
+Taux de la grille fournie par Pierre le 19 octobre 2026. Aucun TJM ni durée de journée n’a été déduit. Les modèles initiaux ont été rapprochés d’un échantillon de dix devis PDF envoyés. Cet échantillon comporte des variantes et extensions d’un même projet : ce ne sont pas dix observations indépendantes. Les devis sont des propositions commerciales, pas des relevés de temps ni des preuves de validation par les clients.
 
-La correspondance des catégories reprend la capture. Pour le formulaire actuel, le cadrage et l’analyse de faisabilité sont classés en conseil expert. Le poste de mesures est calculé au taux expert ; les essais de laboratoire externes restent exclus.
+Les fourchettes d’heures dans le moteur sont des **charges modélisées au tarif actuel**, choisies pour rester compatibles avec les ordres de grandeur des missions observées. Elles ne sont pas présentées comme des heures réellement passées. Les remises ponctuelles, tarifs journaliers anciens et achats ne sont pas transposés automatiquement. Les missions de réparation sont écartées du modèle de développement. Les devis combinant plusieurs métiers ne permettent pas d’attribuer exactement une durée à chaque tâche.
 
-Les heures ci-dessous restent des **hypothèses initiales de charge**, pas des temps fournis par Pierre ni des références historiques. Les calibrer avant de passer `rulesApproved` à `true`. Les taux réels sont renseignés ; seul le calibrage des durées empêche désormais l’affichage des prix. Les cas complexes et sensibles restent soumis à étude, même avec une grille activée. Le texte libre sert de contexte et n’est pas analysé automatiquement.
+Aucun devis, identité client, coordonnées, référence de document, détail contractuel ou donnée bancaire n’est incorporé au site ni aux tests publics. Le site contient uniquement des règles génériques de chiffrage. Aucun apprentissage de modèle n’a été réalisé.
 
-| Poste | Catégorie | Heures proposées, à calibrer |
-| --- | --- | --- |
-| Cadrage, besoin défini ou produit existant | Expert | 4 à 12 |
-| Cadrage, idée | Expert | 7 à 21 |
-| Carte électronique | Ingénieur | 21 à 49 |
-| Logiciel embarqué | Ingénieur | 21 à 56 |
-| Conception mécanique du boîtier | Ingénieur | 14 à 35 |
-| Mesures et mise au point | Expert | 7 à 21 |
-| Accompagnement CE | Expert | 14 à 35 |
-| Impression 3D | Technicien | 2 à 6 |
-| Assemblage électronique | Technicien | 3 à 10 |
-| Intégration produit | Technicien | 7 à 21 |
+## Charges modélisées
 
-Chaque ligne est calculée par `heures × taux de la catégorie`. Le facteur connecté est 1,5 sur les postes choisis, sans majoration sur le cadrage ni l’intégration ajoutée automatiquement entre plusieurs domaines. Cette intégration n’est jamais ajoutée si elle est déjà sélectionnée. Une étude de faisabilité comporte uniquement le cadrage et 4 à 12 heures d’analyse par domaine au taux expert. Arrondi par poste par pas de 50 € (minimum vers le bas, maximum vers le haut) ; le total est la somme exacte des postes affichés.
+| Poste | Catégorie | Heures de base | Évolution ciblée |
+| --- | --- | --- | --- |
+| Cadrage, besoin défini / existant | Expert | 1 à 3 | 1 à 3 |
+| Cadrage, idée | Expert | 3 à 6 | Sans objet |
+| Une carte sur mesure | Ingénieur | 10 à 30 | 2 à 10 |
+| Assemblage de modules existants | Ingénieur | 4 à 12 | 4 à 12 |
+| Logiciel embarqué | Ingénieur | 10 à 24 | 4 à 24 |
+| Conception mécanique | Ingénieur | 6 à 36 | 1 à 10 |
+| Mesures / mise au point | Expert | 4 à 12 | 4 à 12 |
+| Accompagnement CE | Expert | 3 à 24 | 3 à 24 |
+| Impression 3D | Technicien | 1 à 4 | 1 à 4 |
+| Assemblage électronique | Technicien | 3 à 12 | 3 à 12 |
+| Intégration du produit | Technicien | 4 à 16 | 4 à 16 |
 
-Le temps de préparation et réalisation d’une impression 3D, d’un assemblage ou d’une intégration est distingué des achats de composants, matières et prestations de fabrication sous-traitées, qui restent à chiffrer séparément. Les heures ne sont pas un délai calendaire.
+La connectivité majore de 30 % uniquement les postes électronique et firmware. L’intégration automatique (4 à 12 heures technicien) est ajoutée si un travail électronique ou mécanique doit être associé à du firmware ou de l’assemblage. Elle n’est pas ajoutée lorsque l’intégration est déjà choisie. L’étude de faisabilité comprend uniquement le cadrage et 2 à 6 heures d’analyse par domaine au taux expert ; il s’agit d’une hypothèse de périmètre, pas d’une charge historique observée.
 
-L’industrialisation, les contraintes sensibles ou inconnues, et les fonctions avancées ou indéterminées ne sont jamais chiffrées automatiquement. Les risques sont déclarés par le visiteur : la simulation ne valide pas la faisabilité ni la qualification réglementaire du projet.
+Chaque poste = heures × taux du métier. Arrondi par pas de 50 €, borne basse vers le bas et borne haute vers le haut. Le total est la somme des lignes affichées. Un calendrier de livraison ne peut pas être déduit des heures.
+
+## Périmètre et limites
+
+L’estimation est activée pour des missions usuelles, dans un périmètre de premier prototype ou d’évolution ciblée. Les achats, matières, fabrication sous-traitée, laboratoire et série restent à chiffrer séparément. Plusieurs cartes/appareils, application ou logiciel PC, service cloud, préparation à la série, contraintes sensibles, fonctions avancées ou inconnues nécessitent systématiquement une étude et ne reçoivent pas de montant automatique. Une évolution ciblée suppose un produit existant et l’accès aux sources.
+
+Le texte libre est conservé dans le résumé mais n’est pas analysé : les choix structurés déterminent la simulation. La simulation n’atteste ni la faisabilité technique ni la conformité réglementaire. Le caractère initial et indicatif du modèle apparaît avec le résultat. Continuer à ajuster le modèle avec les écarts entre budgets estimés, devis signés et temps réellement passés.
 
 ## Vérification
 
 `node --test tests/estimateur.test.mjs`
 
-Retirer le `noindex` de la page uniquement à l’activation publique de l’estimateur. Aucune clé d’IA ne doit être ajoutée au JavaScript public. Une éventuelle analyse IA nécessitera un point d’accès serveur, une politique de confidentialité adaptée et une validation des sorties avant le calcul déterministe.
+Ne jamais mettre de clé d’IA dans le JavaScript public. Une future aide IA nécessitera une route serveur et une politique de confidentialité adaptée. Le calcul tarifaire doit rester déterministe.

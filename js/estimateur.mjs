@@ -1,4 +1,4 @@
-import { estimate, domains, stages, goals, complexityLabels } from './estimateur-engine.mjs?v=20261019-2';
+import { estimate, domains, stages, goals, complexityLabels } from './estimateur-engine.mjs?v=20261019-3';
 const form = document.querySelector('#estimate-form');
 const panels = [...form.querySelectorAll('[data-step]')];
 const steps = [...document.querySelectorAll('.steps li')];
@@ -49,6 +49,8 @@ form.addEventListener('submit', event => {
   const entries = [
     ['Votre projet', data.description.trim()], ['Situation actuelle', stages[data.stage]], ['Objectif', goals[data.goal]],
     ['Domaines', data.domains.map(key => domains[key].label).join(', ')], ['Fonctions', complexityLabels[data.complexity]],
+    ...(data.domains.includes('electronics') ? [['Réalisation électronique', { custom: 'Une carte sur mesure', modules: 'Assemblage de modules existants', multiple: 'Plusieurs cartes ou appareils' }[data.hardware]]] : []),
+    ['Logiciel complémentaire', data.softwareScope === 'external' ? 'Application, PC ou serveur à chiffrer' : 'Aucun logiciel externe indiqué'],
     ['Sécurité', { standard: 'Pas d’enjeu particulier identifié', sensitive: 'Secteur sensible ou risque pour les personnes', unknown: 'À vérifier ensemble' }[data.constraints]],
     ['Échéance souhaitée', data.timing.trim() || 'À définir']
   ];
@@ -84,3 +86,5 @@ document.querySelector('#copy').addEventListener('click', async () => {
 document.querySelector('#print').addEventListener('click', () => window.print());
 // Initialisation uniquement après le chargement réussi de tous les modules.
 document.querySelector('#estimator').hidden = false;
+
+form.querySelectorAll('input[name=domains]').forEach(field => field.addEventListener('change', () => { document.querySelector('#hardware-options').hidden = !form.querySelector('input[value=electronics]').checked; }));
