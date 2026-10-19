@@ -5,3 +5,17 @@
 #breakdown{overflow-x:auto}
 .steps li{min-width:0;line-height:1.5}
 @media(max-width:480px){.steps{gap:8px}.steps li{align-items:flex-start}.steps li span{max-width:75px}#breakdown table{table-layout:fixed}#breakdown th:first-child{width:47%}#breakdown th:last-child,#breakdown td:last-child{white-space:normal;padding-left:10px;overflow-wrap:anywhere}.actions .secondary{flex:1 1 auto}}
+
+/* Deux colonnes sur ordinateur, choix pleine largeur sur téléphone. */
+@media(min-width:769px){.choices{grid-template-columns:repeat(2,minmax(0,1fr))}.choices label{min-width:0}.estimate-layout{gap:45px}}
+@media(max-width:768px){
+.estimate-intro h1{font-size:clamp(2.05rem,8.7vw,3rem)}
+.estimate-layout{padding-block:22px 32px;gap:26px}
+.steps{margin-bottom:24px;padding-bottom:18px}
+.field-label{margin-top:22px}
+.choices label{min-height:58px;line-height:1.5}
+.actions{gap:10px;margin-top:24px}
+.actions>.button{flex-basis:100%}
+.estimate-aside{padding-top:22px}
+#total{font-size:clamp(1.65rem,7.5vw,2.3rem)}
+}
