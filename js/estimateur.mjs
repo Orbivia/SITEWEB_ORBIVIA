@@ -15,6 +15,9 @@ function show(step) {
   steps.forEach((item, i) => { if (i === step) item.setAttribute('aria-current', 'step'); else item.removeAttribute('aria-current'); });
   const focus = step === 2 ? document.querySelector('#result-title') : panels[step].querySelector('textarea,select,input');
   focus.focus();
+  // Revenir au début de l’étape, même après un long formulaire sur mobile.
+  const anchor = step === 2 ? document.querySelector('#result-title') : document.querySelector('.steps');
+  anchor.scrollIntoView({ block: 'start', behavior: 'instant' });
 }
 function validate(panel) {
   for (const field of panel.querySelectorAll('input,select,textarea')) {
@@ -86,5 +89,6 @@ document.querySelector('#copy').addEventListener('click', async () => {
 document.querySelector('#print').addEventListener('click', () => window.print());
 // Initialisation uniquement après le chargement réussi de tous les modules.
 document.querySelector('#estimator').hidden = false;
+document.querySelector('#estimator-fallback').hidden = true;
 
 form.querySelectorAll('input[name=domains]').forEach(field => field.addEventListener('change', () => { document.querySelector('#hardware-options').hidden = !form.querySelector('input[value=electronics]').checked; }));

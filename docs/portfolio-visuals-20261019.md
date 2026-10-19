@@ -8,7 +8,7 @@ Les 29 projets matériels utilisent désormais des visuels sur fond blanc ou tra
 - Rendus CAO : conversion illustrative vers des matériaux réalistes (polymère, métal, béton), en conservant la géométrie de référence. Les rendus restent identifiés comme illustratifs dans les fenêtres du portfolio.
 - LIDAR : détourage et finition du boîtier lissée à la demande de Pierre. Le marquage PANOPTES visible dans la référence est conservé.
 - Originaux conservés dans `img/Projets/` et `img/featured/`.
-- Livrables légers : WebP avec transparence inclus dans les SVG sous `img/retouched/*-white-v3.svg`. Les visuels détourés existants de KeyDuino et Photobooth V2 sont réutilisés sous `img/editorial/`.
+- Livrables légers : fichiers WebP directs avec transparence sous `img/retouched/`. Les SVG contenant les images d’origine sont conservés comme sources, mais les pages utilisent les WebP pour éviter l’encapsulation en base64. Les visuels détourés existants de KeyDuino et Photobooth V2 sont réutilisés sous `img/editorial/`.
 
 ## Prompts de retouche (outil ImageGen intégré)
 
