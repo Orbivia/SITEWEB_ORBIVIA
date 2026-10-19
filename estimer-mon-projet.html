@@ -8,7 +8,7 @@
 <link rel="icon" href="img/logo.webp"><link rel="stylesheet" href="css/style.css?v=20261016-editorial-a">
 <link rel="stylesheet" href="css/estimateur.css?v=20261019-1">
 <script src="js/site.js?v=20261016-editorial-a" defer></script>
-<script type="module" src="js/estimateur.mjs?v=20261019-1"></script>
+<script type="module" src="js/estimateur.mjs?v=20261019-2"></script>
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -31,9 +31,12 @@
 <fieldset class="domain-options"><legend>Domaines d’intervention</legend><div class="choices">
 <label><input type="checkbox" name="domains" value="electronics"><span>Carte électronique<small>Schéma, conception PCB et mise au point</small></span></label>
 <label><input type="checkbox" name="domains" value="firmware"><span>Logiciel embarqué<small>Capteurs, pilotage et communications</small></span></label>
-<label><input type="checkbox" name="domains" value="mechanical"><span>Boîtier et intégration<small>Conception du boîtier pour le prototype</small></span></label>
+<label><input type="checkbox" name="domains" value="mechanical"><span>Conception mécanique<small>Conception du boîtier pour le prototype</small></span></label>
 <label><input type="checkbox" name="domains" value="testing"><span>Mesures et mise au point<small>Essais fonctionnels, consommation, pré-analyses</small></span></label>
 <label><input type="checkbox" name="domains" value="ce"><span>Accompagnement CE<small>Cadrage réglementaire et dossier technique</small></span></label>
+<label><input type="checkbox" name="domains" value="printing"><span>Impression 3D<small>Préparation et réalisation des pièces du prototype, hors matières</small></span></label>
+<label><input type="checkbox" name="domains" value="assembly"><span>Assemblage électronique<small>Assemblage du prototype, hors composants</small></span></label>
+<label><input type="checkbox" name="domains" value="integration"><span>Intégration du produit<small>Montage et intégration des différentes parties</small></span></label>
 </div></fieldset>
 <label class="field-label" for="complexity">Les fonctions envisagées</label><select id="complexity" name="complexity" required><option value="">Choisir une situation</option><option value="simple">Quelques fonctions simples</option><option value="connected">Un produit connecté ou plusieurs fonctions</option><option value="advanced">Fonctions avancées ou contraintes fortes</option><option value="unknown">Je ne sais pas encore</option></select>
 <label class="field-label" for="constraints">Y a-t-il des enjeux particuliers de sécurité ?</label><select id="constraints" name="constraints" required><option value="">Choisir une situation</option><option value="standard">Pas d’enjeu particulier identifié</option><option value="sensitive">Oui : médical, secteur sensible ou risque pour les personnes</option><option value="unknown">À vérifier ensemble</option></select>

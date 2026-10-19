@@ -1,4 +1,4 @@
-import { estimate, domains, stages, goals, complexityLabels } from './estimateur-engine.mjs';
+import { estimate, domains, stages, goals, complexityLabels } from './estimateur-engine.mjs?v=20261019-2';
 const form = document.querySelector('#estimate-form');
 const panels = [...form.querySelectorAll('[data-step]')];
 const steps = [...document.querySelectorAll('.steps li')];
