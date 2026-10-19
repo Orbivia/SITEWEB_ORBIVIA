@@ -1,5 +1,5 @@
 const gallery=document.querySelector('#gallery'),dialog=document.querySelector('#project-dialog');
-const labels={Medical:'Santé',IOT:'Objets connectés',Autre:'Conception produit'};
+const labels={Medical:'Santé',IOT:'Objets connectés',Autre:'Conception produit',Logiciel:'Logiciel'};
 let opener;
 function description(project){return project.desc.replace(/https?:\/\/[^\s]+/g,'').trim();}
 function render(category='All'){
