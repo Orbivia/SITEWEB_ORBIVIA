@@ -2,29 +2,35 @@
 const projets = [
   {
     "title": "Aegis Rf Pro",
-    "img": "img/Projets/AegisRfPro.webp",
-    "detailImg": "img/featured/aegis-exploded.webp",
+    "img": "img/editorial/aegis.webp",
+    "detailImg": "img/editorial/aegis.webp",
     "desc": "Unité mobile de test radiofréquence pour évaluer les infrastructures de communication, avec intégration dans un équipement transportable. https://orbivia.fr/projets/aegisrf.html",
-    "category": "IOT"
+    "category": "IOT",
+    "visualNote": "Rendu illustratif à partir du modèle du projet."
   },
   {
     "title": "Panoptès AI",
-    "img": "img/Projets/AssistantVocal.webp",
-    "detailImg": "img/featured/panoptes.webp",
+    "img": "img/editorial/panoptes.webp",
+    "detailImg": "img/editorial/panoptes.webp",
     "desc": "Assistant vocal miniature associant carte électronique sur mesure, audio et Bluetooth LE, intégrés dans un pendentif compact. https://orbivia.fr/projets/panoptes.html",
-    "category": "IOT"
+    "category": "IOT",
+    "visualNote": "Rendu illustratif à partir du modèle du projet."
   },
   {
     "title": "NFC Matcher",
-    "img": "img/Projets/NFCMatcher.webp",
+    "img": "img/retouched/NFCMatcher-v2.svg",
     "desc": "Dispositif de calibration automatique d’antennes NFC, conçu pour faciliter les réglages et optimiser les performances de lecture.",
-    "category": "IOT"
+    "category": "IOT",
+    "detailImg": "img/retouched/NFCMatcher-v2.svg",
+    "visualNote": "Photographie du prototype retouchée pour la présentation."
   },
   {
     "title": "ECG Reader",
-    "img": "img/Projets/ECGReader.webp",
+    "img": "img/retouched/ECGReader-v2.svg",
     "desc": "Prototype d’acquisition de signaux ECG avec transmission Bluetooth, associant électronique de mesure et communication sans fil.",
-    "category": "Medical"
+    "category": "Medical",
+    "detailImg": "img/retouched/ECGReader-v2.svg",
+    "visualNote": "Photographie du prototype retouchée pour la présentation."
   },
   {
     "title": "SensorForge",
@@ -40,10 +46,11 @@ const projets = [
   },
   {
     "title": "Luxohm",
-    "img": "img/Projets/Luxohm.webp",
-    "detailImg": "img/featured/luxohm-exploded.webp",
+    "img": "img/retouched/Luxohm-v2.svg",
+    "detailImg": "img/retouched/Luxohm-v2.svg",
     "desc": "Instrument de contrôle électrique pour les installations pyrotechniques, conçu pour accompagner les vérifications sur le terrain. https://orbivia.fr/projets/luxohm.html",
-    "category": "Autre"
+    "category": "Autre",
+    "visualNote": "Photographie du prototype retouchée pour la présentation."
   },
   {
     "title": "La Suite",
@@ -66,9 +73,11 @@ const projets = [
   },
   {
     "title": "Torkeo",
-    "img": "img/Projets/Torkeo.webp",
+    "img": "img/retouched/Torkeo-v2.svg",
     "desc": "Dispositif porté au cou pour le suivi de constantes physiologiques, pensé pour les usages liés à l’accompagnement des troubles cognitifs.",
-    "category": "Medical"
+    "category": "Medical",
+    "detailImg": "img/retouched/Torkeo-v2.svg",
+    "visualNote": "Rendu illustratif à partir du modèle du projet."
   },
   {
     "title": "LIDAR",
@@ -168,9 +177,11 @@ const projets = [
   },
   {
     "title": "Orchidomètre",
-    "img": "img/Projets/Orchidometre.webp",
+    "img": "img/retouched/Orchidometre-v3.svg",
     "desc": "Instrument imprimé en 3D pour l’évaluation du volume testiculaire, illustrant la fabrication d’un outil destiné à un usage médical.",
-    "category": "Medical"
+    "category": "Medical",
+    "detailImg": "img/retouched/Orchidometre-v3.svg",
+    "visualNote": "Rendu illustratif à partir du modèle du projet."
   },
   {
     "title": "Photobooth V2",
@@ -187,9 +198,11 @@ const projets = [
   },
   {
     "title": "AcCorps",
-    "img": "img/Projets/StethoscopePassif.webp",
+    "img": "img/retouched/StethoscopePassif-v2.svg",
     "desc": "Stéthoscope passif biomimétique inspiré de la cochlée humaine, explorant une approche acoustique appliquée à l’écoute des sons corporels. https://biomimexpo.com",
-    "category": "Medical"
+    "category": "Medical",
+    "detailImg": "img/retouched/StethoscopePassif-v2.svg",
+    "visualNote": "Rendu illustratif à partir du modèle du projet."
   },
   {
     "title": "Notaboo",
