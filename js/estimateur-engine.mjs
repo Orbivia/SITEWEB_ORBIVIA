@@ -1,7 +1,7 @@
 // Modèle initial de budget rapproché des devis envoyés, sans assimilation à du temps réellement passé.
 export const pricing = Object.freeze({
   hourlyRatesHT: Object.freeze({ expert: 150, engineer: 120, technician: 80 }),
-  estimatesEnabled: true, revision: '2026-10-v3-budget-reference'
+  effortBuffer: 1.25, estimatesEnabled: true, revision: '2026-10-v4-buffer'
 });
 export const domains = {
   electronics: { label: 'Carte électronique', role: 'engineer', hours: [10, 30], evolutionHours: [2, 10] },
@@ -48,10 +48,11 @@ export function estimate(input, config = pricing) {
     const rate = config.hourlyRatesHT?.[row.role];
     return typeof rate === 'number' && Number.isFinite(rate) && rate > 0;
   });
-  const enabled = validRates && config.estimatesEnabled === true && manual.length === 0;
+  const validBuffer = typeof config.effortBuffer === 'number' && Number.isFinite(config.effortBuffer) && config.effortBuffer >= 1;
+  const enabled = validBuffer && validRates && config.estimatesEnabled === true && manual.length === 0;
   const lines = rows.map(row => ({
     label: row.label, role: row.role,
-    amounts: enabled ? [Math.floor(row.hours[0] * config.hourlyRatesHT[row.role] / 50) * 50, Math.ceil(row.hours[1] * config.hourlyRatesHT[row.role] / 50) * 50] : null
+    amounts: enabled ? [Math.floor(row.hours[0] * config.effortBuffer * config.hourlyRatesHT[row.role] / 50) * 50, Math.ceil(row.hours[1] * config.effortBuffer * config.hourlyRatesHT[row.role] / 50) * 50] : null
   }));
   return {
     status: manual.length ? 'review' : enabled ? 'estimated' : 'unconfigured',

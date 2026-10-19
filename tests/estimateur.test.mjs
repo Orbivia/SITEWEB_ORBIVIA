@@ -12,7 +12,7 @@ test('aucun prix si le chiffrage est désactivé ou les taux invalides', () => {
 test('les postes arrondis concordent avec le budget total', () => {
   const result = estimate(project, config);
   assert.equal(result.status, 'estimated');
-  assert.deepEqual(result.total, [2850, 7950]);
+  assert.deepEqual(result.total, [3550, 9900]);
   assert.deepEqual(result.total, result.lines.reduce((sum, line) => sum.map((value, i) => value + line.amounts[i]), [0, 0]));
 });
 test('les cas nécessitant une étude ne montrent aucun prix', () => {
@@ -37,9 +37,9 @@ test('les valeurs invalides sont refusées', () => {
 test('chaque catégorie de travail utilise son propre taux horaire', () => {
   const input = { ...project, domains: ['electronics', 'testing', 'assembly'] };
   const result = estimate(input, config);
-  assert.equal(result.lines.find(line => line.role === 'engineer').amounts[0], 1200);
-  assert.equal(result.lines.find(line => line.label === 'Mesures et mise au point').amounts[0], 600);
-  assert.equal(result.lines.find(line => line.label === 'Assemblage électronique').amounts[0], 200);
+  assert.equal(result.lines.find(line => line.role === 'engineer').amounts[0], 1500);
+  assert.equal(result.lines.find(line => line.label === 'Mesures et mise au point').amounts[0], 750);
+  assert.equal(result.lines.find(line => line.label === 'Assemblage électronique').amounts[0], 300);
   const higher = estimate(input, { ...config, hourlyRatesHT: { ...config.hourlyRatesHT, technician: 160 } });
   assert.deepEqual(higher.lines.filter(line => line.role !== 'technician'), result.lines.filter(line => line.role !== 'technician'));
   assert.ok(higher.total[0] > result.total[0]);
@@ -72,4 +72,17 @@ test('la connectivité ne majore pas le travail mécanique', () => {
 test('les missions documentaires ne créent pas un poste de montage', () => {
   const input = { ...project, domains: ['ce', 'testing'] };
   assert.equal(estimate(input).lines.filter(line => line.role === 'technician').length, 0);
+});
+
+test('la réserve relève tous les postes avant arrondi sans changer les taux', () => {
+  const baseline = estimate(project, { ...config, effortBuffer: 1 });
+  const buffered = estimate(project, config);
+  assert.equal(pricing.effortBuffer, 1.25);
+  for (let i = 0; i < baseline.lines.length; i++) {
+    for (let bound = 0; bound < 2; bound++) {
+      assert.ok(buffered.lines[i].amounts[bound] >= baseline.lines[i].amounts[bound]);
+    }
+  }
+  assert.ok(buffered.total[0] > baseline.total[0]);
+  for (const effortBuffer of [0, -1, NaN, Infinity, '1.25']) assert.equal(estimate(project, { ...config, effortBuffer }).total, null);
 });

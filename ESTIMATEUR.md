@@ -34,7 +34,7 @@ Aucun devis, identité client, coordonnées, référence de document, détail co
 
 La connectivité majore de 30 % uniquement les postes électronique et firmware. L’intégration automatique (4 à 12 heures technicien) est ajoutée si un travail électronique ou mécanique doit être associé à du firmware ou de l’assemblage. Elle n’est pas ajoutée lorsque l’intégration est déjà choisie. L’étude de faisabilité comprend uniquement le cadrage et 2 à 6 heures d’analyse par domaine au taux expert ; il s’agit d’une hypothèse de périmètre, pas d’une charge historique observée.
 
-Chaque poste = heures × taux du métier. Arrondi par pas de 50 €, borne basse vers le bas et borne haute vers le haut. Le total est la somme des lignes affichées. Un calendrier de livraison ne peut pas être déduit des heures.
+Une réserve de charge de 25 % est appliquée à tous les postes, à la demande de Pierre le 19 octobre 2026. Les taux horaires restent inchangés. Chaque poste = heures × 1,25 × taux du métier. Arrondi par pas de 50 €, borne basse vers le bas et borne haute vers le haut. Le total est la somme des lignes affichées. Un calendrier de livraison ne peut pas être déduit des heures.
 
 ## Périmètre et limites
 
