@@ -40,9 +40,11 @@ const projets = [
   },
   {
     "title": "Stethoscope Bluetooth",
-    "img": "img/Projets/Stethoscope.webp",
+    "img": "img/retouched/Stethoscope-white-v3.svg",
     "desc": "Stéthoscope électronique avec amplification audio et transmission Bluetooth, pour explorer les usages d’enseignement et de télémédecine.",
-    "category": "Medical"
+    "category": "Medical",
+    "detailImg": "img/retouched/Stethoscope-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Luxohm",
@@ -60,10 +62,11 @@ const projets = [
   },
   {
     "title": "KeyDuino",
-    "img": "img/Projets/KeyDuino.webp",
-    "detailImg": "img/featured/keyduino.webp",
+    "img": "img/editorial/keyduino.webp",
+    "detailImg": "img/editorial/keyduino.webp",
     "desc": "Carte de développement NFC open source compatible Arduino, pour prototyper des fonctions d’identification et d’interaction sans contact. https://kickstarter.com/projects/1535978353/keyduino?lang=fr",
-    "category": "IOT"
+    "category": "IOT",
+    "visualNote": "Photographie détourée pour la présentation."
   },
   {
     "title": "Wombly",
@@ -81,9 +84,11 @@ const projets = [
   },
   {
     "title": "LIDAR",
-    "img": "img/Projets/LIDAR.webp",
+    "img": "img/retouched/LIDAR-white-v3.svg",
     "desc": "Capteur LIDAR portable compatible avec une intégration sur drone, pour explorer la détection d’obstacles et les usages de cartographie.",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/LIDAR-white-v3.svg",
+    "visualNote": "Photographie retouchée : finition du boîtier lissée pour la présentation."
   },
   {
     "title": "PrintLeft",
@@ -93,87 +98,115 @@ const projets = [
   },
   {
     "title": "ORBI",
-    "img": "img/Projets/orbi.svg",
-    "desc": "Balle vidéobook pour mariages et événements, conçue pour filmer l’action au cœur de la fête. Visuel présenté : modèle CAO du boîtier.",
-    "category": "Autre"
+    "img": "img/retouched/ORBI-white-v3.svg",
+    "desc": "Balle vidéobook pour mariages et événements, conçue pour filmer l’action au cœur de la fête. Présentation réaliste du concept produit.",
+    "category": "Autre",
+    "detailImg": "img/retouched/ORBI-white-v3.svg",
+    "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
   },
   {
     "title": "Livre d'Or Audio",
-    "img": "img/Projets/AudioBook.webp",
+    "img": "img/retouched/AudioBook-white-v3.svg",
     "desc": "Livre d’or audio connecté en Wi-Fi, permettant aux invités d’enregistrer des messages vocaux pour conserver les souvenirs d’un événement. https://laforgeasouvenirs.fr",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/AudioBook-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Capsule temporelle",
-    "img": "img/Projets/CAPSULE.webp",
+    "img": "img/retouched/CAPSULE-white-v3.svg",
     "desc": "Dispositif de capsule temporelle pour enregistrer des messages vidéo lors d’un événement et programmer leur révélation à une date choisie. https://orbivia.fr/projets/capsule.html",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/CAPSULE-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Clef USB PPG",
-    "img": "img/Projets/ClefPPG.webp",
+    "img": "img/retouched/ClefPPG-white-v3.svg",
     "desc": "Capteur de fréquence cardiaque au format clé USB, basé sur la photopléthysmographie pour explorer l’acquisition de signaux physiologiques.",
-    "category": "Medical"
+    "category": "Medical",
+    "detailImg": "img/retouched/ClefPPG-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Be Wheel Soon",
-    "img": "img/Projets/CompteurTours.webp",
+    "img": "img/retouched/CompteurTours-white-v3.svg",
     "desc": "Compteur de rotations pour roue de rongeur, utilisé en clinique vétérinaire pour étudier l’activité et contribuer à l’évaluation du stress.",
-    "category": "IOT"
+    "category": "IOT",
+    "detailImg": "img/retouched/CompteurTours-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "KeyDuino Nano",
-    "img": "img/Projets/KeyDuinoNano.webp",
+    "img": "img/retouched/KeyDuinoNano-white-v3.svg",
     "desc": "Lecteur NFC miniature de la famille KeyDuino, adapté à l’intégration de fonctions sans contact dans des projets embarqués compacts. https://kickstarter.com/projects/1535978353/keyduino?lang=fr",
-    "category": "IOT"
+    "category": "IOT",
+    "detailImg": "img/retouched/KeyDuinoNano-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Hertz Strike",
-    "img": "img/Projets/HertzStrike.webp",
+    "img": "img/retouched/HertzStrike-white-v3.svg",
     "desc": "Système radiofréquence associant des fonctions de détection de drones et de brouillage, appliquées à la lutte contre les drones.",
-    "category": "IOT"
+    "category": "IOT",
+    "detailImg": "img/retouched/HertzStrike-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Livre d'Or Vidéo",
-    "img": "img/Projets/VideoBook.webp",
+    "img": "img/retouched/VideoBook-white-v3.svg",
     "desc": "Livre d’or vidéo au design rétro, permettant aux invités de laisser des messages filmés et de conserver les souvenirs d’un événement. https://orbivia.fr/projets/videobook.html",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/VideoBook-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "SunGuard",
-    "img": "img/Projets/SunGuard.webp",
+    "img": "img/retouched/SunGuard-white-v3.svg",
     "desc": "Capteur sans fil de suivi de l’exposition aux UV, associant mesure environnementale et recharge par induction dans un même dispositif.",
-    "category": "Medical"
+    "category": "Medical",
+    "detailImg": "img/retouched/SunGuard-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Banc en 3D béton",
-    "img": "img/Projets/Banc3D.webp",
+    "img": "img/retouched/Banc3D-white-v3.svg",
     "desc": "Banc urbain réalisé par impression 3D béton, avec une géométrie inspirée d’un peigne pour explorer les possibilités de fabrication. https://constructions-3d.com/fr/maxiprinter",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/Banc3D-white-v3.svg",
+    "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
   },
   {
     "title": "Airca",
-    "img": "img/Projets/Airca.webp",
+    "img": "img/retouched/Airca-white-v3.svg",
     "desc": "Lanceur pneumatique destiné aux spectacles pyrotechniques, illustrant l’intégration d’un système de projection dans un équipement événementiel.",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/Airca-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "NFC Ring",
-    "img": "img/Projets/NFCRing.webp",
+    "img": "img/retouched/NFCRing-white-v3.svg",
     "desc": "Bague intégrant la technologie NFC pour explorer des usages d’identification sans contact et de contrôle d’accès au format porté. https://nfcring.com",
-    "category": "IOT"
+    "category": "IOT",
+    "detailImg": "img/retouched/NFCRing-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "OzOne",
-    "img": "img/Projets/OZONE.webp",
+    "img": "img/retouched/OZONE-white-v3.svg",
     "desc": "Système de contrôle d’accès par NFC connecté en Wi-Fi, avec configuration à distance pour gérer les paramètres du dispositif.",
-    "category": "IOT"
+    "category": "IOT",
+    "detailImg": "img/retouched/OZONE-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Photobooth V1",
-    "img": "img/Projets/PhotoboothV1.webp",
+    "img": "img/retouched/PhotoboothV1-white-v3.svg",
     "desc": "Première version d’une borne photo événementielle, associant appareil photo, interface et impression dans un équipement intégré. https://orbivia.fr/projets/photobooth.html",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/PhotoboothV1-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   },
   {
     "title": "Orchidomètre",
@@ -185,16 +218,19 @@ const projets = [
   },
   {
     "title": "Photobooth V2",
-    "img": "img/Projets/PhotoboothV2.webp",
-    "detailImg": "img/featured/photobooth-exploded.webp",
+    "img": "img/editorial/photobooth.webp",
+    "detailImg": "img/editorial/photobooth.webp",
     "desc": "Borne photo événementielle transportable, optimisée pour faciliter l’intégration des équipements, le transport et l’utilisation. https://orbivia.fr/projets/photobooth.html",
-    "category": "Autre"
+    "category": "Autre",
+    "visualNote": "Photographie détourée pour la présentation."
   },
   {
     "title": "Dôme en 3D béton",
-    "img": "img/Projets/Sculpture3D.webp",
+    "img": "img/retouched/Sculpture3D-white-v3.svg",
     "desc": "Dôme architectural réalisé par impression 3D béton, explorant les géométries de fabrication et leur intégration dans l’espace public.",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/Sculpture3D-white-v3.svg",
+    "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
   },
   {
     "title": "AcCorps",
@@ -206,14 +242,18 @@ const projets = [
   },
   {
     "title": "Notaboo",
-    "img": "img/Projets/Notaboo.webp",
+    "img": "img/retouched/Notaboo-white-v3.svg",
     "desc": "Toilettes portatives autonomes pensées pour les personnes en situation de handicap, associant besoins d’accessibilité et conception produit. https://helloasso.com/associations/association-notaboo-solutions",
-    "category": "Autre"
+    "category": "Autre",
+    "detailImg": "img/retouched/Notaboo-white-v3.svg",
+    "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
   },
   {
     "title": "Sensor CO2",
-    "img": "img/Projets/SensorCO2.webp",
+    "img": "img/retouched/SensorCO2-white-v3.svg",
     "desc": "Capteur de dioxyde de carbone connecté en Wi-Fi, associant mesure du CO₂ et communication sans fil pour le suivi de l’air ambiant.",
-    "category": "IOT"
+    "category": "IOT",
+    "detailImg": "img/retouched/SensorCO2-white-v3.svg",
+    "visualNote": "Photographie retouchée et détourée pour la présentation."
   }
 ];
