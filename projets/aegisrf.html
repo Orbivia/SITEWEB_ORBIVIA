@@ -1,16 +1,9 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aegis RF Pro — Intégration radiofréquence et SDR | Orbivia</title><meta name="description" content="Conception et intégration d’une unité mobile d’audit radiofréquence : architecture SDR, électronique, commandes et châssis transportable."><link rel="icon" href="../img/logo.webp"><link rel="stylesheet" href="../css/style.css?v=20261019-ux"><link rel="stylesheet" href="../css/project.css?v=20261019-ux"><script src="../js/site.js?v=20261016-editorial-a" defer></script><link rel="canonical" href="https://orbivia.fr/projets/aegisrf.html">
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aegis RF Pro — Intégration radiofréquence et SDR | Orbivia</title><meta name="description" content="Conception et intégration d’une unité mobile d’audit radiofréquence : architecture SDR, électronique, commandes et châssis transportable."><link rel="icon" href="../img/logo.webp"><link rel="stylesheet" href="../css/style.css?v=20261019-ux"><link rel="stylesheet" href="../css/project.css?v=20261020-process"><script src="../js/site.js?v=20261016-editorial-a" defer></script><link rel="canonical" href="https://orbivia.fr/projets/aegisrf.html">
 <meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="Orbivia"><meta property="og:title" content="Aegis RF Pro — Intégration radiofréquence et SDR | Orbivia"><meta property="og:description" content="Conception et intégration d’une unité mobile d’audit radiofréquence : architecture SDR, électronique, commandes et châssis transportable."><meta property="og:url" content="https://orbivia.fr/projets/aegisrf.html"><meta property="og:image" content="https://orbivia.fr/img/editorial/aegis.webp">
 </head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="header"><a class="brand" href="../index.html" aria-label="Orbivia — Accueil">Orbivia</a>
 <button type="button" class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
-<nav id="navigation" aria-label="Navigation principale"><a href="../index.html#expertises">Expertises</a><a href="../realisations.html" aria-current="location">Réalisations</a><a href="../estimer-mon-projet.html">Estimer mon projet</a><a href="../contact.html" class="nav-cta">Parlons de votre projet ↗</a></nav></header><main id="contenu" class="project-main"><div class="wrap"><a class="project-back" href="../realisations.html">← Toutes les réalisations</a><section class="project-intro"><div><span class="eyebrow">Radiofréquences · Instrumentation</span><h1>Aegis RF Pro<span class="accent">.</span></h1><p class="intro">Concevoir une unité mobile pour l’analyse et les audits radiofréquences sur site.</p><div class="tech-tags"><span>SDR</span><span>Raspberry Pi</span><span>Intégration mécanique</span></div></div><figure><img src="../img/editorial/aegis.webp" alt="Aegis RF Pro, présentation sur fond blanc" width="1000" height="750" fetchpriority="high" decoding="async"><figcaption class="visual-note">Vue éclatée illustrative du projet.</figcaption></figure></section><section class="project-summary" aria-label="Le projet en bref"><article><span class="eyebrow">Le besoin</span><p>Concevoir une unité mobile pour l’analyse et les audits radiofréquences sur site.</p></article><article><span class="eyebrow">L’intervention</span><p>Intégration de l’architecture SDR, de son pilotage et du châssis dans une valise transportable.</p></article><article><span class="eyebrow">Le résultat</span><p>Un prototype autonome réunissant écran, commandes, électronique et antennes.</p></article></section><div class="project-reading"><nav class="project-toc" aria-label="Dans cette réalisation"><span>Le projet en détail</span><a href="#etape-1">Analyse du besoin</a><a href="#etape-2">Conception et Architecture</a><a href="#etape-3">Conclusion</a></nav><div class="project-article">
-
-
-
-
-    <section>
-      <h2 id="etape-1">Analyse du besoin</h2>
-
-      <p>
+<nav id="navigation" aria-label="Navigation principale"><a href="../index.html#expertises">Expertises</a><a href="../realisations.html" aria-current="location">Réalisations</a><a href="../estimer-mon-projet.html">Estimer mon projet</a><a href="../contact.html" class="nav-cta">Parlons de votre projet ↗</a></nav></header><main id="contenu" class="project-main"><div class="wrap"><a class="project-back" href="../realisations.html">← Toutes les réalisations</a><section class="project-intro"><div><span class="eyebrow">Radiofréquences · Instrumentation</span><h1>Aegis RF Pro<span class="accent">.</span></h1><p class="intro">Concevoir une unité mobile pour l’analyse et les audits radiofréquences sur site.</p><div class="tech-tags"><span>SDR</span><span>Raspberry Pi</span><span>Intégration mécanique</span></div></div><figure><img src="../img/editorial/aegis.webp" alt="Aegis RF Pro, présentation sur fond blanc" width="1448" height="1086" fetchpriority="high" decoding="async"><figcaption class="visual-note">Vue éclatée illustrative du projet.</figcaption></figure></section><section class="project-summary" aria-label="Le projet en bref"><article><span class="eyebrow">Le besoin</span><p>Concevoir une unité mobile pour l’analyse et les audits radiofréquences sur site.</p></article><article><span class="eyebrow">L’intervention</span><p>Intégration de l’architecture SDR, de son pilotage et du châssis dans une valise transportable.</p></article><article><span class="eyebrow">Le résultat</span><p>Un prototype autonome réunissant écran, commandes, électronique et antennes.</p></article></section><div class="project-reading"><nav class="project-toc" aria-label="Les cinq étapes du projet"><span>Conception &amp; réalisation</span><a href="#etape-1">01 · Besoin et contraintes</a><a href="#etape-2">02 · Conception et architecture</a><a href="#etape-3">03 · Réalisation et intégration</a><a href="#etape-4">04 · Essais et validation</a><a href="#etape-5">05 · Résultat et prochaines étapes</a></nav><div class="project-article"><section class="project-step" data-step="01"><h2 id="etape-1">Besoin et contraintes</h2><h3>Analyse du besoin</h3><p>
         La vulnérabilité des protocoles sans fil est devenue un enjeu majeur pour l'industrie et le secteur médical. Aujourd'hui, la surface d'attaque d'une entreprise ne s'arrête plus à ses prises Ethernet : la multiplication des objets connectés (IoT) et des automates industriels crée des failles invisibles mais critiques.
       </p>
 
@@ -25,20 +18,13 @@
       </ul>
 
       <p>L’objectif est de fournir un appareil capable d'évaluer la résilience de ces systèmes sur une plage de 70 MHz à 6 GHz, tout en garantissant une autonomie de plus de 8 heures pour des interventions sur site.</p>
-    </section>
-
-    <section>
-      <h2 id="etape-2">Conception et Architecture</h2>
-
-      <p>
+    </section><section class="project-step" data-step="02"><h2 id="etape-2">Conception et architecture</h2><h3>Conception et Architecture</h3><p>
         Pour offrir une telle polyvalence, nous avons opté pour une architecture Software Defined Radio (SDR) de pointe. Le cœur du système repose sur un SoC Zynq7020 associé à un transceiver AD9363, permettant un fonctionnement en Full Duplex sur l'ensemble du spectre. Le pilotage logiciel est assuré par un Raspberry Pi 5 sous une version modifiée de Kali Linux, garantissant l'accès aux outils de cybersécurité offensive les plus performants.
       </p>
 
-      <img loading="lazy" src="../img/Projets/aegisrf/Aegis_SIMU.webp"
-           alt="Interface logicielle de l'unité"
-           class="hero-img" width="1542" height="657" decoding="async">
+      <figure class="process-figure"><img loading="lazy" src="../img/Projets/aegisrf/Aegis_SIMU.webp" alt="Interface logicielle de l'unité" class="hero-img" width="1542" height="657" decoding="async">
 
-      <p>
+      <figcaption>Interface logicielle de l'unité</figcaption></figure></section><section class="project-step" data-step="03"><h2 id="etape-3">Réalisation et intégration</h2><p>
         L'architecture interne a été réalisée en impression 3D sur mesure afin d'adapter parfaitement le châssis aux différents modules RF et cartes électroniques.
       </p>
 
@@ -46,15 +32,8 @@
         En raison des fortes puissances mises en jeu par les amplificateurs de 2W et 4W (gains de 23dB et 40dB), une attention particulière a été portée à la dissipation thermique. Un système de refroidissement actif a été intégré pour garantir la stabilité des fréquences et la longévité des composants lors des sessions d'audit intensives.
       </p>
 
-      <img loading="lazy" src="../img/Projets/aegisrf/Aegis_3D.webp"
-           alt="Conception mécanique interne"
-           class="hero-img" width="756" height="502" decoding="async">
-    </section>
-
-    <section>
-      <h2 id="etape-3">Conclusion</h2>
-
-      <p>
+      <figure class="process-figure"><img loading="lazy" src="../img/Projets/aegisrf/Aegis_3D.webp" alt="Conception mécanique interne" class="hero-img" width="756" height="502" decoding="async">
+    <figcaption>Conception mécanique interne</figcaption></figure></section><section class="project-step" data-step="04"><h2 id="etape-4">Essais et validation</h2><p>La fiche présente un prototype intégré. Les protocoles et résultats d’essais radiofréquences, thermiques et d’autonomie ne sont pas détaillés dans la documentation disponible.</p></section><section class="project-step" data-step="05"><h2 id="etape-5">Résultat et prochaines étapes</h2><h3>Conclusion</h3><p>
         L'unité intègre des étages d'amplification spécifiques calibrés pour couvrir aussi bien le Sub-GHz que la bande 2.4 GHz. Le résultat est un outil de diagnostic totalement autonome permettant aux ingénieurs et responsables sécurité de confronter leurs équipements à la réalité du terrain.
       </p>
 
@@ -62,9 +41,5 @@
         En simulant des attaques par rejeu, des brouillages sélectifs ou des dénis de service RF, l'AEGIS-RF assure une protection proactive des systèmes critiques et une validation concrète des protocoles de sécurité en environnement réel.
       </p>
 
-      <img loading="lazy" src="../img/featured/aegis.webp"
-           alt="Unité AEGIS-RF finalisée"
-           class="hero-img" width="1400" height="630" decoding="async">
-    </section>
-
-  </div></div><section class="cta"><div><span class="eyebrow">Un projet similaire ?</span><h2>Parlons de votre besoin.</h2><p>Une idée, une difficulté technique ou un prototype à faire évoluer.</p></div><a class="button" href="../contact.html">Prendre contact →</a></section></div></main><footer><a class="brand" href="../index.html">Orbivia</a><a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a><span>Wattignies · Métropole lilloise<br>© Orbivia</span></footer></body></html>
+      <figure class="process-figure"><img loading="lazy" src="../img/featured/aegis.webp" alt="Unité AEGIS-RF finalisée" class="hero-img" width="1400" height="630" decoding="async">
+    <figcaption>Unité AEGIS-RF finalisée</figcaption></figure></section></div></div><section class="cta"><div><span class="eyebrow">Un projet similaire ?</span><h2>Parlons de votre besoin.</h2><p>Une idée, une difficulté technique ou un prototype à faire évoluer.</p></div><a class="button" href="../contact.html">Prendre contact →</a></section></div></main><footer><a class="brand" href="../index.html">Orbivia</a><a href="mailto:pierre.charlier@orbivia.fr">pierre.charlier@orbivia.fr ↗</a><span>Wattignies · Métropole lilloise<br>© Orbivia</span></footer></body></html>
