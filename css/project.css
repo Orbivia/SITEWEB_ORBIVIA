@@ -67,3 +67,12 @@
 .software-flow strong{display:inline;font-size:.94rem}
 .software-flow li>span{margin-top:5px}
 }
+
+/* Captures d’application réelles, conservées dans leur intégralité. */
+.screen-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin-block:28px}
+.app-screen{min-width:0;margin:0;text-align:center}
+.app-screen>a{display:block;max-width:245px;margin-inline:auto;background:#fff;line-height:0;outline-offset:5px}
+.project-article .app-screen img{width:100%;height:auto;margin:0;border:1px solid var(--line);border-radius:12px}
+.app-screen figcaption{font-size:.77rem;line-height:1.6;color:var(--muted);margin-top:13px}
+.project-article .screen-note{font-size:.76rem;line-height:1.6;color:var(--muted);margin-top:0}
+@media(max-width:600px){.screen-gallery{grid-template-columns:1fr;gap:24px}.app-screen>a{max-width:250px}}

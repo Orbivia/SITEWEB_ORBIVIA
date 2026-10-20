@@ -58,3 +58,7 @@ Les quatre études de cas ont été développées sur les choix fonctionnels et 
 | PrintLeft | Résultat d’un scan, historique des rouleaux, export | Photo d’un consommable testé ; matrice de compatibilité par référence |
 | SensorForge | Courbes / FFT, choix multi-capteurs, session avec marqueurs | CSV anonymisé et relevés de continuité / synchronisation |
 | La Suite | Organisateur ordinateur et téléphone, dépôt invité, découverte | Capsule de démonstration sans données privées ; compte rendu de recette des droits et échéances |
+
+## Captures intégrées — PrintLeft
+
+Deux captures réelles de la version anglophone ont été ajoutées : écran de scan NFC et écran d’aide avec accès aux exports. La capture d’historique vide n’a pas été retenue. Il manque encore une lecture réussie et un historique contenant des rouleaux. Pour Wombly, la planche retrouvée est une maquette de référence ; elle n’est pas publiée comme capture du logiciel. Aucune capture réelle exploitable de SensorForge ou La Suite n’a été intégrée dans cette passe.
