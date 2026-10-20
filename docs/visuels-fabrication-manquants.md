@@ -47,3 +47,14 @@ Les images d’étapes déjà présentes ont été conservées. Les rendus de pr
 5. Résultat et prochaines étapes
 
 Pour les fiches partielles, il manque aussi les matériaux et procédés réellement employés, la séquence d’assemblage, le rôle d’Orbivia et les essais effectués. Fournir uniquement des fichiers partageables publiquement, sans données personnelles ou informations confidentielles.
+
+## Complément du 20 octobre — fiches logiciels enrichies
+
+Les quatre études de cas ont été développées sur les choix fonctionnels et techniques connus. Les sections d’essais décrivent les vérifications à documenter ; elles ne constituent pas des comptes rendus d’essais exécutés.
+
+| Projet | Captures prioritaires | Complément utile |
+|---|---|---|
+| Wombly | Enregistrement, Mes sons, lecteur Original / Wombly | Courbe ou spectre avant/après ; relevé des niveaux et téléphones testés |
+| PrintLeft | Résultat d’un scan, historique des rouleaux, export | Photo d’un consommable testé ; matrice de compatibilité par référence |
+| SensorForge | Courbes / FFT, choix multi-capteurs, session avec marqueurs | CSV anonymisé et relevés de continuité / synchronisation |
+| La Suite | Organisateur ordinateur et téléphone, dépôt invité, découverte | Capsule de démonstration sans données privées ; compte rendu de recette des droits et échéances |
