@@ -46,8 +46,8 @@ form.addEventListener('submit', async event => {
   } catch (error) {
     feedback.setAttribute('data-error', 'true');
     feedback.textContent = error.message === 'activation'
-      ? 'L’envoi par formulaire n’est pas encore activé. Votre demande n’a pas été confirmée : écrivez directement à pierre.charlier@orbivia.fr.'
-      : 'L’envoi n’a pas pu être confirmé. Votre texte est conservé : réessayez ou écrivez à pierre.charlier@orbivia.fr.';
+      ? 'L’envoi par formulaire n’est pas encore activé. Votre demande n’a pas été confirmée : utilisez le lien « Écrire à Orbivia » présent sur cette page.'
+      : 'L’envoi n’a pas pu être confirmé. Votre texte est conservé : réessayez ou utilisez le lien « Écrire à Orbivia » présent sur cette page.';
     feedback.focus();
   } finally {
     clearTimeout(timer); sending = false; submit.disabled = false;
