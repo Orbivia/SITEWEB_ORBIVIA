@@ -42,3 +42,28 @@
 .project-toc{display:grid;grid-template-columns:1fr;gap:2px}
 .project-toc a{min-height:44px}
 }
+
+/* Fiches logiciels : logos à leur juste échelle et explications visuelles du parcours. */
+.software-project .project-intro figure img{width:min(100%,240px);height:240px;margin-inline:auto}
+.software-project .project-intro figcaption{text-align:center}
+.software-project .project-step h2{margin-bottom:18px}
+.software-project .project-article p{line-height:1.8}
+.software-flow{padding:24px;margin-block:26px 30px}
+.project-article .software-flow>.eyebrow{font-size:.65rem;line-height:1.5;margin:0 0 18px;color:#946000}
+.project-article .software-flow ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;list-style:none;counter-reset:flow;padding:0;margin:0}
+.project-article .software-flow li{position:relative;counter-increment:flow;margin:0;padding:0 0 0 14px;border-left:3px solid var(--yellow);min-width:0}
+.software-flow li::before{content:'0' counter(flow);display:block;font-size:.67rem;color:var(--muted);margin-bottom:8px}
+.software-flow strong{display:block;font-size:.95rem;color:var(--ink);font-weight:650}
+.software-flow li>span{display:block;font-size:.8rem;line-height:1.55;color:var(--muted);margin-top:7px}
+.project-facts{margin-block:16px 22px;padding-left:20px}
+.project-facts li{padding-left:4px}
+@media(max-width:768px){
+.software-project .project-intro figure img{width:160px;height:160px}
+.software-project .project-intro figure{justify-self:center;width:100%}
+.software-flow{padding:18px}
+.project-article .software-flow ol{grid-template-columns:1fr;gap:18px}
+.project-article .software-flow li{padding-left:14px}
+.software-flow li::before{display:inline-block;margin:0 8px 0 0}
+.software-flow strong{display:inline;font-size:.94rem}
+.software-flow li>span{margin-top:5px}
+}
