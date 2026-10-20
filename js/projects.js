@@ -4,7 +4,7 @@ const projets = [
     "title": "Aegis Rf Pro",
     "img": "img/editorial/aegis.webp",
     "detailImg": "img/editorial/aegis.webp",
-    "desc": "Unité mobile de test radiofréquence pour évaluer les infrastructures de communication, avec intégration dans un équipement transportable. https://orbivia.fr/projets/aegisrf.html",
+    "desc": "Unité radiofréquence transportable intégrant SDR, ordinateur de pilotage, écran et antennes pour les audits sur site. https://orbivia.fr/projets/aegisrf.html",
     "category": "IOT",
     "visualNote": "Rendu illustratif à partir du modèle du projet."
   },
@@ -12,14 +12,14 @@ const projets = [
     "title": "Panoptès AI",
     "img": "img/editorial/panoptes.webp",
     "detailImg": "img/editorial/panoptes.webp",
-    "desc": "Assistant vocal miniature associant carte électronique sur mesure, audio et Bluetooth LE, intégrés dans un pendentif compact. https://orbivia.fr/projets/panoptes.html",
+    "desc": "Assistant vocal au format pendentif, avec carte électronique sur mesure, microphone, haut-parleur, batterie et liaison Bluetooth LE. https://orbivia.fr/projets/panoptes.html",
     "category": "IOT",
     "visualNote": "Rendu illustratif à partir du modèle du projet."
   },
   {
     "title": "NFC Matcher",
     "img": "img/retouched/NFCMatcher-v2.webp",
-    "desc": "Dispositif de calibration automatique d’antennes NFC, conçu pour faciliter les réglages et optimiser les performances de lecture. https://orbivia.fr/projets/nfc-matcher.html",
+    "desc": "Dispositif de calibration automatique d’antennes NFC destiné au réglage des antennes et à la mise au point de la lecture sans contact. https://orbivia.fr/projets/nfc-matcher.html",
     "category": "IOT",
     "detailImg": "img/retouched/NFCMatcher-v2.webp",
     "visualNote": "Photographie du prototype retouchée pour la présentation."
@@ -27,7 +27,7 @@ const projets = [
   {
     "title": "ECG Reader",
     "img": "img/retouched/ECGReader-v2.webp",
-    "desc": "Prototype d’acquisition de signaux ECG avec transmission Bluetooth, associant électronique de mesure et communication sans fil. https://orbivia.fr/projets/ecg-reader.html",
+    "desc": "Prototype de mesure ECG avec transmission Bluetooth, pour acquérir les signaux cardiaques et les transmettre sans liaison filaire. https://orbivia.fr/projets/ecg-reader.html",
     "category": "Medical",
     "detailImg": "img/retouched/ECGReader-v2.webp",
     "visualNote": "Photographie du prototype retouchée pour la présentation."
@@ -41,7 +41,7 @@ const projets = [
   {
     "title": "Stethoscope Bluetooth",
     "img": "img/retouched/Stethoscope-white-v3.webp",
-    "desc": "Stéthoscope électronique avec amplification audio et transmission Bluetooth, pour explorer les usages d’enseignement et de télémédecine. https://orbivia.fr/projets/stethoscope-bluetooth.html",
+    "desc": "Stéthoscope électronique avec amplification des sons corporels et transmission Bluetooth, étudié pour l’enseignement et la télémédecine. https://orbivia.fr/projets/stethoscope-bluetooth.html",
     "category": "Medical",
     "detailImg": "img/retouched/Stethoscope-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -50,7 +50,7 @@ const projets = [
     "title": "Luxohm",
     "img": "img/retouched/Luxohm-v2.webp",
     "detailImg": "img/retouched/Luxohm-v2.webp",
-    "desc": "Instrument de contrôle électrique pour les installations pyrotechniques, conçu pour accompagner les vérifications sur le terrain. https://orbivia.fr/projets/luxohm.html",
+    "desc": "Testeur de continuité pour inflammateurs pyrotechniques, avec retour par vibration et électronique à très faible consommation. https://orbivia.fr/projets/luxohm.html",
     "category": "Autre",
     "visualNote": "Photographie du prototype retouchée pour la présentation."
   },
@@ -64,7 +64,7 @@ const projets = [
     "title": "KeyDuino",
     "img": "img/editorial/keyduino.webp",
     "detailImg": "img/editorial/keyduino.webp",
-    "desc": "Carte de développement NFC open source compatible Arduino, pour prototyper des fonctions d’identification et d’interaction sans contact. https://orbivia.fr/projets/keyduino.html",
+    "desc": "Carte de développement NFC open source compatible Arduino, destinée au prototypage de fonctions d’identification et d’interaction sans contact. https://orbivia.fr/projets/keyduino.html",
     "category": "IOT",
     "visualNote": "Photographie détourée pour la présentation."
   },
@@ -86,7 +86,7 @@ const projets = [
   {
     "title": "Torkeo",
     "img": "img/retouched/Torkeo-v2.webp",
-    "desc": "Dispositif porté au cou pour le suivi de constantes physiologiques, pensé pour les usages liés à l’accompagnement des troubles cognitifs. https://orbivia.fr/projets/torkeo.html",
+    "desc": "Dispositif porté au cou pour le suivi de constantes physiologiques, étudié dans le cadre de l’accompagnement des troubles cognitifs. https://orbivia.fr/projets/torkeo.html",
     "category": "Medical",
     "detailImg": "img/retouched/Torkeo-v2.webp",
     "visualNote": "Rendu illustratif à partir du modèle du projet."
@@ -94,7 +94,7 @@ const projets = [
   {
     "title": "LIDAR",
     "img": "img/retouched/LIDAR-white-v3.webp",
-    "desc": "Capteur LIDAR portable compatible avec une intégration sur drone, pour explorer la détection d’obstacles et les usages de cartographie. https://orbivia.fr/projets/lidar.html",
+    "desc": "Capteur LIDAR portable destiné à la détection d’obstacles et à la cartographie, avec une intégration sur drone envisagée. https://orbivia.fr/projets/lidar.html",
     "category": "Autre",
     "detailImg": "img/retouched/LIDAR-white-v3.webp",
     "visualNote": "Photographie retouchée : finition du boîtier lissée pour la présentation."
@@ -108,7 +108,7 @@ const projets = [
   {
     "title": "ORBI",
     "img": "img/retouched/ORBI-white-v3.webp",
-    "desc": "Balle vidéobook pour mariages et événements, conçue pour filmer l’action au cœur de la fête. Présentation réaliste du concept produit. https://orbivia.fr/projets/orbi.html",
+    "desc": "Balle vidéobook pour les mariages et événements : un objet avec lequel les invités interagissent pendant qu’il filme l’action. https://orbivia.fr/projets/orbi.html",
     "category": "Autre",
     "detailImg": "img/retouched/ORBI-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -116,7 +116,7 @@ const projets = [
   {
     "title": "Livre d'Or Audio",
     "img": "img/retouched/AudioBook-white-v3.webp",
-    "desc": "Livre d’or audio connecté en Wi-Fi, permettant aux invités d’enregistrer des messages vocaux pour conserver les souvenirs d’un événement. https://orbivia.fr/projets/livre-or-audio.html",
+    "desc": "Livre d’or audio connecté en Wi-Fi pour enregistrer les messages vocaux des invités lors d’un mariage ou d’un événement. https://orbivia.fr/projets/livre-or-audio.html",
     "category": "Autre",
     "detailImg": "img/retouched/AudioBook-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -132,7 +132,7 @@ const projets = [
   {
     "title": "Clef USB PPG",
     "img": "img/retouched/ClefPPG-white-v3.webp",
-    "desc": "Capteur de fréquence cardiaque au format clé USB, basé sur la photopléthysmographie pour explorer l’acquisition de signaux physiologiques. https://orbivia.fr/projets/clef-usb-ppg.html",
+    "desc": "Capteur de fréquence cardiaque au format clé USB, utilisant la photopléthysmographie pour acquérir un signal physiologique optique. https://orbivia.fr/projets/clef-usb-ppg.html",
     "category": "Medical",
     "detailImg": "img/retouched/ClefPPG-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -140,7 +140,7 @@ const projets = [
   {
     "title": "Be Wheel Soon",
     "img": "img/retouched/CompteurTours-white-v3.webp",
-    "desc": "Compteur de rotations pour roue de rongeur, utilisé en clinique vétérinaire pour étudier l’activité et contribuer à l’évaluation du stress. https://orbivia.fr/projets/be-wheel-soon.html",
+    "desc": "Compteur de rotations monté sur une roue de rongeur, utilisé en clinique vétérinaire pour étudier l’activité et évaluer le stress. https://orbivia.fr/projets/be-wheel-soon.html",
     "category": "IOT",
     "detailImg": "img/retouched/CompteurTours-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -148,7 +148,7 @@ const projets = [
   {
     "title": "KeyDuino Nano",
     "img": "img/retouched/KeyDuinoNano-white-v3.webp",
-    "desc": "Lecteur NFC miniature de la famille KeyDuino, adapté à l’intégration de fonctions sans contact dans des projets embarqués compacts. https://orbivia.fr/projets/keyduino-nano.html",
+    "desc": "Lecteur NFC miniature de la famille KeyDuino, destiné aux équipements embarqués où l’espace disponible limite la taille de la carte. https://orbivia.fr/projets/keyduino-nano.html",
     "category": "IOT",
     "detailImg": "img/retouched/KeyDuinoNano-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -156,7 +156,7 @@ const projets = [
   {
     "title": "Hertz Strike",
     "img": "img/retouched/HertzStrike-white-v3.webp",
-    "desc": "Système radiofréquence associant des fonctions de détection de drones et de brouillage, appliquées à la lutte contre les drones. https://orbivia.fr/projets/hertz-strike.html",
+    "desc": "Équipement radiofréquence regroupant détection de drones et brouillage. La présentation publique se limite aux fonctions générales du système. https://orbivia.fr/projets/hertz-strike.html",
     "category": "IOT",
     "detailImg": "img/retouched/HertzStrike-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -172,7 +172,7 @@ const projets = [
   {
     "title": "SunGuard",
     "img": "img/retouched/SunGuard-white-v3.webp",
-    "desc": "Capteur sans fil de suivi de l’exposition aux UV, associant mesure environnementale et recharge par induction dans un même dispositif. https://orbivia.fr/projets/sunguard.html",
+    "desc": "Capteur sans fil pour suivre l’exposition aux UV, avec recharge par induction pour alimenter le dispositif. https://orbivia.fr/projets/sunguard.html",
     "category": "Medical",
     "detailImg": "img/retouched/SunGuard-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -180,7 +180,7 @@ const projets = [
   {
     "title": "Banc en 3D béton",
     "img": "img/retouched/Banc3D-white-v3.webp",
-    "desc": "Banc urbain réalisé par impression 3D béton, avec une géométrie inspirée d’un peigne pour explorer les possibilités de fabrication. https://orbivia.fr/projets/banc-3d-beton.html",
+    "desc": "Banc urbain réalisé en impression 3D béton. Sa forme inspirée d’un peigne met en évidence la géométrie obtenue par fabrication additive. https://orbivia.fr/projets/banc-3d-beton.html",
     "category": "Autre",
     "detailImg": "img/retouched/Banc3D-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -188,7 +188,7 @@ const projets = [
   {
     "title": "Airca",
     "img": "img/retouched/Airca-white-v3.webp",
-    "desc": "Lanceur pneumatique destiné aux spectacles pyrotechniques, illustrant l’intégration d’un système de projection dans un équipement événementiel. https://orbivia.fr/projets/airca.html",
+    "desc": "Lanceur pneumatique destiné aux spectacles pyrotechniques. Le projet porte sur l’intégration du système de projection dans un équipement événementiel. https://orbivia.fr/projets/airca.html",
     "category": "Autre",
     "detailImg": "img/retouched/Airca-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -196,7 +196,7 @@ const projets = [
   {
     "title": "NFC Ring",
     "img": "img/retouched/NFCRing-white-v3.webp",
-    "desc": "Bague intégrant la technologie NFC pour explorer des usages d’identification sans contact et de contrôle d’accès au format porté. https://orbivia.fr/projets/nfc-ring.html",
+    "desc": "Bague intégrant une fonction NFC pour l’identification sans contact et le contrôle d’accès, dans un objet porté au doigt. https://orbivia.fr/projets/nfc-ring.html",
     "category": "IOT",
     "detailImg": "img/retouched/NFCRing-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -204,7 +204,7 @@ const projets = [
   {
     "title": "OzOne",
     "img": "img/retouched/OZONE-white-v3.webp",
-    "desc": "Système de contrôle d’accès par NFC connecté en Wi-Fi, avec configuration à distance pour gérer les paramètres du dispositif. https://orbivia.fr/projets/ozone.html",
+    "desc": "Dispositif de contrôle d’accès par NFC, connecté en Wi-Fi pour permettre la configuration des paramètres à distance. https://orbivia.fr/projets/ozone.html",
     "category": "IOT",
     "detailImg": "img/retouched/OZONE-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -220,7 +220,7 @@ const projets = [
   {
     "title": "Orchidomètre",
     "img": "img/retouched/Orchidometre-v3.webp",
-    "desc": "Instrument imprimé en 3D pour l’évaluation du volume testiculaire, illustrant la fabrication d’un outil destiné à un usage médical. https://orbivia.fr/projets/orchidometre.html",
+    "desc": "Orchidomètre fabriqué par impression 3D : un outil de comparaison de volumes destiné à l’évaluation du volume testiculaire. https://orbivia.fr/projets/orchidometre.html",
     "category": "Medical",
     "detailImg": "img/retouched/Orchidometre-v3.webp",
     "visualNote": "Rendu illustratif à partir du modèle du projet."
@@ -236,7 +236,7 @@ const projets = [
   {
     "title": "Dôme en 3D béton",
     "img": "img/retouched/Sculpture3D-white-v3.webp",
-    "desc": "Dôme architectural réalisé par impression 3D béton, explorant les géométries de fabrication et leur intégration dans l’espace public. https://orbivia.fr/projets/dome-3d-beton.html",
+    "desc": "Dôme architectural réalisé en impression 3D béton, avec une géométrie étudiée pour une installation dans l’espace public. https://orbivia.fr/projets/dome-3d-beton.html",
     "category": "Autre",
     "detailImg": "img/retouched/Sculpture3D-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -244,7 +244,7 @@ const projets = [
   {
     "title": "AcCorps",
     "img": "img/retouched/StethoscopePassif-v2.webp",
-    "desc": "Stéthoscope passif biomimétique inspiré de la cochlée humaine, explorant une approche acoustique appliquée à l’écoute des sons corporels. https://orbivia.fr/projets/accorps.html",
+    "desc": "Stéthoscope passif dont la conception acoustique s’inspire de la cochlée humaine pour l’écoute des sons corporels. https://orbivia.fr/projets/accorps.html",
     "category": "Medical",
     "detailImg": "img/retouched/StethoscopePassif-v2.webp",
     "visualNote": "Rendu illustratif à partir du modèle du projet."
@@ -252,7 +252,7 @@ const projets = [
   {
     "title": "Notaboo",
     "img": "img/retouched/Notaboo-white-v3.webp",
-    "desc": "Toilettes portatives autonomes pensées pour les personnes en situation de handicap, associant besoins d’accessibilité et conception produit. https://orbivia.fr/projets/notaboo.html",
+    "desc": "Toilettes portatives autonomes destinées aux personnes en situation de handicap, avec un travail de conception centré sur l’accessibilité. https://orbivia.fr/projets/notaboo.html",
     "category": "Autre",
     "detailImg": "img/retouched/Notaboo-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -260,7 +260,7 @@ const projets = [
   {
     "title": "Sensor CO2",
     "img": "img/retouched/SensorCO2-white-v3.webp",
-    "desc": "Capteur de dioxyde de carbone connecté en Wi-Fi, associant mesure du CO₂ et communication sans fil pour le suivi de l’air ambiant. https://orbivia.fr/projets/sensor-co2.html",
+    "desc": "Capteur de dioxyde de carbone connecté en Wi-Fi pour mesurer le CO₂ et transmettre les relevés de l’air ambiant. https://orbivia.fr/projets/sensor-co2.html",
     "category": "IOT",
     "detailImg": "img/retouched/SensorCO2-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
