@@ -47,6 +47,8 @@ function openProject(project, button) {
   image.src = project.detailImg || project.img; image.alt = project.title;
   document.querySelector('#dialog-category').textContent = labels[project.category] + (project.status ? ' · ' + project.status : '');
   document.querySelector('#dialog-description').textContent = description(project);
+  const similar = dialog.querySelector('a[href*="contact.html"]');
+  if (similar) { similar.href = 'contact.html?projet=' + encodeURIComponent(project.title) + '#contact-form'; similar.textContent = 'J’ai un besoin similaire →'; }
   const links = document.querySelector('#dialog-link'); links.replaceChildren();
   if (project.visualNote) {
     const note = document.createElement('p'); note.className = 'credit'; note.textContent = project.visualNote; links.append(note);
