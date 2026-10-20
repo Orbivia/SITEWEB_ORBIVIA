@@ -72,9 +72,9 @@ form.addEventListener('submit', event => {
   document.querySelector('#exclusions').textContent = output.exclusions;
   report = ['ORBIVIA — Projet et estimation indicative', '', ...entries.map(([key, value]) => `${key} : ${value}`), '', output.total ? `Budget de prestation : ${range(output.total)} HT` : 'Budget : à préciser après échange.', ...output.lines.filter(line => line.amounts).map(line => `${line.label} : ${range(line.amounts)} HT`), ...output.reasons, '', output.scope, output.exclusions, '', 'Estimation non contractuelle à confirmer après étude. Calendrier à convenir.', `Grille : ${output.revision}`].join('\n');
   const shortEntries = entries.map(([key, value]) => `${key} : ${value.length > 350 ? value.slice(0, 350) + '… (description complète à joindre)' : value}`);
-  const mailBody = ['Bonjour Pierre,', '', 'Je souhaite préciser ce projet :', ...shortEntries, '', output.total ? `Budget indicatif de prestation : ${range(output.total)} HT.` : 'Budget à préciser après échange.', output.scope, '', 'Mon nom / entreprise :', 'Mon téléphone (facultatif) :'].join('\n');
+  const mailBody = ['Bonjour,', '', 'Je souhaite préciser ce projet :', ...shortEntries, '', output.total ? `Budget indicatif de prestation : ${range(output.total)} HT.` : 'Budget à préciser après échange.', output.scope, '', 'Mon nom / entreprise :', 'Mon téléphone (facultatif) :'].join('\n');
   const mailPrefix = `mailto:pierre.charlier@orbivia.fr?subject=${encodeURIComponent('Mon projet — estimation Orbivia')}&body=`;
-  const compactMail = ['Bonjour Pierre,', '', `Mon projet : ${data.description.trim().slice(0, 150)}`, '', 'Je souhaite préciser mon budget. Je joins le récapitulatif complet copié depuis l’estimateur.', '', 'Mon nom / entreprise :'].join('\n');
+  const compactMail = ['Bonjour,', '', `Mon projet : ${data.description.trim().slice(0, 150)}`, '', 'Je souhaite préciser mon budget. Je joins le récapitulatif complet copié depuis l’estimateur.', '', 'Mon nom / entreprise :'].join('\n');
   const longMail = mailPrefix + encodeURIComponent(mailBody);
   document.querySelector('#email').href = longMail.length > 1900 ? mailPrefix + encodeURIComponent(compactMail) : longMail;
   document.querySelector('#copy-status').textContent = '';
