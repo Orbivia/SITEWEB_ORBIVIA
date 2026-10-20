@@ -7,7 +7,7 @@ Site vitrine statique publié sur [orbivia.fr](https://orbivia.fr) avec GitHub P
 - `index.html` : accueil, expertises, réalisations et moyens techniques.
 - Les quatre pages de prestations présentent la conception électronique, les systèmes embarqués, le prototypage et l’accompagnement réglementaire CE.
 - `realisations.html` et `js/projects.js` : galerie filtrable et données des projets.
-- `projets/` : dix présentations détaillées, dont PrintLeft, Wombly, SensorForge et La Suite.
+- `projets/` : dix études de cas détaillées, dont PrintLeft, Wombly, SensorForge et La Suite. Les anciennes fiches courtes renvoient au projet dans la galerie.
 - `contact.html` : coordonnées et localisation.
 - `estimer-mon-projet.html` : parcours d’estimation indicative en trois étapes.
 - `404.html` : page de récupération des adresses introuvables.

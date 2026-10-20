@@ -55,7 +55,7 @@ function openProject(project, button) {
   }
   const url = project.desc.match(/https?:\/\/[^\s]+/);
   if (url) {
-    const link = document.createElement('a'); link.href = url[0]; link.className = 'button'; link.textContent = 'Découvrir le projet ↗';
+    const link = document.createElement('a'); link.href = url[0]; link.className = 'button'; link.textContent = 'Lire l’étude de cas ↗';
     if (new URL(url[0]).hostname !== 'orbivia.fr') {
       link.target = '_blank'; link.rel = 'noopener noreferrer'; link.setAttribute('aria-label', 'Découvrir le projet (nouvel onglet)');
     }
