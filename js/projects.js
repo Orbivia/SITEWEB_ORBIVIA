@@ -1,7 +1,7 @@
 // Les liens de détail sont réservés aux études de cas documentées.
 const projets = [
   {
-    "title": "Aegis Rf Pro",
+    "title": "Aegis RF Pro",
     "img": "img/editorial/aegis.webp",
     "detailImg": "img/editorial/aegis.webp",
     "desc": "Unité radiofréquence transportable intégrant SDR, ordinateur de pilotage, écran et antennes pour les audits sur site. https://orbivia.fr/projets/aegisrf.html",
