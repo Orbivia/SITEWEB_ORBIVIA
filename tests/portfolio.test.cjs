@@ -77,3 +77,11 @@ test('la navigation d’historique restaure le filtre et ferme le dialogue', () 
   assert.equal(p.node('#gallery').children.length, 4);
   assert.equal(new URL(p.location.href).searchParams.get('categorie'), 'Logiciel');
 });
+
+test('le concept fictif reste identifié dans la carte et la fenêtre projet', () => {
+  const p = page('?projet=VibraSense');
+  assert.match(p.node('#dialog-category').textContent, /Concept R&D/);
+  const card = p.node('#gallery').children.find(card => card.children[1].children[1].textContent.startsWith('VibraSense'));
+  assert.match(card.children[1].children[0].textContent, /Concept R&D/);
+  assert.match(p.node('#dialog-link').children[0].textContent, /fictif/);
+});

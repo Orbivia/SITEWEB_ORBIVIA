@@ -32,7 +32,7 @@ function render() {
     image.src = project.img; image.alt = project.title;
     image.loading = 'lazy'; image.decoding = 'async'; frame.append(image);
     const copy = document.createElement('div'); copy.className = 'project-copy';
-    const tag = document.createElement('span'); tag.className = 'eyebrow'; tag.textContent = labels[project.category];
+    const tag = document.createElement('span'); tag.className = 'eyebrow'; tag.textContent = labels[project.category] + (project.status ? ' · ' + project.status : '');
     const title = document.createElement('h3'); title.textContent = project.title + ' ↗';
     const summary = document.createElement('p'); summary.textContent = description(project);
     copy.append(tag, title, summary); button.append(frame, copy);
@@ -45,7 +45,7 @@ function openProject(project, button) {
   document.querySelector('#dialog-title').textContent = project.title;
   const image = document.querySelector('#dialog-image');
   image.src = project.detailImg || project.img; image.alt = project.title;
-  document.querySelector('#dialog-category').textContent = labels[project.category];
+  document.querySelector('#dialog-category').textContent = labels[project.category] + (project.status ? ' · ' + project.status : '');
   document.querySelector('#dialog-description').textContent = description(project);
   const links = document.querySelector('#dialog-link'); links.replaceChildren();
   if (project.visualNote) {

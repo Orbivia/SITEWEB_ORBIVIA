@@ -18,3 +18,5 @@
 .project-article h2{font-size:1.5rem;margin-bottom:16px}
 .project-article p{line-height:1.75}
 }
+
+.concept-notice{border-left:4px solid var(--yellow);background:var(--soft);padding:18px 22px;margin-bottom:28px;font-size:.9rem}.concept-notice p{margin-top:6px;color:var(--muted);line-height:1.65}.project-article ol{padding-left:22px;color:#555e60;font-size:.94rem}.project-article ol li{margin-block:12px}@media(max-width:768px){.concept-notice{padding:16px;font-size:.85rem}}

@@ -1,4 +1,4 @@
-// Les projets présentant les enjeux techniques les plus transversaux sont affichés en premier.
+// Réalisations et concepts exploratoires ; les concepts portent un statut explicite.
 const projets = [
   {
     "title": "Aegis Rf Pro",
@@ -67,6 +67,15 @@ const projets = [
     "desc": "Carte de développement NFC open source compatible Arduino, pour prototyper des fonctions d’identification et d’interaction sans contact. https://kickstarter.com/projects/1535978353/keyduino?lang=fr",
     "category": "IOT",
     "visualNote": "Photographie détourée pour la présentation."
+  },
+  {
+    "title": "VibraSense",
+    "img": "img/concepts/vibrasense.webp",
+    "detailImg": "img/concepts/vibrasense.webp",
+    "desc": "Concept de capteur autonome de vibrations pour machines tournantes, associant acquisition embarquée, analyse fréquentielle et suivi sans fil. https://orbivia.fr/projets/vibrasense.html",
+    "category": "IOT",
+    "status": "Concept R&D",
+    "visualNote": "Projet fictif exploratoire. Visuel généré ; aucun prototype ni résultat d’essai à ce stade."
   },
   {
     "title": "Wombly",
