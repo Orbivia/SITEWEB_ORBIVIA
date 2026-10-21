@@ -99,7 +99,7 @@ const projets = [
   {
     "title": "ORBI",
     "img": "img/retouched/ORBI-white-v3.webp",
-    "desc": "Balle vidéobook qui filme les interactions des invités pendant un mariage ou un événement.",
+    "desc": "Balle vidéo en TPU avec déclenchement par le mouvement, conçue pour La Forge à Souvenirs. https://orbivia.fr/projets/orbi.html",
     "category": "Autre",
     "detailImg": "img/retouched/ORBI-white-v3.webp"
   },
