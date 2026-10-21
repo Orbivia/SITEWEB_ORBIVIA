@@ -2,31 +2,31 @@
 const projets = [
   {
     "title": "Aegis RF Pro",
-    "img": "img/editorial/aegis.webp",
-    "detailImg": "img/editorial/aegis.webp",
+    "img": "img/editorial/aegis-20261021.webp",
+    "detailImg": "img/editorial/aegis-20261021.webp",
     "desc": "Unité radiofréquence transportable intégrant SDR, ordinateur de pilotage, écran et antennes pour les audits sur site. https://orbivia.fr/projets/aegisrf.html",
     "category": "IOT"
   },
   {
     "title": "Panoptès AI",
-    "img": "img/editorial/panoptes.webp",
-    "detailImg": "img/editorial/panoptes.webp",
+    "img": "img/editorial/panoptes-20261021.webp",
+    "detailImg": "img/editorial/panoptes-20261021.webp",
     "desc": "Assistant vocal au format pendentif, avec carte électronique sur mesure, microphone, haut-parleur, batterie et liaison Bluetooth LE. https://orbivia.fr/projets/panoptes.html",
     "category": "IOT"
   },
   {
     "title": "NFC Matcher",
-    "img": "img/retouched/NFCMatcher-v2.webp",
+    "img": "img/editorial/NFCMatcher-20261021.webp",
     "desc": "Dispositif de réglage et de calibration automatique d’antennes NFC.",
     "category": "IOT",
-    "detailImg": "img/retouched/NFCMatcher-v2.webp"
+    "detailImg": "img/editorial/NFCMatcher-20261021.webp"
   },
   {
     "title": "ECG Reader",
-    "img": "img/retouched/ECGReader-v2.webp",
+    "img": "img/editorial/ECGReader-20261021.webp",
     "desc": "Prototype d’acquisition ECG avec transmission des signaux par Bluetooth.",
     "category": "Medical",
-    "detailImg": "img/retouched/ECGReader-v2.webp"
+    "detailImg": "img/editorial/ECGReader-20261021.webp"
   },
   {
     "title": "SensorForge",
@@ -133,10 +133,10 @@ const projets = [
   },
   {
     "title": "KeyDuino Nano",
-    "img": "img/retouched/KeyDuinoNano-white-v3.webp",
+    "img": "img/editorial/KeyDuinoNano-20261021.webp",
     "desc": "Lecteur NFC miniature de la famille KeyDuino, pour les intégrations où la place est limitée.",
     "category": "IOT",
-    "detailImg": "img/retouched/KeyDuinoNano-white-v3.webp"
+    "detailImg": "img/editorial/KeyDuinoNano-20261021.webp"
   },
   {
     "title": "Hertz Strike",
