@@ -19,7 +19,7 @@ const projets = [
   {
     "title": "NFC Matcher",
     "img": "img/retouched/NFCMatcher-v2.webp",
-    "desc": "Dispositif de calibration automatique d’antennes NFC destiné au réglage des antennes et à la mise au point de la lecture sans contact.",
+    "desc": "Dispositif de réglage et de calibration automatique d’antennes NFC.",
     "category": "IOT",
     "detailImg": "img/retouched/NFCMatcher-v2.webp",
     "visualNote": "Photographie du prototype retouchée pour la présentation."
@@ -27,7 +27,7 @@ const projets = [
   {
     "title": "ECG Reader",
     "img": "img/retouched/ECGReader-v2.webp",
-    "desc": "Prototype de mesure ECG avec transmission Bluetooth, pour acquérir les signaux cardiaques et les transmettre sans liaison filaire.",
+    "desc": "Prototype d’acquisition ECG avec transmission des signaux par Bluetooth.",
     "category": "Medical",
     "detailImg": "img/retouched/ECGReader-v2.webp",
     "visualNote": "Photographie du prototype retouchée pour la présentation."
@@ -64,7 +64,7 @@ const projets = [
     "title": "KeyDuino",
     "img": "img/editorial/keyduino.webp",
     "detailImg": "img/editorial/keyduino.webp",
-    "desc": "Carte de développement NFC open source compatible Arduino, destinée au prototypage de fonctions d’identification et d’interaction sans contact.",
+    "desc": "Carte de développement NFC open source compatible Arduino, pour l’identification et les interactions sans contact.",
     "category": "IOT",
     "visualNote": "Photographie détourée pour la présentation."
   },
@@ -86,7 +86,7 @@ const projets = [
   {
     "title": "Torkeo",
     "img": "img/retouched/Torkeo-v2.webp",
-    "desc": "Dispositif porté au cou pour le suivi de constantes physiologiques, étudié dans le cadre de l’accompagnement des troubles cognitifs.",
+    "desc": "Dispositif porté au cou pour le suivi de constantes physiologiques, étudié pour l’accompagnement des troubles cognitifs.",
     "category": "Medical",
     "detailImg": "img/retouched/Torkeo-v2.webp",
     "visualNote": "Rendu illustratif à partir du modèle du projet."
@@ -108,7 +108,7 @@ const projets = [
   {
     "title": "ORBI",
     "img": "img/retouched/ORBI-white-v3.webp",
-    "desc": "Balle vidéobook pour les mariages et événements : un objet avec lequel les invités interagissent pendant qu’il filme l’action.",
+    "desc": "Balle vidéobook qui filme les interactions des invités pendant un mariage ou un événement.",
     "category": "Autre",
     "detailImg": "img/retouched/ORBI-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -124,7 +124,7 @@ const projets = [
   {
     "title": "Capsule temporelle",
     "img": "img/retouched/CAPSULE-white-v3.webp",
-    "desc": "Dispositif de capsule temporelle pour enregistrer des messages vidéo lors d’un événement et programmer leur révélation à une date choisie. https://orbivia.fr/projets/capsule.html",
+    "desc": "Téléphone vidéo pour enregistrer les messages des invités et programmer leur envoi à une date choisie. https://orbivia.fr/projets/capsule.html",
     "category": "Autre",
     "detailImg": "img/retouched/CAPSULE-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -132,7 +132,7 @@ const projets = [
   {
     "title": "Clef USB PPG",
     "img": "img/retouched/ClefPPG-white-v3.webp",
-    "desc": "Capteur de fréquence cardiaque au format clé USB, utilisant la photopléthysmographie pour acquérir un signal physiologique optique.",
+    "desc": "Capteur de fréquence cardiaque par photopléthysmographie, au format clé USB.",
     "category": "Medical",
     "detailImg": "img/retouched/ClefPPG-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -148,7 +148,7 @@ const projets = [
   {
     "title": "KeyDuino Nano",
     "img": "img/retouched/KeyDuinoNano-white-v3.webp",
-    "desc": "Lecteur NFC miniature de la famille KeyDuino, destiné aux équipements embarqués où l’espace disponible limite la taille de la carte.",
+    "desc": "Lecteur NFC miniature de la famille KeyDuino, pour les intégrations où la place est limitée.",
     "category": "IOT",
     "detailImg": "img/retouched/KeyDuinoNano-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -156,7 +156,7 @@ const projets = [
   {
     "title": "Hertz Strike",
     "img": "img/retouched/HertzStrike-white-v3.webp",
-    "desc": "Équipement radiofréquence regroupant détection de drones et brouillage. La présentation publique se limite aux fonctions générales du système.",
+    "desc": "Équipement radiofréquence de détection de drones et de brouillage.",
     "category": "IOT",
     "detailImg": "img/retouched/HertzStrike-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -164,7 +164,7 @@ const projets = [
   {
     "title": "Livre d'Or Vidéo",
     "img": "img/retouched/VideoBook-white-v3.webp",
-    "desc": "Livre d’or vidéo au design rétro, permettant aux invités de laisser des messages filmés et de conserver les souvenirs d’un événement. https://orbivia.fr/projets/videobook.html",
+    "desc": "Téléphone rétro pour enregistrer les messages vidéo des invités en décrochant le combiné. https://orbivia.fr/projets/videobook.html",
     "category": "Autre",
     "detailImg": "img/retouched/VideoBook-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -172,7 +172,7 @@ const projets = [
   {
     "title": "SunGuard",
     "img": "img/retouched/SunGuard-white-v3.webp",
-    "desc": "Capteur sans fil pour suivre l’exposition aux UV, avec recharge par induction pour alimenter le dispositif.",
+    "desc": "Capteur sans fil d’exposition aux UV, rechargeable par induction.",
     "category": "Medical",
     "detailImg": "img/retouched/SunGuard-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -180,7 +180,7 @@ const projets = [
   {
     "title": "Banc en 3D béton",
     "img": "img/retouched/Banc3D-white-v3.webp",
-    "desc": "Banc urbain réalisé en impression 3D béton. Sa forme inspirée d’un peigne met en évidence la géométrie obtenue par fabrication additive.",
+    "desc": "Banc urbain en impression 3D béton, avec une forme inspirée d’un peigne.",
     "category": "Autre",
     "detailImg": "img/retouched/Banc3D-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -188,7 +188,7 @@ const projets = [
   {
     "title": "Airca",
     "img": "img/retouched/Airca-white-v3.webp",
-    "desc": "Lanceur pneumatique destiné aux spectacles pyrotechniques. Le projet porte sur l’intégration du système de projection dans un équipement événementiel.",
+    "desc": "Lanceur pneumatique pour les spectacles pyrotechniques.",
     "category": "Autre",
     "detailImg": "img/retouched/Airca-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -196,7 +196,7 @@ const projets = [
   {
     "title": "NFC Ring",
     "img": "img/retouched/NFCRing-white-v3.webp",
-    "desc": "Bague intégrant une fonction NFC pour l’identification sans contact et le contrôle d’accès, dans un objet porté au doigt.",
+    "desc": "Bague NFC pour l’identification sans contact et le contrôle d’accès.",
     "category": "IOT",
     "detailImg": "img/retouched/NFCRing-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -204,7 +204,7 @@ const projets = [
   {
     "title": "OzOne",
     "img": "img/retouched/OZONE-white-v3.webp",
-    "desc": "Dispositif de contrôle d’accès par NFC, connecté en Wi-Fi pour permettre la configuration des paramètres à distance.",
+    "desc": "Contrôle d’accès NFC avec configuration à distance par Wi-Fi.",
     "category": "IOT",
     "detailImg": "img/retouched/OZONE-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -212,7 +212,7 @@ const projets = [
   {
     "title": "Photobooth V1",
     "img": "img/retouched/PhotoboothV1-white-v3.webp",
-    "desc": "Première version d’une borne photo événementielle, associant appareil photo, interface et impression dans un équipement intégré. https://orbivia.fr/projets/photobooth.html",
+    "desc": "Première borne photo : appareil photo, écran et imprimante réunis autour d’un Raspberry Pi. https://orbivia.fr/projets/photobooth.html",
     "category": "Autre",
     "detailImg": "img/retouched/PhotoboothV1-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
@@ -229,14 +229,14 @@ const projets = [
     "title": "Photobooth V2",
     "img": "img/editorial/photobooth.webp",
     "detailImg": "img/editorial/photobooth.webp",
-    "desc": "Borne photo événementielle transportable, optimisée pour faciliter l’intégration des équipements, le transport et l’utilisation. https://orbivia.fr/projets/photobooth.html",
+    "desc": "Borne photo transportable, revue après les essais terrain et fabriquée en six exemplaires. https://orbivia.fr/projets/photobooth.html",
     "category": "Autre",
     "visualNote": "Photographie détourée pour la présentation."
   },
   {
     "title": "Dôme en 3D béton",
     "img": "img/retouched/Sculpture3D-white-v3.webp",
-    "desc": "Dôme architectural réalisé en impression 3D béton, avec une géométrie étudiée pour une installation dans l’espace public.",
+    "desc": "Dôme architectural réalisé en impression 3D béton pour une installation dans l’espace public.",
     "category": "Autre",
     "detailImg": "img/retouched/Sculpture3D-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -252,7 +252,7 @@ const projets = [
   {
     "title": "Notaboo",
     "img": "img/retouched/Notaboo-white-v3.webp",
-    "desc": "Toilettes portatives autonomes destinées aux personnes en situation de handicap, avec un travail de conception centré sur l’accessibilité.",
+    "desc": "Toilettes portatives autonomes conçues pour les personnes en situation de handicap.",
     "category": "Autre",
     "detailImg": "img/retouched/Notaboo-white-v3.webp",
     "visualNote": "Rendu réaliste illustratif à partir du modèle du projet."
@@ -260,7 +260,7 @@ const projets = [
   {
     "title": "Sensor CO2",
     "img": "img/retouched/SensorCO2-white-v3.webp",
-    "desc": "Capteur de dioxyde de carbone connecté en Wi-Fi pour mesurer le CO₂ et transmettre les relevés de l’air ambiant.",
+    "desc": "Capteur de CO₂ avec transmission des mesures par Wi-Fi.",
     "category": "IOT",
     "detailImg": "img/retouched/SensorCO2-white-v3.webp",
     "visualNote": "Photographie retouchée et détourée pour la présentation."
