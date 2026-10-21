@@ -1,3 +1,4 @@
+import { saveQuote } from './quote-transfer.mjs?v=20261021-devis';
 import { estimate, domains, stages, goals, complexityLabels } from './estimateur-engine.mjs?v=20261019-4';
 const form = document.querySelector('#estimate-form');
 const panels = [...form.querySelectorAll('[data-step]')];
@@ -71,15 +72,20 @@ form.addEventListener('submit', event => {
   document.querySelector('#scope').textContent = output.scope;
   document.querySelector('#exclusions').textContent = output.exclusions;
   report = ['ORBIVIA — Projet et estimation indicative', '', ...entries.map(([key, value]) => `${key} : ${value}`), '', output.total ? `Budget de prestation : ${range(output.total)} HT` : 'Budget : à préciser après échange.', ...output.lines.filter(line => line.amounts).map(line => `${line.label} : ${range(line.amounts)} HT`), ...output.reasons, '', output.scope, output.exclusions, '', 'Estimation non contractuelle à confirmer après étude. Calendrier à convenir.', `Grille : ${output.revision}`].join('\n');
-  const shortEntries = entries.map(([key, value]) => `${key} : ${value.length > 350 ? value.slice(0, 350) + '… (description complète à joindre)' : value}`);
-  const mailBody = ['Bonjour,', '', 'Je souhaite préciser ce projet :', ...shortEntries, '', output.total ? `Budget indicatif de prestation : ${range(output.total)} HT.` : 'Budget à préciser après échange.', output.scope, '', 'Mon nom / entreprise :', 'Mon téléphone (facultatif) :'].join('\n');
-  const mailPrefix = `mailto:pierre.charlier@orbivia.fr?subject=${encodeURIComponent('Mon projet — estimation Orbivia')}&body=`;
-  const compactMail = ['Bonjour,', '', `Mon projet : ${data.description.trim().slice(0, 150)}`, '', 'Je souhaite préciser mon budget. Je joins le récapitulatif complet copié depuis l’estimateur.', '', 'Mon nom / entreprise :'].join('\n');
-  const longMail = mailPrefix + encodeURIComponent(mailBody);
-  document.querySelector('#email').href = longMail.length > 1900 ? mailPrefix + encodeURIComponent(compactMail) : longMail;
+  document.querySelector('#email').href = 'contact.html?estimation=1#contact-form';
   document.querySelector('#copy-status').textContent = '';
   document.querySelector('#copy-fallback').hidden = true;
   show(2);
+});
+document.querySelector('#email').addEventListener('click', event => {
+  try { saveQuote(sessionStorage, report); }
+  catch {
+    event.preventDefault();
+    const fallback = document.querySelector('#copy-fallback');
+    fallback.value = report; fallback.hidden = false; fallback.focus(); fallback.select();
+    document.querySelector('#copy-status').textContent = 'Le transfert automatique est indisponible. Copiez ce récapitulatif, puis ouvrez le formulaire avec le lien ci-dessous.';
+    document.querySelector('#contact-fallback').hidden = false;
+  }
 });
 document.querySelector('#copy').addEventListener('click', async () => {
   const status = document.querySelector('#copy-status');

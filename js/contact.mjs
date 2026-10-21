@@ -1,4 +1,5 @@
-import { ENDPOINT, cleanContext, buildPayload, submissionState } from './contact-core.mjs';
+import { readQuote, clearQuote } from './quote-transfer.mjs?v=20261021-devis';
+import { ENDPOINT, cleanContext, buildPayload, submissionState } from './contact-core.mjs?v=20261021-devis';
 const form = document.querySelector('#contact-form');
 const feedback = document.querySelector('#contact-feedback');
 const submit = document.querySelector('#contact-submit');
@@ -13,6 +14,25 @@ if (project) {
   context.hidden = false;
 }
 document.querySelector('#contact-source').value = project ? 'Fiche projet : ' + project : 'Page contact Orbivia';
+if (params.get('estimation') === '1') {
+  let quote = '';
+  try { quote = readQuote(sessionStorage); } catch {}
+  if (quote) {
+    const reportField = document.querySelector('#quote-report');
+    reportField.value = quote; reportField.disabled = false;
+    document.querySelector('#quote-context').hidden = false;
+    document.querySelector('#contact-source').value = 'Estimateur Orbivia';
+    document.querySelector('label[for="contact-message"]').textContent = 'Une précision à ajouter ? (facultatif)';
+    const message = document.querySelector('#contact-message');
+    message.required = false; message.minLength = 0;
+    message.placeholder = 'Une contrainte, une question ou un détail supplémentaire…';
+    document.querySelector('#message-help').textContent = 'Votre projet est déjà décrit dans le récapitulatif joint.';
+  } else {
+    const notice = document.querySelector('#quote-transfer-feedback');
+    notice.textContent = 'Le récapitulatif n’est plus disponible dans cet onglet. Revenez à l’estimateur ou décrivez votre projet ci-dessous.';
+    notice.hidden = false;
+  }
+}
 function callbackUI() {
   const callback = form.elements.retour.value === 'rappel';
   document.querySelector('#contact-phone').required = callback;
@@ -42,6 +62,7 @@ form.addEventListener('submit', async event => {
     const result = await response.json();
     const state = submissionState(response, result);
     if (state !== 'success') throw new Error(state);
+    try { clearQuote(sessionStorage); } catch {}
     showConfirmation(values.retour === 'rappel');
   } catch (error) {
     feedback.setAttribute('data-error', 'true');

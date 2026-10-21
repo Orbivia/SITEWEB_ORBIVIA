@@ -6,12 +6,13 @@ export function buildPayload(values) {
     name: cleanContext(values.name, 100) || 'Non précisé',
     email: cleanContext(values.email, 254),
     message: String(values.message || '').trim().slice(0, 4000),
+    ...(values.estimation ? { estimation: String(values.estimation).trim().slice(0, 16000) } : {}),
     telephone: cleanContext(values.telephone, 40),
     retour: callback ? 'Rappel téléphonique souhaité' : 'Réponse par e-mail',
     disponibilites: callback ? cleanContext(values.disponibilites, 180) : '',
     projet_reference: cleanContext(values.projet_reference),
     page_origine: cleanContext(values.page_origine, 200),
-    _subject: 'Orbivia — nouvelle demande de projet',
+    _subject: 'Orbivia — nouvelle demande de devis',
     _template: 'table',
     _honey: String(values._honey || '').slice(0, 200)
   };
