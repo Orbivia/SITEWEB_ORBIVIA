@@ -2715,7 +2715,7 @@ function flowSignature(raw){
 function flowDocumentsSignature(p){return flowSignature(df(p).documents.map(x=>[x.id,x.title,x.revision,x.date,x.path,x.url,x.size,x.modified]));}
 function flowSummarySignature(p){
  const d=df(p),c=d.classification;
- return flowSignature({profile:[p.name,p.company,p.device,p.owner,p.intended,p.patient,p.users,p.stage],features:d.features,answers:c.questionnaire?.answers,comments:c.questionnaire?.comments,confirmation:[c.confirmedBasis,c.confirmedAt,c.retained,c.reviewer],documents:d.documents,checks:d.checks,standardUse:d.standardUse});
+ return flowSignature({profile:[p.name,p.company,p.device,p.owner,p.intended,p.patient,p.users,p.stage],features:d.features,answers:c.questionnaire?.answers,comments:c.questionnaire?.comments,confirmation:[c.confirmedBasis,c.confirmedAt,c.retained,c.reviewer],documents:d.documents,checks:d.checks,standardUse:d.standardUse,gsprMatrix:d.gsprMatrix});
 }
 function flowProgress(p,i){
  const d=df(p),flag=d.flowComplete||{};
