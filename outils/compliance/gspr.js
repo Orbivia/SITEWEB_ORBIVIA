@@ -42,7 +42,7 @@ function linkedStandards(row,p){
 function docOf(p,id){return df(p).documents.find(x=>x.id===id);}
 function fingerprint(row,p,e){
  const d=docOf(p,e.documentId);
- return hash({version:VERSION,device:p.device,intended:p.intended,context:techContext(p),scope:scope(row,p),
+ return hash({version:VERSION,device:p.device,intended:p.intended,context:row.tags.map(tag=>[tag,techContext(p)[tag]]),qualification:classificationContext(p).scope,scope:scope(row,p),
  standards:linkedStandards(row,p).map(x=>[x.id,x.edition]),doc:d?[d.id,d.title,d.revision,d.date,d.path,d.url,d.size,d.modified]:e.documentId?'DOCUMENT SUPPRIMÉ':null});
 }
 function check(row,p){
@@ -135,6 +135,10 @@ function report(p){
  const rows=exportRows(p),z=stats(p);
  return '<section><h2>Matrice MDR — Annexe I</h2><p>'+z.reviewed+'/'+z.total+' lignes de revue enregistrées ; '+z.gaps+' écarts déclarés ; '+z.stale+' revues à reconfirmer. Cela ne mesure pas la conformité du dispositif.</p><p>Les intitulés sont simplifiés. Relire le règlement (UE) 2017/745, annexe I, pour les exigences détaillées.</p><table><thead><tr>'+rows[0].slice(0,13).map(s=>'<th>'+esc(s)+'</th>').join('')+'</tr></thead><tbody>'+rows.slice(1).map(row=>'<tr>'+row.slice(0,13).map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table></section>';
 }
+const BASE_PROGRESS=flowProgress;
+flowProgress=function(p,i){const st=BASE_PROGRESS(p,i);if(i!==2||st.state!=='done')return st;const v=stats(p);if(v.reviewed===v.total)return st;return {state:v.reviewed?'progress':'review',short:v.reviewed+'/'+v.total+' exigences',detail:'Normes sélectionnées, mais la matrice MDR reste à examiner.'};};
+const BASE_INVENTORY=dfInventory;
+dfInventory=function(p){return mini(p)+BASE_INVENTORY(p);};
 const BASE_REVIEW=dfReview;
 dfReview=function(p){return mini(p)+BASE_REVIEW(p);};
 const BASE_SUMMARY=dfSummary;
