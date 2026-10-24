@@ -160,6 +160,40 @@ function tidyNorms(p){
   }
  }
 }
+
+function tidyDocflow(p,active){
+ const app=document.getElementById('app');
+ if(!app)return;
+ if(active===3){
+  const panel=app.querySelector('.unified-step-2 section.panel');
+  const heading=panel?.querySelector('h2');
+  if(heading)heading.textContent='Documents du dossier';
+  const help=panel?.querySelector('.help');
+  if(help)help.textContent='Référencez les documents et leurs révisions. L’inventaire ne conserve pas les fichiers d’origine et ne présume pas de leur contenu.';
+ }
+ if(active===4){
+  const selector=app.querySelector('.df-review>aside');
+  const head=selector?.querySelector('h2');
+  if(head)head.textContent='Choisir un contrôle';
+  const checking=app.querySelector('.df-counters + .help');
+  if(checking&&dfCounts(p).checking===0)checking.hidden=true;
+  const mobile=typeof window.matchMedia==='function'&&window.matchMedia('(max-width: 650px)').matches;
+  if(mobile&&selector&&!selector.closest('.v312-proof-picker')){
+   const panel=document.createElement('details');
+   panel.className='v312-proof-picker';
+   const label=document.createElement('summary');
+   const count=selector.querySelectorAll('[data-df-point]').length;
+   label.textContent='Parcourir les contrôles'+(count?' ('+count+')':'');
+   selector.insertAdjacentElement('beforebegin',panel);
+   panel.append(label,selector);
+  }
+ }
+ if(active===5){
+  const title=app.querySelector('.unified-step-4 section.panel>h2');
+  if(title)title.textContent='Bilan documentaire';
+ }
+}
+
 function tidyWorkflow(p){
  const app=document.getElementById('app');
  if(!app)return;
@@ -171,6 +205,7 @@ function tidyWorkflow(p){
  document.body.classList.toggle('v312-classification-result',active===1&&!!app.querySelector('#cq-result'));
  if(active===1)tidyClassification(p);
  if(active===2)tidyNorms(p);
+ if(active>=3)tidyDocflow(p,active);
  // L'inventaire et l'audit conservent un seul jeu de boutons de navigation.
  if(active>=3){
   const footer=app.querySelector('.flow-footer');
