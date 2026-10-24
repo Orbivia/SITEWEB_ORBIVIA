@@ -98,7 +98,7 @@ function tidyClassification(p){
  const result=app.querySelector('#cq-result');
  if(result){
   const r=cqEvaluate(p),status=classificationStatus();
-  if(!result.querySelector('.v312-class-indicator')){
+  if(r.complete&&!result.querySelector('.v312-class-indicator')){
    const indicator=document.createElement('p');indicator.className='v312-class-indicator';
    indicator.textContent=status==='confirmed'?'Classification confirmée après revue':'Proposition à confirmer après revue';
    indicator.style.cssText='display:inline-flex;align-items:center;padding:5px 10px;border-radius:30px;background:'+(status==='confirmed'?'#e4f4eb':'#fff4dc')+';color:'+(status==='confirmed'?'#246d55':'#865d13')+';font-size:11px;font-weight:700;margin:0 0 12px';
