@@ -6,7 +6,7 @@
 'use strict';
 const CATALOG=window.ORBIVIA_GSPR_CATALOGUE||[];
 if(!CATALOG.length)throw Error('Référentiel GSPR non chargé');
-const VERSION='2026-10-24-mdr-annexI-v2';
+const VERSION='2026-10-24-mdr-annexI-v3';
 const MDR_URL='https://eur-lex.europa.eu/eli/reg/2017/745/oj';
 const DECISION_URL='https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards/medical-devices_en';
 const OPT_APPLY=[['pending','À déterminer'],['yes','Applicable'],['no','Non applicable (avec motif)']];
@@ -52,7 +52,7 @@ function check(row,p){
  const closed=e.applicability==='no'&&!!String(e.reason||'').trim();
  const explained=['yes','no'].includes(e.applicability);
  const proof=['present','partial','absent'].includes(e.evidence);
- const reviewed=closed||(e.applicability==='yes'&&proof&&fresh);
+ const reviewed=closed||(e.applicability==='yes'&&proof&&fresh&&(e.evidence!=='present'||!!e.method));
  const incomplete=e.applicability==='yes'&&!proof||e.applicability==='pending'||e.evidence==='checking';
  const gap=e.applicability==='yes'&&['partial','absent'].includes(e.evidence)&&fresh;
  return {e,saved,fresh,reviewed:reviewed&&fresh,gap:!!gap,checking:!!(e.evidence==='checking'),incomplete,closed:closed&&fresh,explained};
@@ -133,8 +133,8 @@ function mini(p){
  return '<section class="gspr-mini panel pad"><div class="gspr-mini-head"><div><h2>Matrice MDR — exigences de sécurité et performance</h2><p class="help">'+z.reviewed+' / '+z.total+' lignes examinées · '+z.gaps+' écart(s) · '+z.checking+' à vérifier · '+z.stale+' à reconfirmer. Compteurs de revue, sans conclusion de conformité.</p></div><button type="button" class="btn gold" data-gspr-open>Ouvrir la matrice</button></div></section>';
 }
 function report(p){
- const rows=exportRows(p),z=stats(p);
- return '<section><h2>Matrice MDR — Annexe I</h2><p>'+z.reviewed+'/'+z.total+' lignes de revue enregistrées ; '+z.gaps+' écarts déclarés ; '+z.stale+' revues à reconfirmer. Cela ne mesure pas la conformité du dispositif.</p><p>Les intitulés sont simplifiés. Relire le règlement (UE) 2017/745, annexe I, pour les exigences détaillées.</p><table><thead><tr>'+rows[0].slice(0,13).map(s=>'<th>'+esc(s)+'</th>').join('')+'</tr></thead><tbody>'+rows.slice(1).map(row=>'<tr>'+row.slice(0,13).map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table></section>';
+ const rows=exportRows(p),z=stats(p),cols=[0,2,4,5,6,9,10,11,12,13,14,15];
+ return '<section><h2>Matrice MDR — Annexe I</h2><p>'+z.reviewed+'/'+z.total+' lignes de revue enregistrées ; '+z.gaps+' écarts déclarés ; '+z.stale+' revues à reconfirmer. Cela ne mesure pas la conformité du dispositif.</p><p>Les intitulés sont simplifiés. Relire le règlement (UE) 2017/745, annexe I, pour les exigences détaillées.</p><table><thead><tr>'+cols.map(i=>'<th>'+esc(rows[0][i])+'</th>').join('')+'</tr></thead><tbody>'+rows.slice(1).map(row=>'<tr>'+cols.map(i=>'<td>'+esc(row[i])+'</td>').join('')+'</tr>').join('')+'</tbody></table></section>';
 }
 const BASE_PROGRESS=flowProgress;
 flowProgress=function(p,i){const st=BASE_PROGRESS(p,i);if(i!==2||st.state!=='done')return st;const v=stats(p);if(v.reviewed===v.total)return st;return {state:v.reviewed?'progress':'review',short:v.reviewed+'/'+v.total+' exigences',detail:'Normes sélectionnées, mais la matrice MDR reste à examiner.'};};
