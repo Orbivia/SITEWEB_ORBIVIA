@@ -1,3 +1,26 @@
+# ORBIVIA Compliance Studio — V5, questionnaire unifié
+
+Deux destinations : **Questionnaire** et **Dossier**. Le questionnaire regroupe trois chapitres : Produit, Réglementation, Documents. Le dossier rassemble preuves, revues, actions, matrice MDR et exports.
+
+## Parcours et avancement
+
+- L’accueil affiche un pourcentage global et les trois pourcentages par chapitre. Le calcul compte les réponses exploitables, les décisions normatives motivées et les confirmations ; « À vérifier » n’est pas une réponse terminée. Le total évolue selon les questions conditionnelles et références proposées. Le pourcentage est plafonné à 99 % tant qu’il manque une réponse.
+- **Continuer** recherche le premier champ manquant, puis la classification à compléter/confirmer, les normes à compléter/confirmer et enfin une réponse documentaire manquante. Un chapitre terminé ne renvoie plus à sa dernière question.
+- Le même cadre présente profil, classification, caractéristiques techniques, références une par une et documents. La progression est mesurée sur les réponses, indépendamment du numéro de la question affichée.
+- Le dossier distingue **Documents rattachés** et **Revues enregistrées**. Aucun pourcentage ne mesure la conformité.
+- Les bulles « i » s’ouvrent au toucher ou au clavier ; les aides restent dépliables. Sur mobile, les commandes du questionnaire restent en bas de l’écran.
+- Une première ouverture de la V5 affiche l’accueil ; les réponses, commentaires, fichiers et revues existants sont conservés.
+
+## Vérification V5
+
+`node --test tests/compliance.test.cjs` : six tests, incluant calcul pondéré du pourcentage, adaptation du dénominateur, plafond à 99 %, compatibilité des sauvegardes, invalidation des revues et export ZIP décodé indépendamment.
+
+Essais navigateur : reprise après profil terminé, réponse de classification à vérifier, transition vers normes, revue d’une référence puis suivante, refus d’exclusion sans motif, dossier regroupé. Contrôle à largeur 390 px : absence de débordement horizontal, commandes fixes et bulle d’aide lisible. Les anciens essais d’import et persistance des fichiers restent décrits ci-dessous.
+
+`journey-metrics.js` contient le calcul indépendant des pourcentages ; `normes.js` expose une lecture de progression et une reprise à ses moteurs existants. Le moteur de classification reste inchangé.
+
+---
+
 # ORBIVIA Compliance Studio — V4.1, parcours guidé
 
 Le questionnaire constitue l’entrée principale. Les trois rubriques sont **Mon parcours**, **Mon dossier** et **Mon bilan**. Les projets, documents et revues V3/V4 restent conservés.

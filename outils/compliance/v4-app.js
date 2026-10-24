@@ -8,7 +8,7 @@ const D=window.ORBIVIA_V4_DATA,F=window.ORBIVIA_V4_FILES;
 if(!D||!F){console.error("Modules documentaires V4 indisponibles.");return;}
 const ui={tab:"home",scope:"mdr",folder:"DT01",entry:"DT-DES-01",auditScope:"mdr",auditEntry:"DT-DES-01",filter:"all",legacy:false,working:false};
 const labels={missing:"À constituer",attached:"À vérifier",reviewed:"Revue enregistrée",gap:"Écart relevé",stale:"Revue à refaire",na:"Non applicable",scope:"Applicabilité à confirmer",uncertain:"À cadrer"};
-const tabs=[["home","Mon parcours"],["dossier","Mon dossier"],["reports","Mon bilan"]];
+const tabs=[["home","Questionnaire"],["dossier","Dossier"]];
 function E(value){return esc(String(value===null||value===undefined?"":value));}
 function A(value){return attr(String(value===null||value===undefined?"":value));}
 function P(){const p=pickProject();D.ensure(p);return p;}
@@ -77,6 +77,7 @@ function journey(p){
  const v=D.ensure(p);
  if(!v.journey||typeof v.journey!=="object"||Array.isArray(v.journey))v.journey={};
  const j=v.journey;
+ if(j.uiVersion!==5){j.screen="home";j.uiVersion=5;}
  if(!j.answers||typeof j.answers!=="object")j.answers={};
  if(!j.drafts||typeof j.drafts!=="object")j.drafts={};
  if(!j.comments||typeof j.comments!=="object")j.comments={};
@@ -99,21 +100,42 @@ function stageState(p,n){
  if(n===2){const v=progress(p),done=v.inspected===v.total;return {done,text:done?"Terminé":v.filled+" / "+v.total+" renseignés"};}
  return {done:false,text:"Consulter"};
 }
-function stageNav(p,current){return '<nav class="j-stepnav" aria-label="Étapes du parcours">'+stages.map((label,n)=>{const st=stageState(p,n);return '<button type="button" data-j-stage="'+n+'" '+(current===n?'aria-current="step"':'')+'><b class="'+(st.done?'done':'')+'">'+(st.done?'✓':n+1)+'</b><span>'+E(label)+'</span></button>';}).join("")+'</nav>';}
+function help(text){return '<details class="v5-help"><summary aria-label="Afficher l’aide" title="Afficher l’aide">i</summary><div role="note">'+E(text)+'</div></details>';}
+function stageNav(){return '';}
+function questionnaireMetrics(p){
+ const c=cqEvaluate(p),a=cqContext(p),n=window.ORBIVIA_NORMES_INFO.journey(p),v=progress(p);
+ return window.ORBIVIA_JOURNEY_METRICS.calculate([
+  {id:0,title:"Produit",done:profileFields.filter(f=>String(p[f[0]]||"").trim()).length,total:profileFields.length},
+  {id:1,title:"Réglementation",done:c.questions.filter(q=>cqKnown(q,a)).length+(dfClassConfirmed(p)?1:0)+n.known+n.decided+(n.confirmed?1:0),total:c.questions.length+1+n.total+n.decisions+1},
+  {id:2,title:"Documents",done:v.filled,total:v.total}
+ ]);
+}
+function chapterProgress(p,n,position,total){const m=questionnaireMetrics(p).chapters[n];return '<div class="v5-chapter"><button type="button" data-v4-switch="home" aria-label="Retour au questionnaire">←</button><span>'+m.title+'</span><small>'+position+' sur '+total+'</small></div><progress class="v5-progress" aria-label="Avancement du chapitre '+m.title+'" value="'+m.done+'" max="'+m.total+'"></progress>';}
+function regulatoryHeader(p,kind,index){const c=cqEvaluate(p),n=window.ORBIVIA_NORMES_INFO.journey(p),offset=kind==='classification'?0:kind==='norms'?c.questions.length+1:c.questions.length+1+n.total;return chapterProgress(p,1,Math.min(offset+index,questionnaireMetrics(p).chapters[1].total),questionnaireMetrics(p).chapters[1].total);}
+function continueJourney(p){
+ const j=journey(p),missing=profileFields.findIndex(f=>!String(p[f[0]]||"").trim());
+ if(missing>=0){j.profile=missing;openStage(0);return;}
+ const c=cqEvaluate(p),a=cqContext(p),q=c.questions.find(q=>!cqKnown(q,a));
+ if(q||!dfClassConfirmed(p)){
+  j.requirement="classification";j.screen="requirements";
+  const session=cqSession(p);session.cursor=q?.id||session.cursor;session.view=q?"question":"result";session.reviewMode=c.questions.some(q=>cqKnown(q,a));session.reviewSeen=[];
+  ui.tab="home";ui.legacy=false;save();render();focusQuestion();return;
+ }
+ const n=window.ORBIVIA_NORMES_INFO.journey(p);
+ if(n.known<n.total||n.decided<n.decisions||!n.confirmed){j.requirement="norms";window.ORBIVIA_NORMES_INFO.resume(p);openStage(1);return;}
+ const e=D.expected.find(e=>!filled(p,e));
+ if(e){openProof(p,e.id,D.expected.filter(e=>!filled(p,e)).map(e=>e.id));return;}
+ route("dossier");
+}
 function autosave(){return '<p class="j-save" role="status" aria-live="polite">'+(storageOK?'Réponses enregistrées automatiquement':'Enregistrement indisponible — exportez une sauvegarde JSON')+'</p>';}
 function nextStage(p){if(!stageState(p,0).done)return 0;if(!stageState(p,1).done)return 1;return progress(p).inspected===D.expected.length?3:2;}
 function home(p){
- const j=journey(p),n=nextStage(p),v=progress(p),resume=j.screen!=="home";
- const next=(resume||j.lastScreen)?((resume?j.screen:j.lastScreen)==="profile"?0:(resume?j.screen:j.lastScreen)==="requirements"?1:2):n;
- const heading=next===2?D.folder(D.entry(j.cursor).folder).title:stages[next];
- return '<div class="j-work">'+title("Construisons votre dossier","Un parcours guidé, une étape à la fois.")
- +'<section class="v4-card j-home"><div class="j-next"><div><small>Votre prochaine étape</small><h2>'+E(heading)+'</h2><p>'+E(next===2?D.expected.filter(e=>unresolved(p,e)).length+' points à traiter':'Reprenez vos réponses là où vous les avez laissées.')+'</p></div>'+button("Reprendre →","j-resume",undefined,"primary")+'</div>'
- +'<div class="j-stages">'+stages.map((name,i)=>{const st=stageState(p,i);return '<button type="button" data-j-stage="'+i+'"><b class="j-num '+(st.done?'done':'')+'">'+(st.done?'✓':i+1)+'</b><strong>'+E(name)+'</strong><span>'+E(st.text)+'</span><span aria-hidden="true">›</span></button>';}).join("")+'</div>'
- +'<div class="j-home-bottom"><span>'+v.filled+' / '+v.total+' rubriques renseignées · '+v.inspected+' revues enregistrées</span>'+button("Voir les points en attente","j-pending",undefined,"quiet")+'</div></section>'+autosave()+'</div>';
+ const m=questionnaireMetrics(p),next=m.chapters.find(c=>c.done<c.total);
+ return '<div class="j-work v5-home"><div class="v5-intro"><span class="v5-kicker">VOTRE PROJET</span><h1>'+E(p.name||"Nouveau projet")+'</h1><p>Répondez aux questions pour construire votre dossier.</p></div><section class="v5-overview"><div class="v5-global"><span>Questionnaire complété</span>'+help("Ce pourcentage compte les réponses renseignées et les décisions confirmées. Les points à vérifier restent à compléter. Il s’adapte aux questions applicables ; il ne mesure pas la conformité.")+'<strong>'+m.percent+'<small> %</small></strong></div><progress class="v5-progress" aria-label="Questionnaire complété" value="'+m.done+'" max="'+m.total+'"></progress><p class="v5-next">'+E(next?'À poursuivre : '+next.title:'Toutes les réponses sont renseignées. Les revues restent consultables dans le dossier.')+'</p>'+button(m.complete?"Ouvrir mon dossier →":"Continuer le questionnaire →","j-resume",undefined,"primary")+'</section><div class="v5-chapters">'+m.chapters.map(c=>'<button type="button" data-j-stage="'+c.id+'"><span>'+E(c.title)+'</span><span>'+c.percent+' % <b aria-hidden="true">›</b></span></button>').join("")+'</div>'+autosave()+'</div>';
 }
 function profile(p){
  const j=journey(p),f=profileFields[j.profile];
- return '<div class="j-work">'+stageNav(p,0)+'<div class="j-progress"><span>Décrire le projet</span><progress aria-label="Avancement du profil" value="'+(j.profile+1)+'" max="'+profileFields.length+'"></progress><span>Question '+(j.profile+1)+' sur '+profileFields.length+'</span></div>'
+ return '<div class="j-work">'+chapterProgress(p,0,j.profile+1,profileFields.length)
  +'<section class="v4-card j-question"><h1 tabindex="-1" id="j-title">'+E(f[1])+'</h1><p>'+E(f[2])+'</p><label class="v4-field" for="j-profile"><span class="j-sr">'+E(f[1])+'</span>'+(f[3]?'<textarea':'<input type="text"')+' id="j-profile" data-j-profile="'+f[0]+'" '+(f[3]?'>':'value="'+A(p[f[0]]||"")+'">')+(f[3]?E(p[f[0]]||"")+'</textarea>':'')+'</label>'
  +comment(p,'profile-'+f[0])+'<div class="j-bottom">'+(j.profile?'<button class="v4-button" type="button" data-j-profile-move="-1">← Précédent</button>':button("Retour au parcours","switch","home","quiet"))+'<button class="v4-button primary" type="button" data-j-profile-move="1">'+(j.profile===profileFields.length-1?'Passer aux exigences →':'Continuer →')+'</button></div></section>'+autosave()+'</div>';
 }
@@ -128,17 +150,13 @@ function openProof(p,id,queue){
 function focusQuestion(){document.getElementById("j-title")?.focus({preventScroll:true});window.scrollTo({top:0,behavior:"auto"});}
 function openStage(n){
  const p=P(),j=journey(p);ui.legacy=false;ui.tab="home";df(p).normsOpen=false;
- if(n===0){j.screen="profile";}
- else if(n===1){j.screen="requirements";j.requirement=j.requirement==="norms"?"norms":"classification";}
- else if(n===2){openProof(p,j.cursor);return;}
+ if(n===0){j.screen="profile";const missing=profileFields.findIndex(f=>!String(p[f[0]]||"").trim());j.profile=missing>=0?missing:0;}
+ else if(n===1){j.screen="requirements";j.requirement=dfClassConfirmed(p)?"norms":"classification";if(j.requirement==="classification"){const c=cqEvaluate(p),a=cqContext(p),q=c.questions.find(q=>!cqKnown(q,a)),ss=cqSession(p);ss.cursor=q?.id||ss.cursor;ss.view=q?"question":"result";ss.reviewMode=false;}else window.ORBIVIA_NORMES_INFO.resume(p);}
+ else if(n===2){const e=D.expected.find(e=>!filled(p,e));openProof(p,e?.id||j.cursor);return;}
  else{route("reports");return;}
  save();render();focusQuestion();
 }
-function advance(p){
- const j=journey(p),at=j.queue.indexOf(j.cursor),current=D.entry(j.cursor),next=D.entry(j.queue[at+1]);
- if(!next||next.folder!==current.folder){j.screen="recap";j.next=next?.id||"";save();render();focusQuestion();return;}
- openProof(p,next.id);
-}
+function advance(p){const j=journey(p),at=j.queue.indexOf(j.cursor),next=j.queue[at+1];if(next)openProof(p,next);else route("dossier");}
 function proofPicker(p){const j=journey(p);return '<details class="j-disclosure j-picker"><summary>Choisir un thème ou retrouver un point</summary><div class="v4-actions">'+button("Uniquement les points en attente","j-pending",undefined,"quiet")+'</div>'+D.folders.map(f=>'<details><summary>'+E(f.title)+' <small>'+E(f.scope==="smq"?'SMQ ISO 13485':'Dossier technique')+'</small></summary><div class="j-pick-list">'+D.expected.filter(e=>e.folder===f.id).map(e=>'<button type="button" data-j-entry="'+A(e.id)+'" '+(j.cursor===e.id?'aria-current="true"':'')+'><span>'+E(e.title)+'</span>'+documentPill(p,e)+'</button>').join("")+'</div></details>').join("")+'</details>';}
 function guideForm(p,entry){
  const j=journey(p),r=j.drafts[entry.id]||D.ensure(p).reviews[entry.id]||{},a=availability(p,entry);
@@ -155,7 +173,7 @@ function proof(p){
  const docs=D.docs(p,entry.id),existing=allDocs(p).filter(x=>!D.links(p,entry.id).includes(x.id));
  const canUpload=a==="present"||a==="partial"||docs.length;
  const s=status(p,entry.id);
- return '<div class="j-work">'+stageNav(p,2)+'<div class="j-progress"><span>'+E(folder.title)+'</span><progress aria-label="Avancement du parcours documentaire" value="'+(at+1)+'" max="'+Math.max(1,j.queue.length)+'"></progress><span>Point '+(at+1)+' sur '+j.queue.length+'</span></div>'
+ return '<div class="j-work">'+chapterProgress(p,2,at+1,j.queue.length)
  +'<section class="v4-card j-question"><div class="j-eyebrow">'+E(entry.scope==="smq"?'SMQ ISO 13485':'Dossier technique')+' · '+E(entry.id)+'</div><h1 id="j-title" tabindex="-1">Avez-vous ce document ?</h1><h2 class="j-document-title">'+E(entry.title)+'</h2>'
  +'<div class="j-options">'+presenceOptions.map(o=>'<button type="button" class="j-option '+(a===o[0]?'selected':'')+'" data-j-presence="'+o[0]+'" aria-pressed="'+(a===o[0])+'"><span class="j-radio" aria-hidden="true"></span>'+E(o[1])+'</button>').join("")+'</div>'
  +'<details class="j-disclosure"><summary>Comprendre ce qui est attendu</summary><ul class="v4-guidelist">'+entry.checks.map(x=>'<li>'+E(x)+'</li>').join("")+'</ul><p class="v4-muted">'+E(entry.ref)+'</p></details>'
@@ -164,17 +182,17 @@ function proof(p){
  +(a?'<div class="j-context" id="j-evidence">'+(canUpload?'<h2>'+(a==="partial"?'Ajoutez votre brouillon':'Ajoutez votre preuve')+'</h2><div class="j-upload"><span>PDF, document, tableur ou autre fichier · 120 Mo maximum par fichier</span><button type="button" class="v4-button primary" data-v4-j-upload>Choisir un fichier</button><input id="v4-file-input" data-v4-file type="file" multiple class="v4-hidden-input"></div><label class="v4-field j-revision">Révision (facultatif)<input id="v4-file-revision" placeholder="Ex. B, 02, 1.0"></label>'+fileList(p,entry)+(existing.length?'<details class="j-disclosure"><summary>Utiliser une preuve déjà enregistrée</summary><label class="v4-field">Document<select id="v4-existing-doc"><option value="">Choisir une référence…</option>'+existing.map(x=>'<option value="'+A(x.id)+'">'+E(x.title)+'</option>').join("")+'</select></label>'+button("Rattacher sans dupliquer","attach",entry.id)+'</details>':'')+'<p class="j-path">Classé dans : '+E(D.path(entry))+'</p><p class="v4-muted">Fichiers conservés dans ce navigateur ; exportez le ZIP pour les sauvegarder avec le dossier.</p>':a==="absent"?'<h2>Préparer ce document</h2><p class="v4-muted">Utilisez une trame de départ et suivez sa rédaction dans une action.</p>'+button("Télécharger la trame","j-template",entry.id)+button(actionBy(p,entry.id)?"Voir l’action":"Créer une action","j-action",entry.id):a==="checking"?'<p class="v4-muted">Ce point restera dans les éléments en attente. Vous pourrez y revenir directement.</p>':'<p class="v4-muted">Précisez pourquoi ce document ne concerne pas votre projet.</p>')+guideForm(p,entry)+'</div>':'<div class="j-bottom">'+button("← Précédent","j-previous")+button("Passer pour le moment","j-skip",undefined,"quiet")+'</div>')+'</section>'
  +proofPicker(p)+autosave()+'</div>';
 }
-function recap(p){const j=journey(p),entry=D.entry(j.cursor),f=D.folder(entry.folder),rows=j.queue.map(id=>D.entry(id)).filter(e=>e.folder===f.id);return '<div class="j-work">'+stageNav(p,2)+'<section class="v4-card j-question"><div class="j-eyebrow">Récapitulatif du thème</div><h1 id="j-title" tabindex="-1">'+E(f.title)+'</h1><p>Vos réponses sont enregistrées. Les points en attente restent accessibles.</p><div class="j-pick-list">'+rows.map(e=>'<button type="button" data-j-entry="'+A(e.id)+'"><span>'+E(e.title)+'</span>'+documentPill(p,e)+'</button>').join("")+'</div><div class="j-bottom">'+button("Retour au parcours","switch","home")+button(j.next?"Thème suivant →":"Voir mon bilan →","j-next-theme",undefined,"primary")+'</div></section>'+autosave()+'</div>';}
+function recap(p){const j=journey(p),entry=D.entry(j.cursor),f=D.folder(entry.folder),rows=j.queue.map(id=>D.entry(id)).filter(e=>e.folder===f.id);return '<div class="j-work">'+stageNav(p,2)+'<section class="v4-card j-question"><div class="j-eyebrow">Récapitulatif du thème</div><h1 id="j-title" tabindex="-1">'+E(f.title)+'</h1><p>Vos réponses sont enregistrées. Les points en attente restent accessibles.</p><div class="j-pick-list">'+rows.map(e=>'<button type="button" data-j-entry="'+A(e.id)+'"><span>'+E(e.title)+'</span>'+documentPill(p,e)+'</button>').join("")+'</div><div class="j-bottom">'+button("Retour au parcours","switch","home")+button(j.next?"Thème suivant →":"Voir mon dossier →","j-next-theme",undefined,"primary")+'</div></section>'+autosave()+'</div>';}
 function journeyView(p){const j=journey(p);if(j.screen==="profile")return profile(p);if(j.screen==="proof")return proof(p);if(j.screen==="recap")return recap(p);return home(p);}
 function meter(value,label,total){const n=Math.round(100*value/total);return '<section class="v4-card j-meter"><span>'+E(label)+'</span><div><strong>'+n+' %</strong><progress aria-label="'+A(label)+'" value="'+value+'" max="'+total+'"></progress></div><small>'+value+' / '+total+' rubriques</small></section>';}
 function embedded(html,selector){const box=document.createElement("div");box.innerHTML=html;return box.querySelector(selector)?.outerHTML||"";}
 function bilan(p){
  const v=progress(p),pending=D.expected.filter(e=>unresolved(p,e));
  const priorities=pending.slice().sort((a,b)=>{const rank={gap:0,stale:1,missing:2,attached:3};return (rank[status(p,a.id)]??4)-(rank[status(p,b.id)]??4);});
- return '<div class="v4-work j-bilan">'+title("Votre bilan de travail","Visualisez l’avancement du dossier et les actions à réaliser.")+'<div class="j-meters">'+meter(v.filled,"Dossier renseigné",v.total)+meter(v.inspected,"Revues enregistrées",v.total)+'</div><p class="v4-muted">Une réponse enregistrée décrit la disponibilité. Une revue enregistrée peut conclure à une preuve suffisante, un écart ou une exclusion justifiée.</p>'
- +(!stageState(p,1).done?'<div class="v4-alert j-scope-alert">Le périmètre réglementaire reste à compléter ou confirmer. <button type="button" class="v4-button quiet" data-j-stage="1">Reprendre les exigences →</button></div>':'')+'<section class="v4-card"><div class="v4-actions j-between"><h2>À traiter en priorité</h2>'+button("Reprendre les "+pending.length+" points en attente","j-pending",undefined,"primary")+'</div><div class="j-pick-list">'+priorities.slice(0,6).map(e=>'<button type="button" data-j-entry="'+A(e.id)+'"><span>'+E(e.title)+'</span>'+documentPill(p,e)+'<strong>Reprendre ›</strong></button>').join("")+(pending.length?'':'<p>Toutes les rubriques ont une revue enregistrée.</p>')+'</div></section>'
- +'<details class="j-disclosure v4-card" open><summary>Plan d’actions ('+countActions(p)+' à traiter)</summary>'+embedded(actions(p),"section.v4-card")+'</details>'
- +'<details class="j-disclosure v4-card"><summary>Rapports, exports et sauvegarde</summary>'+embedded(reports(p),'.v4-exportgrid')+'</details>'
+ return '<div class="v4-work j-bilan">'+title("Mon dossier","Retrouvez vos preuves, les points à traiter et vos exports.")+'<div class="j-meters">'+meter(D.expected.filter(e=>status(p,e.id)!=="na"&&D.docs(p,e.id).length).length,"Documents rattachés",D.expected.filter(e=>status(p,e.id)!=="na").length||1)+meter(v.inspected,"Revues enregistrées",v.total)+'</div><p class="v4-muted">Ces indicateurs suivent les preuves et les revues ; ils ne constituent pas un taux de conformité.</p>'
+ +(!stageState(p,1).done?'<div class="v4-alert j-scope-alert">Le périmètre réglementaire reste à compléter ou confirmer. <button type="button" class="v4-button quiet" data-j-stage="1">Reprendre les exigences →</button></div>':'')+'<section class="v4-card"><div class="v4-actions j-between"><h2>À traiter en priorité</h2>'+button("Reprendre les "+pending.length+" points en attente","j-pending",undefined,"primary")+'</div><div class="j-pick-list">'+priorities.slice(0,3).map(e=>'<button type="button" data-j-entry="'+A(e.id)+'"><span>'+E(e.title)+'</span>'+documentPill(p,e)+'<strong>Reprendre ›</strong></button>').join("")+(pending.length?'':'<p>Toutes les rubriques ont une revue enregistrée.</p>')+'</div></section>'
+ +'<details class="j-disclosure v4-card" '+(ui.openFiles?'open':'')+'><summary>Documents classés</summary>'+button('Choisir un dossier sur mon PC','folder-pick')+embedded(dossier(p),'.v4-dossier-layout')+'</details>'+'<details class="j-disclosure v4-card"><summary>Plan d’actions ('+countActions(p)+' à traiter)</summary>'+embedded(actions(p),"section.v4-card")+'</details>'
+ +'<details class="j-disclosure v4-card"><summary>Références et exigences</summary><div class="v4-actions"><button type="button" class="v4-button" data-v5-gspr>Matrice des exigences MDR</button><button type="button" class="v4-button" data-std-export>Exporter les normes CSV</button></div></details>'+'<details class="j-disclosure v4-card"><summary>Rapports, exports et sauvegarde</summary>'+embedded(reports(p),'.v4-exportgrid')+'</details>'
  +'<div class="v4-actions j-export">'+button("Exporter la synthèse","report",undefined,"primary")+button("Exporter le dossier ZIP","zip")+button("Sauvegarder le projet JSON","json")+'</div><p class="v4-muted">Bilan interne — validation humaine requise. Les 30 rubriques constituent une base à compléter selon le projet.</p></div>';
 }
 function dossier(p){
@@ -244,7 +262,7 @@ function reports(p){
 }
 function view(p){
  if(ui.tab==="home")return journeyView(p);
- if(ui.tab==="dossier")return dossier(p);
+ if(ui.tab==="dossier")return bilan(p);
  if(ui.tab==="audit")return audit(p);
  if(ui.tab==="actions")return actions(p);
  return bilan(p);
@@ -257,7 +275,7 @@ render=function(){
  const p=P();if(ui.project!==p.id){F.directory=null;ui.project=p.id;}const j=journey(p),requirements=!ui.legacy&&ui.tab==="home"&&j.screen==="requirements";
  if(!ui.legacy){page="guided";df(p).normsOpen=requirements&&j.requirement==="norms";if(requirements)df(p).step=1;}
  beforeRender();
- document.body.classList.add("v4-active","j-active");
+ document.body.classList.add("v4-active","j-active","v5-active");
  document.body.classList.toggle("v4-legacy",ui.legacy);
  const header=document.querySelector(".topbar"),app=document.getElementById("app");
  if(!header||!app)return;
@@ -276,9 +294,10 @@ render=function(){
   app.insertAdjacentHTML("afterbegin",'<div class="j-work">'+stageNav(p,1)+'<div class="j-requirement-tabs"><button type="button" data-j-requirement="classification" '+(j.requirement!=="norms"?'aria-current="page"':'')+'>1. Classification</button><button type="button" data-j-requirement="norms" '+(j.requirement==="norms"?'aria-current="page"':'')+'>2. Normes et exigences</button></div></div>');
   app.insertAdjacentHTML("beforeend",'<div class="j-work j-bottom">'+button("Retour au parcours","switch","home")+(j.requirement!=="norms"?'<button class="v4-button primary" type="button" data-j-requirement="norms">Passer aux normes →</button>':'<button class="v4-button primary" type="button" data-j-stage="2">Constituer le dossier →</button>')+'</div>');
  }else app.innerHTML=view(p);
+ polish(p,requirements);
 };
 function route(tab){
- ui.legacy=false;ui.tab=tab;if(tab==="home"){const j=journey(P());if(j.screen!=="home")j.lastScreen=j.screen;j.screen="home";save();}page="guided";df(pickProject()).normsOpen=false;render();window.scrollTo({top:0,behavior:"auto"});
+ if(["reports","actions","audit"].includes(tab))tab="dossier";ui.legacy=false;ui.tab=tab;if(tab==="home"){const j=journey(P());if(j.screen!=="home")j.lastScreen=j.screen;j.screen="home";save();}page="guided";df(pickProject()).normsOpen=false;render();window.scrollTo({top:0,behavior:"auto"});
 }
 function legacy(n){
  ui.legacy=true;df(pickProject()).normsOpen=false;page="guided";
@@ -288,7 +307,7 @@ function changed(p,text){log(p,text);save();render();}
 function newAction(p,id){
  const target=D.entry(id);if(!target){notify("Livrable introuvable.","danger");return;}
  const v=D.ensure(p);
- const existing=actionBy(p,id);if(existing){ui.tab="actions";render();return;}
+ const existing=actionBy(p,id);if(existing){ui.tab="dossier";render();return;}
  v.actions.push({id:uid(),entry:id,title:"Compléter / vérifier : "+target.title,owner:"",due:"",status:"open",createdAt:new Date().toISOString().slice(0,10)});
  changed(p,"Action créée : "+target.title);
 }
@@ -387,7 +406,7 @@ document.addEventListener("click",async function(event){
  if(data.v4AuditEntry){ui.auditEntry=data.v4AuditEntry;render();return;}
  if(data.v4Filter){ui.filter=data.v4Filter;render();return;}
  if(data.v4StartAudit){openProof(p,data.v4StartAudit,D.expected.map(e=>e.id));return;}
- if(data.v4GoEntry){const entry=D.entry(data.v4GoEntry);ui.scope=entry.scope;ui.folder=entry.folder;ui.entry=entry.id;route("dossier");return;}
+ if(data.v4GoEntry){const entry=D.entry(data.v4GoEntry);ui.scope=entry.scope;ui.folder=entry.folder;ui.entry=entry.id;ui.openFiles=true;route("dossier");return;}
  if(data.v4Legacy!==undefined){const n=Number(data.v4Legacy);openStage(n===0?0:1);if(n===2){journey(p).requirement="norms";save();render();}return;}
  if(data.v4Return!==undefined){ui.legacy=false;route("home");return;}
  if(data.v4AddAction){newAction(p,data.v4AddAction);return;}
@@ -461,7 +480,7 @@ document.addEventListener("submit",function(event){
  if(s==="gap"&&!actionBy(p,id)){D.ensure(p).actions.push({id:uid(),entry:id,title:"Écart à traiter : "+entry.title,owner:"",due:"",status:"open",createdAt:new Date().toISOString().slice(0,10)});}
  log(p,"Revue du livrable "+id+" : "+s);save();
  if(form.hasAttribute("data-j-guided"))advance(p);else render();
- notify("Revue enregistrée. La conclusion reste une évaluation interne documentée.");
+ notify(s==="pending"?"Réponse enregistrée. La revue reste à terminer.":"Revue enregistrée.");
 });
 // Keep legacy step buttons coherent when the regulatory engines request the next screen.
 document.addEventListener("click",function(event){
@@ -492,14 +511,14 @@ document.addEventListener("click",function(event){
  const p=P(),j=journey(p),data=b.dataset;
  if(data.v4JUpload!==undefined){document.getElementById("v4-file-input")?.click();return;}
  if(data.jStage!==undefined){openStage(Number(data.jStage));return;}
- if(data.v4JResume!==undefined){if(j.screen==="home"&&j.lastScreen){j.screen=j.lastScreen;ui.tab="home";save();render();focusQuestion();}else if(j.screen==="home")openStage(nextStage(p));else{ui.tab="home";save();render();focusQuestion();}return;}
+ if(data.v4JResume!==undefined){continueJourney(p);return;}
  if(data.v4JPending!==undefined){const ids=D.expected.filter(e=>unresolved(p,e)).map(e=>e.id);if(ids.length)openProof(p,ids[0],ids);else notify("Aucun point en attente.");return;}
  if(data.jEntry){const ids=ui.tab==="reports"?D.expected.filter(e=>unresolved(p,e)).map(e=>e.id):j.queue.includes(data.jEntry)?j.queue:D.expected.map(e=>e.id);openProof(p,data.jEntry,ids);return;}
  if(data.jRequirement){j.requirement=data.jRequirement;j.screen="requirements";ui.tab="home";save();render();focusQuestion();return;}
  if(data.jProfileMove){
   const n=Number(data.jProfileMove);
   if(n>0&&!String(p[profileFields[j.profile][0]]||"").trim()){notify("Renseignez votre réponse avant de continuer.","danger");document.getElementById("j-profile")?.focus();return;}
-  if(j.profile+n>=profileFields.length){j.screen="requirements";j.requirement="classification";}
+  if(j.profile+n>=profileFields.length){continueJourney(p);return;}
   else j.profile=Math.max(0,j.profile+n);
   save();render();focusQuestion();return;
  }
@@ -512,7 +531,7 @@ document.addEventListener("click",function(event){
  if(data.v4JPrevious!==undefined){const at=j.queue.indexOf(j.cursor);if(at>0)openProof(p,j.queue[at-1]);else route("home");return;}
  if(data.v4JSkip!==undefined){j.answers[j.cursor]="checking";save();advance(p);return;}
  if(data.v4JNextTheme!==undefined){if(j.next)openProof(p,j.next);else route("reports");return;}
- if(data.v4JAction){const e=D.entry(data.v4JAction);if(actionBy(p,e.id)){route("reports");return;}D.ensure(p).actions.push({id:uid(),entry:e.id,title:"Constituer : "+e.title,owner:"",due:"",status:"open",createdAt:new Date().toISOString().slice(0,10)});log(p,"Action créée : "+e.title);save();render();notify("Action ajoutée au bilan.");return;}
+ if(data.v4JAction){const e=D.entry(data.v4JAction);if(actionBy(p,e.id)){route("reports");return;}D.ensure(p).actions.push({id:uid(),entry:e.id,title:"Constituer : "+e.title,owner:"",due:"",status:"open",createdAt:new Date().toISOString().slice(0,10)});log(p,"Action créée : "+e.title);save();render();notify("Action ajoutée au dossier.");return;}
  if(data.v4JTemplate){const e=D.entry(data.v4JTemplate);const html='<!doctype html><html lang="fr"><meta charset="utf-8"><title>'+E(e.title)+'</title><body><h1>'+E(e.title)+'</h1><p>Projet : '+E(p.name)+'</p><p>Référence / révision : à renseigner</p><p>Rédacteur / relecteur / date : à renseigner</p><p>Trame de départ à adapter et compléter ; ne constitue pas une preuve validée.</p>'+e.checks.map(x=>'<h2>'+E(x)+'</h2><p>À documenter : méthode, éléments, références et conclusion.</p>').join("")+'<h2>Approbation et historique des modifications</h2><p>À renseigner.</p></body></html>';download(e.id+"_trame.html",html,"text/html;charset=utf-8");}
 });
 document.addEventListener("input",function(event){
@@ -526,6 +545,76 @@ document.addEventListener("input",function(event){
  }else return;
  const label=document.querySelector(".j-save");if(label)label.textContent=storageOK?"Réponses enregistrées automatiquement":"Enregistrement indisponible — exportez une sauvegarde JSON";
 });
-window.ORBIVIA_V4={version:"4.1-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
+
+function polish(p,requirements){
+ if(ui.legacy)return;
+ const app=document.getElementById("app"),j=journey(p);
+ document.body.classList.toggle("v5-question-mode",ui.tab==="home"&&j.screen!=="home");
+ const menu=document.querySelector('.v312-menu-popup');
+ if(menu&&!menu.querySelector('[data-v5-new]'))menu.insertAdjacentHTML('afterbegin','<button type="button" data-v5-new>+ Nouveau projet</button>');
+ if(requirements){
+  app.querySelectorAll('.j-work,.cq-heading,.std-tabs,.v312-norm-tools,.cq-autosave,.std-metrics,.std-filters,.std-actions,.v312-optional,.std-work>.notice').forEach(el=>el.remove());
+  let card;
+  if(j.requirement!=="norms"){
+   const c=cqEvaluate(p),q=c.questions.findIndex(q=>q.id===cqSession(p).cursor);
+   app.insertAdjacentHTML('afterbegin',regulatoryHeader(p,"classification",Math.max(1,q+1)));
+   card=app.querySelector('.cq-card');
+   const bottom=app.querySelector('.cq-below');
+   if(bottom){bottom.classList.add('v5-controls');bottom.querySelectorAll('p').forEach(el=>el.remove());bottom.querySelector('[data-cq-review-end]')?.remove();if(app.querySelector('#cq-result'))bottom.insertAdjacentHTML('beforeend','<button type="button" class="v4-button primary" data-v5-norms>Continuer vers les normes →</button>');}
+   app.querySelector('.cq-progress-row')?.remove();
+  }else{
+   const n=window.ORBIVIA_NORMES_INFO.journey(p),s=df(p).norms;
+   if(s.view==='questions'){
+    const at=n.questions.findIndex(q=>q.id===s.cursor);
+    app.insertAdjacentHTML('afterbegin',regulatoryHeader(p,"norms",Math.max(1,at+1)));
+    app.querySelector('.std-progress')?.remove();card=app.querySelector('.cq-card');
+    app.insertAdjacentHTML('beforeend','<div class="v5-controls"><button class="v4-button quiet" type="button" data-v5-norm-back>← Précédent</button><button class="v4-button quiet" type="button" data-v5-norm-list>Références proposées →</button></div>');
+   }else if(s.view==='catalogue'){
+    const records=Array.from(app.querySelectorAll('.std-record'));
+    const selected=n.references.some(r=>r.id===j.normId)?j.normId:n.unresolved[0]||n.references.at(-1)?.id;
+    j.normId=selected;
+    records.forEach(el=>{if(el.querySelector('[data-std-decision]')?.dataset.stdDecision!==selected)el.remove();});
+    app.querySelectorAll('.std-work>.smalltxt,.std-work>p').forEach(el=>el.remove());
+    app.insertAdjacentHTML('afterbegin',regulatoryHeader(p,"references",Math.max(1,n.references.findIndex(r=>r.id===selected)+1)));
+    card=app.querySelector('.std-record');
+    if(card){card.insertAdjacentHTML('afterbegin','<div class="v5-kicker">RÉFÉRENCE À EXAMINER</div><h1>Cette référence est-elle pertinente ?</h1>'+help('Une proposition reste à examiner selon le produit. Vérifiez le champ, l’édition et le statut de la référence avant de la retenir. La classification et les questions encore en attente restent à confirmer.'));card.classList.add('v5-norm-card');}
+    else app.querySelector('.std-grid')?.insertAdjacentHTML('afterend','<section class="cq-card"><h1>Votre sélection normative</h1><p>Aucune référence dans cette sélection. Complétez les caractéristiques du produit.</p></section>');
+    app.insertAdjacentHTML('beforeend','<div class="v5-controls"><button class="v4-button quiet" type="button" data-v5-norm-questions>← Caractéristiques</button>'+button(n.unresolved.length?'Enregistrer et continuer →':'Confirmer la sélection →','v5-norm-next',undefined,'primary')+'</div>');
+   }
+  }
+  if(card){card.classList.add('v5-common-card');const h=card.querySelector('h1,h2');if(h){h.id='j-title';h.tabIndex=-1;}}
+ }
+ app.querySelectorAll('.cq-comment>summary,.std-comment>summary,.j-question .j-disclosure>summary').forEach(el=>{if(el.textContent.includes('Ajouter un commentaire'))el.textContent='Ajouter un commentaire';});
+ app.querySelectorAll('.j-bottom').forEach(el=>el.classList.add('v5-controls'));
+ app.querySelectorAll('.j-question,.cq-card').forEach(el=>el.classList.add('v5-common-card'));
+ app.querySelectorAll('.j-question>p').forEach(el=>{if(!el.textContent.trim())el.remove();});
+ const h=app.querySelector('.j-question>h1,.std-question-head h2,.cq-question-head h2');
+ if(j.screen==="profile")app.querySelector('.j-question>p')?.remove();
+ if(h&&!h.parentElement.querySelector('.v5-help')&&!h.parentElement.querySelector('.class-info'))h.insertAdjacentHTML('afterend',help(j.screen==='profile'?profileFields[j.profile][2]:'Indiquez la disponibilité, puis rattachez une preuve ou précisez ce qui manque. Une pièce jointe doit faire l’objet d’une revue distincte.'));
+ const pct=app.querySelector('.v5-global strong');if(pct)pct.setAttribute('aria-label',questionnaireMetrics(p).percent+' pour cent du questionnaire complété');
+}
+document.addEventListener('click',function(event){
+ const b=event.target.closest('[data-v5-new],[data-v5-gspr],[data-v5-norms],[data-v5-norm-back],[data-v5-norm-list],[data-v5-norm-questions],[data-v4-v5-norm-next],[data-cq-confirm]');
+ if(!b||ui.working)return;
+ const p=P(),j=journey(p),s=df(p).norms;
+ if(b.hasAttribute('data-v5-gspr')){j.screen='requirements';j.requirement='norms';df(p).norms=df(p).norms||{};df(p).norms.view='matrix';ui.tab='home';save();render();return;}
+ if(b.hasAttribute('data-v5-new')){document.getElementById('newProjectBtn')?.click();return;}
+ if(b.hasAttribute('data-cq-confirm')){if(!dfClassConfirmed(p))return;j.requirement='norms';window.ORBIVIA_NORMES_INFO.resume(p);save();render();focusQuestion();return;}
+ if(b.hasAttribute('data-v5-norms')){j.requirement='norms';window.ORBIVIA_NORMES_INFO.resume(p);save();render();focusQuestion();return;}
+ if(b.hasAttribute('data-v5-norm-questions')){s.view='questions';window.ORBIVIA_NORMES_INFO.resume(p);s.view='questions';save();render();return;}
+ if(b.hasAttribute('data-v5-norm-list')){s.view='catalogue';s.filter='suggested';s.family='all';s.query='';save();render();return;}
+ if(b.hasAttribute('data-v5-norm-back')){const n=window.ORBIVIA_NORMES_INFO.journey(p),at=n.questions.findIndex(q=>q.id===s.cursor);if(at>0)s.cursor=n.questions[at-1].id;else{j.requirement='classification';cqSession(p).view='result';}save();render();return;}
+ if(b.hasAttribute('data-v4-v5-norm-next')){
+  const n=window.ORBIVIA_NORMES_INFO.journey(p),decision=s.decisions[j.normId];
+  if(n.unresolved.includes(j.normId)&&(!decision||!['retained','excluded'].includes(decision.status)||decision.status==='excluded'&&!decision.reason?.trim())){notify('Choisissez une décision et justifiez toute exclusion.','danger');return;}
+  if(n.unresolved.length){j.normId=n.unresolved[0];save();render();focusQuestion();return;}
+  if(n.known!==n.total){notify('Des caractéristiques restent à préciser.','danger');window.ORBIVIA_NORMES_INFO.resume(p);save();render();return;}
+  // Delegate final confirmation to the existing normative engine.
+  const holder=document.createElement('button');holder.hidden=true;holder.dataset.stdConfirm='';document.body.append(holder);holder.click();holder.remove();
+ }
+});
+document.addEventListener('click',function(event){document.querySelectorAll('.v5-help[open]').forEach(el=>{if(!el.contains(event.target))el.open=false;});});
+document.addEventListener('keydown',function(event){if(event.key==='Escape')document.querySelectorAll('.v5-help[open]').forEach(el=>el.open=false);});
+window.ORBIVIA_V4={version:"5.0-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
 render();
 })();

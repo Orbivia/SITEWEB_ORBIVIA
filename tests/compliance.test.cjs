@@ -54,3 +54,12 @@ test('all app scripts parse and the core is loaded externally to avoid HTML scri
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert.match(html,/<script src="\.\/core\.js"><\/script>/);
  for(const name of fs.readdirSync(root).filter(name=>name.endsWith('.js')))new vm.Script(fs.readFileSync(path.join(root,name),'utf8'),{filename:name});
 });
+const {calculate}=require('../outils/compliance/journey-metrics.js');
+test('global percentage counts applicable completed answers without treating an unknown as answered',()=>{
+ const m=calculate([{id:0,done:8,total:8},{id:1,done:4,total:20},{id:2,done:0,total:12}]);
+ assert.equal(m.percent,30);assert.equal(m.chapters[0].percent,100);assert.equal(m.complete,false);
+ const expanded=calculate([{done:8,total:8},{done:4,total:30},{done:0,total:12}]);assert.equal(expanded.percent,24);
+ assert.equal(calculate([{done:399,total:400}]).percent,99);
+ assert.equal(calculate([{done:2,total:2}]).complete,true);
+ assert.equal(calculate([{done:0,total:0}]).complete,false);
+});
