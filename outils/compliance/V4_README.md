@@ -78,3 +78,11 @@ Les questionnaires réglementaires V3 restent intégrés à l’étape **Défini
 
 
 Prochaines étapes : référentiel ISO 13485 détaillé et versionné, bibliothèque SMQ au niveau fabricant, import ZIP et restauration contrôlée des binaires, gestion des droits et sauvegardes chiffrées, vérification automatisée des renvois de preuve et journal d'audit exploitable.
+
+
+## V5.2 — aide des normes et classification simplifiée
+
+- La bulle d’information décrit le sujet de la norme, son usage, les caractéristiques ayant motivé sa proposition et fournit un lien vers l’éditeur. Huit références principales ont un résumé dédié fondé sur les périmètres publics ISO/IEC ; les autres reprennent le sujet du catalogue et renvoient explicitement à l’éditeur pour le périmètre détaillé. Aucune édition ni applicabilité n’est validée automatiquement.
+- Le résultat de classification présente la classe proposée, les règles retenues et une seule action principale. Justification, source MDR, réponses, détail des règles, référence documentaire facultative et export sont regroupés dans un volet replié.
+- La confirmation reste une revue explicite : seul le relecteur est demandé au moment de confirmer. Le moteur de classification et les données existantes sont conservés.
+- Validation : huit tests Node réussis ; parcours mobile 390 px essayé avec un projet fictif (résultat, confirmation refusée sans relecteur, confirmation puis passage aux normes, bulle ISO 14971 et lien éditeur). Captures dans `preview/v52-*.jpg`.

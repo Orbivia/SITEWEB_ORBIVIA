@@ -75,3 +75,10 @@ test('reviewing the standards catalogue does not inflate the questionnaire denom
  const changed=context.questionnaireMetrics({name:'Projet'});assert.equal(changed.total,first.total);assert.equal(changed.percent,first.percent);
  normative.known=5;assert.equal(context.questionnaireMetrics({name:'Projet'}).chapters[1].percent,100);
 });
+test('every catalogue reference gets subject-specific help and an official publisher link',()=>{
+ const {describe}=require('../outils/compliance/normes-explications.js');
+ const context=vm.createContext({window:{}});vm.runInContext(fs.readFileSync(path.join(root,'normes-catalogue.js'),'utf8'),context);
+ for(const entry of context.window.ORBIVIA_NORMES_CATALOGUE){const help=describe(entry);assert.ok(help.scope.length>30,entry.id);assert.ok(help.title);assert.ok(['www.iso.org','webstore.iec.ch','www.cencenelec.eu'].includes(new URL(help.url).hostname),entry.id);}
+ const qms=describe({id:'ISO 13485',title:'Management de la qualité',family:'SMQ',when:'base'});assert.match(qms.scope,/management de la qualité/);assert.equal(qms.curated,true);
+ const reason=describe({id:'IEC 62304',title:'Logiciel',family:'Logiciel',when:'software'},{software:'yes'},[{id:'software',title:'Comprend-il un logiciel médical ?'}]);assert.equal(reason.criteria[0],'Comprend-il un logiciel médical ?');assert.match(reason.url,/webstore\.iec\.ch/);
+});

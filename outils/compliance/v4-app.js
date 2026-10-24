@@ -546,6 +546,37 @@ document.addEventListener("input",function(event){
  const label=document.querySelector(".j-save");if(label)label.textContent=storageOK?"Réponses enregistrées automatiquement":"Enregistrement indisponible — exportez une sauvegarde JSON";
 });
 
+function normHelp(p,id){const entry=window.ORBIVIA_NORMES_CATALOGUE.find(e=>e.id===id),n=window.ORBIVIA_NORMES_INFO.journey(p);if(!entry)return '';const h=window.ORBIVIA_NORMES_EXPLICATIONS.describe(entry,df(p).norms.answers,n.questions);return '<details class="v5-help v52-norm-help"><summary aria-label="Comprendre '+A(id)+'" title="Comprendre cette norme">i</summary><div role="note"><strong>'+E(h.id)+' — '+E(h.title)+'</strong><h3>Ce qu’elle couvre</h3><p>'+E(h.scope)+'</p><p>'+E(h.use)+'</p><h3>Pourquoi elle est proposée</h3><p>'+E(h.why)+'</p>'+(h.criteria.length?'<ul>'+h.criteria.map(x=>'<li>'+E(x)+' : Oui</li>').join('')+'</ul>':'')+'<a href="'+A(h.url)+'" target="_blank" rel="noopener noreferrer">'+E(h.sourceLabel)+' ↗</a><small>Vérifier l’édition, les amendements et le périmètre sur la fiche de l’éditeur.</small></div></details>';}
+function compactClassification(p,app,bottom){
+ const result=app.querySelector('#cq-result');if(!result)return;
+ const r=cqEvaluate(p),confirmed=dfClassConfirmed(p);result.classList.add('v52-class-result');
+ const oldActions=result.querySelector(':scope > .actions');
+ const incompleteAction=oldActions?.querySelector('[data-cq-resume],[data-cq-edit],[data-df-step]');
+ const exporter=oldActions?.querySelector('[data-cq-export]');
+ const parts=Array.from(result.querySelectorAll(':scope > details.cq-result-detail'));
+ let confirmation=parts.find(el=>el.querySelector('[data-cq-confirm]'));
+ const details=document.createElement('details');details.className='j-disclosure v52-class-details';details.innerHTML='<summary>Justification, sources et réponses</summary><p><a href="https://eur-lex.europa.eu/eli/reg/2017/745/oj" target="_blank" rel="noopener noreferrer">MDR — annexe VIII : règles de classification ↗</a></p>';
+ parts.forEach(el=>{if(el!==confirmation){el.open=false;details.append(el);}});
+ if(exporter)details.append(exporter);
+ if(confirmation){
+  confirmation.hidden=confirmed||!journey(p).confirmClassOpen;
+  confirmation.classList.add('v52-confirmation');confirmation.open=true;
+  const reference=confirmation.querySelector('[data-cq-meta="reference"]')?.closest('.field');
+  if(reference){const opt=document.createElement('details');opt.className='j-disclosure';opt.innerHTML='<summary>Référence documentaire (facultatif)</summary>';opt.append(reference);details.append(opt);}
+  confirmation.querySelector(':scope > summary')?.remove();confirmation.querySelector('[data-cq-confirm]')?.remove();
+  const intro=document.createElement('p');intro.className='v4-muted';intro.textContent='Après examen de la justification, indiquez le relecteur pour confirmer la proposition.';confirmation.prepend(intro);
+  const panel=document.createElement('section');panel.className=confirmation.className;panel.hidden=confirmation.hidden;while(confirmation.firstChild)panel.append(confirmation.firstChild);confirmation.replaceWith(panel);confirmation=panel;
+ }
+ if(confirmed)details.insertAdjacentHTML('afterbegin','<p class="v4-muted">Revue enregistrée par '+E(df(p).classification.reviewer||'')+'.</p>');
+ oldActions?.remove();result.append(details);
+ result.querySelector('.v312-class-indicator')?.remove();
+ const lead=result.querySelector('.cq-result-lead');if(lead)lead.textContent=r.complete?'Règles retenues : '+r.rules.filter(rule=>rule.applies==='yes').map(rule=>rule.n).join(', ')+'.':r.missing.length+' point(s) restent à préciser.';
+ result.querySelector('.cq-result-label').textContent=confirmed?'Classe confirmée après revue':'Classe proposée';
+ if(bottom){bottom.innerHTML='<button class="v4-button quiet" type="button" data-cq-last>← Modifier mes réponses</button>';
+  if(r.complete){bottom.insertAdjacentHTML('beforeend',confirmed?'<button class="v4-button primary" type="button" data-v5-norms>Continuer →</button>':journey(p).confirmClassOpen?'<button class="v4-button primary" type="button" data-cq-confirm>Confirmer et continuer →</button>':'<button class="v4-button primary" type="button" data-v52-open-confirm>Confirmer après revue →</button>');}
+  else if(incompleteAction){incompleteAction.textContent='Compléter les réponses →';bottom.append(incompleteAction);}
+ }
+}
 function normReviewSummary(p){const n=window.ORBIVIA_NORMES_INFO.journey(p);return '<p class="v4-muted">Décisions renseignées : '+n.decided+' · Références à examiner : '+n.unresolved.length+'. La revue des normes est distincte du questionnaire.</p><div class="v4-actions"><button type="button" class="v4-button" data-v51-review-norms>Examiner les normes proposées</button><button type="button" class="v4-button quiet" data-v51-confirm-norms>Confirmer la sélection</button></div>';}
 function openNormReview(p){const j=journey(p),n=window.ORBIVIA_NORMES_INFO.journey(p),s=df(p).norms;j.normId=n.unresolved[0]||n.references[0]?.id;j.screen='requirements';j.requirement='norms';s.view='catalogue';s.filter='suggested';s.family='all';s.query='';ui.tab='home';ui.legacy=false;save();render();focusQuestion();}
 function nextNorm(p){const j=journey(p),n=window.ORBIVIA_NORMES_INFO.journey(p),at=n.references.findIndex(r=>r.id===j.normId);if(at>=0&&at+1<n.references.length){j.normId=n.references[at+1].id;save();render();focusQuestion();}else{route('dossier');notify('Revue parcourue. Les références laissées à vérifier restent dans le dossier.');}}
@@ -565,6 +596,7 @@ function polish(p,requirements){
    const bottom=app.querySelector('.cq-below');
    if(bottom){bottom.classList.add('v5-controls');bottom.querySelectorAll('p').forEach(el=>el.remove());bottom.querySelector('[data-cq-review-end]')?.remove();if(app.querySelector('#cq-result'))bottom.insertAdjacentHTML('beforeend','<button type="button" class="v4-button primary" data-v5-norms>Continuer vers les normes →</button>');}
    app.querySelector('.cq-progress-row')?.remove();
+   compactClassification(p,app,bottom);
   }else{
    const n=window.ORBIVIA_NORMES_INFO.journey(p),s=df(p).norms;
    if(s.view==='questions'){
@@ -581,9 +613,9 @@ function polish(p,requirements){
     app.insertAdjacentHTML('afterbegin','<div class="v5-chapter"><button type="button" data-v4-switch="dossier" aria-label="Retour au dossier">←</button><span>Revue des normes</span><small>'+Math.max(1,n.references.findIndex(r=>r.id===selected)+1)+' sur '+n.references.length+'</small></div>');
     card=app.querySelector('.std-record');
     if(card){
-     card.insertAdjacentHTML('afterbegin','<h1>Retenir cette norme ?</h1>'+help('Les références sont proposées à partir de vos réponses. Retenir une norme ne confirme ni son caractère obligatoire ni la conformité du produit. L’édition et les autres détails peuvent être précisés ultérieurement.'));
+     card.insertAdjacentHTML('afterbegin','<h1>Retenir cette norme ?</h1>'+normHelp(p,selected));
      card.classList.add('v5-norm-card');
-     const id=selected,decision=s.decisions[id]||{},fields=card.querySelector('.std-record-fields'),source=card.querySelector('.std-top a'),metadata=card.querySelector('small');
+     const id=selected,decision=s.decisions[id]||{},fields=card.querySelector('.std-record-fields'),source=card.querySelector('.std-top a'),metadata=card.querySelector(':scope > small');
      const details=document.createElement('details');details.className='j-disclosure v51-reference-details';details.innerHTML='<summary>Détails de la référence</summary>';
      if(metadata)details.append(metadata);
      if(fields){const decisionField=fields.querySelector('[data-std-decision]')?.closest('label');if(decisionField)decisionField.hidden=true;details.append(fields);}
@@ -652,8 +684,9 @@ document.addEventListener('click',function(event){
  }
  if(b.hasAttribute('data-v51-exclude')){if(!decision.reason?.trim()){notify('Précisez pourquoi cette norme ne concerne pas le produit.','danger');document.querySelector('.std-reason textarea')?.focus();return;}save();nextNorm(p);}
 });
+document.addEventListener('click',function(event){if(!event.target.closest('[data-v52-open-confirm]')||ui.working)return;journey(P()).confirmClassOpen=true;save();render();document.getElementById('cq-reviewer')?.focus();});
 document.addEventListener('click',function(event){document.querySelectorAll('.v5-help[open]').forEach(el=>{if(!el.contains(event.target))el.open=false;});});
 document.addEventListener('keydown',function(event){if(event.key==='Escape')document.querySelectorAll('.v5-help[open]').forEach(el=>el.open=false);});
-window.ORBIVIA_V4={version:"5.1-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
+window.ORBIVIA_V4={version:"5.2-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
 render();
 })();
