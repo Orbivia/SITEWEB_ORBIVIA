@@ -103,6 +103,14 @@ body.v312-guided .cq-results .cq-result-detail .tablewrap{overflow-x:auto}
 body.v312-guided .gspr-mini{margin:0 0 15px}
 body.v312-guided .gspr-mini .help{font-size:12px}
 body.v312-guided .gspr-work{max-width:1050px}
+
+body.v312-guided .v312-proof-picker{margin:12px 0}
+body.v312-guided .v312-proof-picker>summary{display:flex;align-items:center;justify-content:space-between;min-height:48px;cursor:pointer;list-style:none;border:1px solid #dbe4ed;border-radius:10px;background:white;color:#233a51;font-weight:700;padding:13px 15px}
+body.v312-guided .v312-proof-picker>summary:after{content:'⌄';font-size:20px;color:#6c8196}
+body.v312-guided .v312-proof-picker[open]>summary:after{content:'⌃'}
+body.v312-guided .v312-proof-picker>summary::-webkit-details-marker{display:none}
+body.v312-guided .v312-proof-picker>aside{margin-top:8px}
+
 @media(max-width:850px){
  body.v312-guided .content{padding:18px 18px 72px!important}
  body.v312-ui .topbar{padding:9px 18px}
@@ -144,7 +152,19 @@ body.v312-guided .gspr-work{max-width:1050px}
  body.v312-guided .flow-footer-actions{display:grid;grid-template-columns:1fr 1fr}
  body.v312-guided .flow-footer-actions .btn{width:100%;white-space:normal;min-width:0}
  body.v312-guided .flow-footer-actions .flow-mark{grid-column:1/-1;grid-row:1}
+
+ body.v312-guided .unified-step-2 .tablewrap{overflow:visible}
+ body.v312-guided .unified-step-2 .tablewrap table,body.v312-guided .unified-step-2 .tablewrap tbody{display:block;width:100%}
+ body.v312-guided .unified-step-2 .tablewrap thead{display:none}
+ body.v312-guided .unified-step-2 .tablewrap tbody tr{display:grid;grid-template-columns:1fr auto;gap:0;border:1px solid #e1e7ef;border-radius:10px;background:white;margin-bottom:10px;overflow:hidden}
+ body.v312-guided .unified-step-2 .tablewrap tbody td{display:block;min-width:0;border:0;padding:9px 12px;font-size:12px}
+ body.v312-guided .unified-step-2 .tablewrap tbody td:first-child{grid-column:1/-1;padding-top:13px;font-size:13px}
+ body.v312-guided .unified-step-2 .tablewrap tbody td:nth-child(2){color:#667a91}
+ body.v312-guided .unified-step-2 .tablewrap tbody td:nth-child(3){color:#60758a}
+ body.v312-guided .unified-step-2 .tablewrap tbody td:last-child{text-align:right}
+ body.v312-guided .unified-step-2 .tablewrap tbody td[colspan]{grid-column:1/-1}
  body.v312-guided .df-review{display:block}
+
  body.v312-guided .df-review>aside{margin-bottom:12px}
 }
 @media(max-width:390px){
