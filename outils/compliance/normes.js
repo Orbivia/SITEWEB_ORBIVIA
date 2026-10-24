@@ -17,6 +17,7 @@ const TAGS=[
 ['transport','Subit-il des conditions de chocs ou vibrations exigeantes ?','Environnement'],
 ['clinical','Une investigation clinique est-elle prévue ?','Environnement'],
 ['contact','Présente-t-il un contact direct ou indirect avec le corps ?','Biologie'],
+['substance','Est-il composé de substances introduites, absorbées ou localement dispersées dans le corps ?','Biologie'],
 ['polymer','Les polymères exposent-ils le patient à un risque biologique à évaluer ?','Biologie','contact'],
 ['blood','Entre-t-il en contact avec le sang ?','Biologie'],
 ['implant','Est-il implantable ?','Biologie'],
