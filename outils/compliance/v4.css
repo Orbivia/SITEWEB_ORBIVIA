@@ -11,6 +11,10 @@ body.v4-active .v4-nav button[aria-current="page"]{background:#fff3d8;color:#724
 body.v4-active .v4-nav button:hover{background:#f4f7fa}
 body.v4-active .v4-nav[hidden]{display:none!important}
 body.v4-active.v4-legacy #v312-progress{display:block!important}
+body.v4-active.v4-legacy:not(.v312-guided) .layout{display:grid;grid-template-columns:255px minmax(0,1fr)}
+body.v4-active.v4-legacy:not(.v312-guided) .sidebar{display:block!important}
+body.v4-active.v4-legacy:not(.v312-guided) .main{min-width:0}
+@media(max-width:700px){body.v4-active.v4-legacy:not(.v312-guided) .layout{display:block}body.v4-active.v4-legacy:not(.v312-guided) .sidebar{display:none!important}}
 body.v4-active.v4-legacy .v4-legacybar{position:relative;z-index:12}
 body.v4-active .v4-nav button:focus-visible,body.v4-active #app button:focus-visible{outline:3px solid #e0aa36;outline-offset:2px}
 body.v4-active .v4-work{max-width:1280px;margin:0 auto}
