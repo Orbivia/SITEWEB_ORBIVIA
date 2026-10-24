@@ -50,6 +50,7 @@ const expected=[
  ["SMQ-07","SMQ06","Programme et comptes rendus d'audits internes","ISO 13485 §8.2.4","Planification et impartialité définies|Constats documentés|Suites et vérification des actions enregistrées"],
  ["SMQ-08","SMQ01","Revues de direction","ISO 13485 §5.6","Entrées de revue définies|Décisions et ressources documentées|Actions et suivi consignés"]
 ].map(function(a){return {id:a[0],folder:a[1],title:a[2],ref:a[3],checks:a[4].split("|"),scope:a[0].startsWith("SMQ")?"smq":"mdr"};});
+const conditional={"DT-VAL-03":["electric"],"DT-VAL-04":["software","connected","cloud","ai"],"DT-VAL-05":["contact","polymer","blood","implant","resp"]};
 const app={
  folders:folders,expected:expected,
  folder:function(id){return folders.find(function(x){return x.id===id;});},
@@ -65,16 +66,25 @@ const app={
  links:function(p,id){const v=this.ensure(p);return (v.links[id]||[]).filter(function(x){return df(p).documents.some(function(d){return d.id===x;});});},
  docs:function(p,id){const ids=new Set(this.links(p,id));return df(p).documents.filter(function(d){return ids.has(d.id);});},
  fingerprint:function(p,id){return this.docs(p,id).map(function(d){return [d.id,d.revision||"",d.hash||"",d.modified||0].join(":");}).sort().join("|");},
+ recommend:function(p,id){
+  const tags=conditional[id];if(!tags)return "general";
+  const answers=df(p).norms&&df(p).norms.answers||{};
+  if(tags.some(function(tag){return answers[tag]==="yes";}))return "likely";
+  if(tags.every(function(tag){return answers[tag]==="no";}))return "unlikely";
+  return "unknown";
+ },
  status:function(p,id){
   const r=this.ensure(p).reviews[id],documents=this.docs(p,id);
   if(r&&r.fingerprint!==this.fingerprint(p,id)&&["reviewed","na","gap"].includes(r.status))return "stale";
   if(r&&r.status==="na")return "na";
   if(r&&r.status==="gap")return "gap";
   if(r&&r.status==="reviewed")return "reviewed";
-  return documents.length?"attached":"missing";
+  if(documents.length)return "attached";
+  const recommendation=this.recommend(p,id);
+  return recommendation==="unlikely"?"scope":recommendation==="unknown"?"uncertain":"missing";
  },
  counts:function(p,scope){
-  const rows=expected.filter(function(e){return !scope||e.scope===scope;}),out={total:rows.length,reviewed:0,attached:0,gap:0,missing:0,stale:0,na:0};
+  const rows=expected.filter(function(e){return !scope||e.scope===scope;}),out={total:rows.length,reviewed:0,attached:0,gap:0,missing:0,stale:0,na:0,scope:0,uncertain:0};
   for(const e of rows){const status=this.status(p,e.id);out[status]=(out[status]||0)+1;}
   return out;
  }
