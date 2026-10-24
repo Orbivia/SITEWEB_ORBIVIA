@@ -10,6 +10,8 @@ body.v312-ui .topbar .project-select{max-width:225px;min-width:120px;overflow:hi
 body.v312-ui .project-select option{color:#17263a;background:white}
 body.v312-ui .topbar #newProjectBtn{border-radius:9px;min-height:39px;font-size:12px;padding:9px 12px}
 body.v312-ui .topbar #cq-header-save{display:none!important}
+body.v312-ui .topbar #unified-more,body.v312-ui .topbar #unified-import{display:none!important}
+body.v312-guided .v312-norm-tools[hidden],body.v312-guided .v312-norm-tools [hidden]{display:none!important}
 body.v312-ui .v312-menu{position:relative;flex:none}
 body.v312-ui .v312-menu>summary{list-style:none;display:flex;align-items:center;justify-content:center;width:41px;height:41px;min-width:41px;border-radius:9px;border:1px solid #ffffff50;background:#ffffff10;color:white;cursor:pointer;font-size:22px;font-weight:600;line-height:1}
 body.v312-ui .v312-menu>summary::-webkit-details-marker{display:none}
