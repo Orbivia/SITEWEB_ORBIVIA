@@ -251,3 +251,13 @@ body.v5-active .v4-nav button:focus-visible,body.v5-active .v5-help>summary:focu
 body.v5-active .cq-comment>summary,body.v5-active .std-comment>summary,body.v5-active .j-question .j-disclosure>summary{font-size:13px;font-weight:500;line-height:1.5;color:#536b87;padding:8px 0}
 body.v5-active .v5-norm-card>.v5-help{position:absolute;right:25px;top:25px}
 body.v5-active .std-comment textarea,body.v5-active .cq-comment textarea{font-size:14px;line-height:1.5;border:1px solid #cfdae5;border-radius:8px;padding:12px;width:100%}
+body.v5-active .v51-norm-choices{margin:25px 0 10px}
+body.v5-active .v51-reference-details .std-record-fields{display:block;margin:12px 0}
+body.v5-active .v51-reference-details label[hidden]{display:none!important}
+body.v5-active .v51-reference-details .std-record-fields label:not([hidden]){margin-bottom:12px}
+body.v5-active .std-reason .v4-button{margin-top:12px;align-self:flex-start}
+body.v5-active .v51-reference-details a{font-size:12px;display:inline-block;margin-top:10px}
+body.v5-active .v5-norm-card>.std-top strong{font-size:20px}
+body.v5-active .v5-norm-card>.std-top{margin:0 0 10px}
+body.v5-active .v5-norm-card>p{font-size:15px;line-height:1.6;margin:0 0 12px}
+body.v5-active .std-reason+.v4-button{margin:12px 0 4px}

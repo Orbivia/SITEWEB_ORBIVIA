@@ -63,3 +63,15 @@ test('global percentage counts applicable completed answers without treating an 
  assert.equal(calculate([{done:2,total:2}]).complete,true);
  assert.equal(calculate([{done:0,total:0}]).complete,false);
 });
+test('reviewing the standards catalogue does not inflate the questionnaire denominator or block its completion',()=>{
+ const source=fs.readFileSync(path.join(root,'v4-app.js'),'utf8');
+ const code=source.slice(source.indexOf('function questionnaireMetrics(p){'),source.indexOf('function chapterProgress(',source.indexOf('function questionnaireMetrics(p){')));
+ const normative={known:2,total:5,decided:0,decisions:278,confirmed:false};
+ const context=vm.createContext({window:{ORBIVIA_NORMES_INFO:{journey:()=>normative},ORBIVIA_JOURNEY_METRICS:{calculate}},profileFields:[['name']],cqEvaluate:()=>({questions:[{}]}),cqContext:()=>({}),cqKnown:()=>true,dfClassConfirmed:()=>true,progress:()=>({filled:0,total:1})});
+ vm.runInContext(code,context);
+ const first=context.questionnaireMetrics({name:'Projet'});
+ assert.equal(first.chapters[1].total,7);
+ normative.decided=278;normative.confirmed=true;normative.decisions=400;
+ const changed=context.questionnaireMetrics({name:'Projet'});assert.equal(changed.total,first.total);assert.equal(changed.percent,first.percent);
+ normative.known=5;assert.equal(context.questionnaireMetrics({name:'Projet'}).chapters[1].percent,100);
+});

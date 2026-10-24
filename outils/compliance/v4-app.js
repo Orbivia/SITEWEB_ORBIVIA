@@ -96,7 +96,7 @@ function progress(p){const total=D.expected.length;return {total,filled:D.expect
 function unresolved(p,e){return !["reviewed","na"].includes(status(p,e.id));}
 function stageState(p,n){
  if(n===0){const count=profileFields.filter(f=>String(p[f[0]]||"").trim()).length;return {done:count===profileFields.length,text:count===profileFields.length?"Terminé":count+" / "+profileFields.length+" réponses"};}
- if(n===1){const done=dfClassConfirmed(p)&&flowProgress(p,2).state==="done";return {done,text:done?"Terminé":"À compléter / confirmer"};}
+ if(n===1){const n=window.ORBIVIA_NORMES_INFO.journey(p),done=dfClassConfirmed(p)&&n.known===n.total;return {done,text:done?"Terminé":"À compléter / confirmer"};}
  if(n===2){const v=progress(p),done=v.inspected===v.total;return {done,text:done?"Terminé":v.filled+" / "+v.total+" renseignés"};}
  return {done:false,text:"Consulter"};
 }
@@ -106,7 +106,7 @@ function questionnaireMetrics(p){
  const c=cqEvaluate(p),a=cqContext(p),n=window.ORBIVIA_NORMES_INFO.journey(p),v=progress(p);
  return window.ORBIVIA_JOURNEY_METRICS.calculate([
   {id:0,title:"Produit",done:profileFields.filter(f=>String(p[f[0]]||"").trim()).length,total:profileFields.length},
-  {id:1,title:"Réglementation",done:c.questions.filter(q=>cqKnown(q,a)).length+(dfClassConfirmed(p)?1:0)+n.known+n.decided+(n.confirmed?1:0),total:c.questions.length+1+n.total+n.decisions+1},
+  {id:1,title:"Réglementation",done:c.questions.filter(q=>cqKnown(q,a)).length+(dfClassConfirmed(p)?1:0)+n.known,total:c.questions.length+1+n.total},
   {id:2,title:"Documents",done:v.filled,total:v.total}
  ]);
 }
@@ -122,7 +122,7 @@ function continueJourney(p){
   ui.tab="home";ui.legacy=false;save();render();focusQuestion();return;
  }
  const n=window.ORBIVIA_NORMES_INFO.journey(p);
- if(n.known<n.total||n.decided<n.decisions||!n.confirmed){j.requirement="norms";window.ORBIVIA_NORMES_INFO.resume(p);openStage(1);return;}
+ if(n.known<n.total){j.requirement="norms";window.ORBIVIA_NORMES_INFO.resume(p);openStage(1);return;}
  const e=D.expected.find(e=>!filled(p,e));
  if(e){openProof(p,e.id,D.expected.filter(e=>!filled(p,e)).map(e=>e.id));return;}
  route("dossier");
@@ -131,7 +131,7 @@ function autosave(){return '<p class="j-save" role="status" aria-live="polite">'
 function nextStage(p){if(!stageState(p,0).done)return 0;if(!stageState(p,1).done)return 1;return progress(p).inspected===D.expected.length?3:2;}
 function home(p){
  const m=questionnaireMetrics(p),next=m.chapters.find(c=>c.done<c.total);
- return '<div class="j-work v5-home"><div class="v5-intro"><span class="v5-kicker">VOTRE PROJET</span><h1>'+E(p.name||"Nouveau projet")+'</h1><p>Répondez aux questions pour construire votre dossier.</p></div><section class="v5-overview"><div class="v5-global"><span>Questionnaire complété</span>'+help("Ce pourcentage compte les réponses renseignées et les décisions confirmées. Les points à vérifier restent à compléter. Il s’adapte aux questions applicables ; il ne mesure pas la conformité.")+'<strong>'+m.percent+'<small> %</small></strong></div><progress class="v5-progress" aria-label="Questionnaire complété" value="'+m.done+'" max="'+m.total+'"></progress><p class="v5-next">'+E(next?'À poursuivre : '+next.title:'Toutes les réponses sont renseignées. Les revues restent consultables dans le dossier.')+'</p>'+button(m.complete?"Ouvrir mon dossier →":"Continuer le questionnaire →","j-resume",undefined,"primary")+'</section><div class="v5-chapters">'+m.chapters.map(c=>'<button type="button" data-j-stage="'+c.id+'"><span>'+E(c.title)+'</span><span>'+c.percent+' % <b aria-hidden="true">›</b></span></button>').join("")+'</div>'+autosave()+'</div>';
+ return '<div class="j-work v5-home"><div class="v5-intro"><span class="v5-kicker">VOTRE PROJET</span><h1>'+E(p.name||"Nouveau projet")+'</h1><p>Répondez aux questions pour construire votre dossier.</p></div><section class="v5-overview"><div class="v5-global"><span>Questionnaire complété</span>'+help("Ce pourcentage suit les réponses au questionnaire et la confirmation de la classification. La revue détaillée des normes est suivie séparément dans le dossier. Les réponses à vérifier restent à compléter ; ce pourcentage ne mesure pas la conformité.")+'<strong>'+m.percent+'<small> %</small></strong></div><progress class="v5-progress" aria-label="Questionnaire complété" value="'+m.done+'" max="'+m.total+'"></progress><p class="v5-next">'+E(next?'À poursuivre : '+next.title:'Toutes les réponses sont renseignées. Les revues restent consultables dans le dossier.')+'</p>'+button(m.complete?"Ouvrir mon dossier →":"Continuer le questionnaire →","j-resume",undefined,"primary")+'</section><div class="v5-chapters">'+m.chapters.map(c=>'<button type="button" data-j-stage="'+c.id+'"><span>'+E(c.title)+'</span><span>'+c.percent+' % <b aria-hidden="true">›</b></span></button>').join("")+'</div>'+autosave()+'</div>';
 }
 function profile(p){
  const j=journey(p),f=profileFields[j.profile];
@@ -192,7 +192,7 @@ function bilan(p){
  return '<div class="v4-work j-bilan">'+title("Mon dossier","Retrouvez vos preuves, les points à traiter et vos exports.")+'<div class="j-meters">'+meter(D.expected.filter(e=>status(p,e.id)!=="na"&&D.docs(p,e.id).length).length,"Documents rattachés",D.expected.filter(e=>status(p,e.id)!=="na").length||1)+meter(v.inspected,"Revues enregistrées",v.total)+'</div><p class="v4-muted">Ces indicateurs suivent les preuves et les revues ; ils ne constituent pas un taux de conformité.</p>'
  +(!stageState(p,1).done?'<div class="v4-alert j-scope-alert">Le périmètre réglementaire reste à compléter ou confirmer. <button type="button" class="v4-button quiet" data-j-stage="1">Reprendre les exigences →</button></div>':'')+'<section class="v4-card"><div class="v4-actions j-between"><h2>À traiter en priorité</h2>'+button("Reprendre les "+pending.length+" points en attente","j-pending",undefined,"primary")+'</div><div class="j-pick-list">'+priorities.slice(0,3).map(e=>'<button type="button" data-j-entry="'+A(e.id)+'"><span>'+E(e.title)+'</span>'+documentPill(p,e)+'<strong>Reprendre ›</strong></button>').join("")+(pending.length?'':'<p>Toutes les rubriques ont une revue enregistrée.</p>')+'</div></section>'
  +'<details class="j-disclosure v4-card" '+(ui.openFiles?'open':'')+'><summary>Documents classés</summary>'+button('Choisir un dossier sur mon PC','folder-pick')+embedded(dossier(p),'.v4-dossier-layout')+'</details>'+'<details class="j-disclosure v4-card"><summary>Plan d’actions ('+countActions(p)+' à traiter)</summary>'+embedded(actions(p),"section.v4-card")+'</details>'
- +'<details class="j-disclosure v4-card"><summary>Références et exigences</summary><div class="v4-actions"><button type="button" class="v4-button" data-v5-gspr>Matrice des exigences MDR</button><button type="button" class="v4-button" data-std-export>Exporter les normes CSV</button></div></details>'+'<details class="j-disclosure v4-card"><summary>Rapports, exports et sauvegarde</summary>'+embedded(reports(p),'.v4-exportgrid')+'</details>'
+ +'<details class="j-disclosure v4-card"><summary>Références et exigences</summary>'+normReviewSummary(p)+'<div class="v4-actions"><button type="button" class="v4-button" data-v5-gspr>Matrice des exigences MDR</button><button type="button" class="v4-button" data-std-export>Exporter les normes CSV</button></div></details>'+'<details class="j-disclosure v4-card"><summary>Rapports, exports et sauvegarde</summary>'+embedded(reports(p),'.v4-exportgrid')+'</details>'
  +'<div class="v4-actions j-export">'+button("Exporter la synthèse","report",undefined,"primary")+button("Exporter le dossier ZIP","zip")+button("Sauvegarder le projet JSON","json")+'</div><p class="v4-muted">Bilan interne — validation humaine requise. Les 30 rubriques constituent une base à compléter selon le projet.</p></div>';
 }
 function dossier(p){
@@ -546,6 +546,9 @@ document.addEventListener("input",function(event){
  const label=document.querySelector(".j-save");if(label)label.textContent=storageOK?"Réponses enregistrées automatiquement":"Enregistrement indisponible — exportez une sauvegarde JSON";
 });
 
+function normReviewSummary(p){const n=window.ORBIVIA_NORMES_INFO.journey(p);return '<p class="v4-muted">Décisions renseignées : '+n.decided+' · Références à examiner : '+n.unresolved.length+'. La revue des normes est distincte du questionnaire.</p><div class="v4-actions"><button type="button" class="v4-button" data-v51-review-norms>Examiner les normes proposées</button><button type="button" class="v4-button quiet" data-v51-confirm-norms>Confirmer la sélection</button></div>';}
+function openNormReview(p){const j=journey(p),n=window.ORBIVIA_NORMES_INFO.journey(p),s=df(p).norms;j.normId=n.unresolved[0]||n.references[0]?.id;j.screen='requirements';j.requirement='norms';s.view='catalogue';s.filter='suggested';s.family='all';s.query='';ui.tab='home';ui.legacy=false;save();render();focusQuestion();}
+function nextNorm(p){const j=journey(p),n=window.ORBIVIA_NORMES_INFO.journey(p),at=n.references.findIndex(r=>r.id===j.normId);if(at>=0&&at+1<n.references.length){j.normId=n.references[at+1].id;save();render();focusQuestion();}else{route('dossier');notify('Revue parcourue. Les références laissées à vérifier restent dans le dossier.');}}
 function polish(p,requirements){
  if(ui.legacy)return;
  const app=document.getElementById("app"),j=journey(p);
@@ -575,11 +578,24 @@ function polish(p,requirements){
     j.normId=selected;
     records.forEach(el=>{if(el.querySelector('[data-std-decision]')?.dataset.stdDecision!==selected)el.remove();});
     app.querySelectorAll('.std-work>.smalltxt,.std-work>p').forEach(el=>el.remove());
-    app.insertAdjacentHTML('afterbegin',regulatoryHeader(p,"references",Math.max(1,n.references.findIndex(r=>r.id===selected)+1)));
+    app.insertAdjacentHTML('afterbegin','<div class="v5-chapter"><button type="button" data-v4-switch="dossier" aria-label="Retour au dossier">←</button><span>Revue des normes</span><small>'+Math.max(1,n.references.findIndex(r=>r.id===selected)+1)+' sur '+n.references.length+'</small></div>');
     card=app.querySelector('.std-record');
-    if(card){card.insertAdjacentHTML('afterbegin','<div class="v5-kicker">RÉFÉRENCE À EXAMINER</div><h1>Cette référence est-elle pertinente ?</h1>'+help('Une proposition reste à examiner selon le produit. Vérifiez le champ, l’édition et le statut de la référence avant de la retenir. La classification et les questions encore en attente restent à confirmer.'));card.classList.add('v5-norm-card');}
-    else app.querySelector('.std-grid')?.insertAdjacentHTML('afterend','<section class="cq-card"><h1>Votre sélection normative</h1><p>Aucune référence dans cette sélection. Complétez les caractéristiques du produit.</p></section>');
-    app.insertAdjacentHTML('beforeend','<div class="v5-controls"><button class="v4-button quiet" type="button" data-v5-norm-questions>← Caractéristiques</button>'+button(n.unresolved.length?'Enregistrer et continuer →':'Confirmer la sélection →','v5-norm-next',undefined,'primary')+'</div>');
+    if(card){
+     card.insertAdjacentHTML('afterbegin','<h1>Retenir cette norme ?</h1>'+help('Les références sont proposées à partir de vos réponses. Retenir une norme ne confirme ni son caractère obligatoire ni la conformité du produit. L’édition et les autres détails peuvent être précisés ultérieurement.'));
+     card.classList.add('v5-norm-card');
+     const id=selected,decision=s.decisions[id]||{},fields=card.querySelector('.std-record-fields'),source=card.querySelector('.std-top a'),metadata=card.querySelector('small');
+     const details=document.createElement('details');details.className='j-disclosure v51-reference-details';details.innerHTML='<summary>Détails de la référence</summary>';
+     if(metadata)details.append(metadata);
+     if(fields){const decisionField=fields.querySelector('[data-std-decision]')?.closest('label');if(decisionField)decisionField.hidden=true;details.append(fields);}
+     if(source)details.append(source);
+     card.append(details);
+     const choices=document.createElement('div');choices.className='j-options v51-norm-choices';
+     choices.innerHTML=[['retained','Retenir cette norme'],['review','À vérifier plus tard'],['excluded','Écarter cette norme']].map(([value,label])=>'<button type="button" class="j-option '+(decision.status===value?'selected':'')+'" data-v51-norm-choice="'+value+'" data-v51-norm-id="'+A(id)+'" aria-pressed="'+(decision.status===value)+'"><span class="j-radio" aria-hidden="true"></span>'+label+'</button>').join('');
+     details.before(choices);
+     const reason=card.querySelector('.std-reason');
+     if(reason){choices.after(reason);reason.insertAdjacentHTML('afterend','<button type="button" class="v4-button primary" data-v51-exclude="'+A(id)+'">Valider l’exclusion →</button>');}
+    }else app.querySelector('.std-grid')?.insertAdjacentHTML('afterend','<section class="cq-card"><h1>Aucune norme proposée</h1><p>Vérifiez les caractéristiques du produit dans le questionnaire.</p></section>');
+    app.insertAdjacentHTML('beforeend','<div class="v5-controls"><button class="v4-button quiet" type="button" data-v51-norm-prev>← Précédente</button><button class="v4-button quiet" type="button" data-v51-norm-exit>Retour au dossier</button></div>');
    }
   }
   if(card){card.classList.add('v5-common-card');const h=card.querySelector('h1,h2');if(h){h.id='j-title';h.tabIndex=-1;}}
@@ -613,8 +629,31 @@ document.addEventListener('click',function(event){
   const holder=document.createElement('button');holder.hidden=true;holder.dataset.stdConfirm='';document.body.append(holder);holder.click();holder.remove();
  }
 });
+document.addEventListener('click',function(event){
+ const b=event.target.closest('[data-v51-norm-choice],[data-v51-exclude],[data-v51-norm-prev],[data-v51-norm-exit],[data-v51-review-norms],[data-v51-confirm-norms],[data-std-answer]');
+ if(!b||ui.working)return;
+ const p=P(),j=journey(p),s=df(p).norms,n=window.ORBIVIA_NORMES_INFO.journey(p);
+ if(b.hasAttribute('data-std-answer')){if(s.view==='catalogue'){openStage(2);}return;}
+ if(b.hasAttribute('data-v51-review-norms')){openNormReview(p);return;}
+ if(b.hasAttribute('data-v51-norm-exit')){route('dossier');return;}
+ if(b.hasAttribute('data-v51-norm-prev')){const at=n.references.findIndex(r=>r.id===j.normId);if(at>0){j.normId=n.references[at-1].id;save();render();}else route('dossier');return;}
+ if(b.hasAttribute('data-v51-confirm-norms')){
+  if(n.known!==n.total||n.unresolved.length){notify('Complétez les caractéristiques et les références encore à examiner avant confirmation.','danger');return;}
+  const holder=document.createElement('button');holder.hidden=true;holder.dataset.stdConfirm='';document.body.append(holder);holder.click();holder.remove();route('dossier');return;
+ }
+ const id=b.dataset.v51NormId||b.dataset.v51Exclude;
+ if(!n.references.some(r=>r.id===id))return;
+ const decision=s.decisions[id]||(s.decisions[id]={status:'review'});
+ if(b.dataset.v51NormChoice){
+  if(ui.normClickAt&&Date.now()-ui.normClickAt<300)return;ui.normClickAt=Date.now();
+  decision.status=b.dataset.v51NormChoice;s.confirmedBasis='';log(p,'Référence '+id+' : '+decision.status);save();
+  if(decision.status==='excluded'){render();document.querySelector('.std-reason textarea')?.focus();return;}
+  nextNorm(p);return;
+ }
+ if(b.hasAttribute('data-v51-exclude')){if(!decision.reason?.trim()){notify('Précisez pourquoi cette norme ne concerne pas le produit.','danger');document.querySelector('.std-reason textarea')?.focus();return;}save();nextNorm(p);}
+});
 document.addEventListener('click',function(event){document.querySelectorAll('.v5-help[open]').forEach(el=>{if(!el.contains(event.target))el.open=false;});});
 document.addEventListener('keydown',function(event){if(event.key==='Escape')document.querySelectorAll('.v5-help[open]').forEach(el=>el.open=false);});
-window.ORBIVIA_V4={version:"5.0-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
+window.ORBIVIA_V4={version:"5.1-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
 render();
 })();

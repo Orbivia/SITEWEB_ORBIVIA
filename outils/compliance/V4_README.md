@@ -1,3 +1,14 @@
+# V5.1 — décisions normatives simplifiées
+
+- Trois boutons : **Retenir cette norme**, **À vérifier plus tard**, **Écarter cette norme**. Les deux premiers enregistrent la décision et ouvrent directement la référence suivante. Une exclusion demande une justification, sans supposer un motif à la place du relecteur.
+- L’édition, la source et la famille restent dans **Détails de la référence**. Les éditions déjà saisies sont conservées.
+- La revue des références est suivie dans **Dossier > Références et exigences**, séparément des réponses du questionnaire. Les normes non examinées ne deviennent pas automatiquement retenues ou exclues.
+- Le compteur du questionnaire ne cumule plus les références du catalogue. Le compteur de revue indique uniquement la position dans les normes proposées.
+- Après les caractéristiques techniques, le parcours passe aux documents. **Continuer le questionnaire** ne reboucle pas sur les décisions normatives en attente. La confirmation de la sélection normative reste soumise aux contrôles existants du moteur.
+- Essais navigateur : passage immédiat après Retenir et À vérifier ; édition masquée initialement ; exclusions conditionnelles. Test supplémentaire : les décisions et la taille du catalogue ne changent pas le pourcentage du questionnaire.
+
+---
+
 # ORBIVIA Compliance Studio — V5, questionnaire unifié
 
 Deux destinations : **Questionnaire** et **Dossier**. Le questionnaire regroupe trois chapitres : Produit, Réglementation, Documents. Le dossier rassemble preuves, revues, actions, matrice MDR et exports.
