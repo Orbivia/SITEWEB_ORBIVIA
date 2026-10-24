@@ -7,7 +7,7 @@
 const D=window.ORBIVIA_V4_DATA,F=window.ORBIVIA_V4_FILES;
 if(!D||!F){console.error("Modules documentaires V4 indisponibles.");return;}
 const ui={tab:"home",scope:"mdr",folder:"DT01",entry:"DT-DES-01",auditScope:"mdr",auditEntry:"DT-DES-01",filter:"all",legacy:false,working:false};
-const labels={missing:"À constituer",attached:"À vérifier",reviewed:"Revue enregistrée",gap:"Écart relevé",stale:"Revue à refaire",na:"Non applicable"};
+const labels={missing:"À constituer",attached:"À vérifier",reviewed:"Revue enregistrée",gap:"Écart relevé",stale:"Revue à refaire",na:"Non applicable",scope:"Applicabilité à confirmer",uncertain:"À cadrer"};
 const tabs=[["home","Accueil"],["dossier","Mon dossier"],["audit","Audit"],["actions","Actions"],["reports","Rapports"]];
 function E(value){return esc(String(value===null||value===undefined?"":value));}
 function A(value){return attr(String(value===null||value===undefined?"":value));}
@@ -70,6 +70,7 @@ function home(p){
  +(s.md.missing?'<p class="v4-muted"><b>'+s.md.missing+'</b> documents techniques attendus sans preuve rattachée.</p>':"")
  +(s.md.attached+s.md.stale?'<p class="v4-muted"><b>'+(s.md.attached+s.md.stale)+'</b> dossiers possèdent une preuve, mais nécessitent une revue ou une nouvelle revue.</p>':"")
  +(s.smq.missing?'<p class="v4-muted"><b>'+s.smq.missing+'</b> documents SMQ à constituer ou rattacher.</p>':"")
+ +(s.md.scope+s.md.uncertain?'<p class="v4-muted"><b>'+(s.md.scope+s.md.uncertain)+'</b> rubriques spécialisées dont l’applicabilité reste à examiner.</p>':"")
  +'<div class="v4-actions" style="margin-top:16px">'+button("Ouvrir le dossier technique","switch","dossier","primary")+button("Voir les actions","switch","actions")+'</div>'
  +'<div class="v4-separator"></div>'+note("Mode local : les références et les résultats d'audit sont dans la sauvegarde JSON du projet. Les fichiers sont conservés séparément dans le navigateur et inclus uniquement lors d'un export ZIP du dossier.")+'</section></div></div>';
 }
