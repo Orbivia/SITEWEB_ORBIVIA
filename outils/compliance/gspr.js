@@ -79,7 +79,7 @@ function renderRow(row,p){
  const a='<label>Applicabilité<select name="applicability" class="control">'+OPT_APPLY.map(([v,l])=>'<option value="'+v+'" '+(e.applicability===v?'selected':'')+'>'+l+'</option>').join('')+'</select></label>';
  const ev='<label>État de la preuve<select name="evidence" class="control">'+OPT_EVID.map(([v,l])=>'<option value="'+v+'" '+(e.evidence===v?'selected':'')+'>'+l+'</option>').join('')+'</select></label>';
  const docs='<label>Document rattaché<select name="documentId" class="control"><option value="">Aucun document</option>'+allDocs.map(d=>'<option value="'+attr(d.id)+'" '+(e.documentId===d.id?'selected':'')+'>'+esc(d.title)+(d.revision?' — '+esc(d.revision):'')+'</option>').join('')+'</select></label>';
- return '<details class="gspr-point" data-gspr-row="'+attr(row.ref)+'"><summary><span class="gspr-ref">'+esc(row.ref)+'</span><span class="gspr-name">'+esc(row.title)+'</span><span class="gspr-pill '+b[1]+'">'+b[0]+'</span></summary><div class="gspr-point-body">'+(q.saved&&!q.fresh?'<p class="notice">Le dispositif, les normes ou la référence documentaire ont changé depuis cette revue. Reconfirmer le point après vérification.</p>':'')+'<div class="gspr-context"><div><strong>Applicabilité proposée</strong><p>'+(rec==='priority'?'À examiner en priorité, selon le dispositif et les réponses.':rec==='likely-out'?'Probablement non pertinent ; une exclusion exige une justification.':'À déterminer avec les données techniques du produit.')+'</p></div><div><strong>Preuves documentaires attendues</strong><p>'+esc(row.evidence)+'</p></div></div><div class="gspr-links"><strong>Normes retenues liées à cette exigence</strong>'+linked+'</div><form class="gspr-form" data-gspr-form="'+attr(row.ref)+'"><div class="gspr-fields">'+a+ev+docs+'<label>Référence manuelle / document<input name="reference" class="control" placeholder="N° document, révision..." value="'+attr(e.reference||'')+'"></label><label>Emplacement de la preuve<input name="location" class="control" placeholder="Page, paragraphe, dossier..." value="'+attr(e.location||'')+'"></label><label>Relecteur interne<input name="reviewer" class="control" placeholder="Nom ou fonction" value="'+attr(e.reviewer||'')+'"></label></div><label>Constat / observations<textarea name="finding" class="control" rows="2" placeholder="Ce qui a été réellement vérifié...">'+esc(e.finding||'')+'</textarea></label><label>Motif de non-applicabilité (si exclu)<textarea name="reason" class="control" rows="2" placeholder="Justification documentée du périmètre">'+esc(e.reason||'')+'</textarea></label><label>Action à mener (si manque)<textarea name="action" class="control" rows="2" placeholder="Complément, vérification, responsable...">'+esc(e.action||'')+'</textarea></label><div class="gspr-form-actions"><a href="'+MDR_URL+'" target="_blank" rel="noopener">Relire l’annexe I du MDR ↗</a><button class="btn gold" type="submit">Enregistrer la revue</button></div></form></div></details>';
+ return '<details class="gspr-point" data-gspr-row="'+attr(row.ref)+'"><summary><span class="gspr-ref">'+esc(row.ref)+'</span><span class="gspr-name">'+esc(row.title)+'</span><span class="gspr-pill '+b[1]+'">'+b[0]+'</span></summary><div class="gspr-point-body">'+(q.saved&&!q.fresh?'<p class="notice">Le dispositif, les normes ou la référence documentaire ont changé depuis cette revue. Reconfirmer le point après vérification.</p>':'')+'<div class="gspr-context"><div><strong>Applicabilité proposée</strong><p>'+(rec==='priority'?'À examiner en priorité, selon le dispositif et les réponses.':rec==='likely-out'?'Probablement non pertinent ; une exclusion exige une justification.':'À déterminer avec les données techniques du produit.')+'</p></div><div><strong>Preuves documentaires attendues</strong><p>'+esc(row.evidence)+'</p></div></div><div class="gspr-links"><strong>Normes retenues liées à cette exigence</strong>'+linked+'</div><form class="gspr-form" data-gspr-form="'+attr(row.ref)+'"><div class="gspr-fields">'+a+ev+docs+'<label>Référence manuelle / document<input name="reference" class="control" placeholder="N° document, révision..." value="'+attr(e.reference||'')+'"></label><label>Emplacement de la preuve<input name="location" class="control" placeholder="Page, paragraphe, dossier..." value="'+attr(e.location||'')+'"></label><label>Relecteur interne<input name="reviewer" class="control" placeholder="Nom ou fonction" value="'+attr(e.reviewer||'')+'"></label><label>Méthode de démonstration<input name="method" class="control" placeholder="Essai, analyse, calcul, clinique..." value="'+attr(e.method||'')+'"></label></div><label>Constat / observations<textarea name="finding" class="control" rows="2" placeholder="Ce qui a été réellement vérifié...">'+esc(e.finding||'')+'</textarea></label><label>Motif de non-applicabilité (si exclu)<textarea name="reason" class="control" rows="2" placeholder="Justification documentée du périmètre">'+esc(e.reason||'')+'</textarea></label><label>Action à mener (si manque)<textarea name="action" class="control" rows="2" placeholder="Complément, vérification, responsable...">'+esc(e.action||'')+'</textarea></label><div class="gspr-form-actions"><a href="'+MDR_URL+'" target="_blank" rel="noopener">Relire l’annexe I du MDR ↗</a><button class="btn gold" type="submit">Enregistrer la revue</button></div></form></div></details>';
 }
 function filterRows(p){
  const g=data(p),q=(g.search||'').toLocaleLowerCase('fr');
@@ -92,7 +92,7 @@ function view(p){
 }
 function formRead(form){
  const fd=new FormData(form),v=k=>String(fd.get(k)||'').trim();
- return {applicability:v('applicability'),evidence:v('evidence'),documentId:v('documentId'),reference:v('reference'),location:v('location'),reviewer:v('reviewer'),finding:v('finding'),reason:v('reason'),action:v('action')};
+ return {applicability:v('applicability'),evidence:v('evidence'),documentId:v('documentId'),reference:v('reference'),location:v('location'),reviewer:v('reviewer'),method:v('method'),finding:v('finding'),reason:v('reason'),action:v('action')};
 }
 function validate(row,p,e){
  if(!['pending','yes','no'].includes(e.applicability))return 'Statut d’applicabilité invalide.';
@@ -105,13 +105,13 @@ function validate(row,p,e){
  if(e.applicability!=='yes'&&e.evidence!=='pending')return 'Déterminer l’applicabilité avant de qualifier les preuves.';
  if(e.applicability==='yes'&&e.evidence==='present'){
   if(!(e.documentId||e.reference)&&!e.location)return 'Indiquer au minimum un document ou une référence et un emplacement précis.';
-  if(!(e.documentId||e.reference)||!e.location||!e.finding||!e.reviewer)return 'Pour une preuve suffisante : document/référence, emplacement, constat et relecteur sont requis.';
+  if(!(e.documentId||e.reference)||!e.location||!e.finding||!e.reviewer||!e.method)return 'Pour une preuve suffisante : méthode, document/référence, emplacement, constat et relecteur sont requis.';
  }
  if(e.applicability==='yes'&&['partial','absent'].includes(e.evidence)&&!e.finding)return 'Décrire le manque ou l’écart observé.';
  return '';
 }
 function saveEntry(row,p,value){
- const v={...value},error=validate(row,p,v);if(error)return error;
+ const v={...value};if(v.applicability==='no')v.evidence='pending';const error=validate(row,p,v);if(error)return error;
  if(v.applicability==='no'){v.evidence='pending';v.documentId='';v.reference='';v.location='';}
  v.basis=fingerprint(row,p,v);v.savedAt=new Date().toISOString();
  data(p).entries[row.ref]=v;
@@ -119,10 +119,10 @@ function saveEntry(row,p,value){
  save();return '';
 }
 function exportRows(p){
- const rows=[['Exigence MDR','Chapitre','Intitulé résumé','Applicabilité proposée','Applicabilité confirmée','État de preuve','Document','Révision du document','Référence libre','Emplacement','Normes retenues liées','Constat','Motif d’exclusion','Action','Relecteur','Date revue','Révision périmée']];
+ const rows=[['Exigence MDR','Chapitre','Intitulé résumé','Applicabilité proposée','Applicabilité confirmée','État de preuve','Document','Révision du document','Référence libre','Emplacement','Normes retenues liées','Constat','Motif d’exclusion','Action','Relecteur','Méthode de démonstration','Date revue','Révision périmée']];
  for(const row of CATALOG){
   const a=check(row,p),e=a.e,doc=docOf(p,e.documentId);
-  rows.push([row.ref,row.chapter,row.title,scope(row,p),e.applicability||'pending',e.evidence||'pending',doc?.title||'',doc?.revision||'',e.reference||'',e.location||'',linkedStandards(row,p).map(x=>x.id+(x.edition?' '+x.edition:'')).join(' ; '),e.finding||'',e.reason||'',e.action||'',e.reviewer||'',e.savedAt||'',a.saved&&!a.fresh?'Oui':'Non']);
+  rows.push([row.ref,row.chapter,row.title,scope(row,p),e.applicability||'pending',e.evidence||'pending',doc?.title||'',doc?.revision||'',e.reference||'',e.location||'',linkedStandards(row,p).map(x=>x.id+(x.edition?' '+x.edition:'')).join(' ; '),e.finding||'',e.reason||'',e.action||'',e.reviewer||'',e.method||'',e.savedAt||'',a.saved&&!a.fresh?'Oui':'Non']);
  }
  return rows;
 }
