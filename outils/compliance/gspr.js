@@ -6,7 +6,7 @@
 'use strict';
 const CATALOG=window.ORBIVIA_GSPR_CATALOGUE||[];
 if(!CATALOG.length)throw Error('Référentiel GSPR non chargé');
-const VERSION='2026-10-24-mdr-annexI-v1';
+const VERSION='2026-10-24-mdr-annexI-v2';
 const MDR_URL='https://eur-lex.europa.eu/eli/reg/2017/745/oj';
 const DECISION_URL='https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards/medical-devices_en';
 const OPT_APPLY=[['pending','À déterminer'],['yes','Applicable'],['no','Non applicable (avec motif)']];
@@ -22,6 +22,7 @@ function techContext(p){
  if(['yes','no'].includes(c.implant))a.implant=c.implant;
  if(['yes','no'].includes(c.nano))a.nano=c.nano;
  if(['yes','no'].includes(c.medicinal))a.medicinal=c.medicinal;
+ if(['yes','no'].includes(c.substance))a.substance=c.substance;
  if(c.tissue==='none')a.tissue='no';else if(['animal','human','viable'].includes(c.tissue))a.tissue='yes';
  return {...a,...n};
 }
