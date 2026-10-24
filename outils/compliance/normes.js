@@ -1,0 +1,109 @@
+/* ORBIVIA Compliance Studio — sélection normative guidée V3.9.
+   Sélection indicative, ne se substitue pas à l'étude d'applicabilité MDR. */
+(()=>{
+'use strict';
+const STANDARDS=window.ORBIVIA_NORMES_CATALOGUE;
+if(!Array.isArray(STANDARDS)||!STANDARDS.length)throw Error('Catalogue des normes absent');
+const TAGS=[
+['electric','Le produit est-il un appareil électromédical électrique ?','Électronique'],
+['software','Comprend-il un logiciel médical ?','Électronique'],
+['connected','Communique-t-il avec un réseau ou un système informatique ?','Électronique'],
+['cloud','Utilise-t-il un serveur distant ou des données de santé hébergées ?','Électronique','connected'],
+['ai','Utilise-t-il une fonction d’intelligence artificielle ?','Électronique','software'],
+['alarm','Dispose-t-il d’alarmes médicales ?','Électronique','electric'],
+['closedloop','Régule-t-il un paramètre physiologique en boucle fermée ?','Électronique','electric'],
+['home','Est-il destiné au domicile ?','Environnement'],
+['emergency','Est-il utilisé par les secours médicaux ?','Environnement'],
+['transport','Subit-il des conditions de chocs ou vibrations exigeantes ?','Environnement'],
+['clinical','Une investigation clinique est-elle prévue ?','Environnement'],
+['contact','Présente-t-il un contact direct ou indirect avec le corps ?','Biologie'],
+['polymer','Les polymères exposent-ils le patient à un risque biologique à évaluer ?','Biologie','contact'],
+['blood','Entre-t-il en contact avec le sang ?','Biologie'],
+['implant','Est-il implantable ?','Biologie'],
+['activeImplant','S’agit-il d’un implant actif ?','Biologie','implant'],
+['nano','Contient-il des nanomatériaux avec exposition possible ?','Biologie'],
+['tissue','Contient-il des tissus d’origine animale ou humaine ?','Biologie'],
+['sterile','Est-il fourni à l’état stérile ?','Stérilité'],
+['eto','La stérilisation utilise-t-elle l’oxyde d’éthylène ?','Stérilité','sterile'],
+['radiation','La stérilisation utilise-t-elle une irradiation ?','Stérilité','sterile'],
+['steam','La stérilisation utilise-t-elle la vapeur ?','Stérilité','sterile'],
+['reprocess','Est-il réutilisable avec retraitement entre utilisations ?','Stérilité'],
+['cleanroom','Est-il fabriqué ou conditionné en salle propre ?','Stérilité'],
+['resp','Concerne-t-il la respiration ou un circuit respiratoire ?','Fonction médicale'],
+['sleep','Est-il destiné à traiter les apnées du sommeil ?','Fonction médicale','resp'],
+['oxygen','Utilise-t-il de l’oxygène médical ?','Fonction médicale','resp'],
+['anesthesia','Est-il destiné à l’anesthésie ?','Fonction médicale','resp'],
+['infusion','Administre-t-il des médicaments ou liquides par perfusion ?','Fonction médicale'],
+['catheter','Contient-il un cathéter intravasculaire ?','Fonction médicale'],
+['connectors','Utilise-t-il de petits raccords fluidiques ou gazeux ?','Fonction médicale'],
+['enteral','Concerne-t-il la voie entérale ?','Fonction médicale','connectors'],
+['dialysis','Concerne-t-il la dialyse ou l’épuration extracorporelle ?','Fonction médicale'],
+['cardiac','Concerne-t-il une fonction cardiovasculaire ?','Spécialité'],
+['ecg','Acquiert-il des électrocardiogrammes ?','Spécialité','cardiac'],
+['vascular','Concerne-t-il une prothèse ou un acte vasculaire ?','Spécialité','cardiac'],
+['neuro','Concerne-t-il la neurologie ou neurostimulation ?','Spécialité'],
+['surgical','Est-il utilisé en chirurgie ?','Spécialité'],
+['endoscopy','Est-il utilisé en endoscopie ?','Spécialité','surgical'],
+['orthopedic','Concerne-t-il des implants orthopédiques ?','Spécialité'],
+['prosthesis','Est-ce une prothèse externe ou orthèse ?','Spécialité'],
+['wheelchair','Est-ce un fauteuil roulant ?','Spécialité'],
+['dental','Concerne-t-il la dentisterie ?','Spécialité'],
+['ophthalmic','Concerne-t-il l’ophtalmologie ?','Spécialité'],
+['contactLens','Concerne-t-il les lentilles de contact ?','Spécialité','ophthalmic'],
+['wound','Est-il destiné au traitement de plaies ?','Spécialité'],
+['monitor','Surveille-t-il des paramètres physiologiques ?','Spécialité'],
+['neonatal','Concerne-t-il les nouveau-nés ?','Spécialité'],
+['bed','Est-ce un lit médicalisé ?','Spécialité'],
+['hearing','Concerne-t-il une aide auditive ou un implant cochléaire ?','Spécialité'],
+['thermal','Chauffe-t-il le patient ?','Spécialité'],
+['gloves','Est-ce un gant à usage médical ?','Consommables'],
+['mask','Est-ce un masque à usage médical ?','Consommables'],
+['textile','Concerne-t-il les textiles de bloc opératoire ?','Consommables'],
+['xray','Produit-il ou détecte-t-il les rayons X médicaux ?','Imagerie'],
+['mri','Utilise-t-il l’imagerie par résonance magnétique ?','Imagerie'],
+['ultrasound','Utilise-t-il les ultrasons médicaux ?','Imagerie'],
+['laser','Utilise-t-il un laser médical ?','Imagerie'],
+['optical','Émet-il une lumière à visée médicale ?','Imagerie'],
+['radiotherapy','Concerne-t-il la radiothérapie ?','Imagerie'],
+['imaging','Échange-t-il des images médicales ?','Imagerie'],
+['lab','S’agit-il d’un appareil de laboratoire médical ?','Imagerie'],
+['ivd','Relève-t-il plutôt du diagnostic in vitro (IVDR) ?','Imagerie']
+].map(([id,title,section,dependency])=>({id,title,section,dependency}));
+const groups=[...new Set(STANDARDS.map(x=>x.family))];
+function record(p){const d=df(p);d.norms=d.norms||{};const s=d.norms;s.answers=s.answers||{};s.decisions=s.decisions||{};s.notes=s.notes||{};s.view=s.view||'questions';return s;}
+function activeQ(s){return TAGS.filter(q=>!q.dependency||s.answers[q.dependency]==='yes');}
+function answered(q,s){return ['yes','no'].includes(s.answers[q.id]);}
+function digest(v){const z=JSON.stringify(v);let h=2166136261;for(let i=0;i<z.length;i++){h^=z.charCodeAt(i);h=Math.imul(h,16777619)}return String(h>>>0)+':'+z.length;}
+function classify(r,a){if(r.when==='base')return 'suggested';const clauses=r.when.split(',').map(x=>x.split('+'));if(clauses.some(x=>x.every(k=>a[k]==='yes')))return 'suggested';if(clauses.some(x=>x.some(k=>a[k]==='yes')&&x.every(k=>a[k]!=='no')))return 'possible';return 'all';}
+function info(p){const s=record(p),qs=activeQ(s),recs=STANDARDS.filter(r=>classify(r,s.answers)==='suggested');const unresolved=recs.filter(r=>{const d=s.decisions[r.id];return !d||!['retained','excluded'].includes(d.status)||d.status==='excluded'&&!d.reason?.trim()});const basis=digest([p.intended,cqContext(p),df(p).classification.confirmedAt,df(p).classification.confirmedBasis,s.answers,s.decisions,'catalogue-2026-10-24']);return {qs,recs,unresolved,known:qs.filter(q=>answered(q,s)).length,checking:qs.filter(q=>s.answers[q.id]==='checking').length,basis};}
+function status(p){const s=record(p),v=info(p);if(!v.known&&!v.checking)return {state:'todo',short:'À commencer',detail:'Caractéristiques normatives à renseigner.'};if(v.checking)return {state:'review',short:v.checking+' à vérifier',detail:'Des caractéristiques restent indéterminées.'};if(v.known<v.qs.length)return {state:'progress',short:v.known+'/'+v.qs.length,detail:'Questionnaire en cours.'};if(v.unresolved.length)return {state:'review',short:v.unresolved.length+' à examiner',detail:'Arbitrer les normes suggérées par le questionnaire.'};if(s.confirmedBasis===v.basis)return {state:'done',short:'Terminé',detail:'Sélection revue et enregistrée (non équivalente à un certificat).'};return {state:'progress',short:'À confirmer',detail:'Confirmer la sélection normative après revue.'};}
+const oldFlow=flowProgress;
+flowProgress=function(p,n){return n===2?status(p):oldFlow(p,n>2?n-1:n);};
+function current(p){const d=df(p);return d.normsOpen?2:d.step>=2?d.step+1:d.step;}
+cqStepNav=function(p=pickProject()){const names=['Cadrage','Classification','Normes','Documents','Preuves','Synthèse'],n=current(p);return '<nav class="cq-stepnav flow-stepnav std-stepbar" aria-label="Étapes du dossier">'+names.map((name,i)=>{const v=flowProgress(p,i);return '<button class="cq-stage flow-stage flow-'+v.state+(n===i?' current':'')+'" data-df-step="'+i+'" '+(n===i?'aria-current="step"':'')+' title="'+attr(v.detail)+'"><b class="flow-num"><span>'+(i+1)+'</span><span class="flow-tick">✓</span></b><span class="flow-label">'+name+'</span><small class="flow-status">'+esc(v.short)+'</small></button>';}).join('')+'</nav>';};
+function footer(p){const names=['Cadrage','Classification','Normes','Documents','Preuves','Synthèse'],n=current(p),v=flowProgress(p,n);return '<div class="flow-footer"><div class="flow-recap"><strong>Étape '+(n+1)+' / 6 · '+esc(v.short)+'</strong><span>'+esc(v.detail)+'</span></div><div class="flow-footer-actions">'+(n?'<button class="btn" data-df-step="'+(n-1)+'">← '+names[n-1]+'</button>':'')+(n<5?'<button class="btn gold" data-df-step="'+(n+1)+'">'+names[n+1]+' →</button>':'')+'</div></div>';}
+function option(value,label,selected){return '<option value="'+attr(value)+'" '+(value===selected?'selected':'')+'>'+esc(label)+'</option>';}
+function questionView(p){
+ const s=record(p),qs=activeQ(s),next=qs.find(q=>q.id===s.cursor)||qs.find(q=>!['yes','no','checking'].includes(s.answers[q.id]))||qs[0],index=qs.indexOf(next),v=info(p);if(!next)return '<p>Questionnaire non chargé.</p>';
+ return '<div class="std-question"><p class="std-progress"><progress value="'+v.known+'" max="'+qs.length+'"></progress><span>Question '+(index+1)+' / '+qs.length+' · '+esc(next.section)+'</span></p><section class="cq-card"><h2>'+esc(next.title)+'</h2><div class="std-options">'+[['yes','Oui'],['no','Non'],['checking','À vérifier']].map(([k,l])=>'<button class="cq-option '+(s.answers[next.id]===k?'selected':'')+'" data-std-answer="'+k+'" data-std-id="'+next.id+'">'+l+'</button>').join('')+'</div><details class="std-comment"><summary>Ajouter un commentaire (facultatif)</summary><textarea class="control" data-std-note="'+next.id+'" rows="3">'+esc(s.notes[next.id]||'')+'</textarea></details></section><div class="std-actions"><button class="btn" data-std-back '+(!index?'disabled':'')+'>← Question précédente</button><button class="btn" data-std-view="catalogue">Voir les normes →</button></div></div>';
+}
+function source(id){return id.startsWith('IEC')?'https://webstore.iec.ch/searchform&q='+encodeURIComponent(id):id.startsWith('EN ')?'https://www.cencenelec.eu/european-standardization/european-standards/':'https://www.iso.org/search.html?q='+encodeURIComponent(id);}
+function normView(p){
+ const s=record(p),v=info(p),filter=s.filter||'suggested',family=s.family||'all',query=(s.query||'').toLowerCase(),rows=STANDARDS.filter(r=>(family==='all'||r.family===family)&&(!query||(r.id+' '+r.title+' '+r.family).toLowerCase().includes(query))&&(filter==='all'||filter==='suggested'&&classify(r,s.answers)==='suggested'||filter==='possible'&&classify(r,s.answers)==='possible'||filter==='retained'&&s.decisions[r.id]?.status==='retained'||filter==='unresolved'&&v.unresolved.some(x=>x.id===r.id)));
+ let h='<div class="std-metrics">'+[[STANDARDS.length,'Références'],[v.recs.length,'Suggérées'],[Object.values(s.decisions).filter(x=>x.status==='retained').length,'Retenues'],[v.unresolved.length,'À arbitrer']].map(([n,l])=>'<div><strong>'+n+'</strong><span>'+l+'</span></div>').join('')+'</div><div class="std-filters"><label>Afficher<select class="control" data-std-filter>'+[['suggested','Proposées'],['unresolved','À arbitrer'],['retained','Retenues'],['possible','Possibles'],['all','Catalogue complet']].map(([a,b])=>option(a,b,filter)).join('')+'</select></label><label>Famille<select class="control" data-std-family>'+option('all','Toutes',family)+groups.map(x=>option(x,x,family)).join('')+'</select></label><label>Rechercher<input class="control" data-std-search value="'+attr(s.query||'')+'" placeholder="ISO, IEC, thème..."></label></div><p class="smalltxt">'+rows.length+' références affichées. Une proposition est à évaluer, pas une obligation confirmée.</p><div class="std-grid">';
+ for(const r of rows){const d=s.decisions[r.id]||{},selected=d.status||'review';h+='<article class="std-record"><div class="std-top"><strong>'+esc(r.id)+'</strong><a href="'+source(r.id)+'" target="_blank" rel="noopener noreferrer">Source ↗</a></div><p>'+esc(r.title)+'</p><small>'+esc(r.family)+' · '+(r.when==='base'?'Référence transversale': 'Proposée si : '+esc(r.when.replaceAll(',',' ou ').replaceAll('+',' et ')))+'</small><div class="std-record-fields"><label>Décision<select class="control" data-std-decision="'+attr(r.id)+'">'+[['review','À examiner'],['retained','Retenue'],['excluded','Exclue avec motif']].map(([a,b])=>option(a,b,selected)).join('')+'</select></label><label>Édition retenue<input class="control" data-std-edition="'+attr(r.id)+'" value="'+attr(d.edition||'')+'" placeholder="À confirmer"></label></div>'+(selected==='excluded'?'<label class="std-reason">Motif d’exclusion (obligatoire)<textarea class="control" data-std-reason="'+attr(r.id)+'" rows="2">'+esc(d.reason||'')+'</textarea></label>':'')+'</article>';}
+ h+='</div><div class="std-actions"><button class="btn gold" data-std-confirm '+(v.known===v.qs.length&&!v.checking&&!v.unresolved.length?'':'disabled')+'>Confirmer la sélection ✓</button><button class="btn" data-df-step="3">Passer aux documents →</button></div><p class="smalltxt">Le catalogue peut contenir des références remplacées. Vérifier titre officiel, édition EN, amendements, annexe Z, harmonisation et applicabilité réelle avant utilisation. Le volet IVDR est documentaire et ne réalise pas la qualification IVDR.</p><p class="smalltxt"><a href="https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards/medical-devices_en" target="_blank" rel="noopener">Commission européenne : normes harmonisées MDR</a> · <a href="https://eur-lex.europa.eu/eli/dec_impl/2021/1182/2026-06-17/eng" target="_blank" rel="noopener">Décision 2021/1182 consolidée au 17/06/2026</a></p>';return h;
+}
+function screen(p){const s=record(p),v=info(p);return '<div class="std-work"><div class="cq-heading"><h1>Sélection des normes</h1><p>Questionnaire technique et référentiel de '+STANDARDS.length+' références. La sélection doit être justifiée par le fabricant.</p></div>'+(cqEvaluate(p).complete?'':'<p class="notice">La classification n’est pas complète : la sélection reste provisoire.</p>')+'<div class="std-tabs"><button class="btn '+(s.view==='questions'?'gold':'')+'" data-std-view="questions">Questionnaire ('+v.known+'/'+v.qs.length+')</button><button class="btn '+(s.view==='catalogue'?'gold':'')+'" data-std-view="catalogue">Référentiel</button><button class="btn" data-std-export>Exporter CSV</button></div>'+(s.view==='catalogue'?normView(p):questionView(p))+'</div>';}
+const oldDraw=drawDocflow;drawDocflow=function(p,forced){if(df(p).normsOpen)return cqStepNav(p)+screen(p)+footer(p);const el=document.createElement('div');el.innerHTML=oldDraw(p,forced);el.querySelector('.flow-footer')?.remove();el.querySelector('.df-bottom')?.remove();return el.innerHTML+footer(p);};
+const oldNav=dfNavigate;dfNavigate=function(n){const p=pickProject(),d=df(p);if(n===2){dfKeepDraft();dfDirty=false;d.normsOpen=true;d.step=1;page='guided';save();render();window.scrollTo({top:0});return;}d.normsOpen=false;oldNav(n>=3?n-1:n);};
+const oldRender=render;render=function(){oldRender();const p=pickProject(),n=current(p);document.body.classList.toggle('std-active',!!df(p).normsOpen);document.querySelectorAll('.std-stepbar .flow-stage').forEach((el,i)=>{el.classList.toggle('current',i===n);if(i===n)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')});};
+function csv(v){let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';}
+function exportCSV(p){const s=record(p),rows=[['Référence','Famille','Objet indicatif','Proposée','Décision','Édition','Motif']];for(const r of STANDARDS){const d=s.decisions[r.id]||{};rows.push([r.id,r.family,r.title,classify(r,s.answers),d.status||'à examiner',d.edition||'',d.reason||'']);}download(safeName(p.name||'Audit')+'_normes.csv','\ufeff'+rows.map(row=>row.map(csv).join(';')).join('\r\n'),'text/csv;charset=utf-8');}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-std-answer],[data-std-back],[data-std-view],[data-std-export],[data-std-confirm]');if(!b)return;const p=pickProject(),s=record(p);if(b.dataset.stdView){s.view=b.dataset.stdView;save();render();return;}if(b.hasAttribute('data-std-export')){exportCSV(p);return;}if(b.dataset.stdAnswer){s.answers[b.dataset.stdId]=b.dataset.stdAnswer;const qs=activeQ(s),next=qs.find(q=>!['yes','no','checking'].includes(s.answers[q.id]));s.cursor=next?.id||b.dataset.stdId;s.view=next?'questions':'catalogue';s.confirmedBasis='';save();render();return;}if(b.hasAttribute('data-std-back')){const qs=activeQ(s),n=qs.findIndex(q=>q.id===s.cursor);s.cursor=qs[Math.max(0,n-1)]?.id;s.view='questions';save();render();return;}if(b.hasAttribute('data-std-confirm')){const v=info(p);if(v.checking||v.known!==v.qs.length||v.unresolved.length){notify('Terminer les questions et justifier chaque décision proposée.','danger');return;}s.confirmedBasis=v.basis;save();dfNavigate(3);}});
+document.addEventListener('change',e=>{const b=e.target,p=pickProject(),s=record(p);if(b.hasAttribute('data-std-filter'))s.filter=b.value;else if(b.hasAttribute('data-std-family'))s.family=b.value;else if(b.hasAttribute('data-std-search'))s.query=b.value;else if(b.hasAttribute('data-std-decision')){const d=s.decisions[b.dataset.stdDecision]||{};d.status=b.value;s.decisions[b.dataset.stdDecision]=d;s.confirmedBasis='';}else return;save();render();});
+document.addEventListener('input',e=>{const b=e.target,p=pickProject(),s=record(p);if(b.hasAttribute('data-std-note')){s.notes[b.dataset.stdNote]=b.value;save();return;}if(b.hasAttribute('data-std-search')){s.query=b.value;save();return;}const id=b.dataset.stdReason||b.dataset.stdEdition;if(!id)return;const d=s.decisions[id]||{status:'review'};if(b.dataset.stdReason)d.reason=b.value;else d.edition=b.value;s.decisions[id]=d;s.confirmedBasis='';save();});
+const st=document.createElement('style');st.textContent='.std-stepbar .flow-stage{max-width:175px}.std-work{max-width:1140px;margin:0 auto;padding:0 10px 28px}.std-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.std-question{max-width:800px;margin:0 auto}.std-question h2{font-size:23px;line-height:1.4;margin:0 0 24px}.std-progress{display:flex;gap:12px;align-items:center;margin:14px 0;color:#65758a;font-size:12px}.std-progress progress{flex:1;accent-color:#e7a116}.std-options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.std-options button{min-height:58px}.std-comment{margin-top:22px}.std-actions{display:flex;justify-content:space-between;gap:12px;margin:20px 0;flex-wrap:wrap}.std-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 24px}.std-metrics>div{border:1px solid #dce3eb;padding:16px;border-radius:10px;background:white;display:flex;flex-direction:column;gap:6px}.std-metrics strong{font-size:24px}.std-metrics span{font-size:11px;color:#65758a}.std-filters{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:10px;margin:18px 0}.std-filters label,.std-record-fields label,.std-reason{display:flex;flex-direction:column;gap:6px;color:#536579;font-size:11px}.std-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.std-record{border:1px solid #dce3eb;border-radius:12px;background:white;padding:17px;min-width:0}.std-top{display:flex;justify-content:space-between;gap:10px}.std-top a{font-size:11px}.std-record p{font-size:13px;line-height:1.5;margin:12px 0}.std-record small{font-size:11px;color:#6b7f92;display:block;min-height:28px}.std-record-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.std-record-fields .control{min-width:0;width:100%;font-size:12px}.std-reason{margin-top:12px}@media(max-width:900px){.std-grid{grid-template-columns:1fr}}@media(max-width:700px){.std-stepbar .flow-stage{min-width:108px;flex:0 0 108px}.std-work{padding:0 3px 20px}.std-options{grid-template-columns:1fr}.std-question h2{font-size:19px}.std-metrics{grid-template-columns:1fr 1fr}.std-metrics>div{padding:12px}.std-filters,.std-record-fields{grid-template-columns:1fr}.std-record{padding:15px}.std-actions .btn{flex:1;white-space:normal}}';document.head.append(st);
+window.ORBIVIA_NORMES_INFO={version:'3.9',catalogueDate:'2026-10-24',count:STANDARDS.length,questions:TAGS.length};
+render();
+})();
