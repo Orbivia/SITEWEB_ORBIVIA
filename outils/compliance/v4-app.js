@@ -223,14 +223,19 @@ async function exportZip(){
 async function chooseFolder(){
  try{
   const p=P(),name=await F.chooseDirectory();
-  let count=0;
+  let count=0,copied=0,failed=0;
   for(const f of D.folders){
    const path=(f.scope==="mdr"?"Dossier_technique/":"")+f.path;
    let dir=F.directory;
    for(const segment of path.split("/").filter(Boolean))dir=await dir.getDirectoryHandle(F.safe(segment),{create:true});
    count++;
   }
-  notify("Dossier « "+name+" » : "+count+" répertoires créés. Les nouvelles preuves y seront également copiées.");
+  for(const doc of allDocs(p)){
+   if(!doc.v4FileKey)continue;
+   try{const blob=await F.read(p.id,doc.id);if(!blob){failed++;continue;}await F.writeDirectory(doc.path,blob);copied++;}
+   catch(_e){failed++;}
+  }
+  notify("Dossier « "+name+" » : "+count+" répertoires créés, "+copied+" preuves copiées."+(failed?" "+failed+" fichiers non copiés : vérifier le stockage local.":""),failed?"danger":"success");
  }catch(e){if(e.name!=="AbortError")notify(e.message,"danger");}
 }
 function exportCSV(type){
@@ -258,6 +263,12 @@ function exportReport(){
  const report='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>ORBIVIA — Rapport documentaire</title><style>body{font:13px Arial,sans-serif;color:#20354a;margin:34px}table{border-collapse:collapse;width:100%;font-size:11px}th,td{border:1px solid #ccd6e2;text-align:left;padding:8px;vertical-align:top}th{background:#eef3f8}h1{color:#17263a}small{color:#728398}</style></head><body><h1>Rapport documentaire ORBIVIA V4</h1><p><b>Projet :</b> '+E(p.name)+' — '+E(p.company)+'</p><p>Édité le '+E(new Date().toLocaleDateString("fr-FR"))+'</p><p>Ce document est un relevé de travail et des décisions de relecteurs. Il ne constitue pas une certification, une déclaration de conformité ou un avis d’organisme notifié.</p><h2>Revue des livrables</h2><table><thead><tr><th>Code</th><th>Document attendu</th><th>Référence</th><th>État</th><th>Preuves</th><th>Relecteur</th><th>Constat</th></tr></thead><tbody>'+rows+'</tbody></table><h2>Actions</h2><ul>'+v.actions.map(function(a){return '<li>'+E(a.title)+' — '+E(a.status)+' — '+E(a.owner||"Non affecté")+'</li>';}).join("")+'</ul></body></html>';
  download(safeName(p.name)+"_audit_V4.html",report,"text/html;charset=utf-8");
 }
+document.addEventListener("click",function(event){
+ const link=event.target.closest("[data-unified-tools],[data-nav]");
+ if(!link)return;
+ const name=link.dataset.nav;
+ if(link.hasAttribute("data-unified-tools")||name&&name!=="guided")ui.legacy=true;
+},true);
 document.addEventListener("click",async function(event){
  const b=event.target.closest("[data-v4-switch],[data-v4-project],[data-v4-scope],[data-v4-folder],[data-v4-entry],[data-v4-audit-scope],[data-v4-audit-entry],[data-v4-filter],[data-v4-start-audit],[data-v4-go-entry],[data-v4-legacy],[data-v4-return],[data-v4-add-action],[data-v4-attach],[data-v4-unlink],[data-v4-download],[data-v4-folder-pick],[data-v4-zip],[data-v4-json],[data-v4-report],[data-v4-matrix],[data-v4-actions-export],[data-v4-switch],#v4-new-project");
  if(!b)return;
