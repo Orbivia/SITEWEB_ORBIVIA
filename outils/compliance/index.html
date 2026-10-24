@@ -39,6 +39,7 @@
 .flow-stepnav{display:flex;max-width:1080px;margin:0 auto 30px;gap:10px;padding:22px 6px;justify-content:space-between}
 .flow-stage{position:relative;display:flex;flex:1;flex-direction:column;align-items:center;gap:6px;min-width:0;max-width:210px;padding:12px 8px 14px;border:1px solid transparent;border-radius:12px;background:transparent;color:#536277;white-space:normal;text-align:center;transition:background .15s,border-color .15s}
 .flow-stage:hover{background:#fff;border-color:#dce3eb}
+.flow-stage:not(:last-child)::after{display:none}
 .flow-stage.current{background:white;border-color:#e1ad40;box-shadow:0 5px 18px #15243810;color:#172338}
 .flow-stage .flow-num{position:relative;display:flex;align-items:center;justify-content:center;width:37px;height:37px;border:2px solid #a4b2c4;border-radius:50%;background:white;color:#304258;font-size:14px;font-weight:800;flex:none}
 .flow-stage.current .flow-num{background:#e7a116;border-color:#e7a116;color:#1c2b3f}
