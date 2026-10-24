@@ -5,6 +5,7 @@ body.v4-active .layout{display:block}
 body.v4-active .main{width:100%}
 body.v4-active .content{max-width:1480px!important;padding:26px 28px 90px!important;margin:0 auto!important}
 body.v4-active .topbar{position:sticky;top:0;z-index:180}
+body.v4-active:not(.v4-legacy) #newProjectBtn{display:inline-flex!important}
 body.v4-active .v4-nav{position:sticky;top:64px;z-index:120;background:#fff;border-bottom:1px solid #e2e8f0;padding:7px 23px;display:flex;align-items:center;justify-content:center;gap:8px}
 body.v4-active .v4-nav button{flex:0 1 170px;border:0;background:transparent;color:#53667a;padding:12px 14px;min-height:45px;font-weight:700;font-size:13px;border-radius:8px;cursor:pointer}
 body.v4-active .v4-nav button[aria-current="page"]{background:#fff3d8;color:#724d0b}
