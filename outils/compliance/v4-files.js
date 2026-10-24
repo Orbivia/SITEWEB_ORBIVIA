@@ -70,7 +70,8 @@ function u16(v,o,n){v.setUint16(o,n,true);}function u32(v,o,n){v.setUint32(o,n>>
 function zip(entries){
  let offset=0,body=[],central=[],total=0;
  for(const item of entries){
-  const name=String(item.name).split("/").map(function(v){return safe(v);}).join("/").replace(/^\//,"");
+  const rawName=String(item.name),isDirectory=rawName.endsWith("/");
+  const name=rawName.split("/").filter(Boolean).map(function(v){return safe(v);}).join("/")+(isDirectory?"/":"");
   const filename=encoder.encode(name),data=item.data instanceof Uint8Array?item.data:encoder.encode(String(item.data||""));
   const folder=name.endsWith("/");
   if(!name||name.includes("../")||filename.length>65535||data.length>=0xffffffff)throw Error("Fichier trop volumineux pour cet export.");
