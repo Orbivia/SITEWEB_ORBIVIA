@@ -6,7 +6,7 @@
 "use strict";
 const D=window.ORBIVIA_V4_DATA,F=window.ORBIVIA_V4_FILES;
 if(!D||!F){console.error("Modules documentaires V4 indisponibles.");return;}
-const ui={tab:"home",scope:"mdr",folder:"DT01",entry:"DT-DES-01",auditScope:"mdr",auditEntry:"DT-DES-01",filter:"all",legacy:false,working:false};
+const ui={tab:"home",scope:"mdr",folder:"DT01",entry:"DT-DES-01",auditScope:"mdr",auditEntry:"DT-DES-01",filter:"all",sections:{},legacy:false,working:false};
 const labels={missing:"À constituer",attached:"À vérifier",reviewed:"Revue enregistrée",gap:"Écart relevé",stale:"Revue à refaire",na:"Non applicable",scope:"Applicabilité à confirmer",uncertain:"À cadrer"};
 const tabs=[["home","Questionnaire"],["dossier","Dossier"]];
 function E(value){return esc(String(value===null||value===undefined?"":value));}
@@ -35,30 +35,6 @@ function pickEntry(folder){
  const rows=D.expected.filter(function(e){return e.folder===folder;});
  if(!rows.some(function(x){return x.id===ui.entry;}))ui.entry=rows[0]&&rows[0].id||"";
  return rows;
-}
-function fileList(p,entry){
- const docs=D.docs(p,entry.id);
- if(!docs.length)return '<p class="v4-muted">Aucun document rattaché. Importez un fichier ou rattachez une référence de l’inventaire existant.</p>';
- return '<div class="v4-docfiles">'+docs.map(function(doc){
-  const storage=!!doc.v4FileKey,meta=[doc.revision?'Rév. '+doc.revision:'Révision non renseignée',storage?'Fichier conservé localement':'Référence seule — fichier non stocké'].join(" · ");
-  return '<div class="v4-docfile"><div><strong>'+E(doc.title)+'</strong><small>'+E(meta)+'</small></div><div class="v4-actions">'+(storage?button("Télécharger","download",doc.id):'')+button("Détacher","unlink",doc.id)+'</div></div>';
- }).join("")+'</div>';
-}
-function itemDetail(p,entry){
- if(!entry)return '<div class="v4-empty">Sélectionnez un document attendu.</div>';
- const linked=new Set(D.links(p,entry.id));
- const existing=allDocs(p).filter(function(x){return !linked.has(x.id);});
- const rev=D.ensure(p).reviews[entry.id]||{};
- return '<div class="v4-docdetail"><div class="v4-actions" style="justify-content:space-between"><h2>'+E(entry.title)+'</h2>'+pill(status(p,entry.id))+'</div>'
- +'<p class="v4-muted">'+E(entry.id)+' · '+E(entry.ref)+' · '+E(D.path(entry))+'</p>'
- +'<h3>Éléments attendus</h3><ul class="v4-guidelist">'+entry.checks.map(function(x){return '<li>'+E(x)+'</li>';}).join("")+'</ul>'
- +'<h3>Documents et preuves</h3>'+fileList(p,entry)
- +'<div class="v4-formgrid"><label class="v4-field">Révision du nouveau fichier<input id="v4-file-revision" type="text" placeholder="Ex. B, 02, 1.0 (facultatif)"></label><div class="v4-field"><span>Importer dans ce dossier</span><label class="v4-button primary" for="v4-file-input" style="cursor:pointer">+ Ajouter une preuve</label><input class="v4-hidden-input" id="v4-file-input" data-v4-file type="file" multiple></div></div>'
- +(existing.length?'<div class="v4-formgrid" style="margin-top:12px"><label class="v4-field">Ou rattacher un document existant<select id="v4-existing-doc"><option value="">Choisir une référence…</option>'+existing.map(function(x){return '<option value="'+A(x.id)+'">'+E(x.title)+' '+E(x.revision||"")+'</option>';}).join("")+'</select></label><div class="v4-field"><span>Sans duplication du fichier</span>'+button("Rattacher la référence","attach",entry.id)+'</div></div>':"")
- +'<div class="v4-separator"></div>'
- +'<div class="v4-actions">'+button("Vérifier ce document","start-audit",entry.id,"primary")+button("Ajouter une action","add-action",entry.id)+'</div>'
- +'<p class="v4-muted" style="margin:12px 0 0">Une preuve présente n’est pas automatiquement conforme. Sa revue reste à documenter par un relecteur.</p>'
- +'</div>';
 }
 // Guided journey state belongs to the project and is included in its JSON backup.
 const profileFields=[
@@ -110,7 +86,7 @@ function questionnaireMetrics(p){
   {id:2,title:"Documents",done:v.filled,total:v.total}
  ]);
 }
-function chapterProgress(p,n,position,total){const m=questionnaireMetrics(p).chapters[n];return '<div class="v5-chapter"><button type="button" data-v4-switch="home" aria-label="Retour au questionnaire">←</button><span>'+m.title+'</span><small>'+position+' sur '+total+'</small></div><progress class="v5-progress" aria-label="Avancement du chapitre '+m.title+'" value="'+m.done+'" max="'+m.total+'"></progress>';}
+function chapterProgress(p,n,position,total){const m=questionnaireMetrics(p).chapters[n];return '<div class="v5-chapter"><button type="button" data-v4-switch="home" aria-label="Retour au questionnaire">←</button><span>'+m.title+'</span><small>'+m.percent+' % · '+position+' sur '+total+'</small></div><progress class="v5-progress" aria-label="Avancement du chapitre '+m.title+'" value="'+m.done+'" max="'+m.total+'"></progress>';}
 function regulatoryHeader(p,kind,index){const c=cqEvaluate(p),n=window.ORBIVIA_NORMES_INFO.journey(p),offset=kind==='classification'?0:kind==='norms'?c.questions.length+1:c.questions.length+1+n.total;return chapterProgress(p,1,Math.min(offset+index,questionnaireMetrics(p).chapters[1].total),questionnaireMetrics(p).chapters[1].total);}
 function continueJourney(p){
  const j=journey(p),missing=profileFields.findIndex(f=>!String(p[f[0]]||"").trim());
@@ -147,7 +123,7 @@ function openProof(p,id,queue){
  const e=D.entry(j.cursor);ui.entry=e.id;ui.scope=e.scope;ui.folder=e.folder;
  ui.legacy=false;ui.tab="home";df(p).normsOpen=false;save();render();focusQuestion();
 }
-function focusQuestion(){document.getElementById("j-title")?.focus({preventScroll:true});window.scrollTo({top:0,behavior:"auto"});}
+function focusQuestion(){const h=document.querySelector('#j-title,#app h1,#app h2');if(h){h.tabIndex=-1;h.focus({preventScroll:true});}window.scrollTo({top:0,behavior:"auto"});}
 function openStage(n){
  const p=P(),j=journey(p);ui.legacy=false;ui.tab="home";df(p).normsOpen=false;
  if(n===0){j.screen="profile";const missing=profileFields.findIndex(f=>!String(p[f[0]]||"").trim());j.profile=missing>=0?missing:0;}
@@ -157,135 +133,50 @@ function openStage(n){
  save();render();focusQuestion();
 }
 function advance(p){const j=journey(p),at=j.queue.indexOf(j.cursor),next=j.queue[at+1];if(next)openProof(p,next);else route("dossier");}
-function proofPicker(p){const j=journey(p);return '<details class="j-disclosure j-picker"><summary>Choisir un thème ou retrouver un point</summary><div class="v4-actions">'+button("Uniquement les points en attente","j-pending",undefined,"quiet")+'</div>'+D.folders.map(f=>'<details><summary>'+E(f.title)+' <small>'+E(f.scope==="smq"?'SMQ ISO 13485':'Dossier technique')+'</small></summary><div class="j-pick-list">'+D.expected.filter(e=>e.folder===f.id).map(e=>'<button type="button" data-j-entry="'+A(e.id)+'" '+(j.cursor===e.id?'aria-current="true"':'')+'><span>'+E(e.title)+'</span>'+documentPill(p,e)+'</button>').join("")+'</div></details>').join("")+'</details>';}
-function guideForm(p,entry){
- const j=journey(p),r=j.drafts[entry.id]||D.ensure(p).reviews[entry.id]||{},a=availability(p,entry);
- const attached=D.docs(p,entry.id).length;
- return '<form class="v4-form" id="v4-review-form" data-v4-review-id="'+A(entry.id)+'" data-j-guided>'
- +(attached?'<div><h2>Vérifier le contenu</h2><p class="v4-muted">Examinez chaque point dans la preuve avant de le cocher.</p><div class="v4-review-checks">'+entry.checks.map((x,i)=>'<label><input type="checkbox" name="check" value="'+i+'" '+(Array.isArray(r.checked)&&r.checked.includes(i)?'checked':'')+'>'+E(x)+'</label>').join("")+'</div></div>':'')
- +'<label class="v4-field">'+(a==="na"?'Justification de non-applicabilité':'Conclusion de la revue')+'<select name="status">'+[["pending","Revue à terminer"],["reviewed","Preuve suffisante après revue interne"],["gap","Écart ou preuve insuffisante"],["na","Non applicable — justification requise"]].map(o=>'<option value="'+o[0]+'" '+((r.status||(a==="na"?'na':'pending'))===o[0]?'selected':'')+'>'+E(o[1])+'</option>').join("")+'</select></label>'
- +'<details class="j-disclosure" '+(["reviewed","na","gap"].includes(r.status)||a==="na"?'open':'')+'><summary>Documenter la revue ou l’écart</summary><div class="v4-formgrid"><label class="v4-field">Relecteur<input name="reviewer" value="'+A(r.reviewer||"")+'" autocomplete="name"></label><label class="v4-field">Méthode / passage examiné<input name="method" value="'+A(r.method||"")+'" placeholder="Page, paragraphe, méthode de vérification"></label></div><label class="v4-field">Constat ou justification<textarea name="finding">'+E(r.finding||"")+'</textarea></label></details>'
- +'<div class="j-bottom">'+button("← Précédent","j-previous")+'<button type="submit" class="v4-button primary">Enregistrer et continuer →</button></div></form>';
-}
-function proof(p){
- const j=journey(p),entry=D.entry(j.cursor),a=availability(p,entry),folder=D.folder(entry.folder),at=j.queue.indexOf(entry.id);
- ui.entry=entry.id;ui.folder=entry.folder;ui.scope=entry.scope;
- const docs=D.docs(p,entry.id),existing=allDocs(p).filter(x=>!D.links(p,entry.id).includes(x.id));
- const canUpload=a==="present"||a==="partial"||docs.length;
- const s=status(p,entry.id);
- return '<div class="j-work">'+chapterProgress(p,2,at+1,j.queue.length)
- +'<section class="v4-card j-question"><div class="j-eyebrow">'+E(entry.scope==="smq"?'SMQ ISO 13485':'Dossier technique')+' · '+E(entry.id)+'</div><h1 id="j-title" tabindex="-1">Avez-vous ce document ?</h1><h2 class="j-document-title">'+E(entry.title)+'</h2>'
- +'<div class="j-options">'+presenceOptions.map(o=>'<button type="button" class="j-option '+(a===o[0]?'selected':'')+'" data-j-presence="'+o[0]+'" aria-pressed="'+(a===o[0])+'"><span class="j-radio" aria-hidden="true"></span>'+E(o[1])+'</button>').join("")+'</div>'
- +'<details class="j-disclosure"><summary>Comprendre ce qui est attendu</summary><ul class="v4-guidelist">'+entry.checks.map(x=>'<li>'+E(x)+'</li>').join("")+'</ul><p class="v4-muted">'+E(entry.ref)+'</p></details>'
- +comment(p,entry.id)
- +(s==="stale"?'<p class="v4-alert">Les preuves ont changé : la revue précédente doit être reconfirmée.</p>':'')
- +(a?'<div class="j-context" id="j-evidence">'+(canUpload?'<h2>'+(a==="partial"?'Ajoutez votre brouillon':'Ajoutez votre preuve')+'</h2><div class="j-upload"><span>PDF, document, tableur ou autre fichier · 120 Mo maximum par fichier</span><button type="button" class="v4-button primary" data-v4-j-upload>Choisir un fichier</button><input id="v4-file-input" data-v4-file type="file" multiple class="v4-hidden-input"></div><label class="v4-field j-revision">Révision (facultatif)<input id="v4-file-revision" placeholder="Ex. B, 02, 1.0"></label>'+fileList(p,entry)+(existing.length?'<details class="j-disclosure"><summary>Utiliser une preuve déjà enregistrée</summary><label class="v4-field">Document<select id="v4-existing-doc"><option value="">Choisir une référence…</option>'+existing.map(x=>'<option value="'+A(x.id)+'">'+E(x.title)+'</option>').join("")+'</select></label>'+button("Rattacher sans dupliquer","attach",entry.id)+'</details>':'')+'<p class="j-path">Classé dans : '+E(D.path(entry))+'</p><p class="v4-muted">Fichiers conservés dans ce navigateur ; exportez le ZIP pour les sauvegarder avec le dossier.</p>':a==="absent"?'<h2>Préparer ce document</h2><p class="v4-muted">Utilisez une trame de départ et suivez sa rédaction dans une action.</p>'+button("Télécharger la trame","j-template",entry.id)+button(actionBy(p,entry.id)?"Voir l’action":"Créer une action","j-action",entry.id):a==="checking"?'<p class="v4-muted">Ce point restera dans les éléments en attente. Vous pourrez y revenir directement.</p>':'<p class="v4-muted">Précisez pourquoi ce document ne concerne pas votre projet.</p>')+guideForm(p,entry)+'</div>':'<div class="j-bottom">'+button("← Précédent","j-previous")+button("Passer pour le moment","j-skip",undefined,"quiet")+'</div>')+'</section>'
- +proofPicker(p)+autosave()+'</div>';
-}
-function recap(p){const j=journey(p),entry=D.entry(j.cursor),f=D.folder(entry.folder),rows=j.queue.map(id=>D.entry(id)).filter(e=>e.folder===f.id);return '<div class="j-work">'+stageNav(p,2)+'<section class="v4-card j-question"><div class="j-eyebrow">Récapitulatif du thème</div><h1 id="j-title" tabindex="-1">'+E(f.title)+'</h1><p>Vos réponses sont enregistrées. Les points en attente restent accessibles.</p><div class="j-pick-list">'+rows.map(e=>'<button type="button" data-j-entry="'+A(e.id)+'"><span>'+E(e.title)+'</span>'+documentPill(p,e)+'</button>').join("")+'</div><div class="j-bottom">'+button("Retour au parcours","switch","home")+button(j.next?"Thème suivant →":"Voir mon dossier →","j-next-theme",undefined,"primary")+'</div></section>'+autosave()+'</div>';}
 function journeyView(p){const j=journey(p);if(j.screen==="profile")return profile(p);if(j.screen==="proof")return proof(p);if(j.screen==="recap")return recap(p);return home(p);}
-function meter(value,label,total){const n=Math.round(100*value/total);return '<section class="v4-card j-meter"><span>'+E(label)+'</span><div><strong>'+n+' %</strong><progress aria-label="'+A(label)+'" value="'+value+'" max="'+total+'"></progress></div><small>'+value+' / '+total+' rubriques</small></section>';}
-function embedded(html,selector){const box=document.createElement("div");box.innerHTML=html;return box.querySelector(selector)?.outerHTML||"";}
-function bilan(p){
- const v=progress(p),pending=D.expected.filter(e=>unresolved(p,e));
- const priorities=pending.slice().sort((a,b)=>{const rank={gap:0,stale:1,missing:2,attached:3};return (rank[status(p,a.id)]??4)-(rank[status(p,b.id)]??4);});
- return '<div class="v4-work j-bilan">'+title("Mon dossier","Retrouvez vos preuves, les points à traiter et vos exports.")+'<div class="j-meters">'+meter(D.expected.filter(e=>status(p,e.id)!=="na"&&D.docs(p,e.id).length).length,"Documents rattachés",D.expected.filter(e=>status(p,e.id)!=="na").length||1)+meter(v.inspected,"Revues enregistrées",v.total)+'</div><p class="v4-muted">Ces indicateurs suivent les preuves et les revues ; ils ne constituent pas un taux de conformité.</p>'
- +(!stageState(p,1).done?'<div class="v4-alert j-scope-alert">Le périmètre réglementaire reste à compléter ou confirmer. <button type="button" class="v4-button quiet" data-j-stage="1">Reprendre les exigences →</button></div>':'')+'<section class="v4-card"><div class="v4-actions j-between"><h2>À traiter en priorité</h2>'+button("Reprendre les "+pending.length+" points en attente","j-pending",undefined,"primary")+'</div><div class="j-pick-list">'+priorities.slice(0,3).map(e=>'<button type="button" data-j-entry="'+A(e.id)+'"><span>'+E(e.title)+'</span>'+documentPill(p,e)+'<strong>Reprendre ›</strong></button>').join("")+(pending.length?'':'<p>Toutes les rubriques ont une revue enregistrée.</p>')+'</div></section>'
- +'<details class="j-disclosure v4-card" '+(ui.openFiles?'open':'')+'><summary>Documents classés</summary>'+button('Choisir un dossier sur mon PC','folder-pick')+embedded(dossier(p),'.v4-dossier-layout')+'</details>'+'<details class="j-disclosure v4-card"><summary>Plan d’actions ('+countActions(p)+' à traiter)</summary>'+embedded(actions(p),"section.v4-card")+'</details>'
- +'<details class="j-disclosure v4-card"><summary>Références et exigences</summary>'+normReviewSummary(p)+'<div class="v4-actions"><button type="button" class="v4-button" data-v5-gspr>Matrice des exigences MDR</button><button type="button" class="v4-button" data-std-export>Exporter les normes CSV</button></div></details>'+'<details class="j-disclosure v4-card"><summary>Rapports, exports et sauvegarde</summary>'+embedded(reports(p),'.v4-exportgrid')+'</details>'
- +'<div class="v4-actions j-export">'+button("Exporter la synthèse","report",undefined,"primary")+button("Exporter le dossier ZIP","zip")+button("Sauvegarder le projet JSON","json")+'</div><p class="v4-muted">Bilan interne — validation humaine requise. Les 30 rubriques constituent une base à compléter selon le projet.</p></div>';
-}
-function dossier(p){
- const folders=pickFolder(ui.scope),folder=D.folder(ui.folder),entries=pickEntry(folder.id),selected=D.entry(ui.entry);
- const scope=ui.scope;
- const topActions=button("Cadrage et classification","legacy","0")+button("Normes applicables","legacy","2")+button("Générer sur mon PC","folder-pick",undefined,"primary")+button("Exporter ZIP","zip");
- const nav='<div class="v4-scope">'+[["mdr","Dossier MDR"],["smq","SMQ ISO 13485"]].map(function(r){return '<button type="button" data-v4-scope="'+r[0]+'" class="'+(scope===r[0]?'active':'')+'">'+E(r[1])+'</button>';}).join("")+'</div>';
- const tree='<aside class="v4-card">'+nav+'<div class="v4-folders">'+folders.map(function(f){
-  const docs=D.expected.filter(function(x){return x.folder===f.id;});
-  const reviewed=docs.filter(function(x){return status(p,x.id)==="reviewed";}).length;
-  return '<button type="button" class="v4-folder '+(f.id===ui.folder?'selected':'')+'" data-v4-folder="'+A(f.id)+'"><span>'+E(f.title)+'</span><b>'+reviewed+'/'+docs.length+'</b></button>';
- }).join("")+'</div></aside>';
- const rows='<section class="v4-card"><h2>'+E(folder.title)+'</h2><p class="v4-muted">Cliquez sur un livrable pour voir les attentes, les preuves et ses contrôles.</p>'
- +'<div class="v4-entrylist">'+entries.map(function(x){return '<button type="button" class="v4-entry '+(ui.entry===x.id?'active':'')+'" data-v4-entry="'+A(x.id)+'"><span><strong>'+E(x.title)+'</strong><small>'+E(x.ref)+'</small></span>'+pill(status(p,x.id))+'</button>';}).join("")+'</div>'
- +itemDetail(p,selected)+'</section>';
- return '<div class="v4-work">'+title("Mon dossier","Arborescence générée, preuves et vérification document par document",topActions)
- +'<div class="v4-dossier-layout">'+tree+rows+'</div>'
- +'<div class="v4-card" style="margin-top:14px">'+note("Les modèles sont une trame de constitution, pas un référentiel exhaustif. Confirmez l'applicabilité réelle des exigences et des normes avant toute conclusion de conformité. Le SMQ est pour l'instant rattaché à ce projet.")+'</div></div>';
-}
-function reviewForm(p,entry){
- if(!entry)return '<div class="v4-empty">Sélectionnez un contrôle.</div>';
- const item=D.ensure(p).reviews[entry.id]||{},statusNow=status(p,entry.id);
- const selected=Array.isArray(item.checked)?item.checked:[];
- const options=[["pending","Non audité / à vérifier"],["reviewed","Preuve suffisante après revue interne"],["gap","Écart ou preuve insuffisante"],["na","Non applicable — justification requise"]];
- return '<h2>'+E(entry.title)+'</h2><p class="v4-muted">'+E(entry.ref)+' · '+E(entry.id)+'</p><div style="margin-top:12px">'+pill(statusNow)+'</div>'
- +(statusNow==="stale"?'<div class="v4-alert" style="margin-top:12px">La liste ou la révision des preuves a changé. La revue précédente doit être reconfirmée.</div>':'')
- +'<div class="v4-separator"></div><b>Preuves rattachées</b>'+fileList(p,entry)
- +'<form class="v4-form" id="v4-review-form" data-v4-review-id="'+A(entry.id)+'">'
- +'<div><b>Points à examiner</b><p class="v4-muted">Cochez un point uniquement après vérification de son contenu dans la preuve.</p><div class="v4-review-checks">'+entry.checks.map(function(x,i){return '<label><input type="checkbox" name="check" value="'+i+'" '+(selected.includes(i)?'checked':'')+'>'+E(x)+'</label>';}).join("")+'</div></div>'
- +'<label class="v4-field">Conclusion documentaire<select name="status">'+options.map(function(o){return '<option value="'+o[0]+'" '+((item.status||"pending")===o[0]?'selected':'')+'>'+E(o[1])+'</option>';}).join("")+'</select></label>'
- +'<div class="v4-formgrid"><label class="v4-field">Relecteur<input name="reviewer" value="'+A(item.reviewer||"")+'" placeholder="Nom et fonction"></label><label class="v4-field">Méthode / référence du contrôle<input name="method" value="'+A(item.method||"")+'" placeholder="Ex. §4 du rapport, vérification des résultats"></label></div>'
- +'<label class="v4-field">Constat, justification ou écart<textarea name="finding" placeholder="Exigence évaluée, passage examiné, résultat, lacune éventuelle…">'+E(item.finding||"")+'</textarea></label>'
- +'<div class="v4-actions"><button type="submit" class="v4-button primary">Enregistrer la revue</button>'+button("Ouvrir dans mon dossier","go-entry",entry.id)+'</div></form>';
-}
-function audit(p){
- const items=D.expected.filter(function(e){return e.scope===ui.auditScope&&(ui.filter==="all"||(ui.filter==="open"?status(p,e.id)!=="reviewed"&&status(p,e.id)!=="na":status(p,e.id)===ui.filter));});
- if(!items.some(function(x){return x.id===ui.auditEntry;}))ui.auditEntry=items[0]&&items[0].id||"";
- const selected=D.entry(ui.auditEntry);
- const filters=[["all","Tous"],["open","À traiter"],["gap","Écarts"],["stale","Révision modifiée"],["reviewed","Revus"]];
- const select='<div class="v4-scope"><button class="'+(ui.auditScope==="mdr"?'active':'')+'" data-v4-audit-scope="mdr">Dossier MDR</button><button class="'+(ui.auditScope==="smq"?'active':'')+'" data-v4-audit-scope="smq">SMQ ISO 13485</button></div>'
- +'<div class="v4-auditlist">'+items.map(function(e){return '<button type="button" class="'+(ui.auditEntry===e.id?'active':'')+'" data-v4-audit-entry="'+A(e.id)+'"><strong>'+E(e.title)+'</strong>'+documentPill(p,e)+'</button>';}).join("")+'</div>';
- return '<div class="v4-work">'+title("Audit documentaire","Présence des documents et examen de leur contenu : deux décisions distinctes",button("Consulter les matrices MDR","legacy","2"))
- +'<div class="v4-filter">'+filters.map(function(f){return '<button type="button" data-v4-filter="'+f[0]+'" class="'+(ui.filter===f[0]?'active':'')+'">'+E(f[1])+'</button>';}).join("")+'</div>'
- +'<div class="v4-audit-layout"><aside class="v4-card">'+select+'</aside><section class="v4-card">'+(selected?reviewForm(p,selected):'<div class="v4-empty">Aucun contrôle dans cette sélection.</div>')+'</section></div>'
- +'<div style="margin-top:12px">'+note("Les points proposés ne remplacent ni une lecture des exigences ISO 13485 applicables ni la revue exhaustive du MDR. Toute décision 'suffisante' nécessite une preuve liée, une méthode, un relecteur et la vérification des points attendus.")+'</div></div>';
-}
-function actions(p){
- const v=D.ensure(p),missing=D.expected.filter(function(e){return status(p,e.id)==="missing"&&!actionBy(p,e.id);});
- return '<div class="v4-work">'+title("Écarts et actions","Registre des constats et documents à produire",button("Ouvrir l’audit","switch","audit","primary"))
- +'<div class="v4-metrics">'+metric(countActions(p),"Actions ouvertes")+metric(missing.length,"Livrables sans preuve")+metric(D.counts(p,"mdr").gap+D.counts(p,"smq").gap,"Écarts de revue")+'</div>'
- +'<section class="v4-card"><h2>Plan d’actions</h2>'+(v.actions.length?v.actions.map(function(x){return '<div class="v4-action" data-v4-action-id="'+A(x.id)+'"><div><strong>'+E(x.title)+'</strong><small>'+E(x.entry)+' · '+E(x.createdAt||"")+'</small></div><div><label class="v4-field">Responsable<input data-v4-action-field="owner" value="'+A(x.owner||"")+'" placeholder="À affecter"></label></div><div><label class="v4-field">Échéance<input type="date" data-v4-action-field="due" value="'+A(x.due||"")+'"></label></div><div><label class="v4-field">Statut<select data-v4-action-field="status">'+[["open","À faire"],["doing","En cours"],["closed","Clôturée"]].map(function(y){return '<option value="'+y[0]+'" '+(x.status===y[0]?'selected':'')+'>'+E(y[1])+'</option>';}).join("")+'</select></label></div></div>';}).join(""):'<div class="v4-empty">Aucune action créée.</div>')
- +'</section><section class="v4-card" style="margin-top:15px"><h2>Documents manquants à traiter ('+missing.length+')</h2><div class="v4-stack">'+missing.map(function(entry){return '<div class="v4-entry"><span><strong>'+E(entry.title)+'</strong><small>'+E(entry.ref)+'</small></span>'+button("Créer une action","add-action",entry.id)+'</div>';}).join("")+'</div></section></div>';
-}
-function reports(p){
- const s=stats(p);
- const card=function(heading,txt,btn){return '<section class="v4-card v4-report-card"><h2>'+E(heading)+'</h2><p>'+E(txt)+'</p>'+btn+'</section>';};
- return '<div class="v4-work">'+title("Rapports et exports","Fichiers, tableaux de suivi et conclusions des revues internes",button("Sauvegarde du projet","json",undefined,"primary"))
- +'<div class="v4-metrics">'+metric(s.md.reviewed+"/"+s.md.total,"Revue dossier MDR")+metric(s.smq.reviewed+"/"+s.smq.total,"Revue documentaire SMQ")+metric(s.md.gap+s.smq.gap,"Écarts de revue")+metric(s.md.stale+s.smq.stale,"Revues invalidées")+'</div>'
- +'<div class="v4-exportgrid">'
- +card("Dossier technique ZIP","Arborescence générée, fichiers réellement conservés dans le navigateur, index JSON et références documentaires.",button("Exporter l'arborescence et les preuves","zip",undefined,"primary"))
- +card("Rapport d'audit V4","Statut de chaque livrable, décisions documentées, références des preuves, constats et actions.",button("Exporter le rapport HTML","report"))
- +card("Matrice des preuves","Correspondance des documents attendus avec les preuves, révisions et résultats de revue.",button("Exporter la matrice CSV","matrix"))
- +card("Plan d'actions","Écarts ouverts, responsables et échéances, y compris les nouveaux documents à créer.",button("Exporter les actions CSV","actions-export"))
- +card("Audit documentaire historique","Conserver l'accès au rapport détaillé et à la grille de contrôle de la V3.",'<button class="v4-button" type="button" data-df-export="full">Revue V3 détaillée</button>')
- +card("Sauvegarde et transfert","Le JSON enregistre les références et les décisions, mais pas les fichiers binaires. Pour transférer les preuves, exporter aussi le ZIP.",button("Télécharger la sauvegarde JSON","json"))
- +'</div><p class="v4-note" style="margin-top:17px">La complétude du dossier et le résultat des contrôles sont deux indicateurs différents. Le logiciel ne délivre pas de déclaration de conformité ni de certification ISO 13485.</p></div>';
-}
 function view(p){
  if(ui.tab==="home")return journeyView(p);
  if(ui.tab==="dossier")return bilan(p);
- if(ui.tab==="audit")return audit(p);
- if(ui.tab==="actions")return actions(p);
  return bilan(p);
 }
 function nav(){
  return '<nav class="v4-nav" id="v4-nav" aria-label="Navigation principale">'+tabs.map(function(tab){return '<button type="button" data-v4-switch="'+tab[0]+'" '+(ui.tab===tab[0]?'aria-current="page"':'')+'>'+tab[1]+'</button>';}).join("")+'</nav>';
 }
+document.addEventListener('toggle',function(event){const el=event.target;if(el.matches('[data-v4-section]')&&el.isConnected)ui.sections[el.dataset.v4Section]=el.open;},true);
+const {proof,recap,bilan}=window.ORBIVIA_DOCUMENT_VIEWS.create({D,ui,E,A,button,status,pill,journey,availability,documentPill,allDocs,actionBy,comment,stageNav,chapterProgress,progress,unresolved,title,stageState,normReviewSummary,countActions,pickFolder,pickEntry,presenceOptions,autosave});
+function paintStorage(){
+ const app=document.getElementById('app');if(!app)return;
+ let warning=document.getElementById('v53-storage-warning');
+ if(!warning){warning=document.createElement('div');warning.id='v53-storage-warning';warning.className='v4-alert v53-storage-warning';warning.setAttribute('role','alert');warning.innerHTML='<span>Enregistrement indisponible. Exportez vos réponses avant de quitter.</span>'+button('Sauvegarder le JSON','json');app.before(warning);}
+ warning.hidden=storageOK;
+ document.querySelectorAll('.j-save,.cq-autosave').forEach(el=>{el.textContent=storageOK?'Réponses enregistrées automatiquement':'Enregistrement indisponible — exportez une sauvegarde JSON';});
+}
+document.addEventListener('orbivia-storage',paintStorage);
+document.addEventListener('orbivia-restored',()=>{ui.project=null;});
 const beforeRender=render;
 render=function(){
- const p=P();if(ui.project!==p.id){F.directory=null;ui.project=p.id;}const j=journey(p),requirements=!ui.legacy&&ui.tab==="home"&&j.screen==="requirements";
+ const p=P();if(ui.project!==p.id){F.directory=null;ui.sections={};ui.project=p.id;ui.normClickAt=0;ui.legacy=false;ui.tab="home";}const j=journey(p),requirements=!ui.legacy&&ui.tab==="home"&&j.screen==="requirements";
  if(!ui.legacy){page="guided";df(p).normsOpen=requirements&&j.requirement==="norms";if(requirements)df(p).step=1;}
- beforeRender();
+ if(ui.legacy||requirements)beforeRender();
+ else{
+  normalizeProject(p);
+  document.getElementById('projectSelect').innerHTML=state.projects.map(x=>'<option value="'+A(x.id)+'" '+(x.id===p.id?'selected':'')+'>'+E(x.name||'Projet à renseigner')+'</option>').join('');
+  document.body.classList.add('v312-guided','cq-focused','unified-guided');
+  document.body.classList.remove('v312-classification','v312-norms','v312-classification-result','std-active');
+ }
  document.body.classList.add("v4-active","j-active","v5-active");
  document.body.classList.toggle("v4-legacy",ui.legacy);
  const header=document.querySelector(".topbar"),app=document.getElementById("app");
  if(!header||!app)return;
+ paintStorage();
+ const menu=document.querySelector('.v312-menu-popup');if(menu&&!menu.querySelector('[data-v5-new]'))menu.insertAdjacentHTML('afterbegin','<button type="button" data-v5-new>+ Nouveau projet</button>');
  let navigation=document.getElementById("v4-nav");
  if(!navigation){header.insertAdjacentHTML("afterend",nav());navigation=document.getElementById("v4-nav");}
  document.querySelectorAll(".v4-legacybar").forEach(el=>el.remove());
  if(ui.legacy){
   navigation.hidden=true;
   const bar=document.createElement("div");bar.className="v4-legacybar";
-  bar.innerHTML='<span>Outils détaillés</span><button class="v4-button primary" type="button" data-v4-return>← Retour au parcours</button>';
+  bar.innerHTML='<label class="v4-field">Outil<select data-v53-tool>'+NAV.filter(x=>!["guided","classification","proofs","docsummary"].includes(x[0])).map(x=>'<option value="'+A(x[0])+'" '+(page===x[0]?'selected':'')+'>'+E(x[2])+'</option>').join('')+'</select></label><button class="v4-button primary" type="button" data-v4-return>← Retour au parcours</button>';
   app.insertAdjacentElement("beforebegin",bar);return;
  }
  navigation.outerHTML=nav();
@@ -297,7 +188,8 @@ render=function(){
  polish(p,requirements);
 };
 function route(tab){
- if(["reports","actions","audit"].includes(tab))tab="dossier";ui.legacy=false;ui.tab=tab;if(tab==="home"){const j=journey(P());if(j.screen!=="home")j.lastScreen=j.screen;j.screen="home";save();}page="guided";df(pickProject()).normsOpen=false;render();window.scrollTo({top:0,behavior:"auto"});
+ const section={reports:'exports',actions:'actions',audit:'files'}[tab];
+ if(section){ui.sections[section]=true;tab='dossier';}ui.legacy=false;ui.tab=tab;if(tab==="home"){const j=journey(P());if(j.screen!=="home")j.lastScreen=j.screen;j.screen="home";save();}page="guided";df(pickProject()).normsOpen=false;render();if(section)document.querySelector('[data-v4-section="'+section+'"]')?.scrollIntoView({block:"start"});else window.scrollTo({top:0,behavior:"auto"});
 }
 function legacy(n){
  ui.legacy=true;df(pickProject()).normsOpen=false;page="guided";
@@ -307,9 +199,9 @@ function changed(p,text){log(p,text);save();render();}
 function newAction(p,id){
  const target=D.entry(id);if(!target){notify("Livrable introuvable.","danger");return;}
  const v=D.ensure(p);
- const existing=actionBy(p,id);if(existing){ui.tab="dossier";render();return;}
+ const existing=actionBy(p,id);if(existing){route("actions");return;}
  v.actions.push({id:uid(),entry:id,title:"Compléter / vérifier : "+target.title,owner:"",due:"",status:"open",createdAt:new Date().toISOString().slice(0,10)});
- changed(p,"Action créée : "+target.title);
+ ui.sections.actions=true;changed(p,"Action créée : "+target.title);
 }
 async function storeFiles(list,p,entry){
  if(ui.working)return;ui.working=true;
@@ -344,6 +236,7 @@ async function exportZip(){
  }catch(e){notify("Export ZIP impossible : "+e.message,"danger");}finally{ui.working=false;}
 }
 async function chooseFolder(){
+ if(ui.working)return;ui.working=true;
  try{
   const p=P(),name=await F.chooseDirectory();
   let count=0,copied=0,failed=0;
@@ -359,7 +252,7 @@ async function chooseFolder(){
    catch(_e){failed++;}
   }
   notify("Dossier « "+name+" » : "+count+" répertoires créés, "+copied+" preuves copiées."+(failed?" "+failed+" fichiers non copiés : vérifier le stockage local.":""),failed?"danger":"success");
- }catch(e){if(e.name!=="AbortError")notify(e.message,"danger");}
+ }catch(e){if(e.name!=="AbortError")notify(e.message,"danger");}finally{ui.working=false;}
 }
 function exportCSV(type){
  const p=P();let rows;
@@ -406,7 +299,7 @@ document.addEventListener("click",async function(event){
  if(data.v4AuditEntry){ui.auditEntry=data.v4AuditEntry;render();return;}
  if(data.v4Filter){ui.filter=data.v4Filter;render();return;}
  if(data.v4StartAudit){openProof(p,data.v4StartAudit,D.expected.map(e=>e.id));return;}
- if(data.v4GoEntry){const entry=D.entry(data.v4GoEntry);ui.scope=entry.scope;ui.folder=entry.folder;ui.entry=entry.id;ui.openFiles=true;route("dossier");return;}
+ if(data.v4GoEntry){const entry=D.entry(data.v4GoEntry);ui.scope=entry.scope;ui.folder=entry.folder;ui.entry=entry.id;ui.sections.files=true;route("dossier");return;}
  if(data.v4Legacy!==undefined){const n=Number(data.v4Legacy);openStage(n===0?0:1);if(n===2){journey(p).requirement="norms";save();render();}return;}
  if(data.v4Return!==undefined){ui.legacy=false;route("home");return;}
  if(data.v4AddAction){newAction(p,data.v4AddAction);return;}
@@ -416,6 +309,7 @@ document.addEventListener("click",async function(event){
   if(!allDocs(p).some(function(d){return d.id===id;})){notify("Document introuvable.","danger");return;}
   const ids=D.ensure(p).links[data.v4Attach]||(D.ensure(p).links[data.v4Attach]=[]);
   if(!ids.includes(id))ids.push(id);
+  journey(p).answers[data.v4Attach]=journey(p).answers[data.v4Attach]==="partial"?"partial":"present";
   changed(p,"Document rattaché à "+data.v4Attach);return;
  }
  if(data.v4Unlink){
@@ -447,13 +341,14 @@ document.addEventListener("change",async function(event){
   if(entry&&list.length)await storeFiles(list,P(),entry);
   return;
  }
+ if(input.matches("[data-v53-tool]")){page=input.value;ui.legacy=true;render();window.scrollTo({top:0});return;}
  if(input.matches("[data-v4-action-field]")){
   const row=input.closest("[data-v4-action-id]"),p=P();
   const action=D.ensure(p).actions.find(function(x){return x.id===row?.dataset?.v4ActionId;});
   if(!action)return;
   const field=input.dataset.v4ActionField;
   if(["owner","due","status"].includes(field))action[field]=input.value;
-  log(p,"Action "+action.id+" : "+field+" actualisé");save();render();
+  log(p,"Action "+action.id+" : "+field+" actualisé");save();if(field==="status")render();
  }
 });
 document.addEventListener("submit",function(event){
@@ -465,11 +360,8 @@ document.addEventListener("submit",function(event){
  const data=new FormData(form),s=String(data.get("status")||"pending"),
   reviewer=String(data.get("reviewer")||"").trim(),method=String(data.get("method")||"").trim(),finding=String(data.get("finding")||"").trim(),
   checked=data.getAll("check").map(Number);
- if(s==="reviewed"&&(!D.docs(p,id).length||!reviewer||!method||checked.length!==entry.checks.length)){
-  form.querySelector("details")?.setAttribute("open","");notify("Pour conclure à une preuve suffisante : rattacher une preuve, préciser le relecteur et la méthode, puis vérifier tous les points.","danger");return;
- }
- if(s==="gap"&&!finding){form.querySelector("details")?.setAttribute("open","");notify("Décrivez l'écart constaté.","danger");return;}
- if(s==="na"&&(!finding||!reviewer)){form.querySelector("details")?.setAttribute("open","");notify("Justifiez l’inapplicabilité et renseignez le relecteur.","danger");return;}
+ const error=window.ORBIVIA_DOCUMENT_REVIEW.validate({status:s,reviewer,method,finding,checked},entry,D.docs(p,id).length);
+ if(error){form.querySelector("details")?.setAttribute("open","");notify(error,"danger");return;}
  if(form.hasAttribute("data-j-guided")&&availability(p,entry)==="na"&&s!=="na"){
   notify("Justifiez l’exclusion ou choisissez une autre réponse de disponibilité.","danger");return;
  }
@@ -482,6 +374,20 @@ document.addEventListener("submit",function(event){
  if(form.hasAttribute("data-j-guided"))advance(p);else render();
  notify(s==="pending"?"Réponse enregistrée. La revue reste à terminer.":"Revue enregistrée.");
 });
+// Intercept the legacy duplicate action so IndexedDB proofs follow the new project ID.
+document.addEventListener('click',async function(event){
+ if(!event.target.closest('[data-duplicate]'))return;
+ event.preventDefault();event.stopImmediatePropagation();
+ if(ui.working){notify('Attendez la fin de l’opération en cours.');return;}
+ ui.working=true;
+ try{
+  const source=P(),copy=JSON.parse(JSON.stringify(source));copy.id=uid();copy.name=(source.name||'Projet')+' (copie)';copy.activity=[];
+  const missing=await F.copyProject(source.id,copy.id,df(copy).documents);
+  for(const doc of df(copy).documents)if(missing.includes(doc.id)){doc.v4FileKey=false;doc.origin='Référence copiée — fichier absent du stockage source';}
+  log(copy,'Projet dupliqué avec ses preuves locales');state.projects.push(copy);state.activeProject=copy.id;save();render();
+  notify(missing.length?'Projet copié. '+missing.length+' référence(s) sans fichier dans le stockage source.':'Projet et preuves locales copiés.',missing.length?'danger':'success');
+ }catch(error){notify('Duplication impossible : '+error.message,'danger');}finally{ui.working=false;}
+},true);
 // Keep legacy step buttons coherent when the regulatory engines request the next screen.
 document.addEventListener("click",function(event){
  if(ui.working&&(event.target.closest("#projectSelect,#newProjectBtn,[data-nav],[data-unified-tools],[data-import],[data-j-stage],[data-v4-switch],[data-v4-return]"))){event.preventDefault();event.stopImmediatePropagation();notify("Attendez la fin de l’import des fichiers.");return;}
@@ -531,22 +437,23 @@ document.addEventListener("click",function(event){
  if(data.v4JPrevious!==undefined){const at=j.queue.indexOf(j.cursor);if(at>0)openProof(p,j.queue[at-1]);else route("home");return;}
  if(data.v4JSkip!==undefined){j.answers[j.cursor]="checking";save();advance(p);return;}
  if(data.v4JNextTheme!==undefined){if(j.next)openProof(p,j.next);else route("reports");return;}
- if(data.v4JAction){const e=D.entry(data.v4JAction);if(actionBy(p,e.id)){route("reports");return;}D.ensure(p).actions.push({id:uid(),entry:e.id,title:"Constituer : "+e.title,owner:"",due:"",status:"open",createdAt:new Date().toISOString().slice(0,10)});log(p,"Action créée : "+e.title);save();render();notify("Action ajoutée au dossier.");return;}
+ if(data.v4JAction){const e=D.entry(data.v4JAction);if(actionBy(p,e.id)){route("actions");return;}D.ensure(p).actions.push({id:uid(),entry:e.id,title:"Constituer : "+e.title,owner:"",due:"",status:"open",createdAt:new Date().toISOString().slice(0,10)});log(p,"Action créée : "+e.title);save();render();notify("Action ajoutée au dossier.");return;}
  if(data.v4JTemplate){const e=D.entry(data.v4JTemplate);const html='<!doctype html><html lang="fr"><meta charset="utf-8"><title>'+E(e.title)+'</title><body><h1>'+E(e.title)+'</h1><p>Projet : '+E(p.name)+'</p><p>Référence / révision : à renseigner</p><p>Rédacteur / relecteur / date : à renseigner</p><p>Trame de départ à adapter et compléter ; ne constitue pas une preuve validée.</p>'+e.checks.map(x=>'<h2>'+E(x)+'</h2><p>À documenter : méthode, éléments, références et conclusion.</p>').join("")+'<h2>Approbation et historique des modifications</h2><p>À renseigner.</p></body></html>';download(e.id+"_trame.html",html,"text/html;charset=utf-8");}
 });
 document.addEventListener("input",function(event){
  const x=event.target,p=P(),j=journey(p);
+ if(x.matches('[data-v4-action-field]')){const row=x.closest('[data-v4-action-id]'),action=D.ensure(p).actions.find(a=>a.id===row?.dataset.v4ActionId);if(action&&['owner','due','status'].includes(x.dataset.v4ActionField)){action[x.dataset.v4ActionField]=x.value;save();}return;}
  if(x.dataset.jProfile){p[x.dataset.jProfile]=x.value;if(["device","intended","patient","users"].includes(x.dataset.jProfile))cqInvalidate(p);save();}
  else if(x.dataset.jComment){j.comments[x.dataset.jComment]=x.value;save();}
  else if(x.closest("form[data-j-guided]")){
   const f=x.closest("form"),data=new FormData(f);
-  j.drafts[f.dataset.v4ReviewId]={status:String(data.get("status")||"pending"),reviewer:String(data.get("reviewer")||""),method:String(data.get("method")||""),finding:String(data.get("finding")||""),checked:data.getAll("check").map(Number)};save();
+  j.drafts[f.dataset.v4ReviewId]={status:String(data.get("status")||"pending"),reviewer:String(data.get("reviewer")||""),method:String(data.get("method")||""),finding:String(data.get("finding")||""),checked:data.getAll("check").map(Number),fingerprint:D.fingerprint(p,f.dataset.v4ReviewId)};save();
   if(x.name==="status"&&x.value!=="pending")f.querySelector("details")?.setAttribute("open","");
  }else return;
  const label=document.querySelector(".j-save");if(label)label.textContent=storageOK?"Réponses enregistrées automatiquement":"Enregistrement indisponible — exportez une sauvegarde JSON";
 });
 
-function normHelp(p,id){const entry=window.ORBIVIA_NORMES_CATALOGUE.find(e=>e.id===id),n=window.ORBIVIA_NORMES_INFO.journey(p);if(!entry)return '';const h=window.ORBIVIA_NORMES_EXPLICATIONS.describe(entry,df(p).norms.answers,n.questions);return '<details class="v5-help v52-norm-help"><summary aria-label="Comprendre '+A(id)+'" title="Comprendre cette norme">i</summary><div role="note"><strong>'+E(h.id)+' — '+E(h.title)+'</strong><h3>Ce qu’elle couvre</h3><p>'+E(h.scope)+'</p><p>'+E(h.use)+'</p><h3>Pourquoi elle est proposée</h3><p>'+E(h.why)+'</p>'+(h.criteria.length?'<ul>'+h.criteria.map(x=>'<li>'+E(x)+' : Oui</li>').join('')+'</ul>':'')+'<a href="'+A(h.url)+'" target="_blank" rel="noopener noreferrer">'+E(h.sourceLabel)+' ↗</a><small>Vérifier l’édition, les amendements et le périmètre sur la fiche de l’éditeur.</small></div></details>';}
+function normHelp(p,id){const entry=window.ORBIVIA_NORMES_CATALOGUE.find(e=>e.id===id),n=window.ORBIVIA_NORMES_INFO.journey(p);if(!entry)return '';const h=window.ORBIVIA_NORMES_EXPLICATIONS.describe(entry,window.ORBIVIA_NORMES_INFO.answers(p),n.questions);return '<details class="v5-help v52-norm-help"><summary aria-label="Comprendre '+A(id)+'" title="Comprendre cette norme">i</summary><div role="note"><strong>'+E(h.id)+' — '+E(h.title)+'</strong><h3>Ce qu’elle couvre</h3><p>'+E(h.scope)+'</p><p>'+E(h.use)+'</p><h3>Pourquoi elle est proposée</h3><p>'+E(h.why)+'</p>'+(h.criteria.length?'<ul>'+h.criteria.map(x=>'<li>'+E(x)+' : Oui</li>').join('')+'</ul>':'')+'<a href="'+A(h.url)+'" target="_blank" rel="noopener noreferrer">'+E(h.sourceLabel)+' ↗</a><small>Vérifier l’édition, les amendements et le périmètre sur la fiche de l’éditeur.</small></div></details>';}
 function compactClassification(p,app,bottom){
  const result=app.querySelector('#cq-result');if(!result)return;
  const r=cqEvaluate(p),confirmed=dfClassConfirmed(p);result.classList.add('v52-class-result');
@@ -571,7 +478,7 @@ function compactClassification(p,app,bottom){
  oldActions?.remove();result.append(details);
  result.querySelector('.v312-class-indicator')?.remove();
  const lead=result.querySelector('.cq-result-lead');if(lead)lead.textContent=r.complete?'Règles retenues : '+r.rules.filter(rule=>rule.applies==='yes').map(rule=>rule.n).join(', ')+'.':r.missing.length+' point(s) restent à préciser.';
- result.querySelector('.cq-result-label').textContent=confirmed?'Classe confirmée après revue':'Classe proposée';
+ result.querySelector('.cq-result-label').textContent=confirmed?'Classe confirmée après revue':r.complete?'Classe proposée':'Classification à préciser';
  if(bottom){bottom.innerHTML='<button class="v4-button quiet" type="button" data-cq-last>← Modifier mes réponses</button>';
   if(r.complete){bottom.insertAdjacentHTML('beforeend',confirmed?'<button class="v4-button primary" type="button" data-v5-norms>Continuer →</button>':journey(p).confirmClassOpen?'<button class="v4-button primary" type="button" data-cq-confirm>Confirmer et continuer →</button>':'<button class="v4-button primary" type="button" data-v52-open-confirm>Confirmer après revue →</button>');}
   else if(incompleteAction){incompleteAction.textContent='Compléter les réponses →';bottom.append(incompleteAction);}
@@ -591,7 +498,7 @@ function polish(p,requirements){
   let card;
   if(j.requirement!=="norms"){
    const c=cqEvaluate(p),q=c.questions.findIndex(q=>q.id===cqSession(p).cursor);
-   app.insertAdjacentHTML('afterbegin',regulatoryHeader(p,"classification",Math.max(1,q+1)));
+   app.insertAdjacentHTML('afterbegin',regulatoryHeader(p,"classification",app.querySelector("#cq-result")?c.questions.length+1:Math.max(1,q+1)));
    card=app.querySelector('.cq-card');
    const bottom=app.querySelector('.cq-below');
    if(bottom){bottom.classList.add('v5-controls');bottom.querySelectorAll('p').forEach(el=>el.remove());bottom.querySelector('[data-cq-review-end]')?.remove();if(app.querySelector('#cq-result'))bottom.insertAdjacentHTML('beforeend','<button type="button" class="v4-button primary" data-v5-norms>Continuer vers les normes →</button>');}
@@ -599,7 +506,7 @@ function polish(p,requirements){
    compactClassification(p,app,bottom);
   }else{
    const n=window.ORBIVIA_NORMES_INFO.journey(p),s=df(p).norms;
-   if(s.view==='questions'){
+   if(s.view==='matrix'){app.insertAdjacentHTML('afterbegin','<div class="v5-chapter"><button type="button" data-v4-switch="dossier" aria-label="Retour au dossier">←</button><span>Matrice des exigences MDR</span></div>');}else if(s.view==='questions'){
     const at=n.questions.findIndex(q=>q.id===s.cursor);
     app.insertAdjacentHTML('afterbegin',regulatoryHeader(p,"norms",Math.max(1,at+1)));
     app.querySelector('.std-progress')?.remove();card=app.querySelector('.cq-card');
@@ -687,6 +594,6 @@ document.addEventListener('click',function(event){
 document.addEventListener('click',function(event){if(!event.target.closest('[data-v52-open-confirm]')||ui.working)return;journey(P()).confirmClassOpen=true;save();render();document.getElementById('cq-reviewer')?.focus();});
 document.addEventListener('click',function(event){document.querySelectorAll('.v5-help[open]').forEach(el=>{if(!el.contains(event.target))el.open=false;});});
 document.addEventListener('keydown',function(event){if(event.key==='Escape')document.querySelectorAll('.v5-help[open]').forEach(el=>el.open=false);});
-window.ORBIVIA_V4={version:"5.2-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
+window.ORBIVIA_V4={version:"5.3-guided",getState:function(){return {tab:ui.tab,legacy:ui.legacy};},open:function(tab){route(tab||"home");},model:D};
 render();
 })();

@@ -276,3 +276,16 @@ body.v5-active .v52-confirmation{border:0!important;border-top:1px solid #e2e8f0
 body.v5-active .v52-confirmation .config-grid{grid-template-columns:1fr!important}
 body.v5-active .v52-class-result .v5-common-card{padding:0!important}
 @media(max-width:700px){body.v5-active .v52-class-result .cq-class-value{font-size:44px!important}.v52-norm-help>div{max-width:calc(100vw - 64px);max-height:60vh}.v52-norm-help>div>strong{display:block;line-height:1.5;font-size:13px}}
+/* V5.3 — retours, brouillons et accès mobile aux outils. */
+body.v5-active .v53-storage-warning{max-width:1080px;margin:18px auto;display:flex;gap:16px;align-items:center;justify-content:space-between}
+body.v5-active .v53-storage-warning[hidden]{display:none!important}
+body.v5-active .v4-legacybar{display:flex;align-items:end;justify-content:space-between;gap:14px;padding:16px 24px;background:#fff;border-bottom:1px solid #e0e6ee}
+body.v5-active .v4-legacybar label{margin:0;min-width:0;max-width:420px;flex:1}
+body.v5-active .gspr-draft{color:#7c5b15;font-size:12px;line-height:1.6}
+body.v5-active .gspr-result-count{color:#65758b;font-size:12px}
+body.v5-active [data-v4-section]{scroll-margin-top:140px}
+body.v5-active .v5-chapter small{white-space:nowrap}
+@media(max-width:700px){body.v5-active .v4-legacybar{padding:14px 18px;flex-wrap:wrap}body.v5-active .v4-legacybar label{flex-basis:100%;max-width:none}body.v5-active .v4-legacybar>button{width:100%}body.v5-active .v53-storage-warning{margin:12px 18px;flex-direction:column;align-items:stretch}}
+
+body.v5-active.v5-question-mode #orbivia-notification{bottom:calc(92px + env(safe-area-inset-bottom))!important}
+body.v5-active .v5-controls{scroll-margin-bottom:90px}

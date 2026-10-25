@@ -68,7 +68,7 @@ const app={
  fingerprint:function(p,id){return this.docs(p,id).map(function(d){return [d.id,d.revision||"",d.hash||"",d.modified||0].join(":");}).sort().join("|");},
  recommend:function(p,id){
   const tags=conditional[id];if(!tags)return "general";
-  const answers=df(p).norms&&df(p).norms.answers||{};
+  const answers=window.ORBIVIA_NORMES_INFO?.answers?window.ORBIVIA_NORMES_INFO.answers(p):df(p).norms&&df(p).norms.answers||{};
   if(tags.some(function(tag){return answers[tag]==="yes";}))return "likely";
   if(tags.every(function(tag){return answers[tag]==="no";}))return "unlikely";
   return "unknown";

@@ -86,3 +86,10 @@ Prochaines étapes : référentiel ISO 13485 détaillé et versionné, biblioth�
 - Le résultat de classification présente la classe proposée, les règles retenues et une seule action principale. Justification, source MDR, réponses, détail des règles, référence documentaire facultative et export sont regroupés dans un volet replié.
 - La confirmation reste une revue explicite : seul le relecteur est demandé au moment de confirmer. Le moteur de classification et les données existantes sont conservés.
 - Validation : huit tests Node réussis ; parcours mobile 390 px essayé avec un projet fictif (résultat, confirmation refusée sans relecteur, confirmation puis passage aux normes, bulle ISO 14971 et lien éditeur). Captures dans `preview/v52-*.jpg`.
+
+
+## V5.3 — fiabilisation et maintenance
+
+Navigation directe vers les actions, volets conservés pendant l’édition, recherche immédiate et brouillons de matrice MDR, réponse conditionnelle inactive exclue des propositions, reprise sans boucle des réponses à vérifier, contrôles documentaires réinitialisés après modification de preuve, validation renforcée des imports et accès mobile aux outils avancés. Les nouveaux projets reviennent dans le questionnaire actuel.
+
+Les vues documentaires, les règles de revue, la logique des questions normatives et la validation JSON sont séparées en modules. Le contrôleur est passé d’environ 73 à 54 Ko. Consulter [MAINTENANCE.md](MAINTENANCE.md) pour les responsabilités, les tests, les essais réalisés et leurs limites.

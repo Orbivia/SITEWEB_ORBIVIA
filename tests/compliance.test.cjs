@@ -21,9 +21,7 @@ test('unlinking or replacing a reviewed proof requires a new review',()=>{
  d.ensure(p).links['DT-RIS-01']=[];assert.equal(d.status(p,'DT-RIS-01'),'stale');
 });
 test('JSON validation accepts older projects and guided drafts, rejects malformed guided backups',()=>{
- const source=fs.readFileSync(path.join(root,'core.js'),'utf8');
- const validator=source.slice(source.indexOf('function validateBackup(obj){'),source.indexOf('// Project changes must not keep',source.indexOf('function validateBackup(obj){')));
- const context=vm.createContext({});vm.runInContext(validator,context);
+ const context={validateBackup:require('../outils/compliance/backup-validation.js').validate};
  const p={id:'p',name:'Projet'},backup={version:1,projects:[p]};
  assert.equal(context.validateBackup(backup),true);
  p.v4={reviews:{},links:{},actions:[],journey:{answers:{'DT-DES-01':'present'},comments:{'DT-DES-01':'Note'},drafts:{'DT-DES-01':{checked:[0,1],status:'pending'}},queue:['DT-DES-01'],cursor:'DT-DES-01',screen:'proof'}};
@@ -51,7 +49,7 @@ assert 'Dossier/Évaluation/' in z.namelist()
  assert.equal(verify.status,0,verify.stderr.toString());
 });
 test('all app scripts parse and the core is loaded externally to avoid HTML script-tokenizer failures',()=>{
- const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert.match(html,/<script src="\.\/core\.js"><\/script>/);
+ const html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert.match(html,/<script src="\.\/core\.js(?:\?v=[^"]+)?"><\/script>/);
  for(const name of fs.readdirSync(root).filter(name=>name.endsWith('.js')))new vm.Script(fs.readFileSync(path.join(root,name),'utf8'),{filename:name});
 });
 const {calculate}=require('../outils/compliance/journey-metrics.js');

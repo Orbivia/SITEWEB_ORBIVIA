@@ -92,6 +92,16 @@ function zip(entries){
  return new Blob(body.concat(central,[end]),{type:"application/zip"});
 }
 files.buildZip=zip;
+files.copyProject=async function(sourceId,targetId,documents){
+ const missing=[];
+ for(const doc of documents){
+  if(!doc.v4FileKey)continue;
+  const blob=await this.read(sourceId,doc.id);
+  if(blob)await this.save(targetId,doc.id,blob);
+  else missing.push(doc.id);
+ }
+ return missing;
+};
 files.exportProject=async function(p,docList,folders,extra){
  const entries=[],missing=[];
  for(const folder of folders){entries.push({name:folder.endsWith("/")?folder:folder+"/",data:""});}
