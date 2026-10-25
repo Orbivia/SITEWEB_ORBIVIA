@@ -75,7 +75,8 @@ test('each public page resolves its local scripts and styles and exposes both to
  }
  assert.match(fs.readFileSync(path.join(root,'../index.html'),'utf8'),/>Outils<\/a>/);
  assert.match(fs.readFileSync(path.join(root,'index.html'),'utf8'),/href="classification\/"/);
- assert.match(fs.readFileSync(path.join(root,'index.html'),'utf8'),/href="normes\/"/);
+ assert.doesNotMatch(fs.readFileSync(path.join(root,'index.html'),'utf8'),/href="normes\/"/);
+ assert.match(fs.readFileSync(path.join(root,'../_config.yml'),'utf8'),/outils\/normes/);
 });
 test('public progress keeps fixed positions and never retreats on a forward conditional route',()=>{
  for(const kind of ['classification','norms']){

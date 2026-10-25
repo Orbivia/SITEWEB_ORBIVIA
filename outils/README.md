@@ -1,3 +1,5 @@
+> Publication actuelle : seule la classification MDR/IVDR est accessible. Le parcours normes est conservé en source, retiré de l’accueil et du sitemap, et exclu de GitHub Pages par `_config.yml`.
+
 # Outils publics ORBIVIA
 
 Deux outils autonomes, accessibles depuis l’onglet **Outils** de la navigation du site :
