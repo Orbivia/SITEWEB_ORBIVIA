@@ -63,3 +63,8 @@ Avant publication, essayer dans un projet fictif : profil → classification (r�
 ## Dette technique restante
 
 `core.js`, `normes.js`, `gspr.js` et `ui-v312.js` conservent des adaptations historiques de fonctions globales. Éviter d’ajouter une nouvelle couche de remplacement de `render` : étendre les modules du parcours ou exposer une fonction explicite dans le moteur concerné. Une séparation complète du moteur de classification et des registres historiques serait une migration distincte, avec des jeux de sauvegardes et des scénarios réglementaires supplémentaires.
+
+
+## Questionnaires publics
+
+Les nouveaux outils `/outils/classification/` et `/outils/normes/` utilisent les moteurs partagés sans charger l’interface documentaire. Les questions/règles MDR résident désormais dans `classification-engine.js` ; `core.js` appelle ce module et conserve l’exigence de destination prévue pour le dossier. Les questions normatives communes sont dans `normes-questions.js`. Ne pas maintenir une seconde copie de ces données dans les pages publiques. Voir `../README.md` pour l’interface, le stockage isolé et les exports.

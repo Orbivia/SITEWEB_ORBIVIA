@@ -55,4 +55,13 @@
     <loc>https://orbivia.fr/projets/wombly.html</loc>
   </url>
   <url><loc>https://orbivia.fr/mentions-legales.html</loc></url><url><loc>https://orbivia.fr/conditions-prestations.html</loc></url><url><loc>https://orbivia.fr/confidentialite.html</loc></url>  <url><loc>https://orbivia.fr/projets/orbi.html</loc></url>
+  <url>
+    <loc>https://orbivia.fr/outils/</loc>
+  </url>
+  <url>
+    <loc>https://orbivia.fr/outils/classification/</loc>
+  </url>
+  <url>
+    <loc>https://orbivia.fr/outils/normes/</loc>
+  </url>
 </urlset>
