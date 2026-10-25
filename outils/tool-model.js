@@ -6,10 +6,17 @@ function create({classification,norms,questions,catalogue,explanations}){
  const yesNo=[['yes','Oui'],['no','Non']];
  function visible(kind,answers){
   if(kind!=='classification')return norms.activeQuestions(questions,answers).map(q=>({...q,label:q.title,options:yesNo}));
-  return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quelle est la qualification du produit ?',options:q.options.map(([value,label])=>[value,({md:'Dispositif médical (MDR)',accessory:'Accessoire de DM',annex16:'Sans destination médicale (annexe XVI)',other:'Qualification à préciser'})[value]||label])}:q);
+  const scopeHelp={
+   md:{label:'Dispositif médical',description:'Pour soigner ou diagnostiquer. Ex. : CPAP, thermomètre.'},
+   accessory:{label:'Accessoire dédié à un DM',description:'Permet ou assiste l’usage d’un DM, sans être lui-même un DM.'},
+   ivd:{label:'Diagnostic in vitro',description:'Analyse d’un prélèvement humain. Ex. : test de grossesse.'},
+   annex16:{label:'Sans but médical (annexe XVI)',description:'Ex. : lentilles colorées non correctrices, laser d’épilation.'},
+   other:{label:'Autre produit / statut incertain',description:'Clarifier le statut du produit avant de le classer.'}
+  };
+  return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quel type de produit ?',example:'Choisissez selon l’usage prévu par le fabricant. Un dispositif médical a une fonction médicale propre (diagnostic, prévention, surveillance, traitement…). Un accessoire contribue spécifiquement à l’usage ou à la fonction d’un DM, sans être lui-même un DM. Le diagnostic in vitro analyse un prélèvement humain : il relève de l’IVDR. L’annexe XVI vise seulement certains groupes sans but médical (dont lentilles non correctrices et certains équipements esthétiques). Si le statut est incertain, il doit être clarifié avant de proposer une classe.',options:q.options.map(([value,label])=>[value,scopeHelp[value]?.label||label]),optionHelp:Object.fromEntries(Object.entries(scopeHelp).map(([id,item])=>[id,item.description]))}:q);
  }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
- function visited(q,answers){return known(q,answers)||answers[q.id]==='checking';}
+ function visited(q,answers){return known(q,answers);}
  // Each question keeps a fixed position, independent of conditional branches.
  // Skipped branches advance the route; they never change its denominator.
  function progress(kind,answers,cursor){
@@ -29,8 +36,10 @@ function create({classification,norms,questions,catalogue,explanations}){
   const state={answers:{},comments:{},cursor:'',result:false};
   if(!value||typeof value!=='object'||Array.isArray(value))return state;
   const all=kind==='classification'?classification.allQuestions:questions.map(q=>({...q,options:yesNo}));
-  for(const q of all){const answer=value.answers?.[q.id];if(answer==='checking'||q.options.some(([v])=>v===answer))state.answers[q.id]=answer;if(typeof value.comments?.[q.id]==='string')state.comments[q.id]=value.comments[q.id].slice(0,10000);}
+  for(const q of all){const answer=value.answers?.[q.id];if(q.options.some(([v])=>v===answer))state.answers[q.id]=answer;if(typeof value.comments?.[q.id]==='string')state.comments[q.id]=value.comments[q.id].slice(0,10000);}
   state.cursor=visible(kind,state.answers).some(q=>q.id===value.cursor)?value.cursor:'';state.result=value.result===true;
+  const unanswered=visible(kind,state.answers).find(q=>!known(q,state.answers));
+  if(unanswered&&(state.result||Object.values(value.answers||{}).includes('checking'))){state.cursor=unanswered.id;state.result=false;}
   return state;
  }
  function analysis(kind,answers){
@@ -46,7 +55,36 @@ function create({classification,norms,questions,catalogue,explanations}){
   const missing=active.filter(q=>!['yes','no'].includes(effective[q.id]));
   return {suggested:catalogue.filter(r=>norms.classify(r,effective)==='suggested').map(describe),possible:catalogue.filter(r=>norms.classify(r,effective)==='possible').map(describe),missing,complete:missing.length===0,answered:active.length-missing.length,total:active.length};
  }
- function answerRows(kind,state){return visible(kind,state.answers).map(q=>({id:q.id,label:q.label,answer:q.options.find(([value])=>value===state.answers[q.id])?.[1]||(state.answers[q.id]==='checking'?'À vérifier':'Sans réponse'),comment:state.comments[q.id]||''}));}
+ function answerRows(kind,state){return visible(kind,state.answers).map(q=>({id:q.id,label:q.label,answer:q.options.find(([value])=>value===state.answers[q.id])?.[1]||(state.answers[q.id]==='checking'?'À vérifier':'Sans réponse'),comment:state.comments?.[q.id]||''}));}
+ function summary(kind,state,date=new Date().toLocaleDateString('fr-FR')){
+  const result=analysis(kind,state.answers),isClass=kind==='classification';
+  const document={compact:!isClass,title:isClass?'Classification MDR':'Normes du dispositif',date,
+   outcome:isClass?(result.complete?'Classe proposée : '+result.highest:'Classification à préciser'):result.suggested.length+' références proposées',
+   note:isClass?'Proposition à vérifier selon la destination réelle et les règles du MDR. Ne vaut pas validation réglementaire.':'Applicabilité, édition et harmonisation à vérifier. Liste indicative, non exhaustive. Les références sont cliquables vers leur source.',
+   sections:[]};
+  if(isClass){
+   const profile=answerRows(kind,state).filter(q=>['scope','form','active','contact','implant','duration'].includes(q.id));
+   document.sections.push({title:'Profil déclaré',items:profile.map(q=>({text:({scope:'Type',form:'Forme',active:'Dispositif actif',contact:'Contact / pénétration',implant:'Implantable',duration:'Durée'})[q.id]+' : '+q.answer}))});
+   const retained=result.rules.filter(r=>r.applies==='yes');
+   document.sections.push({title:result.complete?'Règles retenues et raisons':'Règles proposées, à confirmer',items:retained.map(r=>({text:'Règle '+r.n+' · '+r.class+' — '+r.reason}))});
+   if(result.missing.length)document.sections.push({title:'Points à préciser',items:result.missing.map(text=>({text}))});
+   document.sections.push({title:'Source',items:[{text:'Règlement (UE) 2017/745 · annexe VIII',url:'https://eur-lex.europa.eu/eli/reg/2017/745/oj'}]});
+  }else{
+   const short={electric:'Électromédical',software:'Logiciel médical',connected:'Connexion réseau',cloud:'Serveur distant',ai:'IA',alarm:'Alarmes',closedloop:'Boucle fermée',home:'Domicile',emergency:'Secours',transport:'Chocs et vibrations',clinical:'Investigation clinique',contact:'Contact corporel',substance:'Substances',polymer:'Polymères exposés',blood:'Contact sanguin',implant:'Implant',activeImplant:'Implant actif',nano:'Nanomatériaux',tissue:'Tissus biologiques',sterile:'Produit stérile',eto:'Oxyde d’éthylène',radiation:'Irradiation',steam:'Vapeur',reprocess:'Retraitement',cleanroom:'Salle propre',resp:'Circuit respiratoire',sleep:'Apnées du sommeil',oxygen:'Oxygène',anesthesia:'Anesthésie',infusion:'Perfusion',catheter:'Cathéter intravasculaire',connectors:'Petits raccords',enteral:'Voie entérale',dialysis:'Dialyse',cardiac:'Cardiovasculaire',ecg:'ECG',vascular:'Vasculaire',neuro:'Neurologie',surgical:'Chirurgie',endoscopy:'Endoscopie',orthopedic:'Implant orthopédique',prosthesis:'Prothèse / orthèse externe',wheelchair:'Fauteuil roulant',dental:'Dentaire',ophthalmic:'Ophtalmologie',contactLens:'Lentilles',wound:'Plaies',monitor:'Surveillance physiologique',neonatal:'Nouveau-nés',bed:'Lit médicalisé',hearing:'Audition',thermal:'Chauffage patient',gloves:'Gants médicaux',mask:'Masque médical',textile:'Textiles de bloc',xray:'Rayons X',mri:'IRM',ultrasound:'Ultrasons',laser:'Laser',optical:'Lumière médicale',radiotherapy:'Radiothérapie',imaging:'Images médicales',lab:'Laboratoire',ivd:'Diagnostic in vitro'};
+   const effective=norms.effectiveAnswers(questions,state.answers),byId=new Map(catalogue.map(r=>[r.id,r]));
+   const groups=new Map();
+   for(const reference of result.suggested){
+    const original=byId.get(reference.id);
+    const reason=original.when==='base'?'Références transversales':original.when.split(',').map(clause=>clause.split('+')).filter(clause=>clause.every(id=>effective[id]==='yes')).map(clause=>clause.map(id=>short[id]||id).join(' + ')).join(' ou ');
+    if(!groups.has(reason))groups.set(reason,[]);
+    groups.get(reason).push({text:reference.id,url:reference.url});
+   }
+   document.sections.push(...[...groups].map(([title,items])=>({title,items,inline:true})));
+   if(result.missing.length)document.sections.unshift({title:'Caractéristiques à préciser',items:result.missing.map(q=>({text:q.title}))});
+   if(state.answers.ivd==='yes')document.note+=' Le profil IVDR nécessite une analyse distincte ; aucune classification IVDR n’est réalisée.';
+  }
+  return document;
+ }
  function reportBody(kind,state,date=new Date().toLocaleDateString('fr-FR')){
   const result=analysis(kind,state.answers),isClass=kind==='classification';
   let html='<h1>'+E(isClass?'Classification MDR':'Normes du dispositif')+'</h1><p>ORBIVIA · Résultat du questionnaire · '+E(date)+'</p>';
@@ -66,7 +104,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   return html;
  }
  function report(kind,state){return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ORBIVIA — '+(kind==='classification'?'Classification MDR':'Normes du dispositif')+'</title><style>body{font:14px/1.6 Arial,sans-serif;color:#17263a;margin:35px auto;padding:0 20px;max-width:1100px}h1{font-size:30px}h2{margin-top:30px}table{width:100%;border-collapse:collapse;margin:16px 0;font-size:12px}th,td{border:1px solid #dce3eb;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f5f8}.notice{padding:16px;border-left:4px solid #e7a116;background:#fffbf1}a{color:#325c83}@media print{body{margin:0}thead{display:table-header-group}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head><body>'+reportBody(kind,state)+'</body></html>';}
- return {visible,known,visited,progress,restore,analysis,answerRows,reportBody,report,escape:E};
+ return {visible,known,visited,progress,restore,analysis,answerRows,summary,reportBody,report,escape:E};
 }
 if(typeof module==='object'&&module.exports)module.exports={create};else window.ORBIVIA_PUBLIC_TOOLS={create};
 })();

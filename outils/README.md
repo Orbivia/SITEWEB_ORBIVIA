@@ -20,7 +20,12 @@ Les deux questionnaires publics n’accèdent pas aux projets documentaires. Leu
 
 ## Exports
 
-**Exporter le résultat en PDF** télécharge directement un PDF paginé et recherchable, avec date, résultat, raisons, sources cliquables, réponses et commentaires. Le PDF est préparé localement par `pdf-export.js` à partir du même contenu que le rapport détaillé. `vendor/pdf-lib.min.js` (licence MIT incluse) est servi depuis le site, sans CDN ni transmission des réponses. Aucun dialogue d’impression n’est nécessaire. Le résultat incomplet reste identifié comme provisoire. Les références normatives ne sont pas déclarées automatiquement obligatoires, à jour ou harmonisées.
+**Exporter le résultat en PDF** télécharge une synthèse A4 d’une seule page, préparée localement par `pdf-export.js` à partir de `tool-model.js` (`summary`). Aucun dialogue d’impression ni service externe.
+
+- Classification : classe proposée, profil déclaré, règles retenues avec leurs raisons, points à préciser et source MDR cliquable.
+- Normes : toutes les références proposées, regroupées par motif de sélection, avec chaque référence cliquable vers l’éditeur. La mise en page adapte les colonnes et la typographie ; le cas extrême des 278 références est testé sans en omettre.
+
+Les réponses complètes et commentaires restent consultables dans le résultat de l’outil. Ils ne sont pas reproduits dans cette fiche de synthèse. `reportBody` et `report` conservent le générateur de rapport détaillé pour les usages internes et leurs tests.
 
 ## Vérifications
 
@@ -43,10 +48,18 @@ Contrôles de cette adaptation : accueil, question à six choix et résultat de 
 
 ### Simplification des outils publics
 
-Le résultat apparaît une fois toutes les questions actives parcourues. « À vérifier » permet de finir le parcours, avec un résultat clairement provisoire et une reprise ciblée. Une ancienne sauvegarde ouverte sur un résultat incomplet revient automatiquement à la première question non parcourue. « Reprendre à zéro » est disponible dans les questions et le résultat ; sa confirmation efface uniquement les réponses de l’outil courant.
+Le résultat apparaît une fois toutes les questions actives renseignées. Le choix « À vérifier » est retiré des outils publics. Les anciennes valeurs `checking` sont ignorées à la restauration : les autres réponses et commentaires sont conservés, et le questionnaire reprend directement au premier point sans réponse. Un choix métier ambigu peut néanmoins produire une conclusion à préciser ; aucune classe n’est inventée pour un périmètre hors MDR. « Reprendre à zéro » est disponible dans les questions et le résultat ; sa confirmation efface uniquement les réponses de l’outil courant.
 
-Le compteur « question X sur Y » a été retiré. Chaque question possède une position fixe dans le parcours de référence (`tool-model.js`, `progress`) : le pourcentage ne dépend plus du nombre de questions momentanément visibles. Les branches non applicables sont sautées ; la progression ne recule pas lorsqu’on avance. Une modification antérieure qui ouvre de nouveaux points peut légitimement réduire l’avancement ; les points « À vérifier » empêchent d’afficher 100 %. L’intitulé du thème reste visible au-dessus de la question.
+Le compteur « question X sur Y » a été retiré. Chaque question possède une position fixe dans le parcours de référence (`tool-model.js`, `progress`) : le pourcentage ne dépend plus du nombre de questions momentanément visibles. Les branches non applicables sont sautées ; la progression ne recule pas lorsqu’on avance. Une modification antérieure qui ouvre de nouveaux points peut légitimement réduire l’avancement ; les points sans réponse empêchent d’afficher 100 %. L’intitulé du thème reste visible au-dessus de la question.
 
 Le pied de page compact est présent sur les pages publiques du site, l’accueil Outils et les deux questionnaires. Les trois liens conduisent aux mentions légales, aux conditions générales de prestation et à la confidentialité.
 
 Contrôles : 51 tests, dont parcours conditionnels monotones et génération/relecture d’un PDF multipage avec annotations de liens. Parcours de classification classe I, remise à zéro et génération des deux liens PDF vérifiés dans le navigateur. La première question de classification et le pied de page tiennent à 320 × 640 et 390 × 640 pixels, sans défilement dans les vues contrôlées. Le pilote de téléchargement distant ne renvoie pas d’événement ; la récupération du fichier par ce pilote reste une limite de vérification.
+
+### Aides par question
+
+`question-examples.js` contient des exemples pour les 64 questions de classification et les 64 questions techniques. Ils sont affichés dans les bulles avec l’aide existante et les liens officiels. Les exemples opposent des situations lorsque cela aide à distinguer les réponses ; ils ne déduisent pas une classe du seul nom d’un produit. Le test de couverture exige au moins deux exemples par question.
+
+La question initiale présente des boutons décrivant dispositif médical, accessoire, diagnostic in vitro, annexe XVI et statut à clarifier. Les exemples sont fondés sur les définitions MDR/IVDR et l’orientation de la Commission européenne. Les moteurs partagés de qualification, de classification et de proposition des normes restent inchangés.
+
+Contrôles de cette révision : 53 tests réussis ; parcours classe I de 18 questions réalisé dans le navigateur ; génération du lien PDF des résultats contrôlée ; PDFs d’une page rendus avec Poppler et inspectés ; reprise des anciennes réponses incertaines testée ; première question et pied de page à 390 × 640 px sans défilement, exemples repliés au départ.

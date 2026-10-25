@@ -55,7 +55,7 @@ test('reports contain reasons, all applicable answers and sources without unesca
 });
 test('restoring a tool ignores invalid answers and keeps its state independent of projects',()=>{
  const restored=model.restore('classification',{answers:{scope:'md',form:'bogus',name:'Projet'},comments:{scope:15,form:'Note'},cursor:'bogus',result:true});
- assert.deepEqual(restored.answers,{scope:'md'});assert.equal(restored.comments.form,'Note');assert.equal(restored.comments.scope,undefined);assert.equal(restored.cursor,'');
+ assert.deepEqual(restored.answers,{scope:'md'});assert.equal(restored.comments.form,'Note');assert.equal(restored.comments.scope,undefined);assert.equal(restored.cursor,'form');
  const script=fs.readFileSync(path.join(root,'questionnaire.js'),'utf8');
  assert.match(script,/orbivia-public-/);assert.doesNotMatch(script,/pickProject|activeProject|projectSelect/);
 });
@@ -90,12 +90,50 @@ test('public progress keeps fixed positions and never retreats on a forward cond
  const two=model.progress('classification',{scope:'md',form:'physical',active:'yes'}).percent;
  assert.equal(one,two,'a future branch cannot change the current fixed position');
 });
-test('PDF generation produces a paginated PDF with sources, accented text and long URLs',async()=>{
+test('one-page PDFs preserve reasons and all linked references, including the entire catalogue',async()=>{
  const pdf=require('../outils/vendor/pdf-lib.min.js');
  const exporter=require('../outils/pdf-export.js');
- const blocks=[{text:'Classification MDR — résultat',level:1},{text:'Réponses et commentaires : français, œ, ≥, µ,\nDeuxième ligne',level:0},...Array.from({length:90},(_,i)=>({text:'Règle '+i+' : justification détaillée. '.repeat(12),level:0})),{text:'https://eur-lex.europa.eu/eli/reg/2017/745/oj',url:'https://eur-lex.europa.eu/eli/reg/2017/745/oj',level:0}];
- const bytes=await exporter.createFromBlocks(blocks,pdf);
- assert.equal(Buffer.from(bytes).subarray(0,5).toString(),'%PDF-');
- const document=await pdf.PDFDocument.load(bytes);assert.ok(document.getPageCount()>2);
- const last=document.getPages().at(-1);assert.ok(last.node.lookup(pdf.PDFName.of('Annots')).size()>0);
+ const allYes=Object.fromEntries(questions.map(q=>[q.id,'yes']));
+ for(const [kind,state] of [
+  ['classification',{answers:complete(),comments:{}}],
+  ['classification',{answers:complete({active:'yes',therapyEnergy:'yes',energyHazard:'yes'}),comments:{}}],
+  ['classification',{answers:{scope:'ivd'},comments:{}}],
+  ['norms',{answers:allYes,comments:{}}],
+  ['norms',{answers:Object.fromEntries(questions.map(q=>[q.id,'no'])),comments:{}}]
+ ]){
+  const summary=model.summary(kind,state);
+  const bytes=await exporter.create(summary,pdf);
+  assert.equal(Buffer.from(bytes).subarray(0,5).toString(),'%PDF-');
+  const document=await pdf.PDFDocument.load(bytes);assert.equal(document.getPageCount(),1);
+  const annotations=document.getPage(0).node.lookup(pdf.PDFName.of('Annots'));
+  if(kind==='norms'){
+   const expected=model.analysis(kind,state.answers).suggested;
+   assert.equal(annotations.size(),expected.length);
+   assert.equal(summary.sections.reduce((n,s)=>n+s.items.filter(i=>i.url).length,0),expected.length);
+  }else assert.equal(annotations.size(),1);
+ }
+ const full=model.summary('norms',{answers:allYes,comments:{}});
+ assert.equal(full.sections.reduce((n,s)=>n+s.items.length,0),context.window.ORBIVIA_NORMES_CATALOGUE.length);
+});
+test('legacy uncertain answers return directly to an unanswered question without blocking',()=>{
+ for(const kind of ['classification','norms']){
+  const id=kind==='classification'?'scope':'electric';
+  const state=model.restore(kind,{answers:{[id]:'checking'},comments:{[id]:'Conserver cette note'},cursor:kind==='classification'?'form':'ivd',result:true});
+  assert.equal(state.answers[id],undefined);assert.equal(state.cursor,id);assert.equal(state.result,false);
+  assert.equal(state.comments[id],'Conserver cette note');
+  assert.equal(model.visited(model.visible(kind,state.answers)[0],state.answers),false);
+ }
+ const q=model.visible('classification',{})[0];assert.match(q.label,/type de produit/);
+ assert.equal(q.options.length,5);assert.equal(Object.keys(q.optionHelp).length,5);
+ const script=fs.readFileSync(path.join(root,'questionnaire.js'),'utf8');
+ assert.doesNotMatch(script,/\['checking','À vérifier'\]/);
+});
+test('every public question has several product-specific examples',()=>{
+ const examples=require('../outils/question-examples.js');
+ for(const [kind,all] of [['classification',classification.allQuestions],['norms',questions]]){
+  for(const q of all){
+   assert.ok(examples[kind][q.id]?.length>=2,kind+': '+q.id);
+   assert.ok(examples[kind][q.id].every(text=>typeof text==='string'&&text.length>30));
+  }
+ }
 });
