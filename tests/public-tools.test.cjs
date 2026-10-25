@@ -210,6 +210,7 @@ test('each initial product choice either continues MDR or gives a specific orien
  for(const scope of ['ivd','annex16','other','unresolved']){
   const info=model.orientation('classification',{scope});assert.ok(info?.title);assert.ok(info.text.length>100);
   assert.equal(model.visible('classification',{scope}).length,1);
+  assert.equal(model.progress('classification',{scope},'scope').percent,0);
  }
  assert.match(model.orientation('classification',{scope:'ivd'}).text,/A, B, C et D/);
  assert.match(model.orientation('classification',{scope:'annex16'}).text,/pas pris en charge/);

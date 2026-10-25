@@ -41,7 +41,7 @@ function create({classification,norms,questions,catalogue,explanations}){
  function progress(kind,answers,cursor){
   const all=kind==='classification'?classification.allQuestions:questions;
   const active=visible(kind,answers),next=active.find(q=>!visited(q,answers));
-  const position=next?all.findIndex(q=>q.id===next.id):all.length;
+  const position=orientation(kind,answers)?0:next?all.findIndex(q=>q.id===next.id):all.length;
   const percent=Math.min(active.some(q=>!resolved(q,answers))?99:100,Math.floor(100*position/all.length));
   let theme;
   if(kind==='norms')theme=all.find(q=>q.id===cursor)?.section||all[position]?.section||'Résultat';
