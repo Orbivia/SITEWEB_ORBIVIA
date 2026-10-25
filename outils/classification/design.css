@@ -108,3 +108,13 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 }
 
 [data-tool="classification"] .info-bubble summary{min-width:44px;min-height:44px}
+
+/* Initial product categories: Orbivia duotone pictograms. */
+[data-tool="classification"] .answer>span.scope-icon:first-child:not(.answer-copy),
+[data-tool="classification"] .answer.selected>span.scope-icon:first-child:not(.answer-copy){display:block;width:40px;height:40px;border:0;border-radius:0;color:#17263a;flex:0 0 40px}
+[data-tool="classification"] .scope-icon svg{display:block;width:100%;height:100%}
+@media(max-width:700px){
+ [data-tool="classification"] .answer>span.scope-icon:first-child:not(.answer-copy){width:30px;height:30px;flex-basis:30px}
+}
+[data-tool="classification"] .scope-choices .answer:last-child{grid-column:auto;min-height:92px}
+@media(max-width:700px){[data-tool="classification"] .scope-choices .answer:last-child{min-height:82px}}
