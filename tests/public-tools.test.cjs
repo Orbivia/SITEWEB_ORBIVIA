@@ -72,3 +72,30 @@ test('each public page resolves its local scripts and styles and exposes both to
  assert.match(fs.readFileSync(path.join(root,'index.html'),'utf8'),/href="classification\/"/);
  assert.match(fs.readFileSync(path.join(root,'index.html'),'utf8'),/href="normes\/"/);
 });
+test('public progress keeps fixed positions and never retreats on a forward conditional route',()=>{
+ for(const kind of ['classification','norms']){
+  for(const variant of [0,1,2]){
+   const answers={};let last=0;
+   for(let i=0;i<150;i++){
+    const progress=model.progress(kind,answers),q=model.visible(kind,answers).find(q=>!model.visited(q,answers));
+    assert.ok(progress.percent>=last,kind+': percentage retreated');last=progress.percent;
+    if(!q){assert.equal(progress.percent,100);break;}
+    answers[q.id]=q.options[Math.min(variant,q.options.length-1)][0];
+   }
+  }
+ }
+ const a=complete();assert.equal(model.progress('classification',a).percent,100);
+ a.nano='checking';assert.ok(model.progress('classification',a).percent<100);
+ const one=model.progress('classification',{scope:'md',form:'physical',active:'no'}).percent;
+ const two=model.progress('classification',{scope:'md',form:'physical',active:'yes'}).percent;
+ assert.equal(one,two,'a future branch cannot change the current fixed position');
+});
+test('PDF generation produces a paginated PDF with sources, accented text and long URLs',async()=>{
+ const pdf=require('../outils/vendor/pdf-lib.min.js');
+ const exporter=require('../outils/pdf-export.js');
+ const blocks=[{text:'Classification MDR — résultat',level:1},{text:'Réponses et commentaires : français, œ, ≥, µ,\nDeuxième ligne',level:0},...Array.from({length:90},(_,i)=>({text:'Règle '+i+' : justification détaillée. '.repeat(12),level:0})),{text:'https://eur-lex.europa.eu/eli/reg/2017/745/oj',url:'https://eur-lex.europa.eu/eli/reg/2017/745/oj',level:0}];
+ const bytes=await exporter.createFromBlocks(blocks,pdf);
+ assert.equal(Buffer.from(bytes).subarray(0,5).toString(),'%PDF-');
+ const document=await pdf.PDFDocument.load(bytes);assert.ok(document.getPageCount()>2);
+ const last=document.getPages().at(-1);assert.ok(last.node.lookup(pdf.PDFName.of('Annots')).size()>0);
+});

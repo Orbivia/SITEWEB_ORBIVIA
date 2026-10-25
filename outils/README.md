@@ -10,7 +10,7 @@ L’accueil `/outils/` présente uniquement ces deux outils. L’espace document
 ## Code commun
 
 - `questionnaire.js` : interface et navigation des deux questionnaires, commentaires, reprise ciblée, réinitialisation et affichage des résultats.
-- `questionnaire.css` : présentation commune et impression.
+- `questionnaire.css` : présentation commune et affichage mobile.
 - `tool-model.js` : validation de la reprise, interprétation des réponses et rapports autonomes.
 - `compliance/classification-engine.js` : moteur MDR extrait du code historique ; le dossier documentaire et le questionnaire public utilisent les mêmes règles et questions. Le mode public n’exige pas de formulaire de destination ; le dossier documentaire conserve cette exigence. Les réponses doivent néanmoins correspondre à la destination réellement prévue.
 - `compliance/normes-questions.js` : questions techniques communes, extraites sans changement de l’ancien module.
@@ -20,7 +20,7 @@ Les deux questionnaires publics n’accèdent pas aux projets documentaires. Leu
 
 ## Exports
 
-**Exporter le résultat** est un lien de téléchargement natif vers un rapport HTML autonome, avec date, résultat, raisons, sources, réponses et commentaires. **Imprimer / PDF** utilise l’impression du navigateur sur une version complète dédiée ; l’enregistrement PDF dépend du dialogue d’impression du système. Le résultat incomplet reste identifié comme provisoire. Les références normatives ne sont pas déclarées automatiquement obligatoires, à jour ou harmonisées.
+**Exporter le résultat en PDF** télécharge directement un PDF paginé et recherchable, avec date, résultat, raisons, sources cliquables, réponses et commentaires. Le PDF est préparé localement par `pdf-export.js` à partir du même contenu que le rapport détaillé. `vendor/pdf-lib.min.js` (licence MIT incluse) est servi depuis le site, sans CDN ni transmission des réponses. Aucun dialogue d’impression n’est nécessaire. Le résultat incomplet reste identifié comme provisoire. Les références normatives ne sont pas déclarées automatiquement obligatoires, à jour ou harmonisées.
 
 ## Vérifications
 
@@ -40,3 +40,13 @@ Affichage contrôlé à 390 px et 320 px : accueil, résultat et question sans d
 L’accueil et les questions utilisent des espacements réduits et des réponses en colonnes selon leur longueur. Les boutons conservent une hauteur minimale de 44 px. Les commentaires, aides et informations de confidentialité se déplient à la demande. Sur le résultat normatif, les exports précèdent désormais la liste des références, repliée au départ ; la recherche, les explications et les sources restent accessibles. Les rapports exportés conservent le contenu complet.
 
 Contrôles de cette adaptation : accueil, question à six choix et résultat de classification à 390 × 640 px ; accueil et question normative à 320 × 640 px sans défilement ni débordement horizontal dans ces vues. Résultat normatif de 52 références repliées contrôlé à 390 × 640 px ; recherche IEC 62304 et détail avec source vérifiés après ouverture. Les explications ouvertes et les contenus longs peuvent naturellement nécessiter de défiler : aucune zone utile n’est masquée pour forcer la hauteur.
+
+### Simplification des outils publics
+
+Le résultat apparaît une fois toutes les questions actives parcourues. « À vérifier » permet de finir le parcours, avec un résultat clairement provisoire et une reprise ciblée. Une ancienne sauvegarde ouverte sur un résultat incomplet revient automatiquement à la première question non parcourue. « Reprendre à zéro » est disponible dans les questions et le résultat ; sa confirmation efface uniquement les réponses de l’outil courant.
+
+Le compteur « question X sur Y » a été retiré. Chaque question possède une position fixe dans le parcours de référence (`tool-model.js`, `progress`) : le pourcentage ne dépend plus du nombre de questions momentanément visibles. Les branches non applicables sont sautées ; la progression ne recule pas lorsqu’on avance. Une modification antérieure qui ouvre de nouveaux points peut légitimement réduire l’avancement ; les points « À vérifier » empêchent d’afficher 100 %. L’intitulé du thème reste visible au-dessus de la question.
+
+Le pied de page compact est présent sur les pages publiques du site, l’accueil Outils et les deux questionnaires. Les trois liens conduisent aux mentions légales, aux conditions générales de prestation et à la confidentialité.
+
+Contrôles : 51 tests, dont parcours conditionnels monotones et génération/relecture d’un PDF multipage avec annotations de liens. Parcours de classification classe I, remise à zéro et génération des deux liens PDF vérifiés dans le navigateur. La première question de classification et le pied de page tiennent à 320 × 640 et 390 × 640 pixels, sans défilement dans les vues contrôlées. Le pilote de téléchargement distant ne renvoie pas d’événement ; la récupération du fichier par ce pilote reste une limite de vérification.

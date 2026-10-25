@@ -5,7 +5,7 @@ const model=window.ORBIVIA_PUBLIC_TOOLS.create({classification:window.ORBIVIA_CL
 const E=model.escape,key='orbivia-public-'+kind+'-v1',app=document.getElementById('tool-app');
 let state=model.restore(kind,null),storageOK=true,locked=false,reviewMode=false,reviewSeen=[],reportURL=null;
 try{state=model.restore(kind,JSON.parse(localStorage.getItem(key)||'null'));}catch(_error){storageOK=false;}
-function save(){try{localStorage.setItem(key,JSON.stringify(state));storageOK=true;}catch(_error){storageOK=false;}const status=document.getElementById('save-status');if(status)status.textContent=storageOK?'Réponses enregistrées dans ce navigateur.':'Enregistrement indisponible : exportez le résultat avant de quitter.';}
+function save(){try{localStorage.setItem(key,JSON.stringify(state));storageOK=true;}catch(_error){storageOK=false;}}
 function action(label,name,classes=''){return '<button type="button" class="tool-button '+classes+'" data-action="'+name+'">'+label+'</button>';}
 function questionHelp(q){
  const n=window.ORBIVIA_NORMES_AIDES?.[q.id],text=kind==='classification'?q.example:n?.text;
@@ -15,8 +15,8 @@ function focus(){const h=app.querySelector('h1');if(h){h.tabIndex=-1;h.focus({pr
 function renderQuestion(){
  const qs=model.visible(kind,state.answers),q=qs.find(q=>q.id===state.cursor)||qs.find(q=>!model.visited(q,state.answers))||qs[0];state.cursor=q.id;
  const choiceLayout=q.options.length>=4?'many':q.options.every(([,label])=>label.length<28)?'short':'long';
- const at=qs.findIndex(x=>x.id===q.id),done=qs.filter(x=>model.visited(x,state.answers)).length,percent=Math.round(100*done/qs.length);
- app.innerHTML='<div class="question-progress"><span>Question '+(at+1)+' sur '+qs.length+(reviewMode?' · Points à préciser':'')+'<b>'+percent+' % parcouru</b></span><progress aria-label="Avancement du questionnaire" max="'+qs.length+'" value="'+done+'"></progress></div><section class="question-card"><div class="question-heading"><h1>'+E(q.label)+'</h1>'+questionHelp(q)+'</div><div class="answer-list choices-'+choiceLayout+'">'+[...q.options,['checking','À vérifier']].map(([value,label])=>'<button type="button" class="answer '+(state.answers[q.id]===value?'selected':'')+'" data-answer="'+E(value)+'" data-question="'+E(q.id)+'" aria-pressed="'+(state.answers[q.id]===value)+'"><span aria-hidden="true"></span>'+E(label)+'</button>').join('')+'</div><details class="comment" '+(state.comments[q.id]?'open':'')+'><summary>Ajouter un commentaire</summary><label for="question-comment" class="sr-only">Commentaire sur cette réponse</label><textarea id="question-comment" data-comment="'+E(q.id)+'" rows="3">'+E(state.comments[q.id]||'')+'</textarea></details></section><div class="question-controls">'+action('← Précédent','previous')+action('Voir mon résultat →','result','quiet')+'</div><p class="save-status" id="save-status" role="status">'+(storageOK?'Réponses enregistrées dans ce navigateur.':'Enregistrement indisponible : exportez le résultat avant de quitter.')+'</p>';
+ const at=qs.findIndex(x=>x.id===q.id),{percent,theme}=model.progress(kind,state.answers,q.id);
+ app.innerHTML='<div class="question-progress"><span>'+E(theme)+(reviewMode?' · À préciser':'')+'<b>'+percent+' % parcouru</b></span><progress aria-label="Avancement du questionnaire" max="100" value="'+percent+'"></progress></div><section class="question-card"><div class="question-heading"><h1>'+E(q.label)+'</h1>'+questionHelp(q)+'</div><div class="answer-list choices-'+choiceLayout+'">'+[...q.options,['checking','À vérifier']].map(([value,label])=>'<button type="button" class="answer '+(state.answers[q.id]===value?'selected':'')+'" data-answer="'+E(value)+'" data-question="'+E(q.id)+'" aria-pressed="'+(state.answers[q.id]===value)+'"><span aria-hidden="true"></span>'+E(label)+'</button>').join('')+'</div><details class="comment" '+(state.comments[q.id]?'open':'')+'><summary>Ajouter un commentaire</summary><label for="question-comment" class="sr-only">Commentaire sur cette réponse</label><textarea id="question-comment" data-comment="'+E(q.id)+'" rows="3">'+E(state.comments[q.id]||'')+'</textarea></details></section><div class="question-controls">'+action('← Précédent','previous')+action('Reprendre à zéro','restart','quiet')+'</div><p class="save-status" id="save-status" role="status">'+(storageOK?'':'Enregistrement indisponible sur cet appareil.')+'</p>';
  app.querySelector('[data-action="previous"]').disabled=at===0;
 }
 function normRow(r){return '<details class="norm-row" data-reference="'+E((r.id+' '+r.title).toLocaleLowerCase('fr'))+'"><summary><span><strong>'+E(r.id)+'</strong><span>'+E(r.title)+'</span></span><span class="row-info" aria-label="Explication et source">i</span></summary><div class="norm-detail"><h3>Pourquoi cette référence ?</h3><ul>'+r.reasons.map(reason=>'<li>'+E(reason)+'</li>').join('')+'</ul><h3>Ce qu’elle couvre</h3><p>'+E(r.scope)+'</p><p>'+E(r.use)+'</p><a href="'+E(r.url)+'" target="_blank" rel="noopener noreferrer">'+E(r.sourceLabel)+' ↗</a><p class="muted">Édition, amendements et statut d’harmonisation à vérifier.</p></div></details>';}
@@ -31,9 +31,7 @@ function renderResult(){
  }
  body+='<p class="scope-note">'+E(isClass?'Proposition à vérifier selon la destination et les variantes du dispositif ; ne vaut pas validation réglementaire.':'Applicabilité, périmètre, édition et harmonisation à vérifier pour chaque référence. Liste non exhaustive.')+'</p>';
  if(pending.length)body+='<div class="pending-box"><span>'+pending.length+' réponse(s) à préciser</span>'+action('Revoir ces points →','review','quiet')+'</div>';
- if(reportURL)URL.revokeObjectURL(reportURL);reportURL=URL.createObjectURL(new Blob([model.report(kind,state)],{type:'text/html;charset=utf-8'}));
- const filename='ORBIVIA_'+(isClass?'classification_MDR':'normes_dispositif')+'_'+new Date().toISOString().slice(0,10)+'.html';
- body+='<div class="export-actions"><a class="tool-button primary" href="'+E(reportURL)+'" download="'+filename+'">Exporter le résultat</a>'+action('Imprimer / PDF','print')+'</div><p class="save-status">Export : réponses, raisons, sources et commentaires.</p><details class="result-detail answers-review"><summary>Relire ou modifier mes réponses</summary>'+model.answerRows(kind,state).map(q=>'<div class="answer-row"><div><span>'+E(q.label)+'</span><b>'+E(q.answer)+'</b>'+(q.comment?'<p>'+E(q.comment)+'</p>':'')+'</div><button type="button" class="text-button" data-edit="'+E(q.id)+'">Modifier</button></div>').join('')+'</details><div class="result-bottom">'+action('← Questionnaire','back','quiet')+action('Recommencer','restart','quiet')+'</div>';
+ body+='<div class="export-actions"><a class="tool-button primary" id="pdf-download" aria-disabled="true">Préparation du PDF…</a></div><p class="save-status">Export : réponses, raisons, sources et commentaires.</p><details class="result-detail answers-review"><summary>Relire ou modifier mes réponses</summary>'+model.answerRows(kind,state).map(q=>'<div class="answer-row"><div><span>'+E(q.label)+'</span><b>'+E(q.answer)+'</b>'+(q.comment?'<p>'+E(q.comment)+'</p>':'')+'</div><button type="button" class="text-button" data-edit="'+E(q.id)+'">Modifier</button></div>').join('')+'</details><div class="result-bottom">'+action('← Questionnaire','back','quiet')+action('Reprendre à zéro','restart','quiet')+'</div>';
  app.innerHTML=body;
  if(!isClass){
   const references=document.createElement('details');references.className='result-detail reference-browser';
@@ -43,9 +41,21 @@ function renderResult(){
   if(conditional)references.append(conditional);
   app.querySelector('.answers-review').before(references);
  }
- document.getElementById('print-document').innerHTML=model.reportBody(kind,state);
+ preparePDF(app.querySelector('#pdf-download'));
 }
-function render(){document.body.classList.toggle('is-question',!state.result);document.body.classList.toggle('is-result',state.result);if(state.result)renderResult();else renderQuestion();}
+async function preparePDF(button){
+ button.setAttribute('aria-disabled','true');button.textContent='Préparation du PDF…';
+ try{
+  const bytes=await window.ORBIVIA_TOOL_PDF.create(model.reportBody(kind,state));
+  if(!button.isConnected)return;
+  if(reportURL)URL.revokeObjectURL(reportURL);
+  reportURL=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
+  button.href=reportURL;button.download='ORBIVIA_'+(kind==='classification'?'classification_MDR':'normes_dispositif')+'_'+new Date().toISOString().slice(0,10)+'.pdf';
+  button.textContent='Exporter le résultat en PDF';button.removeAttribute('data-action');button.removeAttribute('aria-disabled');
+ }catch(error){button.textContent='Réessayer l’export PDF';button.dataset.action='export-pdf';button.removeAttribute('aria-disabled');console.error('Export PDF indisponible',error);}
+}
+
+function render(){if(state.result){const missing=model.visible(kind,state.answers).find(q=>!model.visited(q,state.answers));if(missing){state.result=false;state.cursor=missing.id;}}document.body.classList.toggle('is-question',!state.result);document.body.classList.toggle('is-result',state.result);if(state.result)renderResult();else renderQuestion();}
 function moveTo(q){state.cursor=q.id;state.result=false;save();render();focus();}
 document.addEventListener('click',event=>{
  const b=event.target.closest('[data-answer],[data-action],[data-edit]');if(!b||b.disabled)return;
@@ -62,10 +72,9 @@ document.addEventListener('click',event=>{
  }
  if(b.dataset.edit){state.editing=true;reviewMode=false;const q=qs.find(q=>q.id===b.dataset.edit);if(q)moveTo(q);return;}
  if(cmd==='previous'){state.editing=false;reviewMode=false;if(at>0)moveTo(qs[at-1]);return;}
- if(cmd==='result'){state.result=true;save();render();focus();return;}
  if(cmd==='back'){state.result=false;reviewMode=false;save();render();focus();return;}
  if(cmd==='review'){const q=qs.find(x=>!model.known(x,state.answers));if(q){reviewMode=true;reviewSeen=[];moveTo(q);}return;}
- if(cmd==='print'){window.print();return;}
+ if(cmd==='export-pdf'){preparePDF(b);return;}
  if(cmd==='restart'){document.getElementById('restart-dialog').showModal();return;}
  if(cmd==='cancel-restart'){document.getElementById('restart-dialog').close();return;}
  if(cmd==='confirm-restart'){state=model.restore(kind,null);reviewMode=false;reviewSeen=[];save();document.getElementById('restart-dialog').close();render();focus();}

@@ -75,3 +75,17 @@ body.tool-page{--tool-ink:#17263a;--tool-gold:#e7a116;background:#f5f7fa;color:v
  .tool-privacy{margin-top:8px}
 }
 @media print{body.tool-page>*{display:none!important}body.tool-page>#print-document{display:block!important;font:11px/1.5 Arial,sans-serif;color:#111}#print-document h1{font-size:24px;margin-bottom:12px}#print-document h2{font-size:18px;margin:12px 0 6px}#print-document h3{font-size:14px;margin:20px 0 10px}#print-document p{margin:12px 0}#print-document table{border-collapse:collapse;width:100%;font-size:9px;table-layout:fixed}#print-document td,#print-document th{border:1px solid #bbb;padding:7px;text-align:left;vertical-align:top;overflow-wrap:anywhere}#print-document thead{display:table-header-group}#print-document tr{break-inside:avoid}#print-document h2,#print-document h3{break-after:avoid}}
+body.tool-page{display:flex;flex-direction:column;min-height:100vh;min-height:100svh}
+.tool-page .header,.tool-page .site-footer{flex-shrink:0}
+.tool-page .site-footer{margin-top:auto}
+.save-status:empty{display:none}
+.tool-page .header{margin-block:0}
+@media(max-width:350px){
+ .tool-shell{width:calc(100% - 24px);margin-top:8px;margin-bottom:10px}
+ .question-card{padding:12px}
+ .question-heading{gap:8px;margin-bottom:12px}
+ .question-heading h1{font-size:18px}
+ .choices-many .answer{padding:8px;line-height:1.35}
+ .question-controls{margin-top:6px}
+ .comment{margin-top:10px;padding-top:8px}
+}

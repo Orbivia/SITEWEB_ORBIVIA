@@ -4,9 +4,27 @@
 function create({classification,norms,questions,catalogue,explanations}){
  const E=value=>String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
  const yesNo=[['yes','Oui'],['no','Non']];
- function visible(kind,answers){return kind==='classification'?classification.questions(answers):norms.activeQuestions(questions,answers).map(q=>({...q,label:q.title,options:yesNo}));}
+ function visible(kind,answers){
+  if(kind!=='classification')return norms.activeQuestions(questions,answers).map(q=>({...q,label:q.title,options:yesNo}));
+  return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quelle est la qualification du produit ?',options:q.options.map(([value,label])=>[value,({md:'Dispositif médical (MDR)',accessory:'Accessoire de DM',annex16:'Sans destination médicale (annexe XVI)',other:'Qualification à préciser'})[value]||label])}:q);
+ }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
  function visited(q,answers){return known(q,answers)||answers[q.id]==='checking';}
+ // Each question keeps a fixed position, independent of conditional branches.
+ // Skipped branches advance the route; they never change its denominator.
+ function progress(kind,answers,cursor){
+  const all=kind==='classification'?classification.allQuestions:questions;
+  const active=visible(kind,answers),next=active.find(q=>!visited(q,answers));
+  const position=next?all.findIndex(q=>q.id===next.id):all.length;
+  const percent=Math.min(active.some(q=>!known(q,answers))?99:100,Math.floor(100*position/all.length));
+  let theme;
+  if(kind==='norms')theme=all.find(q=>q.id===cursor)?.section||all[position]?.section||'Résultat';
+  else{
+   const index=all.findIndex(q=>q.id===cursor);
+   theme=index<6?'Votre produit':index<19?'Fonctions particulières':index<45?'Contact et utilisation':index<58?'Fonctions actives':'Logiciel et usages';
+  }
+  return {percent,theme};
+ }
  function restore(kind,value){
   const state={answers:{},comments:{},cursor:'',result:false};
   if(!value||typeof value!=='object'||Array.isArray(value))return state;
@@ -48,7 +66,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   return html;
  }
  function report(kind,state){return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ORBIVIA — '+(kind==='classification'?'Classification MDR':'Normes du dispositif')+'</title><style>body{font:14px/1.6 Arial,sans-serif;color:#17263a;margin:35px auto;padding:0 20px;max-width:1100px}h1{font-size:30px}h2{margin-top:30px}table{width:100%;border-collapse:collapse;margin:16px 0;font-size:12px}th,td{border:1px solid #dce3eb;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f5f8}.notice{padding:16px;border-left:4px solid #e7a116;background:#fffbf1}a{color:#325c83}@media print{body{margin:0}thead{display:table-header-group}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head><body>'+reportBody(kind,state)+'</body></html>';}
- return {visible,known,visited,restore,analysis,answerRows,reportBody,report,escape:E};
+ return {visible,known,visited,progress,restore,analysis,answerRows,reportBody,report,escape:E};
 }
 if(typeof module==='object'&&module.exports)module.exports={create};else window.ORBIVIA_PUBLIC_TOOLS={create};
 })();
