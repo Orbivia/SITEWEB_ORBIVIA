@@ -5,16 +5,16 @@ Deux outils autonomes, accessibles depuis l’onglet **Outils** de la navigation
 - `/outils/classification/` : **Classification MDR**, questionnaire conditionnel, résultat justifié et réponses à préciser. Aucun champ projet, fabricant ou relecteur.
 - `/outils/normes/` : **Normes du dispositif**, questionnaire technique, références proposées, motifs fondés sur les réponses actives et liens vers les éditeurs. Aucun arbitrage manuel de chaque norme requis pour obtenir le résultat.
 
-L’accueil `/outils/` présente uniquement ces deux outils. L’espace documentaire historique reste à son adresse existante ; le développement Windows est reporté.
+L’accueil `/outils/` présente uniquement ces deux outils. Compliance Studio est désormais une application privée conservée dans Google Drive. Il n’est plus publié sur orbivia.fr.
 
 ## Code commun
 
 - `questionnaire.js` : interface et navigation des deux questionnaires, commentaires, reprise ciblée, réinitialisation et affichage des résultats.
 - `questionnaire.css` : présentation commune et affichage mobile.
 - `tool-model.js` : validation de la reprise, interprétation des réponses et rapports autonomes.
-- `compliance/classification-engine.js` : moteur MDR extrait du code historique ; le dossier documentaire et le questionnaire public utilisent les mêmes règles et questions. Le mode public n’exige pas de formulaire de destination ; le dossier documentaire conserve cette exigence. Les réponses doivent néanmoins correspondre à la destination réellement prévue.
-- `compliance/normes-questions.js` : questions techniques communes, extraites sans changement de l’ancien module.
-- `compliance/normes-model.js`, `normes-catalogue.js`, `normes-aide.js` et `normes-explications.js` : dépendances, catalogue et aides partagés.
+- `shared/classification-engine.js` : moteur MDR extrait du code historique ; le dossier documentaire et le questionnaire public utilisent les mêmes règles et questions. Le mode public n’exige pas de formulaire de destination ; le dossier documentaire conserve cette exigence. Les réponses doivent néanmoins correspondre à la destination réellement prévue.
+- `shared/normes-questions.js` : questions techniques communes, extraites sans changement de l’ancien module.
+- `shared/normes-model.js`, `normes-catalogue.js`, `normes-aide.js` et `normes-explications.js` : dépendances, catalogue et aides partagés.
 
 Les deux questionnaires publics n’accèdent pas aux projets documentaires. Leurs clés de stockage local sont `orbivia-public-classification-v1` et `orbivia-public-norms-v1`. Recommencer un outil efface uniquement son état. Les anciennes réponses à des sous-questions désactivées ne participent pas au résultat.
 
