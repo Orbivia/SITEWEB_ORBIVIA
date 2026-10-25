@@ -1,6 +1,6 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const c=require('../outils/compliance/classification-engine.js');
+const c=require('../outils/shared/classification-engine.js');
 // Expected outcomes derived from MDR Annex VIII and MDCG 2021-24 Rev.1 (April 2026).
 // Defaults describe a passive, external device, with no special function.
 function complete(overrides={}){
