@@ -6,7 +6,6 @@ const questions={
   "title": "Quel type de produit ?",
   "criterion": "",
   "sourceLabel": "Le produit est-il déjà qualifié de dispositif médical ?",
-  "icon": "product",
   "options": {
    "md": "Dispositif médical",
    "accessory": "Accessoire dédié à un DM",
@@ -25,7 +24,6 @@ const questions={
   "title": "Quelle forme a le produit ?",
   "criterion": "",
   "sourceLabel": "Quelle forme a le produit ?",
-  "icon": "product",
   "options": {
    "physical": "Un produit physique",
    "software": "Un logiciel seul",
@@ -41,7 +39,6 @@ const questions={
   "title": "Toutes les configurations du dispositif sont-elles couvertes ?",
   "criterion": "Les réponses couvrent-elles un seul dispositif et tous ses usages / variantes, avec les situations les plus contraignantes ?",
   "sourceLabel": "Les réponses couvrent-elles un seul dispositif et tous ses usages / variantes, avec les situations les plus contraignantes ?",
-  "icon": "product",
   "options": {
    "yes": "Oui",
    "no": "Non : plusieurs configurations doivent encore être analysées"
@@ -51,7 +48,6 @@ const questions={
   "title": "Toutes les destinations et la configuration complète sont-elles couvertes ?",
   "criterion": "Les réponses couvrent-elles toutes les destinations du produit et sa configuration complète ?",
   "sourceLabel": "Les réponses couvrent-elles toutes les destinations du produit et sa configuration complète ?",
-  "icon": "product",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -61,7 +57,6 @@ const questions={
   "title": "Le produit dépend-il d’une source d’énergie ?",
   "criterion": "Le produit utilise-t-il une énergie électrique ou une autre énergie externe pour sa fonction ?",
   "sourceLabel": "Le produit utilise-t-il une énergie électrique ou une autre énergie externe pour sa fonction ?",
-  "icon": "energy",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -71,7 +66,6 @@ const questions={
   "title": "Le produit échange-t-il de l’énergie avec le corps pour traiter ?",
   "criterion": "Le produit administre-t-il ou échange-t-il de l’énergie avec le corps à des fins thérapeutiques ?",
   "sourceLabel": "Le produit administre-t-il ou échange-t-il de l’énergie avec le corps à des fins thérapeutiques ?",
-  "icon": "energy",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -81,7 +75,6 @@ const questions={
   "title": "L’énergie peut-elle être administrée de façon dangereuse ?",
   "criterion": "Cette énergie peut-elle être administrée d’une manière potentiellement dangereuse compte tenu de sa nature, densité et site ?",
   "sourceLabel": "Cette énergie peut-elle être administrée d’une manière potentiellement dangereuse compte tenu de sa nature, densité et site ?",
-  "icon": "energy",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -91,7 +84,6 @@ const questions={
   "title": "Comment le produit entre-t-il en contact avec le corps ?",
   "criterion": "",
   "sourceLabel": "Comment le produit entre-t-il en contact avec le corps ?",
-  "icon": "body",
   "options": {
    "none": "Il ne pénètre pas dans le corps",
    "orifice": "Par un orifice, sans pénétration chirurgicale",
@@ -103,7 +95,6 @@ const questions={
   "title": "Le dispositif d’origine animale touche-t-il exclusivement une peau intacte ?",
   "criterion": "",
   "sourceLabel": "Le dispositif d’origine animale touche-t-il exclusivement une peau intacte ?",
-  "icon": "body",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -113,7 +104,6 @@ const questions={
   "title": "Le nanomatériau peut-il exposer une personne ?",
   "criterion": "Le composant contenant le nanomatériau peut-il avoir un contact direct ou indirect avec une personne ?",
   "sourceLabel": "Le composant contenant le nanomatériau peut-il avoir un contact direct ou indirect avec une personne ?",
-  "icon": "body",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -123,7 +113,6 @@ const questions={
   "title": "Le produit touche-t-il une peau ou une muqueuse lésée ?",
   "criterion": "",
   "sourceLabel": "Le produit touche-t-il une peau ou une muqueuse lésée ?",
-  "icon": "body",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -133,7 +122,6 @@ const questions={
   "title": "Le produit vise-t-il des lésions profondes cicatrisant par seconde intention ?",
   "criterion": "Est-il principalement destiné aux lésions ayant franchi le derme / la muqueuse et cicatrisant uniquement par seconde intention ?",
   "sourceLabel": "Est-il principalement destiné aux lésions ayant franchi le derme / la muqueuse et cicatrisant uniquement par seconde intention ?",
-  "icon": "body",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -143,7 +131,6 @@ const questions={
   "title": "Son rôle se limite-t-il à une barrière mécanique, la compression ou l’absorption des exsudats ?",
   "criterion": "",
   "sourceLabel": "Son rôle se limite-t-il à une barrière mécanique, la compression ou l’absorption des exsudats ?",
-  "icon": "body",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -153,7 +140,6 @@ const questions={
   "title": "L’usage est-il limité à certaines cavités naturelles ?",
   "criterion": "Est-il utilisé uniquement dans la bouche jusqu’au pharynx, le conduit auditif jusqu’au tympan ou la cavité nasale ?",
   "sourceLabel": "Est-il utilisé uniquement dans la bouche jusqu’au pharynx, le conduit auditif jusqu’au tympan ou la cavité nasale ?",
-  "icon": "body",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -163,7 +149,6 @@ const questions={
   "title": "Est-il susceptible d’être absorbé par la muqueuse ?",
   "criterion": "",
   "sourceLabel": "Est-il susceptible d’être absorbé par la muqueuse ?",
-  "icon": "body",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -173,7 +158,6 @@ const questions={
   "title": "Le produit est-il destiné à rester implanté après une intervention clinique ?",
   "criterion": "",
   "sourceLabel": "Le produit est-il destiné à rester implanté après une intervention clinique ?",
-  "icon": "implant",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -183,7 +167,6 @@ const questions={
   "title": "S’agit-il d’un implant actif ou d’un accessoire d’implant actif ?",
   "criterion": "",
   "sourceLabel": "S’agit-il d’un implant actif ou d’un accessoire d’implant actif ?",
-  "icon": "implant",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -193,7 +176,6 @@ const questions={
   "title": "L’implant appartient-il à l’une de ces catégories particulières ?",
   "criterion": "Est-ce un implant mammaire, un treillis chirurgical, une prothèse articulaire totale / partielle ou un dispositif rachidien visé par la règle ?",
   "sourceLabel": "Est-ce un implant mammaire, un treillis chirurgical, une prothèse articulaire totale / partielle ou un dispositif rachidien visé par la règle ?",
-  "icon": "implant",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -203,7 +185,6 @@ const questions={
   "title": "Le dispositif est-il destiné à être placé dans les dents ?",
   "criterion": "",
   "sourceLabel": "Le dispositif est-il destiné à être placé dans les dents ?",
-  "icon": "implant",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -213,7 +194,6 @@ const questions={
   "title": "Est-ce un instrument chirurgical réutilisable, sans connexion à un dispositif actif ?",
   "criterion": "",
   "sourceLabel": "Est-ce un instrument chirurgical réutilisable, sans connexion à un dispositif actif ?",
-  "icon": "implant",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -223,7 +203,6 @@ const questions={
   "title": "Quelle est la durée maximale d’utilisation continue prévue ?",
   "criterion": "",
   "sourceLabel": "Quelle est la durée maximale d’utilisation continue prévue ?",
-  "icon": "clock",
   "options": {
    "transient": "Moins de 60 minutes",
    "short": "De 60 minutes à 30 jours inclus",
@@ -235,7 +214,6 @@ const questions={
   "title": "Le produit incorpore-t-il un médicament à action accessoire ?",
   "criterion": "Le produit incorpore-t-il une substance médicamenteuse dont l’action est accessoire ?",
   "sourceLabel": "Le produit incorpore-t-il une substance médicamenteuse dont l’action est accessoire ?",
-  "icon": "medicine",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -245,7 +223,6 @@ const questions={
   "title": "Le produit a-t-il une fonction contraceptive ou de prévention des IST ?",
   "criterion": "Le produit sert-il à la contraception ou à la prévention des infections sexuellement transmissibles ?",
   "sourceLabel": "Le produit sert-il à la contraception ou à la prévention des infections sexuellement transmissibles ?",
-  "icon": "medicine",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -255,7 +232,6 @@ const questions={
   "title": "Le produit administre-t-il un médicament par inhalation ?",
   "criterion": "",
   "sourceLabel": "Le produit administre-t-il un médicament par inhalation ?",
-  "icon": "medicine",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -265,7 +241,6 @@ const questions={
   "title": "L’inhalation présente-t-elle l’un de ces enjeux cliniques ?",
   "criterion": "Son fonctionnement influence-t-il essentiellement l’efficacité / la sécurité du médicament, ou traite-t-il une affection mettant la vie en danger ?",
   "sourceLabel": "Son fonctionnement influence-t-il essentiellement l’efficacité / la sécurité du médicament, ou traite-t-il une affection mettant la vie en danger ?",
-  "icon": "medicine",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -275,7 +250,6 @@ const questions={
   "title": "Est-il destiné à administrer un médicament ?",
   "criterion": "",
   "sourceLabel": "Est-il destiné à administrer un médicament ?",
-  "icon": "medicine",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -285,7 +259,6 @@ const questions={
   "title": "Cette administration temporaire se fait-elle d’une manière potentiellement dangereuse ?",
   "criterion": "",
   "sourceLabel": "Cette administration temporaire se fait-elle d’une manière potentiellement dangereuse ?",
-  "icon": "medicine",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -295,7 +268,6 @@ const questions={
   "title": "Le test est-il un diagnostic compagnon d’un médicament ?",
   "criterion": "",
   "sourceLabel": "Le test est-il un diagnostic compagnon d’un médicament ?",
-  "icon": "medicine",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -305,7 +277,6 @@ const questions={
   "title": "Une erreur de suivi peut-elle conduire à une décision menaçant la vie ?",
   "criterion": "Une erreur de suivi d’un médicament, d’une substance ou d’un composant biologique pourrait-elle mener à une décision menaçant la vie ?",
   "sourceLabel": "Une erreur de suivi d’un médicament, d’une substance ou d’un composant biologique pourrait-elle mener à une décision menaçant la vie ?",
-  "icon": "medicine",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -315,7 +286,6 @@ const questions={
   "title": "Le produit sert-il à traiter d’autres dispositifs médicaux ?",
   "criterion": "Le produit est-il spécifiquement destiné au traitement de dispositifs médicaux ?",
   "sourceLabel": "Le produit est-il spécifiquement destiné au traitement de dispositifs médicaux ?",
-  "icon": "clean",
   "options": {
    "none": "Non",
    "lens": "Nettoyage, rinçage, désinfection ou hydratation des lentilles de contact",
@@ -328,7 +298,6 @@ const questions={
   "title": "Le produit est-il mis sur le marché à l’état stérile ?",
   "criterion": "",
   "sourceLabel": "Le produit est-il mis sur le marché à l’état stérile ?",
-  "icon": "clean",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -338,7 +307,6 @@ const questions={
   "title": "Le produit enregistre-t-il des images issues de rayons X ?",
   "criterion": "Le produit enregistre-t-il spécifiquement les images diagnostiques générées par rayons X ?",
   "sourceLabel": "Le produit enregistre-t-il spécifiquement les images diagnostiques générées par rayons X ?",
-  "icon": "radiation",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -348,7 +316,6 @@ const questions={
   "title": "Le dispositif fournit-il de l’énergie sous forme de rayonnements ionisants ?",
   "criterion": "",
   "sourceLabel": "Le dispositif fournit-il de l’énergie sous forme de rayonnements ionisants ?",
-  "icon": "radiation",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -358,7 +325,6 @@ const questions={
   "title": "Le produit intervient-il dans une thérapie par rayonnements ionisants ?",
   "criterion": "Le produit émet-il des rayonnements ionisants à visée thérapeutique, ou commande-t-il / surveille-t-il directement un tel dispositif ?",
   "sourceLabel": "Le produit émet-il des rayonnements ionisants à visée thérapeutique, ou commande-t-il / surveille-t-il directement un tel dispositif ?",
-  "icon": "radiation",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -368,7 +334,6 @@ const questions={
   "title": "Le produit intervient-il dans un diagnostic par rayonnements ionisants ?",
   "criterion": "Émet-il des rayonnements ionisants pour le diagnostic / la radiologie interventionnelle, ou commande-t-il / surveille-t-il un tel dispositif ?",
   "sourceLabel": "Émet-il des rayonnements ionisants pour le diagnostic / la radiologie interventionnelle, ou commande-t-il / surveille-t-il un tel dispositif ?",
-  "icon": "radiation",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -378,7 +343,6 @@ const questions={
   "title": "Le produit contient-il des tissus ou cellules d’origine biologique ?",
   "criterion": "Le produit est-il fabriqué avec des tissus, cellules ou dérivés d’origine humaine ou animale ?",
   "sourceLabel": "Le produit est-il fabriqué avec des tissus, cellules ou dérivés d’origine humaine ou animale ?",
-  "icon": "molecule",
   "options": {
    "none": "Non",
    "human": "Origine humaine, non viable / rendue non viable",
@@ -390,7 +354,6 @@ const questions={
   "title": "Le produit incorpore-t-il un nanomatériau ou est-il constitué d’un nanomatériau ?",
   "criterion": "",
   "sourceLabel": "Le produit incorpore-t-il un nanomatériau ou est-il constitué d’un nanomatériau ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -400,7 +363,6 @@ const questions={
   "title": "Quelle exposition interne au nanomatériau est documentée ?",
   "criterion": "Quel est le potentiel documenté d’exposition interne au nanomatériau ?",
   "sourceLabel": "Quel est le potentiel documenté d’exposition interne au nanomatériau ?",
-  "icon": "molecule",
   "options": {
    "high": "Élevé ou moyen",
    "low": "Faible",
@@ -412,7 +374,6 @@ const questions={
   "title": "Le produit est-il composé de substances absorbées ou dispersées dans le corps ?",
   "criterion": "Le produit est-il composé de substances appliquées sur la peau ou introduites par un orifice, puis absorbées ou dispersées dans le corps ?",
   "sourceLabel": "Le produit est-il composé de substances appliquées sur la peau ou introduites par un orifice, puis absorbées ou dispersées dans le corps ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -422,7 +383,6 @@ const questions={
   "title": "Une absorption systémique est-elle nécessaire à l’effet prévu ?",
   "criterion": "L’absorption systémique du produit ou de ses métabolites est-elle nécessaire à l’effet prévu ?",
   "sourceLabel": "L’absorption systémique du produit ou de ses métabolites est-elle nécessaire à l’effet prévu ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -432,7 +392,6 @@ const questions={
   "title": "La substance agit-elle dans le tube digestif avec absorption systémique ?",
   "criterion": "La substance agit-elle dans l’estomac / le tube digestif inférieur et est-elle, ou ses métabolites, absorbée par voie systémique ?",
   "sourceLabel": "La substance agit-elle dans l’estomac / le tube digestif inférieur et est-elle, ou ses métabolites, absorbée par voie systémique ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -442,7 +401,6 @@ const questions={
   "title": "La substance atteint-elle son effet dans une zone locale précise ?",
   "criterion": "La substance est-elle appliquée sur la peau ou dans la cavité nasale / buccale jusqu’au pharynx, et y atteint-elle son effet ?",
   "sourceLabel": "La substance est-elle appliquée sur la peau ou dans la cavité nasale / buccale jusqu’au pharynx, et y atteint-elle son effet ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -452,7 +410,6 @@ const questions={
   "title": "A-t-il un effet biologique ou est-il absorbé en totalité ou en grande partie ?",
   "criterion": "",
   "sourceLabel": "A-t-il un effet biologique ou est-il absorbé en totalité ou en grande partie ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -462,7 +419,6 @@ const questions={
   "title": "Subit-il une transformation chimique dans le corps, en dehors d’un placement dans les dents ?",
   "criterion": "",
   "sourceLabel": "Subit-il une transformation chimique dans le corps, en dehors d’un placement dans les dents ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -472,7 +428,6 @@ const questions={
   "title": "La substance prépare-t-elle du matériel humain à une implantation ou administration ?",
   "criterion": "Est-ce une substance utilisée in vitro au contact direct de cellules, tissus, organes humains ou d’embryons avant leur implantation / administration ?",
   "sourceLabel": "Est-ce une substance utilisée in vitro au contact direct de cellules, tissus, organes humains ou d’embryons avant leur implantation / administration ?",
-  "icon": "molecule",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -482,7 +437,6 @@ const questions={
   "title": "Le produit conduit-il ou stocke-t-il des matières destinées au corps ?",
   "criterion": "Le produit conduit-il ou stocke-t-il des matières destinées à être introduites dans le corps ?",
   "sourceLabel": "Le produit conduit-il ou stocke-t-il des matières destinées à être introduites dans le corps ?",
-  "icon": "drop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -492,7 +446,6 @@ const questions={
   "title": "Est-ce une poche destinée à conserver du sang ?",
   "criterion": "",
   "sourceLabel": "Est-ce une poche destinée à conserver du sang ?",
-  "icon": "drop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -502,7 +455,6 @@ const questions={
   "title": "Le produit conduit-il ou stocke-t-il des matières biologiques ?",
   "criterion": "Le produit conduit-il / stocke-t-il du sang ou des liquides corporels, ou stocke-t-il des organes, cellules ou tissus ?",
   "sourceLabel": "Le produit conduit-il / stocke-t-il du sang ou des liquides corporels, ou stocke-t-il des organes, cellules ou tissus ?",
-  "icon": "drop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -512,7 +464,6 @@ const questions={
   "title": "Le produit modifie-t-il des matières biologiques destinées au corps ?",
   "criterion": "Le produit modifie-t-il la composition de tissus, cellules, sang ou liquides destinés à être implantés ou administrés ?",
   "sourceLabel": "Le produit modifie-t-il la composition de tissus, cellules, sang ou liquides destinés à être implantés ou administrés ?",
-  "icon": "drop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -522,7 +473,6 @@ const questions={
   "title": "Le traitement se limite-t-il à une filtration, centrifugation ou à un échange de gaz ou de chaleur ?",
   "criterion": "",
   "sourceLabel": "Le traitement se limite-t-il à une filtration, centrifugation ou à un échange de gaz ou de chaleur ?",
-  "icon": "drop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -532,7 +482,6 @@ const questions={
   "title": "Le produit actif administre-t-il ou retire-t-il une substance ?",
   "criterion": "Le dispositif actif fait-il entrer ou sortir de l’air, un liquide ou une autre substance du corps ?",
   "sourceLabel": "Le dispositif actif fait-il entrer ou sortir de l’air, un liquide ou une autre substance du corps ?",
-  "icon": "drop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -542,7 +491,6 @@ const questions={
   "title": "L’administration ou le retrait peut-il être dangereux ?",
   "criterion": "L’administration / le retrait peut-il être potentiellement dangereux selon la substance, le site ou le mode ?",
   "sourceLabel": "L’administration / le retrait peut-il être potentiellement dangereux selon la substance, le site ou le mode ?",
-  "icon": "drop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -552,7 +500,6 @@ const questions={
   "title": "Le test recherche-t-il un agent transmissible pour accepter un don ?",
   "criterion": "",
   "sourceLabel": "Le test recherche-t-il un agent transmissible pour accepter un don ?",
-  "icon": "drop",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -562,7 +509,6 @@ const questions={
   "title": "Le test détecte-t-il directement un agent dans le sang ou le LCR ?",
   "criterion": "Détecte-t-il directement un agent infectieux dans le sang ou le liquide céphalo-rachidien, sans fort risque de propagation ?",
   "sourceLabel": "Détecte-t-il directement un agent infectieux dans le sang ou le liquide céphalo-rachidien, sans fort risque de propagation ?",
-  "icon": "drop",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -572,7 +518,6 @@ const questions={
   "title": "Peut-il se connecter à un dispositif actif de classe IIa, IIb ou III ?",
   "criterion": "",
   "sourceLabel": "Peut-il se connecter à un dispositif actif de classe IIa, IIb ou III ?",
-  "icon": "link",
   "options": {
    "yes": "Oui, selon l’usage prévu et la classe documentée du dispositif connecté",
    "no": "Non",
@@ -583,7 +528,6 @@ const questions={
   "title": "Le produit est-il destiné à être connecté à un dispositif actif IIa, IIb ou III ?",
   "criterion": "",
   "sourceLabel": "Le produit est-il destiné à être connecté à un dispositif actif IIa, IIb ou III ?",
-  "icon": "link",
   "options": {
    "yes": "Oui, classe du dispositif connecté documentée",
    "no": "Non ou connexion uniquement à un actif de classe I",
@@ -594,7 +538,6 @@ const questions={
   "title": "Le produit agit-il sur un autre dispositif thérapeutique actif ?",
   "criterion": "Le produit commande-t-il, surveille-t-il ou influence-t-il directement un autre dispositif thérapeutique actif ?",
   "sourceLabel": "Le produit commande-t-il, surveille-t-il ou influence-t-il directement un autre dispositif thérapeutique actif ?",
-  "icon": "link",
   "options": {
    "none": "Non",
    "iib": "Un dispositif thérapeutique actif IIb",
@@ -606,7 +549,6 @@ const questions={
   "title": "L’accessoire possède-t-il une caractéristique critique pour l’examen ?",
   "criterion": "",
   "sourceLabel": "L’accessoire possède-t-il une caractéristique critique pour l’examen ?",
-  "icon": "link",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -616,7 +558,6 @@ const questions={
   "title": "Le produit intervient-il directement sur une défaillance cardiaque ou circulatoire centrale ?",
   "criterion": "Est-il spécifiquement destiné à contrôler, diagnostiquer, surveiller ou corriger une défaillance cardiaque / circulatoire centrale par contact direct ?",
   "sourceLabel": "Est-il spécifiquement destiné à contrôler, diagnostiquer, surveiller ou corriger une défaillance cardiaque / circulatoire centrale par contact direct ?",
-  "icon": "heart",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -626,7 +567,6 @@ const questions={
   "title": "Le produit touche-t-il directement le cœur ou le système nerveux central ?",
   "criterion": "Est-il spécifiquement utilisé en contact direct avec le cœur, la circulation centrale ou le système nerveux central ?",
   "sourceLabel": "Est-il spécifiquement utilisé en contact direct avec le cœur, la circulation centrale ou le système nerveux central ?",
-  "icon": "heart",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -636,7 +576,6 @@ const questions={
   "title": "Les paramètres surveillés peuvent-ils signaler un danger vital immédiat ?",
   "criterion": "Surveille-t-il des paramètres vitaux dont les variations peuvent présenter un danger immédiat pour la vie ?",
   "sourceLabel": "Surveille-t-il des paramètres vitaux dont les variations peuvent présenter un danger immédiat pour la vie ?",
-  "icon": "heart",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -646,7 +585,6 @@ const questions={
   "title": "Le produit réalise-t-il un diagnostic ou une surveillance physiologique ?",
   "criterion": "",
   "sourceLabel": "Le produit réalise-t-il un diagnostic ou une surveillance physiologique ?",
-  "icon": "monitor",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -656,7 +594,6 @@ const questions={
   "title": "Fournit-il une énergie absorbée par le corps, hors simple éclairage visible ?",
   "criterion": "",
   "sourceLabel": "Fournit-il une énergie absorbée par le corps, hors simple éclairage visible ?",
-  "icon": "monitor",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -666,7 +603,6 @@ const questions={
   "title": "Représente-t-il la distribution de produits radiopharmaceutiques dans le corps ?",
   "criterion": "",
   "sourceLabel": "Représente-t-il la distribution de produits radiopharmaceutiques dans le corps ?",
-  "icon": "monitor",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -676,7 +612,6 @@ const questions={
   "title": "Dans quel contexte clinique le produit est-il utilisé ?",
   "criterion": "Dans quel contexte le diagnostic ou la surveillance est-il utilisé ?",
   "sourceLabel": "Dans quel contexte le diagnostic ou la surveillance est-il utilisé ?",
-  "icon": "monitor",
   "options": {
    "routine": "Diagnostic / mesure courante (EEG, ECG, température…)",
    "critical": "Surveillance / diagnostic avec danger immédiat",
@@ -688,7 +623,6 @@ const questions={
   "title": "Le logiciel surveille-t-il des processus physiologiques ?",
   "criterion": "",
   "sourceLabel": "Le logiciel surveille-t-il des processus physiologiques ?",
-  "icon": "monitor",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -698,7 +632,6 @@ const questions={
   "title": "L’instrument réalise-t-il une mesure sans réactif supplémentaire ?",
   "criterion": "L’instrument réalise-t-il une mesure indépendante sans réactif supplémentaire ?",
   "sourceLabel": "L’instrument réalise-t-il une mesure indépendante sans réactif supplémentaire ?",
-  "icon": "monitor",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -708,7 +641,6 @@ const questions={
   "title": "Le dispositif adapte-t-il automatiquement un traitement à partir de mesures sur le patient ?",
   "criterion": "",
   "sourceLabel": "Le dispositif adapte-t-il automatiquement un traitement à partir de mesures sur le patient ?",
-  "icon": "loop",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -718,7 +650,6 @@ const questions={
   "title": "Une fonction diagnostique détermine-t-elle le traitement automatique ?",
   "criterion": "Une fonction diagnostique patient détermine-t-elle le traitement automatique ?",
   "sourceLabel": "Une fonction diagnostique patient détermine-t-elle le traitement automatique ?",
-  "icon": "loop",
   "options": {
    "no": "Non, régulation technique seule",
    "yes": "Oui, fonction diagnostique déterminante",
@@ -729,7 +660,6 @@ const questions={
   "title": "Quel est le rôle médical du logiciel ?",
   "criterion": "",
   "sourceLabel": "Quel est le rôle médical du logiciel ?",
-  "icon": "software",
   "options": {
    "independent": "Il a une fonction médicale propre",
    "drives": "Il commande ou influence seulement l’utilisation du dispositif physique",
@@ -740,7 +670,6 @@ const questions={
   "title": "Fournit-il des informations utilisées pour une décision diagnostique ou thérapeutique ?",
   "criterion": "",
   "sourceLabel": "Fournit-il des informations utilisées pour une décision diagnostique ou thérapeutique ?",
-  "icon": "software",
   "options": {
    "yes": "Oui",
    "no": "Non"
@@ -750,7 +679,6 @@ const questions={
   "title": "Quelle serait la conséquence la plus grave d’une décision erronée ?",
   "criterion": "Quelle est la conséquence la plus grave qu’une décision erronée pourrait entraîner ?",
   "sourceLabel": "Quelle est la conséquence la plus grave qu’une décision erronée pourrait entraîner ?",
-  "icon": "software",
   "options": {
    "death": "Décès ou détérioration irréversible de la santé",
    "serious": "Détérioration grave ou intervention chirurgicale",
@@ -761,7 +689,6 @@ const questions={
   "title": "Quel est le rôle du logiciel IVD ?",
   "criterion": "",
   "sourceLabel": "Quel est le rôle du logiciel IVD ?",
-  "icon": "software",
   "options": {
    "independent": "Il fournit une information IVD pour sa propre destination",
    "drives": "Il pilote ou influence uniquement un autre DIV",
@@ -772,7 +699,6 @@ const questions={
   "title": "Le fabricant prévoit-il une destination de diagnostic in vitro humain ?",
   "criterion": "Le fabricant destine-t-il ce produit au diagnostic in vitro humain, ou comme accessoire dédié ?",
   "sourceLabel": "Le fabricant destine-t-il ce produit au diagnostic in vitro humain, ou comme accessoire dédié ?",
-  "icon": "tube",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -782,7 +708,6 @@ const questions={
   "title": "Quel élément souhaitez-vous classer ?",
   "criterion": "Quel élément classez-vous séparément ?",
   "sourceLabel": "Quel élément classez-vous séparément ?",
-  "icon": "tube",
   "options": {
    "test": "Réactif, test ou kit réalisant une analyse",
    "instrument": "Instrument d’analyse vendu séparément des réactifs",
@@ -799,7 +724,6 @@ const questions={
   "title": "S’agit-il d’un produit général IVD de la règle 5a ?",
   "criterion": "Le produit correspond-il à un produit général IVD de la règle 5a ?",
   "sourceLabel": "Le produit correspond-il à un produit général IVD de la règle 5a ?",
-  "icon": "tube",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -809,7 +733,6 @@ const questions={
   "title": "Le produit possède-t-il une autre fonction ou destination à classer ?",
   "criterion": "Le produit possède-t-il aussi une fonction d’analyse ou une autre destination à classer ?",
   "sourceLabel": "Le produit possède-t-il aussi une fonction d’analyse ou une autre destination à classer ?",
-  "icon": "tube",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -819,7 +742,6 @@ const questions={
   "title": "Quelle est la classe documentée la plus élevée des DIV associés ?",
   "criterion": "",
   "sourceLabel": "Quelle est la classe documentée la plus élevée des DIV associés ?",
-  "icon": "chart",
   "options": {
    "A": "Classe A",
    "B": "Classe B",
@@ -832,7 +754,6 @@ const questions={
   "title": "Le suivi de la charge infectieuse est-il critique ?",
   "criterion": "Le test mesure-t-il une charge infectieuse dont le suivi est critique pour une maladie mortelle ?",
   "sourceLabel": "Le test mesure-t-il une charge infectieuse dont le suivi est critique pour une maladie mortelle ?",
-  "icon": "chart",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -842,7 +763,6 @@ const questions={
   "title": "Une erreur de stadification peut-elle menacer la vie ?",
   "criterion": "Une erreur de détermination du stade d’une maladie pourrait-elle mener à une décision menaçant la vie ?",
   "sourceLabel": "Une erreur de détermination du stade d’une maladie pourrait-elle mener à une décision menaçant la vie ?",
-  "icon": "chart",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -852,7 +772,6 @@ const questions={
   "title": "L’agent détecté présente-t-il un risque élevé de propagation ?",
   "criterion": "Le test détecte-t-il un agent causant une maladie mortelle à fort risque de propagation ?",
   "sourceLabel": "Le test détecte-t-il un agent causant une maladie mortelle à fort risque de propagation ?",
-  "icon": "infection",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -862,7 +781,6 @@ const questions={
   "title": "La destination couvre-t-elle la détection d’une infection ou d’un état immunitaire infectieux ?",
   "criterion": "",
   "sourceLabel": "La destination couvre-t-elle la détection d’une infection ou d’un état immunitaire infectieux ?",
-  "icon": "infection",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -872,7 +790,6 @@ const questions={
   "title": "Le test recherche-t-il un agent principalement sexuellement transmissible, ou l’exposition à cet agent ?",
   "criterion": "",
   "sourceLabel": "Le test recherche-t-il un agent principalement sexuellement transmissible, ou l’exposition à cet agent ?",
-  "icon": "infection",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -882,7 +799,6 @@ const questions={
   "title": "Une erreur de détection risque-t-elle un décès ou un handicap grave ?",
   "criterion": "Un résultat erroné de détection d’agent risque-t-il d’entraîner décès ou handicap grave ?",
   "sourceLabel": "Un résultat erroné de détection d’agent risque-t-il d’entraîner décès ou handicap grave ?",
-  "icon": "infection",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -892,7 +808,6 @@ const questions={
   "title": "Le test dépiste-t-il un statut immunitaire pendant la grossesse ?",
   "criterion": "Le test dépiste-t-il le statut immunitaire d’une femme enceinte envers un agent transmissible ?",
   "sourceLabel": "Le test dépiste-t-il le statut immunitaire d’une femme enceinte envers un agent transmissible ?",
-  "icon": "infection",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -902,7 +817,6 @@ const questions={
   "title": "Une erreur de statut peut-elle conduire à une décision menaçant la vie ?",
   "criterion": "Une erreur de statut infectieux ou immunitaire pourrait-elle mener à une décision menaçant la vie ?",
   "sourceLabel": "Une erreur de statut infectieux ou immunitaire pourrait-elle mener à une décision menaçant la vie ?",
-  "icon": "infection",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -912,7 +826,6 @@ const questions={
   "title": "Le test détermine-t-il une compatibilité immunologique ?",
   "criterion": "Le test détermine-t-il une compatibilité immunologique ou une incompatibilité fœto-maternelle ?",
   "sourceLabel": "Le test détermine-t-il une compatibilité immunologique ou une incompatibilité fœto-maternelle ?",
-  "icon": "shield",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -922,7 +835,6 @@ const questions={
   "title": "Le test couvre-t-il un des marqueurs de groupe explicitement classés D ?",
   "criterion": "",
   "sourceLabel": "Le test couvre-t-il un des marqueurs de groupe explicitement classés D ?",
-  "icon": "shield",
   "options": {
    "other": "Non, uniquement d’autres marqueurs de compatibilité",
    "listed": "Oui : ABO, Rhésus listé, K (Kell), Kidd ou Duffy listé",
@@ -933,7 +845,6 @@ const questions={
   "title": "Le test aide-t-il à prendre en charge une situation menaçant la vie ?",
   "criterion": "Le test sert-il à la prise en charge d’une maladie ou d’un état menaçant la vie ?",
   "sourceLabel": "Le test sert-il à la prise en charge d’une maladie ou d’un état menaçant la vie ?",
-  "icon": "shield",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -943,7 +854,6 @@ const questions={
   "title": "Le test est-il destiné au dépistage, au diagnostic ou à la stadification d’un cancer ?",
   "criterion": "",
   "sourceLabel": "Le test est-il destiné au dépistage, au diagnostic ou à la stadification d’un cancer ?",
-  "icon": "gene",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -953,7 +863,6 @@ const questions={
   "title": "Le test est-il destiné à un examen génétique humain ?",
   "criterion": "",
   "sourceLabel": "Le test est-il destiné à un examen génétique humain ?",
-  "icon": "gene",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -963,7 +872,6 @@ const questions={
   "title": "Le test dépiste-t-il une anomalie congénitale de l’embryon ou du fœtus ?",
   "criterion": "",
   "sourceLabel": "Le test dépiste-t-il une anomalie congénitale de l’embryon ou du fœtus ?",
-  "icon": "baby",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -973,7 +881,6 @@ const questions={
   "title": "Le dépistage du nouveau-né prévient-il une conséquence grave ?",
   "criterion": "Le test dépiste-t-il chez le nouveau-né une anomalie dont l’absence de traitement risque décès ou handicap grave ?",
   "sourceLabel": "Le test dépiste-t-il chez le nouveau-né une anomalie dont l’absence de traitement risque décès ou handicap grave ?",
-  "icon": "baby",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -983,7 +890,6 @@ const questions={
   "title": "Un non-professionnel réalise-t-il une étape du test ?",
   "criterion": "Une personne non professionnelle réalise-t-elle au moins une étape du test lui-même ?",
   "sourceLabel": "Une personne non professionnelle réalise-t-elle au moins une étape du test lui-même ?",
-  "icon": "person",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -993,7 +899,6 @@ const questions={
   "title": "L’autotest correspond-il à une exception de classe B ?",
   "criterion": "L’autotest est-il limité à l’une des exceptions de classe B ?",
   "sourceLabel": "L’autotest est-il limité à l’une des exceptions de classe B ?",
-  "icon": "person",
   "options": {
    "pregnancy": "Détection de grossesse uniquement",
    "fertility": "Test de fertilité uniquement",
@@ -1006,7 +911,6 @@ const questions={
   "title": "Le test est-il réalisé par un professionnel près du patient, hors laboratoire ?",
   "criterion": "",
   "sourceLabel": "Le test est-il réalisé par un professionnel près du patient, hors laboratoire ?",
-  "icon": "person",
   "options": {
    "no": "Non",
    "yes": "Oui"
@@ -1070,46 +974,54 @@ const hints={
  "ivdAllUses": "L’ensemble des destinations du produit et sa configuration complète ont été examinés."
 };
 const icons={
- yes:'<circle cx="16" cy="16" r="13" fill="currentColor"/><path d="m10 16 4 4 8-9" stroke="#e7a116" stroke-width="3" fill="none"/>',
- no:'<circle cx="16" cy="16" r="13" fill="currentColor"/><path d="M10 16h12" stroke="#e7a116" stroke-width="3"/>',
+ medical:'<rect x="3" y="3" width="26" height="26" rx="5" fill="currentColor"/><path d="M13 8h6v5h5v6h-5v5h-6v-5H8v-6h5z" fill="#e7a116"/>',
  unknown:'<circle cx="16" cy="16" r="13" fill="currentColor"/><path d="M12 12a4 4 0 1 1 6 4c-2 1-2 2-2 4" stroke="white" stroke-width="2.5" fill="none"/><circle cx="16" cy="24" r="1.5" fill="#e7a116"/>',
- product:'<rect x="4" y="6" width="24" height="21" rx="3" fill="currentColor"/><path d="M8 17h4l3-6 4 11 3-5h3" stroke="#e7a116" stroke-width="2" fill="none"/>',
- energy:'<rect x="7" y="5" width="18" height="24" rx="3" fill="currentColor"/><path d="M12 2h8v4h-8z" fill="currentColor"/><path d="m17 9-6 10h5l-1 6 7-11h-5z" fill="#e7a116"/>',
- body:'<circle cx="16" cy="6" r="4" fill="currentColor"/><path d="M9 13h14l-2 10h-3v7h-4v-7h-3z" fill="currentColor"/><path d="M8 18h16" stroke="#e7a116" stroke-width="3"/>',
- implant:'<path d="m8 4 18 18-5 5L3 9z" fill="currentColor"/><path d="m12 13 4-4m1 9 4-4" stroke="#e7a116" stroke-width="2"/><circle cx="7" cy="8" r="2" fill="white"/>',
- clock:'<circle cx="16" cy="17" r="12" fill="currentColor"/><path d="M16 9v8l6 3" stroke="#e7a116" stroke-width="2.5" fill="none"/><path d="M12 2h8" stroke="currentColor" stroke-width="3"/>',
- medicine:'<g transform="rotate(-40 16 16)"><rect x="2" y="9" width="28" height="14" rx="7" fill="currentColor"/><path d="M16 9h7a7 7 0 0 1 0 14h-7z" fill="#e7a116"/></g>',
- clean:'<path d="M10 9h12l3 19H7z" fill="currentColor"/><path d="M12 4h8v6h-8z" fill="currentColor"/><path d="M16 14v10m-5-5h10" stroke="#e7a116" stroke-width="2.5"/>',
- radiation:'<circle cx="16" cy="16" r="13" fill="currentColor"/><circle cx="16" cy="16" r="2" fill="#e7a116"/><path d="m14 12-4-7-5 8 8 1m6 0 8-1-5-8-4 7m-2 7-4 7h9l-4-7" fill="#e7a116"/>',
- molecule:'<path d="m8 8 15 4-7 13z" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="8" cy="8" r="5" fill="currentColor"/><circle cx="23" cy="12" r="5" fill="#e7a116"/><circle cx="16" cy="25" r="5" fill="currentColor"/>',
- drop:'<path d="M16 2C12 9 5 15 5 21a11 11 0 0 0 22 0c0-6-7-12-11-19" fill="currentColor"/><path d="M10 22a6 6 0 0 0 6 5" stroke="#e7a116" stroke-width="3" fill="none"/>',
+ product:'<path d="m16 2 13 7v15l-13 7L3 24V9z" fill="currentColor"/><path d="m3 9 13 7 13-7M16 16v15M9 5l13 7" stroke="#e7a116" stroke-width="2" fill="none"/>',
  link:'<path d="M8 13v9a7 7 0 0 0 14 0v-9" stroke="currentColor" stroke-width="3" fill="none"/><rect x="4" y="6" width="8" height="11" rx="2" fill="currentColor"/><rect x="19" y="6" width="6" height="11" rx="2" fill="currentColor"/><path d="M6 2h4v5H6zm14 0h4v5h-4z" fill="#e7a116"/>',
- heart:'<path d="M16 28 4 16C-3 7 8-2 16 7c8-9 19 0 12 9z" fill="currentColor"/><path d="M6 16h5l3-6 4 12 3-6h5" stroke="#e7a116" stroke-width="2" fill="none"/>',
- monitor:'<rect x="3" y="3" width="26" height="22" rx="3" fill="currentColor"/><path d="M7 14h4l3-6 4 11 3-5h4" stroke="#e7a116" stroke-width="2" fill="none"/><path d="M16 25v4m-6 0h12" stroke="currentColor" stroke-width="3"/>',
- loop:'<path d="M25 11a11 11 0 0 0-19 0m1 10a11 11 0 0 0 19 0" stroke="currentColor" stroke-width="3" fill="none"/><path d="m19 11 8 3 1-9M4 19l1 9 8-3" fill="#e7a116"/>',
  software:'<rect x="3" y="4" width="26" height="24" rx="3" fill="currentColor"/><path d="M6 10h20" stroke="white" stroke-width="1.5"/><path d="m12 14-4 4 4 4m8-8 4 4-4 4m-3-8-2 9" stroke="#e7a116" stroke-width="2" fill="none"/>',
  tube:'<path d="M10 9h12v15a6 6 0 0 1-12 0z" fill="currentColor"/><rect x="8" y="2" width="16" height="7" rx="2" fill="#e7a116"/><path d="M12 14h4m-4 4h4" stroke="white" stroke-width="1.5"/><path d="M12 24v-1l8-4v5a4 4 0 0 1-8 0" fill="#e7a116"/>',
- chart:'<rect x="4" y="3" width="24" height="27" rx="2" fill="currentColor"/><path d="M9 23v-7m7 7V9m7 14V13" stroke="#e7a116" stroke-width="3"/>',
- infection:'<circle cx="16" cy="16" r="8" fill="currentColor"/><path d="M16 2v6m0 16v6M2 16h6m16 0h6M6 6l5 5m10 10 5 5M6 26l5-5M21 11l5-5" stroke="currentColor" stroke-width="3"/><circle cx="13" cy="14" r="2" fill="#e7a116"/><circle cx="19" cy="19" r="2" fill="#e7a116"/>',
- shield:'<path d="m16 2 12 5v10c0 6-7 11-12 14C11 28 4 23 4 17V7z" fill="currentColor"/><path d="m10 16 4 4 8-9" stroke="#e7a116" stroke-width="2.5" fill="none"/>',
- gene:'<path d="M8 2c0 14 16 14 16 28M24 2C24 16 8 16 8 30" stroke="currentColor" stroke-width="3" fill="none"/><path d="M10 5h12M12 12h8m-8 8h8M10 27h12" stroke="#e7a116" stroke-width="2"/>',
- baby:'<circle cx="16" cy="11" r="7" fill="currentColor"/><path d="M7 23a9 9 0 0 1 18 0v7H7z" fill="currentColor"/><path d="m12 23 4 4 4-4" stroke="#e7a116" stroke-width="2" fill="none"/>',
- person:'<circle cx="16" cy="7" r="5" fill="currentColor"/><path d="M6 29v-8a10 10 0 0 1 20 0v8z" fill="currentColor"/><path d="M16 17v8m-4-4h8" stroke="#e7a116" stroke-width="2"/>',
- combined:'<rect x="2" y="4" width="18" height="20" rx="2" fill="currentColor"/><path d="M5 13h4l2-4 3 8 3-4" stroke="#e7a116" stroke-width="1.5" fill="none"/><rect x="15" y="14" width="15" height="15" rx="2" fill="currentColor" stroke="white"/><path d="m21 18-3 3 3 3m3-6 3 3-3 3" stroke="#e7a116" stroke-width="1.5" fill="none"/>'
+ combined:'<path d="m11 2 10 5v13l-10 5-10-5V7z" fill="currentColor"/><path d="m1 7 10 5 10-5M11 12v13" stroke="#e7a116" stroke-width="1.5" fill="none"/><rect x="15" y="14" width="15" height="15" rx="2" fill="currentColor" stroke="white"/><path d="m21 18-3 3 3 3m3-6 3 3-3 3" stroke="#e7a116" stroke-width="1.5" fill="none"/>'
 };
 const optionIcons={
- scope:{md:'monitor',accessory:'link',ivd:'tube',other:'unknown'},
- form:{physical:'product',software:'software',combined:'combined'},
- contact:{none:'shield',orifice:'body',surgical:'implant',multiple:'unknown'},
- duration:{transient:'clock',short:'clock',long:'clock',multiple:'unknown'},
- softwareRole:{independent:'software',drives:'link',both:'combined'},
- ivdSoftwareRole:{independent:'software',drives:'link',both:'combined'},
- ivdRole:{test:'tube',instrument:'monitor',software:'software',receptacle:'tube',lab:'molecule',accessory:'link',calibrator:'chart',assignedControl:'shield',unassignedControl:'chart'}
+ scope:{md:'medical',accessory:'link',ivd:'tube',other:'unknown'},
+ form:{physical:'product',software:'software',combined:'combined'}
 };
 function icon(name){return '<span class="choice-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+(icons[name]||icons.unknown)+'</svg></span>';}
 function view(q){const p=questions[q.id];if(!p)return {title:q.label,criterion:q.intro||'',options:q.options,descriptions:q.optionHelp||{}};
  return {title:p.title,criterion:hints[q.id]||p.criterion||q.intro||'',options:q.options.map(([value,label])=>[value,p.options[value]||label]),descriptions:{...q.optionHelp,...p.descriptions}};}
-function answerIcon(q,value){const named=optionIcons[q.id]?.[value];return icon(named||(value==='yes'?'yes':value==='no'||value==='none'?'no':/unknown|unclear|multiple|other/.test(value)?'unknown':questions[q.id]?.icon));}
-const api={questions,icons,view,icon,answerIcon};
+// Use icons only where the object itself is readily recognizable.
+function answerIcon(q,value){
+ if(!['scope','form'].includes(q.id))return '';
+ return icon(optionIcons[q.id]?.[value]||'unknown');
+}
+let promptWidth=0,promptHeight=0;
+function reservePrompt(app){
+ const prompt=app.querySelector('.question-prompt');if(!prompt)return;
+ const width=Math.round(prompt.getBoundingClientRect().width);if(!width)return;
+ if(width!==promptWidth){
+  const measure=document.createElement('div');measure.className='question-card prompt-measure';
+  measure.setAttribute('aria-hidden','true');measure.inert=true;
+  Object.assign(measure.style,{position:'absolute',visibility:'hidden',pointerEvents:'none',width:width+'px',padding:'0',left:'0',top:'0'});
+  for(const [id,p] of Object.entries(questions)){
+   const item=document.createElement('div');item.className='question-prompt';
+   const heading=document.createElement('div');heading.className='question-heading';
+   const title=document.createElement('h1');title.textContent=p.title.replace(/\s+\?$/,'\u00a0?');
+   const info=document.createElement('details');info.className='info-bubble';
+   const summary=document.createElement('summary');summary.textContent='i';info.append(summary);heading.append(title,info);item.append(heading);
+   const text=hints[id]||p.criterion;
+   if(text){const note=document.createElement('p');note.className='question-intro';note.textContent=text;item.append(note);}
+   measure.append(item);
+  }
+  app.append(measure);
+  promptHeight=Math.ceil(Math.max(...Array.from(measure.children,item=>item.getBoundingClientRect().height)));
+  promptWidth=width;measure.remove();
+ }
+ app.style.setProperty('--question-prompt-height',promptHeight+'px');
+}
+if(typeof window!=='undefined'){
+ window.addEventListener('resize',()=>{const app=document.getElementById('tool-app');if(app)reservePrompt(app);});
+ document.fonts?.ready.then(()=>{promptWidth=0;const app=document.getElementById('tool-app');if(app)reservePrompt(app);});
+}
+const api={questions,icons,view,icon,answerIcon,reservePrompt};
 if(typeof module==='object'&&module.exports)module.exports=api;else window.ORBIVIA_QUESTION_PRESENTATION=api;
 })();

@@ -179,3 +179,19 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 @media(max-width:700px){
  [data-tool="classification"] .question-heading h1,[data-tool="classification"] .scope-card .question-heading h1{font-size:23px}
 }
+
+/* Reserve one shared prompt height so answer targets never jump between questions. */
+[data-tool="classification"] .question-prompt{display:flow-root;min-height:var(--question-prompt-height,240px)}
+[data-tool="classification"] .prompt-measure .question-prompt{min-height:0!important}
+[data-tool="classification"] .question-card .question-prompt .question-heading{margin:0 0 18px;gap:12px;align-items:start}
+[data-tool="classification"] .question-prompt .question-intro{margin:0 0 22px}
+[data-tool="classification"] .question-prompt h1{font-size:30px;line-height:1.25;letter-spacing:-.8px;flex:1;min-width:0;max-width:none}
+[data-tool="classification"] .question-prompt .info-bubble{flex:none}
+[data-tool="classification"] .question-card{animation:none!important}
+[data-tool="classification"] .answer-list .answer:not(:has(.choice-icon)){justify-content:flex-start}
+@media(max-width:700px){
+ [data-tool="classification"] .question-prompt h1{font-size:23px!important;line-height:1.25;letter-spacing:-.6px}
+ [data-tool="classification"] .question-card .question-prompt .question-heading{margin-bottom:18px}
+}
+
+html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
