@@ -118,3 +118,21 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 }
 [data-tool="classification"] .scope-choices .answer:last-child{grid-column:auto;min-height:92px}
 @media(max-width:700px){[data-tool="classification"] .scope-choices .answer:last-child{min-height:82px}}
+
+/* Scope: one clear choice per row on phones; help stays beside the title. */
+[data-tool="classification"] .scope-card .question-heading{align-items:center;margin-bottom:22px}
+[data-tool="classification"] .scope-card .question-heading h1{flex:1;min-width:0}
+[data-tool="classification"] .scope-card .info-bubble{flex:none}
+[data-tool="classification"] .scope-choices .answer{align-items:center}
+[data-tool="classification"] .scope-choices .answer::after{content:'›';font-size:25px;font-weight:400;color:#68716f;margin-left:auto;flex:none}
+[data-tool="classification"] .scope-choices .answer-copy{flex:1;min-width:0}
+[data-tool="classification"] .scope-card+.question-controls{justify-content:flex-end}
+@media(max-width:700px){
+ [data-tool="classification"] .scope-card .scope-choices{grid-template-columns:1fr;gap:10px}
+ [data-tool="classification"] .scope-card .scope-choices .answer{min-height:78px;padding:12px;gap:12px}
+ [data-tool="classification"] .scope-card .answer>.answer-copy{font-size:14px}
+ [data-tool="classification"] .scope-card .answer>.answer-copy small{font-size:12px;line-height:1.4;margin-top:4px}
+ [data-tool="classification"] .scope-card .question-heading{gap:8px;margin-bottom:16px}
+ [data-tool="classification"] .scope-card .question-heading h1{font-size:22px;letter-spacing:-.5px}
+ [data-tool="classification"] .scope-card.question-card{padding:18px 14px}
+}
