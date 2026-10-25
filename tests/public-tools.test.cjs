@@ -257,3 +257,14 @@ test('all 64 standards bubbles have topic-specific references at official publis
  assert.ok(help.ivd.sources.some(s=>s.url.includes('2017/746')));
  assert.ok(help.textile.sources.every(s=>s.url.includes('fa20508')),'2025 product pages, not withdrawn 2019 versions');
 });
+
+test('previous cancels the destination answer and downstream answers, preserving comments',()=>{
+ for(const kind of ['classification','norms']){
+  const answers=kind==='classification'?complete():Object.fromEntries(questions.map(q=>[q.id,'yes']));
+  const active=model.visible(kind,answers),target=active[1],state={answers,comments:{[target.id]:'Conserver'},clarifications:{[target.id]:{steps:[]}},result:true};
+  model.rewind(kind,state,target.id);
+  assert.equal(state.answers[target.id],undefined);assert.equal(state.clarifications[target.id],undefined);assert.equal(state.comments[target.id],'Conserver');assert.equal(state.result,false);
+  assert.ok(model.progress(kind,state.answers,target.id).percent<100);
+  assert.equal(model.visible(kind,state.answers).find(q=>!model.visited(q,state.answers)).id,target.id);
+ }
+});

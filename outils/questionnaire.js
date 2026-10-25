@@ -115,7 +115,7 @@ document.addEventListener('click',event=>{
   answerQuestion(q,b.dataset.answer);return;
  }
  if(b.dataset.edit){state.assistance=null;state.editing=true;reviewMode=false;const q=qs.find(q=>q.id===b.dataset.edit);if(q)moveTo(q);return;}
- if(cmd==='previous'){state.editing=false;reviewMode=false;if(at>0)moveTo(qs[at-1]);return;}
+ if(cmd==='previous'){if(at>0){model.rewind(kind,state,qs[at-1].id);reviewMode=false;reviewSeen=[];moveTo(qs[at-1]);}return;}
  if(cmd==='back'){state.result=false;reviewMode=false;save();render();focus();return;}
  if(cmd==='review'){const q=qs.find(x=>!model.resolved(x,state.answers));if(q){reviewMode=true;reviewSeen=[];state.assistance={question:q.id,version:guide.version,path:[]};moveTo(q);}return;}
  if(cmd==='export-pdf'){preparePDF(b);return;}

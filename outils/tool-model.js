@@ -33,6 +33,12 @@ function create({classification,norms,questions,catalogue,explanations}){
   };
   return cases[answers.scope]||null;
  }
+ function rewind(kind,state,target){
+  const all=kind==='classification'?classification.allQuestions:questions;
+  const index=all.findIndex(q=>q.id===target);if(index<0)return;
+  for(const q of all.slice(index)){delete state.answers[q.id];delete state.clarifications?.[q.id];}
+  state.cursor=target;state.result=false;state.assistance=null;state.editing=false;state.reviewMode=false;state.reviewSeen=[];
+ }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
  function visited(q,answers){return known(q,answers)||answers[q.id]==='unresolved';}
  function resolved(q,answers){return known(q,answers)&&!['unclear','unknown','unknownClass','multiple'].includes(answers[q.id])&&!(q.id==='controlTherapy'&&answers[q.id]==='other')&&!(q.id==='scope'&&answers[q.id]==='other')&&!(q.id==='multiPurpose'&&answers[q.id]==='no')&&!(q.id==='tissue'&&answers[q.id]==='viable')&&!(q.id==='ivdAllUses'&&answers[q.id]==='no')&&!(q.id==='ivdQualification'&&answers[q.id]==='no');}
@@ -118,7 +124,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   }
   return document;
  }
- return {orientation,visible,known,visited,resolved,progress,restore,analysis,answerRows,summary,escape:E};
+ return {rewind,orientation,visible,known,visited,resolved,progress,restore,analysis,answerRows,summary,escape:E};
 }
 if(typeof module==='object'&&module.exports)module.exports={create};else window.ORBIVIA_PUBLIC_TOOLS={create};
 })();
