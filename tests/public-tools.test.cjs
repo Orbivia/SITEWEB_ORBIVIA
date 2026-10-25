@@ -82,7 +82,7 @@ test('public progress keeps fixed positions and never retreats on a forward cond
    for(let i=0;i<150;i++){
     const progress=model.progress(kind,answers),q=model.visible(kind,answers).find(q=>!model.visited(q,answers));
     assert.ok(progress.percent>=last,kind+': percentage retreated');last=progress.percent;
-    if(!q){assert.equal(progress.percent,model.visible(kind,answers).some(q=>!model.resolved(q,answers))?99:100);break;}
+    if(!q){assert.equal(progress.percent,model.orientation(kind,answers)?0:model.visible(kind,answers).some(q=>!model.resolved(q,answers))?99:100);break;}
     answers[q.id]=q.options[Math.min(variant,q.options.length-1)][0];
    }
   }
