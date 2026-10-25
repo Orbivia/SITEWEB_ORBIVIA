@@ -4,12 +4,12 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const root=path.join(__dirname,'../outils');
-const classification=require('../outils/compliance/classification-engine.js');
-const norms=require('../outils/compliance/normes-model.js');
-const questions=require('../outils/compliance/normes-questions.js');
-const explanations=require('../outils/compliance/normes-explications.js');
+const classification=require('../outils/shared/classification-engine.js');
+const norms=require('../outils/shared/normes-model.js');
+const questions=require('../outils/shared/normes-questions.js');
+const explanations=require('../outils/shared/normes-explications.js');
 const context=vm.createContext({window:{}});
-vm.runInContext(fs.readFileSync(path.join(root,'compliance/normes-catalogue.js'),'utf8'),context);
+vm.runInContext(fs.readFileSync(path.join(root,'shared/normes-catalogue.js'),'utf8'),context);
 const model=require('../outils/tool-model.js').create({classification,norms,questions,explanations,catalogue:context.window.ORBIVIA_NORMES_CATALOGUE});
 function complete(overrides={}){
  const answers={};
