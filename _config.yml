@@ -1,0 +1,12 @@
+# Source and maintenance files are not part of the public website.
+exclude:
+  - tests
+  - scripts
+  - docs
+  - README.md
+  - ESTIMATEUR.md
+  - outils/README.md
+  - outils/CLARIFICATION_MAINTENANCE.md
+  - outils/CLASSIFICATION_VALIDATION.md
+  - _preview
+  - .openai

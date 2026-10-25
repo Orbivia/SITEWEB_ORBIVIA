@@ -45,13 +45,16 @@ test('normative suggestions use active answers and contain human-readable reason
  const software=r.suggested.find(x=>x.id==='IEC 62304');assert.match(software.reasons.join(' '),/logiciel médical/);assert.match(software.url,/iec\.ch/);
  assert.equal(a.alarm,'yes');
 });
-test('reports contain reasons, all applicable answers and sources without unescaped comments',()=>{
+test('PDF summaries retain reasons and sources, while comments stay safely available to the UI',()=>{
  const state={answers:complete(),comments:{scope:'<img src=x onerror=alert(1)>'}};
- const html=model.report('classification',state);
- assert.match(html,/Classe proposée : I/);assert.match(html,/Examen des 22 règles/);assert.match(html,/eur-lex/);assert.match(html,/&lt;img/);assert.doesNotMatch(html,/<img src=x/);
- const normative=model.report('norms',{answers:{software:'yes'},comments:{}});
- assert.match(normative,/IEC 62304/);assert.match(normative,/Caractéristiques restant à préciser/);assert.match(normative,/Pourquoi elle est proposée/);
- assert.match(model.report('norms',{answers:{ivd:'yes'},comments:{}}),/ne réalise pas la qualification ni la classification IVDR/);
+ const summary=model.summary('classification',state);
+ assert.equal(summary.outcome,'Classe proposée : I');
+ assert.ok(summary.sections.some(s=>s.items.some(i=>i.url?.includes('eur-lex'))));
+ const row=model.answerRows('classification',state).find(q=>q.id==='scope');
+ assert.equal(model.escape(row.comment),'&lt;img src=x onerror=alert(1)&gt;');
+ const normative=model.summary('norms',{answers:{software:'yes'},comments:{}});
+ assert.ok(normative.sections.some(s=>s.items.some(i=>i.text==='IEC 62304')));
+ assert.match(model.summary('norms',{answers:{ivd:'yes'},comments:{}}).note,/aucune classification IVDR/);
 });
 test('restoring a tool ignores invalid answers and keeps its state independent of projects',()=>{
  const restored=model.restore('classification',{answers:{scope:'md',form:'bogus',name:'Projet'},comments:{scope:15,form:'Note'},cursor:'bogus',result:true});

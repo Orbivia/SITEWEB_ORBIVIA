@@ -93,3 +93,7 @@ Retouche ciblée de la surface : supprimer les stries FDM et les irrégularités
 ### Airca
 
 Détourage uniquement et présentation catalogue fidèle du prototype orange et noir, en conservant tous les éléments d'origine ; aucune scène d'action, aucun accessoire ajouté.
+
+## Nettoyage du 25 octobre 2026
+
+Les originaux et variantes sans référence dans le site ont été retirés du dépôt courant, ainsi que les SVG encapsulant les images en base64. Ils restent récupérables dans l’historique Git. Les images effectivement utilisées sont conservées.
