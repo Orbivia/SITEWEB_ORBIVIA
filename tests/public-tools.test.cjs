@@ -244,3 +244,15 @@ test('MDR configurations not covered and viable tissues remain directly reviewab
   assert.ok(model.progress('classification',answers).percent<100);
  }
 });
+
+test('all 64 standards bubbles have topic-specific references at official publishers',()=>{
+ const ctx=vm.createContext({window:{}});vm.runInContext(fs.readFileSync(path.join(root,'shared/normes-aide.js'),'utf8'),ctx);
+ const help=ctx.window.ORBIVIA_NORMES_AIDES;
+ for(const q of questions){
+  assert.ok(help[q.id].sources.some(s=>s.reference),q.id);
+  for(const s of help[q.id].sources){const u=new URL(s.url);assert.ok(['www.iso.org','webstore.iec.ch','www.boutique.afnor.org','eur-lex.europa.eu'].includes(u.hostname));if(s.label.startsWith('Rechercher ')){assert.ok(u.searchParams.get('q')===s.reference);assert.match(s.label,/catalogue/);}}
+ }
+ assert.equal(help.software.sources[0].reference,'IEC 62304');assert.equal(help.contact.sources[0].reference,'ISO 10993-1');assert.equal(help.sleep.sources[0].reference,'ISO 80601-2-70');
+ assert.ok(help.ivd.sources.some(s=>s.url.includes('2017/746')));
+ assert.ok(help.textile.sources.every(s=>s.url.includes('fa20508')),'2025 product pages, not withdrawn 2019 versions');
+});
