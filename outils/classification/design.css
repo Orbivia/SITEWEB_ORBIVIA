@@ -109,13 +109,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 
 [data-tool="classification"] .info-bubble summary{min-width:44px;min-height:44px}
 
-/* Initial product categories: Orbivia duotone pictograms. */
-[data-tool="classification"] .answer>span.scope-icon:first-child:not(.answer-copy),
-[data-tool="classification"] .answer.selected>span.scope-icon:first-child:not(.answer-copy){display:block;width:40px;height:40px;border:0;border-radius:0;color:#17263a;flex:0 0 40px}
-[data-tool="classification"] .scope-icon svg{display:block;width:100%;height:100%}
-@media(max-width:700px){
- [data-tool="classification"] .answer>span.scope-icon:first-child:not(.answer-copy){width:30px;height:30px;flex-basis:30px}
-}
 [data-tool="classification"] .scope-choices .answer:last-child{grid-column:auto;min-height:92px}
 @media(max-width:700px){[data-tool="classification"] .scope-choices .answer:last-child{min-height:82px}}
 
@@ -135,4 +128,54 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
  [data-tool="classification"] .scope-card .question-heading{gap:8px;margin-bottom:16px}
  [data-tool="classification"] .scope-card .question-heading h1{font-size:22px;letter-spacing:-.5px}
  [data-tool="classification"] .scope-card.question-card{padding:18px 14px}
+}
+
+/* Shared visual system for all MDR and IVDR questions. */
+[data-tool="classification"] .question-card:not(.assistance-card){border:0;border-radius:0;background:transparent;box-shadow:none;padding:8px 0 0}
+[data-tool="classification"] .question-card:not(.assistance-card)::before{display:none}
+[data-tool="classification"] .question-card:not(.assistance-card) .question-heading{align-items:start;margin-bottom:18px;gap:12px}
+[data-tool="classification"] .question-heading h1{flex:1;min-width:0}
+[data-tool="classification"] .question-intro{font-size:14px;line-height:1.55;color:#59645e;margin:-4px 0 22px;max-width:720px}
+[data-tool="classification"] .question-card:not(.assistance-card) .answer{align-items:center;gap:16px;padding:18px;min-height:86px}
+[data-tool="classification"] .answer>span.choice-icon:first-child:not(.answer-copy),
+[data-tool="classification"] .answer.selected>span.choice-icon:first-child:not(.answer-copy){display:block;width:38px;height:38px;border:0;border-radius:0;flex:0 0 38px;color:#17263a}
+[data-tool="classification"] .choice-icon svg{display:block;width:100%;height:100%}
+[data-tool="classification"] .answer>.answer-copy{flex:1;min-width:0;font-size:15px;line-height:1.4}
+[data-tool="classification"] .answer>.answer-copy small{font-size:13px;color:#59645e;line-height:1.45}
+[data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{display:flex;width:100%;min-height:44px;margin:18px 0 8px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
+[data-tool="classification"] .question-card:not(.assistance-card)>.comment{display:block;width:100%;text-align:left;border-top:1px solid #dfe4de;border-bottom:1px solid #dfe4de;margin:0;padding:2px 0;font-size:13px}
+[data-tool="classification"] .comment summary{min-height:44px;font-size:13px}
+[data-tool="classification"] .question-controls{background:transparent;margin-top:18px}
+[data-tool="classification"] .result-card{border-radius:14px;box-shadow:none;padding:28px;border:1px solid #dfe4de}
+[data-tool="classification"] .class-value{display:block;position:relative;padding-bottom:20px;margin-bottom:20px;font-size:76px;line-height:1.1;letter-spacing:-2px}
+[data-tool="classification"] .class-value::after{content:'';position:absolute;bottom:0;left:0;width:38px;height:4px;background:#e7a116;border-radius:2px}
+[data-tool="classification"] .result-reason{margin:22px 0}
+[data-tool="classification"] .result-reason h2{font-size:20px;margin:0 0 10px;letter-spacing:-.3px}
+[data-tool="classification"] .result-reason p{font-size:15px;line-height:1.55;margin:0}
+[data-tool="classification"] .answers-review{border:1px solid #dfe4de;border-radius:10px;background:white;padding:4px 18px}
+[data-tool="classification"] .export-actions .primary{border-radius:10px;min-height:54px}
+@media(max-width:700px){
+ [data-tool="classification"] .question-card:not(.assistance-card),[data-tool="classification"] .scope-card.question-card{padding:8px 0 0}
+ [data-tool="classification"] .question-heading h1,[data-tool="classification"] .scope-card .question-heading h1{font-size:25px;line-height:1.25;letter-spacing:-.6px}
+ [data-tool="classification"] .question-intro{font-size:13px;line-height:1.5;margin:0 0 18px}
+ [data-tool="classification"] .question-card:not(.assistance-card) .answer-list{grid-template-columns:1fr;gap:10px}
+ [data-tool="classification"] .question-card:not(.assistance-card) .answer{min-height:76px;padding:14px;gap:14px}
+ [data-tool="classification"] .answer>span.choice-icon:first-child:not(.answer-copy){width:34px;height:34px;flex-basis:34px}
+ [data-tool="classification"] .answer>.answer-copy,[data-tool="classification"] .scope-card .answer>.answer-copy{font-size:14px}
+ [data-tool="classification"] .answer>.answer-copy small,[data-tool="classification"] .scope-card .answer>.answer-copy small{font-size:12px;line-height:1.45;margin-top:4px}
+ [data-tool="classification"] .result-card{padding:22px}
+ [data-tool="classification"] .class-value{font-size:66px}
+ [data-tool="classification"] .result-reason h2{font-size:19px}
+ [data-tool="classification"] .tool-shell,[data-tool="classification"] .tool-shell:has(.explained-choices){width:calc(100% - 32px);margin-top:16px}
+}
+@media(prefers-reduced-motion:no-preference){
+ [data-tool="classification"] .question-card,[data-tool="classification"] .result-card{animation:question-appear .16s ease-out}
+ @keyframes question-appear{from{opacity:.5;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+}
+
+[data-tool="classification"] .question-heading h1{text-wrap:pretty}
+[data-tool="classification"] .explained-choices .answer:last-child{background:#fff}
+[data-tool="classification"] .scope-choices .answer:last-child{background:#f8faf7}
+@media(max-width:700px){
+ [data-tool="classification"] .question-heading h1,[data-tool="classification"] .scope-card .question-heading h1{font-size:23px}
 }

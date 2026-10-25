@@ -13,6 +13,8 @@ L’accueil `/outils/` présente uniquement ces deux outils. Compliance Studio e
 
 - `questionnaire.js` : interface et navigation des deux questionnaires, commentaires, reprise ciblée, réinitialisation et affichage des résultats.
 - `questionnaire.css` : présentation commune et affichage mobile.
+- `classification/presentation.js` : textes des 96 questions MDR/IVDR et pictogrammes SVG bicolores. Présentation indépendante des règles : mêmes identifiants, valeurs et ordre des réponses. Les critères complets restent dans le « i ».
+- `classification/design.css` : présentation du questionnaire et du résultat publics, cartes en une colonne sur mobile.
 - `tool-model.js` : validation de la reprise, interprétation des réponses et rapports autonomes.
 - `shared/classification-engine.js` : moteur MDR extrait du code historique ; le questionnaire public n’exige pas de formulaire de destination. Les réponses doivent néanmoins correspondre à la destination réellement prévue.
 - `shared/normes-questions.js` : questions techniques communes, extraites sans changement de l’ancien module.
