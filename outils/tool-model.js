@@ -23,6 +23,16 @@ function create({classification,norms,questions,catalogue,explanations}){
   };
   return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quel type de produit ?',example:'Choisissez selon l’usage prévu par le fabricant. Un dispositif médical a une fonction médicale propre (diagnostic, prévention, surveillance, traitement…). Un accessoire contribue spécifiquement à l’usage ou à la fonction d’un DM, sans être lui-même un DM. Le diagnostic in vitro analyse un prélèvement humain : il relève de l’IVDR. L’annexe XVI vise seulement certains groupes sans but médical (dont lentilles non correctrices et certains équipements esthétiques). Si le statut est incertain, il doit être clarifié avant de proposer une classe.',options:q.options.map(([value,label])=>[value,scopeHelp[value]?.label||label]),optionHelp:Object.fromEntries(Object.entries(scopeHelp).map(([id,item])=>[id,item.description]))}:q).map(q=>ordered(q,kind,answers));
  }
+ function orientation(kind,answers){
+  if(kind!=='classification')return null;
+  const cases={
+   ivd:{title:'Ce produit relève du parcours IVDR',text:'Vous avez choisi un diagnostic in vitro : l’analyse porte sur un prélèvement humain hors du corps. Les classes A, B, C et D relèvent du règlement IVDR. Cet outil calcule uniquement les classes MDR I, IIa, IIb et III ; il ne classe pas les produits IVDR.',source:'Règlement IVDR — annexe VIII',url:'https://eur-lex.europa.eu/eli/reg/2017/746/oj'},
+   annex16:{title:'Un parcours spécifique à l’annexe XVI est nécessaire',text:'Vous avez choisi un produit sans destination médicale de l’annexe XVI. Son classement nécessite notamment l’examen du groupe de produits, des spécifications communes et des actes de reclassification. Ce cas n’est pas pris en charge par le calculateur actuel.',source:'Règlement MDR — annexe XVI',url:'https://eur-lex.europa.eu/eli/reg/2017/745/oj'},
+   other:{title:'Précisons d’abord le statut du produit',text:'La qualification n’est pas encore établie. L’aide au choix peut distinguer dispositif médical, accessoire, diagnostic in vitro et produit sans destination médicale. Aucune classe ne peut être calculée à ce stade.'},
+   unresolved:{title:'Le statut du produit reste à préciser',text:'Les informations disponibles ne permettent pas encore de choisir le cadre réglementaire. Vous pouvez reprendre l’aide ou modifier le type de produit. Aucune classe ne peut être calculée à ce stade.'}
+  };
+  return cases[answers.scope]||null;
+ }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
  function visited(q,answers){return known(q,answers)||answers[q.id]==='unresolved';}
  function resolved(q,answers){return known(q,answers)&&!['unclear','unknown','unknownClass','multiple'].includes(answers[q.id])&&!(q.id==='controlTherapy'&&answers[q.id]==='other')&&!(q.id==='scope'&&answers[q.id]==='other');}
@@ -106,7 +116,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   }
   return document;
  }
- return {visible,known,visited,resolved,progress,restore,analysis,answerRows,summary,escape:E};
+ return {orientation,visible,known,visited,resolved,progress,restore,analysis,answerRows,summary,escape:E};
 }
 if(typeof module==='object'&&module.exports)module.exports={create};else window.ORBIVIA_PUBLIC_TOOLS={create};
 })();

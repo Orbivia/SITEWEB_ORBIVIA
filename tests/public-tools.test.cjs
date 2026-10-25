@@ -200,3 +200,18 @@ test('an unresolved clinical context cannot export a fallback class I as a propo
  assert.match(summary.outcome,/préciser/);
  assert.equal(summary.sections.find(s=>s.title==='Règles proposées, à confirmer').items.some(i=>/Règle (1|13) ·/.test(i.text)),false);
 });
+
+test('each initial product choice either continues MDR or gives a specific orientation',()=>{
+ for(const scope of ['md','accessory']){
+  assert.equal(model.orientation('classification',{scope}),null);
+  assert.ok(model.visible('classification',{scope}).some(q=>q.id==='form'));
+  assert.equal(model.restore('classification',{answers:{scope},result:true}).result,false);
+ }
+ for(const scope of ['ivd','annex16','other','unresolved']){
+  const info=model.orientation('classification',{scope});assert.ok(info?.title);assert.ok(info.text.length>100);
+  assert.equal(model.visible('classification',{scope}).length,1);
+ }
+ assert.match(model.orientation('classification',{scope:'ivd'}).text,/A, B, C et D/);
+ assert.match(model.orientation('classification',{scope:'annex16'}).text,/pas pris en charge/);
+ assert.equal(model.orientation('norms',{scope:'ivd'}),null);
+});

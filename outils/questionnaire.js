@@ -39,6 +39,7 @@ function renderAssistance(q){
 }
 function answerQuestion(q,value,clarification){
  state.answers[q.id]=value;state.assistance=null;
+ if(kind==='classification'&&q.id==='scope'&&value==='other'&&!clarification){state.result=false;state.cursor='scope';state.assistance={question:'scope',version:guide.version,path:[]};save();render();focus();return;}
  if(clarification)state.clarifications[q.id]={value,steps:clarification.trace};else delete state.clarifications[q.id];
  const nextQuestions=model.visible(kind,state.answers);let next;
  if(reviewMode){reviewSeen.push(q.id);next=nextQuestions.find(x=>!model.resolved(x,state.answers)&&!reviewSeen.includes(x.id));}
@@ -48,6 +49,9 @@ function answerQuestion(q,value,clarification){
  save();render();focus();locked=true;app.querySelectorAll('[data-answer]').forEach(x=>x.disabled=true);setTimeout(()=>{locked=false;app.querySelectorAll('[data-answer]').forEach(x=>x.disabled=false);},250);
 }
 function normRow(r){return '<details class="norm-row" data-reference="'+E((r.id+' '+r.title).toLocaleLowerCase('fr'))+'"><summary><span><strong>'+E(r.id)+'</strong><span>'+E(r.title)+'</span></span><span class="row-info" aria-label="Explication et source">i</span></summary><div class="norm-detail"><h3>Pourquoi cette référence ?</h3><ul>'+r.reasons.map(reason=>'<li>'+E(reason)+'</li>').join('')+'</ul><h3>Ce qu’elle couvre</h3><p>'+E(r.scope)+'</p><p>'+E(r.use)+'</p><a href="'+E(r.url)+'" target="_blank" rel="noopener noreferrer">'+E(r.sourceLabel)+' ↗</a><p class="muted">Édition, amendements et statut d’harmonisation à vérifier.</p></div></details>';}
+function renderOrientation(info){
+ app.innerHTML='<div class="result-heading"><span class="eyebrow">Orientation du produit</span><h1>'+E(info.title)+'</h1></div><section class="result-card"><p>'+E(info.text)+'</p>'+(info.url?'<p><a href="'+E(info.url)+'" target="_blank" rel="noopener noreferrer">'+E(info.source)+' ↗</a></p>':'')+'</section><div class="question-controls">'+action('Modifier le type de produit','scope-change','primary')+action('M’aider à choisir','scope-help','quiet')+'</div><p class="scope-note">Le questionnaire MDR se poursuit pour un dispositif médical ou un accessoire relevant de ce règlement.</p>';
+}
 function renderResult(){
  const r=model.analysis(kind,state.answers),isClass=kind==='classification',qs=model.visible(kind,state.answers),pending=qs.filter(q=>!model.resolved(q,state.answers));
  let body='<div class="result-heading"><span class="eyebrow">Votre résultat</span><h1>'+E(isClass?'Classification MDR':'Normes du dispositif')+'</h1></div>';
@@ -83,12 +87,13 @@ async function preparePDF(button){
  }catch(error){button.textContent='Réessayer l’export PDF';button.dataset.action='export-pdf';button.removeAttribute('aria-disabled');console.error('Export PDF indisponible',error);}
 }
 
-function render(){if(state.result){const missing=model.visible(kind,state.answers).find(q=>!model.visited(q,state.answers));if(missing){state.result=false;state.cursor=missing.id;}}document.body.classList.toggle('is-question',!state.result);document.body.classList.toggle('is-result',state.result);if(state.result)renderResult();else renderQuestion();}
+function render(){const orientation=model.orientation(kind,state.answers);if(state.result&&orientation){document.body.classList.remove('is-question','is-result');renderOrientation(orientation);return;}if(state.result){const missing=model.visible(kind,state.answers).find(q=>!model.visited(q,state.answers));if(missing){state.result=false;state.cursor=missing.id;}}document.body.classList.toggle('is-question',!state.result);document.body.classList.toggle('is-result',state.result);if(state.result)renderResult();else renderQuestion();}
 function moveTo(q){state.cursor=q.id;state.result=false;save();render();focus();}
 document.addEventListener('click',event=>{
  const b=event.target.closest('[data-answer],[data-action],[data-edit],[data-probe]');if(!b||b.disabled)return;
  const qs=model.visible(kind,state.answers),at=qs.findIndex(q=>q.id===state.cursor),cmd=b.dataset.action;
  const current=qs.find(q=>q.id===state.cursor);
+ if(cmd==='scope-change'||cmd==='scope-help'){state.editing=true;reviewMode=false;state.assistance=cmd==='scope-help'?{question:'scope',version:guide.version,path:[]}:null;moveTo(qs.find(q=>q.id==='scope'));return;}
  if(cmd==='assist-start'&&current){state.assistance={question:current.id,version:guide.version,path:[]};save();render();focus();return;}
  if(b.hasAttribute('data-probe')&&state.assistance&&current){
   if(locked)return;locked=true;setTimeout(()=>{locked=false;},250);
