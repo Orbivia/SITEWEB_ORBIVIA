@@ -79,7 +79,7 @@ test('public progress keeps fixed positions and never retreats on a forward cond
    for(let i=0;i<150;i++){
     const progress=model.progress(kind,answers),q=model.visible(kind,answers).find(q=>!model.visited(q,answers));
     assert.ok(progress.percent>=last,kind+': percentage retreated');last=progress.percent;
-    if(!q){assert.equal(progress.percent,100);break;}
+    if(!q){assert.equal(progress.percent,model.visible(kind,answers).some(q=>!model.resolved(q,answers))?99:100);break;}
     answers[q.id]=q.options[Math.min(variant,q.options.length-1)][0];
    }
   }
@@ -152,4 +152,48 @@ test('legacy diagnostic answers require the clearer clinical-context question',(
  const state=model.restore('classification',{answers,cursor:'multiPurpose',result:true});
  assert.equal(state.result,false);assert.equal(state.cursor,'diagnosticUse');
  assert.equal(state.answers.diagnosticVital,undefined);assert.equal(state.answers.diagnosticUse,undefined);
+});
+test('unresolved points persist without becoming false, blocking the result or counting as complete',()=>{
+ const answers=complete();answers.nano='unresolved';
+ const state=model.restore('classification',{answers,cursor:'multiPurpose',result:true,comments:{nano:'Donnée fournisseur attendue'}});
+ assert.equal(state.answers.nano,'unresolved');assert.equal(state.result,true);
+ const nano=model.visible('classification',state.answers).find(q=>q.id==='nano');
+ assert.equal(model.visited(nano,state.answers),true);assert.equal(model.known(nano,state.answers),false);
+ assert.equal(model.analysis('classification',state.answers).complete,false);
+ assert.ok(model.progress('classification',state.answers).percent<100);
+ assert.match(model.answerRows('classification',state).find(q=>q.id==='nano').answer,/À préciser/);
+ assert.match(model.summary('classification',state).outcome,/préciser/);
+ assert.equal(state.comments.nano,'Donnée fournisseur attendue');
+});
+test('a restored assistance draft retains its current question and explanatory trace',()=>{
+ const state=model.restore('classification',{answers:{scope:'md'},assistance:{question:'form',version:'clarification-1',path:['physical']},clarifications:{scope:{value:'md',steps:[{question:'Fonction médicale propre ?',answer:'Oui'}]}}});
+ assert.equal(state.assistance.question,'form');assert.equal(state.result,false);
+ assert.deepEqual(state.assistance.path,['physical']);assert.equal(state.clarifications.scope.steps[0].answer,'Oui');
+ assert.equal(model.restore('classification',{assistance:{question:'bad',path:['yes']}}).assistance,null);
+});
+test('a fully deferred normative route terminates and its provisional PDF remains one page',async()=>{
+ const answers={};let count=0;
+ while(count<100){const q=model.visible('norms',answers).find(q=>!model.visited(q,answers));if(!q)break;answers[q.id]='unresolved';count++;}
+ assert.ok(count>10&&count<100);
+ assert.equal(model.analysis('norms',answers).complete,false);
+ const restored=model.restore('norms',{answers,result:true});assert.equal(restored.result,true);
+ const pdf=require('../outils/vendor/pdf-lib.min.js'),exporter=require('../outils/pdf-export.js');
+ const bytes=await exporter.create(model.summary('norms',restored),pdf);
+ assert.equal((await pdf.PDFDocument.load(bytes)).getPageCount(),1);
+});
+test('deferred inactive branches do not prevent completion or affect the standards result',()=>{
+ const answers=Object.fromEntries(questions.map(q=>[q.id,'no']));answers.cloud='unresolved';
+ assert.equal(model.analysis('norms',answers).complete,true);
+ assert.equal(model.visible('norms',answers).some(q=>q.id==='cloud'),false);
+});
+test('targeted review and answer editing survive a reload without restarting the whole route',()=>{
+ const state=model.restore('classification',{answers:complete(),editing:true,reviewMode:true,reviewSeen:['scope','bogus','scope'],assistance:{question:'form',version:'clarification-1',path:[]}});
+ assert.equal(state.editing,true);assert.equal(state.reviewMode,true);assert.deepEqual(state.reviewSeen,['scope']);
+ assert.equal(state.assistance.version,'clarification-1');
+});
+test('an unresolved clinical context cannot export a fallback class I as a proposed rule',()=>{
+ const answers=complete({active:'yes',diagnostic:'yes',diagnosticUse:'routine'});answers.diagnosticUse='unresolved';
+ const summary=model.summary('classification',{answers,comments:{}});
+ assert.match(summary.outcome,/préciser/);
+ assert.equal(summary.sections.find(s=>s.title==='Règles proposées, à confirmer').items.some(i=>/Règle (1|13) ·/.test(i.text)),false);
 });

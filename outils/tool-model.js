@@ -24,14 +24,15 @@ function create({classification,norms,questions,catalogue,explanations}){
   return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quel type de produit ?',example:'Choisissez selon l’usage prévu par le fabricant. Un dispositif médical a une fonction médicale propre (diagnostic, prévention, surveillance, traitement…). Un accessoire contribue spécifiquement à l’usage ou à la fonction d’un DM, sans être lui-même un DM. Le diagnostic in vitro analyse un prélèvement humain : il relève de l’IVDR. L’annexe XVI vise seulement certains groupes sans but médical (dont lentilles non correctrices et certains équipements esthétiques). Si le statut est incertain, il doit être clarifié avant de proposer une classe.',options:q.options.map(([value,label])=>[value,scopeHelp[value]?.label||label]),optionHelp:Object.fromEntries(Object.entries(scopeHelp).map(([id,item])=>[id,item.description]))}:q).map(q=>ordered(q,kind,answers));
  }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
- function visited(q,answers){return known(q,answers);}
+ function visited(q,answers){return known(q,answers)||answers[q.id]==='unresolved';}
+ function resolved(q,answers){return known(q,answers)&&!['unclear','unknown','unknownClass','multiple'].includes(answers[q.id])&&!(q.id==='controlTherapy'&&answers[q.id]==='other')&&!(q.id==='scope'&&answers[q.id]==='other');}
  // Each question keeps a fixed position, independent of conditional branches.
  // Skipped branches advance the route; they never change its denominator.
  function progress(kind,answers,cursor){
   const all=kind==='classification'?classification.allQuestions:questions;
   const active=visible(kind,answers),next=active.find(q=>!visited(q,answers));
   const position=next?all.findIndex(q=>q.id===next.id):all.length;
-  const percent=Math.min(active.some(q=>!known(q,answers))?99:100,Math.floor(100*position/all.length));
+  const percent=Math.min(active.some(q=>!resolved(q,answers))?99:100,Math.floor(100*position/all.length));
   let theme;
   if(kind==='norms')theme=all.find(q=>q.id===cursor)?.section||all[position]?.section||'Résultat';
   else{
@@ -42,13 +43,24 @@ function create({classification,norms,questions,catalogue,explanations}){
   return {percent,theme};
  }
  function restore(kind,value){
-  const state={answers:{},comments:{},cursor:'',result:false};
+  const state={answers:{},comments:{},cursor:'',result:false,assistance:null,clarifications:{},editing:false,reviewMode:false,reviewSeen:[]};
   if(!value||typeof value!=='object'||Array.isArray(value))return state;
   const all=kind==='classification'?classification.allQuestions:questions.map(q=>({...q,options:yesNo}));
-  for(const q of all){const answer=value.answers?.[q.id];if(q.options.some(([v])=>v===answer))state.answers[q.id]=answer;if(typeof value.comments?.[q.id]==='string')state.comments[q.id]=value.comments[q.id].slice(0,10000);}
+  state.editing=value.editing===true;state.reviewMode=value.reviewMode===true;
+  state.reviewSeen=Array.isArray(value.reviewSeen)?[...new Set(value.reviewSeen.filter(id=>all.some(q=>q.id===id)))].slice(0,all.length):[];
+  for(const q of all){const answer=value.answers?.[q.id];if(answer==='unresolved'||q.options.some(([v])=>v===answer))state.answers[q.id]=answer;if(typeof value.comments?.[q.id]==='string')state.comments[q.id]=value.comments[q.id].slice(0,10000);}
   state.cursor=visible(kind,state.answers).some(q=>q.id===value.cursor)?value.cursor:'';state.result=value.result===true;
-  const unanswered=visible(kind,state.answers).find(q=>!known(q,state.answers));
+  const unanswered=visible(kind,state.answers).find(q=>!visited(q,state.answers));
   if(unanswered&&(state.result||Object.values(value.answers||{}).includes('checking')||Object.hasOwn(value.answers||{},'diagnosticVital')||Object.hasOwn(value.answers||{},'diagnosticImmediate'))){state.cursor=unanswered.id;state.result=false;}
+  const activeIds=new Set(visible(kind,state.answers).map(q=>q.id));
+  if(value.assistance&&activeIds.has(value.assistance.question)&&Array.isArray(value.assistance.path)){
+   state.assistance={question:value.assistance.question,version:typeof value.assistance.version==='string'?value.assistance.version.slice(0,80):'',path:(value.assistance.path.every(x=>typeof x==='string'&&x.length<80)?value.assistance.path.slice(0,8):[])};
+   state.cursor=state.assistance.question;state.result=false;
+  }
+  for(const q of all){
+   const record=value.clarifications?.[q.id];
+   if(record&&Object.hasOwn(state.answers,q.id)&&record.value===state.answers[q.id]&&Array.isArray(record.steps))state.clarifications[q.id]={value:record.value,steps:record.steps.filter(x=>x&&typeof x.question==='string'&&typeof x.answer==='string').slice(0,8).map(x=>({question:x.question.slice(0,1000),answer:x.answer.slice(0,1000)}))};
+  }
   return state;
  }
  function analysis(kind,answers){
@@ -64,17 +76,17 @@ function create({classification,norms,questions,catalogue,explanations}){
   const missing=active.filter(q=>!['yes','no'].includes(effective[q.id]));
   return {suggested:catalogue.filter(r=>norms.classify(r,effective)==='suggested').map(describe),possible:catalogue.filter(r=>norms.classify(r,effective)==='possible').map(describe),missing,complete:missing.length===0,answered:active.length-missing.length,total:active.length};
  }
- function answerRows(kind,state){return visible(kind,state.answers).map(q=>({id:q.id,label:q.label,answer:q.options.find(([value])=>value===state.answers[q.id])?.[1]||(state.answers[q.id]==='checking'?'À vérifier':'Sans réponse'),comment:state.comments?.[q.id]||''}));}
+ function answerRows(kind,state){return visible(kind,state.answers).map(q=>({id:q.id,label:q.label,answer:q.options.find(([value])=>value===state.answers[q.id])?.[1]||(state.answers[q.id]==='unresolved'?'À préciser — aide non concluante':'Sans réponse'),comment:state.comments?.[q.id]||'',guidance:state.clarifications?.[q.id]?.steps||[]}));}
  function summary(kind,state,date=new Date().toLocaleDateString('fr-FR')){
   const result=analysis(kind,state.answers),isClass=kind==='classification';
   const document={compact:!isClass,title:isClass?'Classification MDR':'Normes du dispositif',date,
-   outcome:isClass?(result.complete?'Classe proposée : '+result.highest:'Classification à préciser'):result.suggested.length+' références proposées',
+   outcome:isClass?(result.complete?'Classe proposée : '+result.highest:'Classification à préciser'):result.suggested.length+' références proposées'+(result.complete?'':' · provisoire'),
    note:isClass?'Proposition à vérifier selon la destination réelle et les règles du MDR. Ne vaut pas validation réglementaire.':'Applicabilité, édition et harmonisation à vérifier. Liste indicative, non exhaustive. Les références sont cliquables vers leur source.',
    sections:[]};
   if(isClass){
    const profile=answerRows(kind,state).filter(q=>['scope','form','active','contact','implant','duration'].includes(q.id));
    document.sections.push({title:'Profil déclaré',items:profile.map(q=>({text:({scope:'Type',form:'Forme',active:'Dispositif actif',contact:'Contact / pénétration',implant:'Implantable',duration:'Durée'})[q.id]+' : '+q.answer}))});
-   const retained=result.rules.filter(r=>r.applies==='yes');
+   const retained=result.rules.filter(r=>r.applies==='yes'&&(result.complete||![1,13].includes(r.n)));
    document.sections.push({title:result.complete?'Règles retenues et raisons':'Règles proposées, à confirmer',items:retained.map(r=>({text:'Règle '+r.n+' · '+r.class+' — '+r.reason}))});
    if(result.missing.length)document.sections.push({title:'Points à préciser',items:result.missing.map(text=>({text}))});
    document.sections.push({title:'Source',items:[{text:'Règlement (UE) 2017/745 · annexe VIII',url:'https://eur-lex.europa.eu/eli/reg/2017/745/oj'}]});
@@ -113,7 +125,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   return html;
  }
  function report(kind,state){return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ORBIVIA — '+(kind==='classification'?'Classification MDR':'Normes du dispositif')+'</title><style>body{font:14px/1.6 Arial,sans-serif;color:#17263a;margin:35px auto;padding:0 20px;max-width:1100px}h1{font-size:30px}h2{margin-top:30px}table{width:100%;border-collapse:collapse;margin:16px 0;font-size:12px}th,td{border:1px solid #dce3eb;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f5f8}.notice{padding:16px;border-left:4px solid #e7a116;background:#fffbf1}a{color:#325c83}@media print{body{margin:0}thead{display:table-header-group}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head><body>'+reportBody(kind,state)+'</body></html>';}
- return {visible,known,visited,progress,restore,analysis,answerRows,summary,reportBody,report,escape:E};
+ return {visible,known,visited,resolved,progress,restore,analysis,answerRows,summary,reportBody,report,escape:E};
 }
 if(typeof module==='object'&&module.exports)module.exports={create};else window.ORBIVIA_PUBLIC_TOOLS={create};
 })();

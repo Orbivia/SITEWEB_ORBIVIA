@@ -106,3 +106,25 @@ body.tool-page{display:flex;flex-direction:column;min-height:100vh;min-height:10
  .explained-choices .answer{padding:8px}
  .explained-choices .answer-copy small{line-height:1.25}
 }
+.help-choice{border:0;background:transparent;color:#48627e;font:500 12px/1.4 'Segoe UI',Arial,sans-serif;text-decoration:underline;text-underline-offset:3px;min-height:44px;padding:8px 0;text-align:left;cursor:pointer}
+.question-card:not(.assistance-card)>.help-choice{display:inline-flex;align-items:center;width:69%;margin-top:6px;vertical-align:middle}
+.question-card:not(.assistance-card)>.comment{display:inline-block;vertical-align:middle;width:30%;border:0;margin:6px 0 0;padding:0;font-size:11px}
+.question-card:not(.assistance-card)>.comment[open]{display:block;width:100%;margin-top:8px}
+.assistance-card h1{font-size:23px;line-height:1.35;letter-spacing:-.4px;margin-bottom:18px}
+.guide-parent{font-size:12px;line-height:1.5;color:#677a90;margin-bottom:14px}
+.guide-answers .answer{font-size:14px;min-height:44px}
+.guide-note,.guide-trace{font-size:13px;line-height:1.65;color:#52677f;margin:14px 0}
+.guide-trace{padding-left:18px}
+.guide-trace li{margin:8px 0}
+.guide-context{border-top:1px solid #e2e8f0;padding-top:12px;margin-top:12px;font-size:12px}
+.guide-context>summary{cursor:pointer;color:#52677f}
+.guide-context .info-bubble{margin-top:10px}
+.guide-context .info-bubble>div{position:static;width:100%;max-width:none;max-height:45vh;margin-top:10px}
+@media(max-width:700px){.assistance-card h1{font-size:19px;margin-bottom:14px}.guide-parent{font-size:11px;margin-bottom:12px}.guide-note,.guide-trace{font-size:12px}.help-choice{font-size:11px}.guide-answers .answer{font-size:13px}}
+.guide-explanation{font-size:12px;line-height:1.65;color:#52677f;margin-top:12px}
+.guide-explanation p{margin:10px 0}
+.guide-explanation a{display:block;color:#315c85;text-decoration:underline;margin-top:10px}
+.guide-short{grid-template-columns:repeat(2,minmax(0,1fr))}
+.guide-short .answer{justify-content:center;text-align:center}
+.guide-rationale{font-size:12px;color:#52677f;margin:12px 0}
+.guide-rationale>summary{cursor:pointer;padding:5px 0}

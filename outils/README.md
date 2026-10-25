@@ -71,3 +71,9 @@ La convention d’ordre des réponses place les cas usuels avant les fonctions p
 Les corrections de règles, la matrice de couverture et les hypothèses EEG / CPAP figurent dans [CLASSIFICATION_VALIDATION.md](CLASSIFICATION_VALIDATION.md). Le guide de référence est MDCG 2021-24 Rev.1 (avril 2026). Les 22 règles ont des scénarios attendus ; cette couverture ne vaut pas validation réglementaire exhaustive de tous les produits possibles.
 
 Contrôles : 121 tests réussis, dont 66 dédiés aux règles et cas limites ; EEG courant testé dans le navigateur en 28 questions (IIa, règle 10), CPAP simple en 27 questions (IIa, règles 9 et 12). La règle 4 est également évaluée pour les muqueuses lésées en cas d’invasivité. Une simple régulation technique ne déclenche pas automatiquement la règle 22.
+
+### Clarifications guidées
+
+Les 128 questions proposent « Je ne sais pas — aidez-moi à répondre ». Les sujets complexes sont décomposés en sous-questions. Toute proposition doit être confirmée. Une incertitude persistante permet de continuer avec un résultat provisoire et peut être revue directement à la fin. Les traces et brouillons sont conservés après rechargement.
+
+Voir [CLARIFICATION_MAINTENANCE.md](CLARIFICATION_MAINTENANCE.md) pour les cas examinés et le catalogue. Contrôles : 261 tests réussis, parcours de report/résolution et reprise ciblée vérifiés dans le navigateur, aide mobile à 390 × 640 px.
