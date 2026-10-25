@@ -137,3 +137,19 @@ test('every public question has several product-specific examples',()=>{
   }
  }
 });
+test('common answer ordering is stable, semantic and never preselects an answer',()=>{
+ const empty=model.restore('classification',null);
+ assert.deepEqual(empty.answers,{});
+ const first=id=>model.visible('classification',{scope:'md',form:'physical',active:'yes'}).find(q=>q.id===id)?.options[0][0];
+ assert.equal(first('active'),'yes');assert.equal(first('medicinal'),'no');assert.equal(first('nano'),'no');assert.equal(first('implant'),'no');
+ assert.equal(model.visible('classification',{scope:'md',form:'software'}).find(q=>q.id==='softwareRole').options[0][0],'independent');
+ const a=model.visible('classification',{scope:'md',form:'physical',active:'yes',nano:'yes'}).find(q=>q.id==='nano').options.map(([v])=>v);
+ const b=model.visible('classification',{scope:'md',form:'physical',active:'yes',nano:'no'}).find(q=>q.id==='nano').options.map(([v])=>v);
+ assert.deepEqual(a,b);
+});
+test('legacy diagnostic answers require the clearer clinical-context question',()=>{
+ const answers=complete({active:'yes',diagnostic:'yes',diagnosticUse:'routine'});delete answers.diagnosticUse;answers.diagnosticVital='yes';answers.diagnosticImmediate='no';
+ const state=model.restore('classification',{answers,cursor:'multiPurpose',result:true});
+ assert.equal(state.result,false);assert.equal(state.cursor,'diagnosticUse');
+ assert.equal(state.answers.diagnosticVital,undefined);assert.equal(state.answers.diagnosticUse,undefined);
+});

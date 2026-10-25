@@ -4,8 +4,16 @@
 function create({classification,norms,questions,catalogue,explanations}){
  const E=value=>String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
  const yesNo=[['yes','Oui'],['no','Non']];
+ function ordered(q,kind,answers){
+  let preferred;
+  if(kind==='norms')preferred=['electric','software','contact'].includes(q.id)?'yes':'no';
+  else preferred=({scope:'md',form:'physical',active:'yes',contact:'none',implant:'no',cleaning:'none',tissue:'none',controlTherapy:'none',duration:'short',multiPurpose:'yes',diagnosticUse:'routine',softwareRole:'drives'})[q.id]||'no';
+  if(q.id==='diagnostic')preferred=answers.therapyEnergy==='yes'?'no':'yes';
+  if(q.id==='softwareRole'&&answers.form==='software')preferred='independent';
+  return {...q,options:[...q.options].sort((a,b)=>(b[0]===preferred?1:0)-(a[0]===preferred?1:0))};
+ }
  function visible(kind,answers){
-  if(kind!=='classification')return norms.activeQuestions(questions,answers).map(q=>({...q,label:q.title,options:yesNo}));
+  if(kind!=='classification')return norms.activeQuestions(questions,answers).map(q=>ordered({...q,label:q.title,options:yesNo},kind,answers));
   const scopeHelp={
    md:{label:'Dispositif médical',description:'Pour soigner ou diagnostiquer. Ex. : CPAP, thermomètre.'},
    accessory:{label:'Accessoire dédié à un DM',description:'Permet ou assiste l’usage d’un DM, sans être lui-même un DM.'},
@@ -13,7 +21,7 @@ function create({classification,norms,questions,catalogue,explanations}){
    annex16:{label:'Sans but médical (annexe XVI)',description:'Ex. : lentilles colorées non correctrices, laser d’épilation.'},
    other:{label:'Autre produit / statut incertain',description:'Clarifier le statut du produit avant de le classer.'}
   };
-  return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quel type de produit ?',example:'Choisissez selon l’usage prévu par le fabricant. Un dispositif médical a une fonction médicale propre (diagnostic, prévention, surveillance, traitement…). Un accessoire contribue spécifiquement à l’usage ou à la fonction d’un DM, sans être lui-même un DM. Le diagnostic in vitro analyse un prélèvement humain : il relève de l’IVDR. L’annexe XVI vise seulement certains groupes sans but médical (dont lentilles non correctrices et certains équipements esthétiques). Si le statut est incertain, il doit être clarifié avant de proposer une classe.',options:q.options.map(([value,label])=>[value,scopeHelp[value]?.label||label]),optionHelp:Object.fromEntries(Object.entries(scopeHelp).map(([id,item])=>[id,item.description]))}:q);
+  return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quel type de produit ?',example:'Choisissez selon l’usage prévu par le fabricant. Un dispositif médical a une fonction médicale propre (diagnostic, prévention, surveillance, traitement…). Un accessoire contribue spécifiquement à l’usage ou à la fonction d’un DM, sans être lui-même un DM. Le diagnostic in vitro analyse un prélèvement humain : il relève de l’IVDR. L’annexe XVI vise seulement certains groupes sans but médical (dont lentilles non correctrices et certains équipements esthétiques). Si le statut est incertain, il doit être clarifié avant de proposer une classe.',options:q.options.map(([value,label])=>[value,scopeHelp[value]?.label||label]),optionHelp:Object.fromEntries(Object.entries(scopeHelp).map(([id,item])=>[id,item.description]))}:q).map(q=>ordered(q,kind,answers));
  }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
  function visited(q,answers){return known(q,answers);}
@@ -28,7 +36,8 @@ function create({classification,norms,questions,catalogue,explanations}){
   if(kind==='norms')theme=all.find(q=>q.id===cursor)?.section||all[position]?.section||'Résultat';
   else{
    const index=all.findIndex(q=>q.id===cursor);
-   theme=index<6?'Votre produit':index<19?'Fonctions particulières':index<45?'Contact et utilisation':index<58?'Fonctions actives':'Logiciel et usages';
+   const before=id=>index<all.findIndex(q=>q.id===id);
+   theme=before('medicinal')?'Votre produit':before('channel')?'Fonctions particulières':before('therapyEnergy')?'Contact et utilisation':before('softwareRole')?'Fonctions actives':'Logiciel et usages';
   }
   return {percent,theme};
  }
@@ -39,7 +48,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   for(const q of all){const answer=value.answers?.[q.id];if(q.options.some(([v])=>v===answer))state.answers[q.id]=answer;if(typeof value.comments?.[q.id]==='string')state.comments[q.id]=value.comments[q.id].slice(0,10000);}
   state.cursor=visible(kind,state.answers).some(q=>q.id===value.cursor)?value.cursor:'';state.result=value.result===true;
   const unanswered=visible(kind,state.answers).find(q=>!known(q,state.answers));
-  if(unanswered&&(state.result||Object.values(value.answers||{}).includes('checking'))){state.cursor=unanswered.id;state.result=false;}
+  if(unanswered&&(state.result||Object.values(value.answers||{}).includes('checking')||Object.hasOwn(value.answers||{},'diagnosticVital')||Object.hasOwn(value.answers||{},'diagnosticImmediate'))){state.cursor=unanswered.id;state.result=false;}
   return state;
  }
  function analysis(kind,answers){

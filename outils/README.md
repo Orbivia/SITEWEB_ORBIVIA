@@ -63,3 +63,11 @@ Contrôles : 51 tests, dont parcours conditionnels monotones et génération/rel
 La question initiale présente des boutons décrivant dispositif médical, accessoire, diagnostic in vitro, annexe XVI et statut à clarifier. Les exemples sont fondés sur les définitions MDR/IVDR et l’orientation de la Commission européenne. Les moteurs partagés de qualification, de classification et de proposition des normes restent inchangés.
 
 Contrôles de cette révision : 53 tests réussis ; parcours classe I de 18 questions réalisé dans le navigateur ; génération du lien PDF des résultats contrôlée ; PDFs d’une page rendus avec Poppler et inspectés ; reprise des anciennes réponses incertaines testée ; première question et pied de page à 390 × 640 px sans défilement, exemples repliés au départ.
+
+### Revue MDR et ordre des réponses
+
+La convention d’ordre des réponses place les cas usuels avant les fonctions particulières, sans présélection et sans modifier les valeurs enregistrées. Les seuils de gravité restent présentés comme des niveaux, sans supposer qu’un risque faible serait le plus probable. Le moteur partagé est en version `mdr-questionnaire-2`. La question de contexte clinique remplace les deux anciennes questions ambiguës sur les paramètres vitaux ; les anciennes réponses sont conservées pour les autres sujets mais ce nouveau point doit être répondu explicitement.
+
+Les corrections de règles, la matrice de couverture et les hypothèses EEG / CPAP figurent dans [CLASSIFICATION_VALIDATION.md](CLASSIFICATION_VALIDATION.md). Le guide de référence est MDCG 2021-24 Rev.1 (avril 2026). Les 22 règles ont des scénarios attendus ; cette couverture ne vaut pas validation réglementaire exhaustive de tous les produits possibles.
+
+Contrôles : 121 tests réussis, dont 66 dédiés aux règles et cas limites ; EEG courant testé dans le navigateur en 28 questions (IIa, règle 10), CPAP simple en 27 questions (IIa, règles 9 et 12). La règle 4 est également évaluée pour les muqueuses lésées en cas d’invasivité. Une simple régulation technique ne déclenche pas automatiquement la règle 22.
