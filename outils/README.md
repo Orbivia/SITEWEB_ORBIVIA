@@ -2,7 +2,7 @@
 
 Deux outils autonomes, accessibles depuis l’onglet **Outils** de la navigation du site :
 
-- `/outils/classification/` : **Classification MDR**, questionnaire conditionnel, résultat justifié et réponses à préciser. Aucun champ projet, fabricant ou relecteur.
+- `/outils/classification/` : **Classification MDR / IVDR**, questionnaire conditionnel, résultat justifié et réponses à préciser. Aucun champ projet, fabricant ou relecteur.
 - `/outils/normes/` : **Normes du dispositif**, questionnaire technique, références proposées, motifs fondés sur les réponses actives et liens vers les éditeurs. Aucun arbitrage manuel de chaque norme requis pour obtenir le résultat.
 
 L’accueil `/outils/` présente uniquement ces deux outils. Compliance Studio est désormais une application privée conservée dans Google Drive. Il n’est plus publié sur orbivia.fr.
@@ -34,7 +34,7 @@ node --test tests/*.test.*
 git diff --check
 ```
 
-245 tests réussis sur le site public. Le contrôle `python scripts/check-site.py` vérifie également les liens, ancres et ressources locales des 48 pages HTML, y compris les anciennes adresses de projets conservées comme redirections.
+328 tests réussis sur le site public. Le contrôle `python scripts/check-site.py` vérifie également les liens, ancres et ressources locales des 48 pages HTML, y compris les anciennes adresses de projets conservées comme redirections.
 
 ## Questions et clarifications
 
@@ -55,3 +55,11 @@ Les anciens choix `checking` sont ignorés à la restauration, sans effacer les 
 Les aides, commentaires et listes longues se déplient à la demande. Les cibles tactiles restent accessibles ; les contenus ouverts peuvent défiler. Le pied de page compact contient les trois liens légaux sur les deux outils.
 
 Le site public utilise uniquement le moteur `shared/`. Aucun fichier de Compliance Studio n’est nécessaire. L’ancien générateur de rapport HTML a été retiré : l’export public utilise uniquement `summary` et `pdf-export.js`. Les tests et documents de maintenance sont exclus de GitHub Pages par `_config.yml`.
+
+## Parcours IVDR
+
+Le choix « Diagnostic in vitro / accessoire DIV » ouvre 32 champs conditionnels consacrés à la qualification, à la fonction du produit et aux règles IVDR. Les sept règles et les règles d’application des logiciels, calibrateurs et contrôles à valeur assignée sont calculées par `shared/ivdr-engine.js`. `shared/classification-router.js` choisit le moteur et la progression de référence en fonction du type de produit. Les règles MDR existantes restent dans leur module propre.
+
+Les champs IVDR portent leurs exemples, explications, critères de clarification et liens officiels. Les quatre classes A, B, C et D utilisent le même écran et le PDF d’une page, avec titre, source et nom de fichier IVDR. Un point reporté reste provisoire et peut être revu directement. Les anciennes analyses IVDR interrompues au choix du type reprennent à la nouvelle qualification.
+
+Voir [IVDR_VALIDATION.md](IVDR_VALIDATION.md) pour la couverture, les cas limites et les sources.

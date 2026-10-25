@@ -8,5 +8,6 @@ exclude:
   - outils/README.md
   - outils/CLARIFICATION_MAINTENANCE.md
   - outils/CLASSIFICATION_VALIDATION.md
+  - outils/IVDR_VALIDATION.md
   - _preview
   - .openai

@@ -4,7 +4,9 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const root=path.join(__dirname,'../outils');
-const classification=require('../outils/shared/classification-engine.js');
+const mdr=require('../outils/shared/classification-engine.js');
+const ivdr=require('../outils/shared/ivdr-engine.js');
+const classification=require('../outils/shared/classification-router.js').create(mdr,ivdr);
 const norms=require('../outils/shared/normes-model.js');
 const questions=require('../outils/shared/normes-questions.js');
 const explanations=require('../outils/shared/normes-explications.js');
@@ -82,7 +84,7 @@ test('public progress keeps fixed positions and never retreats on a forward cond
    for(let i=0;i<150;i++){
     const progress=model.progress(kind,answers),q=model.visible(kind,answers).find(q=>!model.visited(q,answers));
     assert.ok(progress.percent>=last,kind+': percentage retreated');last=progress.percent;
-    if(!q){assert.equal(progress.percent,model.orientation(kind,answers)?0:model.visible(kind,answers).some(q=>!model.resolved(q,answers))?99:100);break;}
+    if(!q){if(model.orientation(kind,answers))assert.ok(progress.percent<100);else assert.equal(progress.percent,model.visible(kind,answers).some(q=>!model.resolved(q,answers))?99:100);break;}
     answers[q.id]=q.options[Math.min(variant,q.options.length-1)][0];
    }
   }
@@ -135,8 +137,8 @@ test('every public question has several product-specific examples',()=>{
  const examples=require('../outils/question-examples.js');
  for(const [kind,all] of [['classification',classification.allQuestions],['norms',questions]]){
   for(const q of all){
-   assert.ok(examples[kind][q.id]?.length>=2,kind+': '+q.id);
-   assert.ok(examples[kind][q.id].every(text=>typeof text==='string'&&text.length>30));
+   assert.ok((q.examples||examples[kind][q.id])?.length>=2,kind+': '+q.id);
+   assert.ok((q.examples||examples[kind][q.id]).every(text=>typeof text==='string'&&text.length>30));
   }
  }
 });
@@ -207,12 +209,30 @@ test('each initial product choice either continues MDR or gives a specific orien
   assert.ok(model.visible('classification',{scope}).some(q=>q.id==='form'));
   assert.equal(model.restore('classification',{answers:{scope},result:true}).result,false);
  }
- for(const scope of ['ivd','annex16','other','unresolved']){
+ for(const scope of ['annex16','other','unresolved']){
   const info=model.orientation('classification',{scope});assert.ok(info?.title);assert.ok(info.text.length>100);
   assert.equal(model.visible('classification',{scope}).length,1);
   assert.equal(model.progress('classification',{scope},'scope').percent,0);
  }
- assert.match(model.orientation('classification',{scope:'ivd'}).text,/A, B, C et D/);
+ assert.equal(model.orientation('classification',{scope:'ivd'}),null);
+ assert.ok(model.visible('classification',{scope:'ivd'}).some(q=>q.id==='ivdQualification'));
+ assert.equal(model.restore('classification',{answers:{scope:'ivd'},result:true}).cursor,'ivdQualification');
  assert.match(model.orientation('classification',{scope:'annex16'}).text,/pas pris en charge/);
  assert.equal(model.orientation('norms',{scope:'ivd'}),null);
+});
+
+test('IVDR PDF summaries use IVDR rules and sources and remain one page',async()=>{
+ const PDFLib=require('../outils/vendor/pdf-lib.min.js');
+ const exporter=require('../outils/pdf-export.js');
+ function route(overrides){const answers={scope:'ivd'},defaults={ivdQualification:'yes',ivdRole:'test',ivdAllUses:'yes',ivdMarkers:'listed',ivdSelfException:'other',...overrides};for(let i=0;i<100;i++){const q=model.visible('classification',answers).find(q=>!model.visited(q,answers));if(!q)return answers;answers[q.id]=defaults[q.id]??'no';}throw Error('Route did not finish');}
+ for(const overrides of [{ivdSelf:'yes',ivdSelfException:'pregnancy'},{ivdRole:'receptacle',ivdSterile:'yes'},Object.fromEntries(ivdr.allQuestions.filter(q=>q.options.some(([v])=>v==='yes')).map(q=>[q.id,'yes']))]){
+  const answers=route(overrides),summary=model.summary('classification',{answers,comments:{}});
+  assert.equal(summary.title,'Classification IVDR');assert.ok(summary.sections.some(s=>s.items.some(i=>i.url===ivdr.source)));
+  const bytes=await exporter.create(summary,PDFLib),doc=await PDFLib.PDFDocument.load(bytes);
+  assert.equal(doc.getPageCount(),1);assert.ok(bytes.length>1000);
+ }
+ const restored=model.restore('classification',{answers:{scope:'ivd'},result:true});assert.equal(restored.cursor,'ivdQualification');assert.equal(restored.result,false);
+ const answers=route({ivdSelf:'yes',ivdSelfException:'pregnancy'});answers.ivdPropagation='unresolved';
+ const r=model.analysis('classification',answers);assert.equal(r.complete,false);assert.equal(model.summary('classification',{answers,comments:{}}).outcome,'Classification à préciser');
+ const changed={...answers,scope:'md'};assert.equal(model.analysis('classification',changed).regulation,'MDR');assert.equal(model.visible('classification',changed).some(q=>q.id.startsWith('ivd')),false);
 });

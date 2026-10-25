@@ -1,7 +1,8 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const c=require('../outils/shared/classification-engine.js'),n=require('../outils/shared/normes-questions.js');
 const g=require('../outils/clarification.js');
-const groups=[['classification',c.allQuestions],['norms',n.map(q=>({...q,options:[['yes','Oui'],['no','Non']]}))]];
+const ivdr=require('../outils/shared/ivdr-engine.js');
+const groups=[['classification',[...c.allQuestions,...ivdr.allQuestions]],['norms',n.map(q=>({...q,options:[['yes','Oui'],['no','Non']]}))]];
 for(const [kind,questions] of groups)for(const q of questions)test('Clarification '+kind+'/'+q.id+' — all paths end with a valid proposal or an explicit unresolved point',()=>{
  let leaves=0;
  function visit(path){

@@ -7,7 +7,7 @@ function create({classification,norms,questions,catalogue,explanations}){
  function ordered(q,kind,answers){
   let preferred;
   if(kind==='norms')preferred=['electric','software','contact'].includes(q.id)?'yes':'no';
-  else preferred=({scope:'md',form:'physical',active:'yes',contact:'none',implant:'no',cleaning:'none',tissue:'none',controlTherapy:'none',duration:'short',multiPurpose:'yes',diagnosticUse:'routine',softwareRole:'drives'})[q.id]||'no';
+  else preferred=({ivdQualification:'yes',ivdAllUses:'yes',scope:'md',form:'physical',active:'yes',contact:'none',implant:'no',cleaning:'none',tissue:'none',controlTherapy:'none',duration:'short',multiPurpose:'yes',diagnosticUse:'routine',softwareRole:'drives'})[q.id]||'no';
   if(q.id==='diagnostic')preferred=answers.therapyEnergy==='yes'?'no':'yes';
   if(q.id==='softwareRole'&&answers.form==='software')preferred='independent';
   return {...q,options:[...q.options].sort((a,b)=>(b[0]===preferred?1:0)-(a[0]===preferred?1:0))};
@@ -17,7 +17,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   const scopeHelp={
    md:{label:'Dispositif médical',description:'Pour soigner ou diagnostiquer. Ex. : CPAP, thermomètre.'},
    accessory:{label:'Accessoire dédié à un DM',description:'Permet ou assiste l’usage d’un DM, sans être lui-même un DM.'},
-   ivd:{label:'Diagnostic in vitro',description:'Analyse d’un prélèvement humain. Ex. : test de grossesse.'},
+   ivd:{label:'Diagnostic in vitro / accessoire DIV',description:'Analyse d’un prélèvement humain, récipient ou accessoire dédié. Ex. : test de grossesse.'},
    annex16:{label:'Sans but médical (annexe XVI)',description:'Ex. : lentilles colorées non correctrices, laser d’épilation.'},
    other:{label:'Autre produit / statut incertain',description:'Clarifier le statut du produit avant de le classer.'}
   };
@@ -25,8 +25,8 @@ function create({classification,norms,questions,catalogue,explanations}){
  }
  function orientation(kind,answers){
   if(kind!=='classification')return null;
+  if(answers.scope==='ivd'&&answers.ivdQualification==='no')return {title:'La qualification IVDR doit être revue',text:'Sans destination IVD humaine ou accessoire IVD dédié prévue par le fabricant, ce parcours ne peut pas attribuer une classe IVDR. Un produit de recherche seul, vétérinaire ou de laboratoire général n’est pas automatiquement un DIV. Revenez au choix du produit pour examiner le cadre adapté.'};
   const cases={
-   ivd:{title:'Ce produit relève du parcours IVDR',text:'Vous avez choisi un diagnostic in vitro : l’analyse porte sur un prélèvement humain hors du corps. Les classes A, B, C et D relèvent du règlement IVDR. Cet outil calcule uniquement les classes MDR I, IIa, IIb et III ; il ne classe pas les produits IVDR.',source:'Règlement IVDR — annexe VIII',url:'https://eur-lex.europa.eu/eli/reg/2017/746/oj'},
    annex16:{title:'Un parcours spécifique à l’annexe XVI est nécessaire',text:'Vous avez choisi un produit sans destination médicale de l’annexe XVI. Son classement nécessite notamment l’examen du groupe de produits, des spécifications communes et des actes de reclassification. Ce cas n’est pas pris en charge par le calculateur actuel.',source:'Règlement MDR — annexe XVI',url:'https://eur-lex.europa.eu/eli/reg/2017/745/oj'},
    other:{title:'Précisons d’abord le statut du produit',text:'La qualification n’est pas encore établie. L’aide au choix peut distinguer dispositif médical, accessoire, diagnostic in vitro et produit sans destination médicale. Aucune classe ne peut être calculée à ce stade.'},
    unresolved:{title:'Le statut du produit reste à préciser',text:'Les informations disponibles ne permettent pas encore de choisir le cadre réglementaire. Vous pouvez reprendre l’aide ou modifier le type de produit. Aucune classe ne peut être calculée à ce stade.'}
@@ -35,16 +35,17 @@ function create({classification,norms,questions,catalogue,explanations}){
  }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
  function visited(q,answers){return known(q,answers)||answers[q.id]==='unresolved';}
- function resolved(q,answers){return known(q,answers)&&!['unclear','unknown','unknownClass','multiple'].includes(answers[q.id])&&!(q.id==='controlTherapy'&&answers[q.id]==='other')&&!(q.id==='scope'&&answers[q.id]==='other');}
+ function resolved(q,answers){return known(q,answers)&&!['unclear','unknown','unknownClass','multiple'].includes(answers[q.id])&&!(q.id==='controlTherapy'&&answers[q.id]==='other')&&!(q.id==='scope'&&answers[q.id]==='other')&&!(q.id==='ivdAllUses'&&answers[q.id]==='no')&&!(q.id==='ivdQualification'&&answers[q.id]==='no');}
  // Each question keeps a fixed position, independent of conditional branches.
  // Skipped branches advance the route; they never change its denominator.
  function progress(kind,answers,cursor){
-  const all=kind==='classification'?classification.allQuestions:questions;
+  const all=kind==='classification'?(classification.referenceQuestions?.(answers)||classification.allQuestions):questions;
   const active=visible(kind,answers),next=active.find(q=>!visited(q,answers));
-  const position=orientation(kind,answers)?0:next?all.findIndex(q=>q.id===next.id):all.length;
+  const position=orientation(kind,answers)?(answers.scope==='ivd'?1:0):next?all.findIndex(q=>q.id===next.id):all.length;
   const percent=Math.min(active.some(q=>!resolved(q,answers))?99:100,Math.floor(100*position/all.length));
   let theme;
   if(kind==='norms')theme=all.find(q=>q.id===cursor)?.section||all[position]?.section||'Résultat';
+  else if(answers.scope==='ivd')theme=all.find(q=>q.id===cursor)?.section||'Diagnostic in vitro';
   else{
    const index=all.findIndex(q=>q.id===cursor);
    const before=id=>index<all.findIndex(q=>q.id===id);
@@ -88,18 +89,19 @@ function create({classification,norms,questions,catalogue,explanations}){
  }
  function answerRows(kind,state){return visible(kind,state.answers).map(q=>({id:q.id,label:q.label,answer:q.options.find(([value])=>value===state.answers[q.id])?.[1]||(state.answers[q.id]==='unresolved'?'À préciser — aide non concluante':'Sans réponse'),comment:state.comments?.[q.id]||'',guidance:state.clarifications?.[q.id]?.steps||[]}));}
  function summary(kind,state,date=new Date().toLocaleDateString('fr-FR')){
-  const result=analysis(kind,state.answers),isClass=kind==='classification';
-  const document={compact:!isClass,title:isClass?'Classification MDR':'Normes du dispositif',date,
+  const result=analysis(kind,state.answers),isClass=kind==='classification',ivd=isClass&&result.regulation==='IVDR';
+  const document={compact:!isClass,title:isClass?(ivd?'Classification IVDR':'Classification MDR'):'Normes du dispositif',date,
    outcome:isClass?(result.complete?'Classe proposée : '+result.highest:'Classification à préciser'):result.suggested.length+' références proposées'+(result.complete?'':' · provisoire'),
-   note:isClass?'Proposition à vérifier selon la destination réelle et les règles du MDR. Ne vaut pas validation réglementaire.':'Applicabilité, édition et harmonisation à vérifier. Liste indicative, non exhaustive. Les références sont cliquables vers leur source.',
+   note:isClass?'Proposition à vérifier selon la destination réelle et les règles du '+(ivd?'IVDR':'MDR')+'. Ne vaut pas validation réglementaire.':'Applicabilité, édition et harmonisation à vérifier. Liste indicative, non exhaustive. Les références sont cliquables vers leur source.',
    sections:[]};
   if(isClass){
-   const profile=answerRows(kind,state).filter(q=>['scope','form','active','contact','implant','duration'].includes(q.id));
-   document.sections.push({title:'Profil déclaré',items:profile.map(q=>({text:({scope:'Type',form:'Forme',active:'Dispositif actif',contact:'Contact / pénétration',implant:'Implantable',duration:'Durée'})[q.id]+' : '+q.answer}))});
-   const retained=result.rules.filter(r=>r.applies==='yes'&&(result.complete||![1,13].includes(r.n)));
+   const profile=answerRows(kind,state).filter(q=>(ivd?['scope','ivdRole','ivdQualification','ivdLinkedClass','ivdSelf','ivdNear','ivdSterile']:['scope','form','active','contact','implant','duration']).includes(q.id));
+   document.sections.push({title:'Profil déclaré',items:profile.map(q=>({text:(({scope:'Type',form:'Forme',active:'Dispositif actif',contact:'Contact / pénétration',implant:'Implantable',duration:'Durée'})[q.id]||q.label)+' : '+q.answer}))});
+   if(result.sterileA)document.sections.push({title:'État stérile',items:[{text:'Classe A stérile : intervention de l’organisme notifié limitée aux aspects de stérilité (article 48, paragraphe 10).'}]});
+   const retained=result.rules.filter(r=>r.applies==='yes'&&(result.complete||!(ivd?[6]:[1,13]).includes(r.n)));
    document.sections.push({title:result.complete?'Règles retenues et raisons':'Règles proposées, à confirmer',items:retained.map(r=>({text:'Règle '+r.n+' · '+r.class+' — '+r.reason}))});
    if(result.missing.length)document.sections.push({title:'Points à préciser',items:result.missing.map(text=>({text}))});
-   document.sections.push({title:'Source',items:[{text:'Règlement (UE) 2017/745 · annexe VIII',url:'https://eur-lex.europa.eu/eli/reg/2017/745/oj'}]});
+   document.sections.push({title:'Source',items:[{text:ivd?'Règlement (UE) 2017/746 · annexe VIII':'Règlement (UE) 2017/745 · annexe VIII',url:result.source||'https://eur-lex.europa.eu/eli/reg/2017/745/oj'}]});
   }else{
    const short={electric:'Électromédical',software:'Logiciel médical',connected:'Connexion réseau',cloud:'Serveur distant',ai:'IA',alarm:'Alarmes',closedloop:'Boucle fermée',home:'Domicile',emergency:'Secours',transport:'Chocs et vibrations',clinical:'Investigation clinique',contact:'Contact corporel',substance:'Substances',polymer:'Polymères exposés',blood:'Contact sanguin',implant:'Implant',activeImplant:'Implant actif',nano:'Nanomatériaux',tissue:'Tissus biologiques',sterile:'Produit stérile',eto:'Oxyde d’éthylène',radiation:'Irradiation',steam:'Vapeur',reprocess:'Retraitement',cleanroom:'Salle propre',resp:'Circuit respiratoire',sleep:'Apnées du sommeil',oxygen:'Oxygène',anesthesia:'Anesthésie',infusion:'Perfusion',catheter:'Cathéter intravasculaire',connectors:'Petits raccords',enteral:'Voie entérale',dialysis:'Dialyse',cardiac:'Cardiovasculaire',ecg:'ECG',vascular:'Vasculaire',neuro:'Neurologie',surgical:'Chirurgie',endoscopy:'Endoscopie',orthopedic:'Implant orthopédique',prosthesis:'Prothèse / orthèse externe',wheelchair:'Fauteuil roulant',dental:'Dentaire',ophthalmic:'Ophtalmologie',contactLens:'Lentilles',wound:'Plaies',monitor:'Surveillance physiologique',neonatal:'Nouveau-nés',bed:'Lit médicalisé',hearing:'Audition',thermal:'Chauffage patient',gloves:'Gants médicaux',mask:'Masque médical',textile:'Textiles de bloc',xray:'Rayons X',mri:'IRM',ultrasound:'Ultrasons',laser:'Laser',optical:'Lumière médicale',radiotherapy:'Radiothérapie',imaging:'Images médicales',lab:'Laboratoire',ivd:'Diagnostic in vitro'};
    const effective=norms.effectiveAnswers(questions,state.answers),byId=new Map(catalogue.map(r=>[r.id,r]));

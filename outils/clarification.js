@@ -166,6 +166,10 @@ const normTrees={
   step('Une réponse de l’utilisateur est-elle nécessaire, immédiatement ou dans un délai défini, pour réduire ce risque ?',result('yes'),result('no')),result('no'))
 };
 function definition(kind,q){
+ if(kind==='classification'&&q.probe){
+  if(q.clarification)return q.clarification;
+  return {question:typeof q.probe==='string'?q.probe:q.label,options:q.options,next:Object.fromEntries(q.options.map(([value])=>[value,result(value)]))};
+ }
  if(kind==='classification'&&trees[q.id])return trees[q.id];
  if(kind==='norms'&&normTrees[q.id])return normTrees[q.id];
  if(kind==='classification'&&choices[q.id])return {question:'Quelle situation est effectivement prévue ou documentée pour le produit ?',options:q.options.map(([value,label])=>[value,choices[q.id][value]||label]),next:Object.fromEntries(q.options.map(([value])=>[value,result(value)]))};

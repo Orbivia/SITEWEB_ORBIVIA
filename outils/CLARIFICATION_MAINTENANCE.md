@@ -157,3 +157,7 @@ Après modification des arbres, incrémenter version dans clarification.js et la
 | ivd | Relève-t-il plutôt du diagnostic in vitro (IVDR) ? | Critère concret | 1–1 |
 
 {"Arbre ciblé":12,"Choix décrits":10,"Critère concret":106}
+
+## Ajout IVDR — 25 octobre 2026
+
+Le parcours comporte maintenant 32 champs IVDR supplémentaires, soit 160 champs aidés dans les deux outils. Leurs critères, exemples et sources sont portés par `shared/ivdr-engine.js` ; quatre critères composés utilisent des aides en plusieurs étapes. Voir IVDR_VALIDATION.md. La suite complète comporte 328 tests réussis.
