@@ -63,3 +63,9 @@ Le choix « Diagnostic in vitro / accessoire DIV » ouvre 32 champs conditionnel
 Les champs IVDR portent leurs exemples, explications, critères de clarification et liens officiels. Les quatre classes A, B, C et D utilisent le même écran et le PDF d’une page, avec titre, source et nom de fichier IVDR. Un point reporté reste provisoire et peut être revu directement. Les anciennes analyses IVDR interrompues au choix du type reprennent à la nouvelle qualification.
 
 Voir [IVDR_VALIDATION.md](IVDR_VALIDATION.md) pour la couverture, les cas limites et les sources.
+
+## Revue des parcours — 25 octobre 2026
+
+La suite comprend désormais 333 tests, dont 1 200 simulations reproductibles (300 MDR, 300 accessoires MDR, 300 IVDR, 300 normes), chacune avec reprise après chaque réponse, incertitudes et modification d’une réponse antérieure. Les simulations contrôlent terminaison, reprise, progression et absence de conclusion définitive en présence de réponses non résolues. Les tests existants contrôlent règles et exports.
+
+Corrections : les configurations MDR non couvertes et les tissus viables restent visibles dans la liste des points à préciser et empêchent 100 %. L’écran de refus de qualification IVDR permet de revoir directement cette réponse, sans effacer le parcours. Cette revue teste les comportements couverts ; elle ne démontre pas l’absence de tout bug ni une validation réglementaire exhaustive.

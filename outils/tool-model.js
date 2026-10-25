@@ -35,7 +35,7 @@ function create({classification,norms,questions,catalogue,explanations}){
  }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
  function visited(q,answers){return known(q,answers)||answers[q.id]==='unresolved';}
- function resolved(q,answers){return known(q,answers)&&!['unclear','unknown','unknownClass','multiple'].includes(answers[q.id])&&!(q.id==='controlTherapy'&&answers[q.id]==='other')&&!(q.id==='scope'&&answers[q.id]==='other')&&!(q.id==='ivdAllUses'&&answers[q.id]==='no')&&!(q.id==='ivdQualification'&&answers[q.id]==='no');}
+ function resolved(q,answers){return known(q,answers)&&!['unclear','unknown','unknownClass','multiple'].includes(answers[q.id])&&!(q.id==='controlTherapy'&&answers[q.id]==='other')&&!(q.id==='scope'&&answers[q.id]==='other')&&!(q.id==='multiPurpose'&&answers[q.id]==='no')&&!(q.id==='tissue'&&answers[q.id]==='viable')&&!(q.id==='ivdAllUses'&&answers[q.id]==='no')&&!(q.id==='ivdQualification'&&answers[q.id]==='no');}
  // Each question keeps a fixed position, independent of conditional branches.
  // Skipped branches advance the route; they never change its denominator.
  function progress(kind,answers,cursor){

@@ -236,3 +236,11 @@ test('IVDR PDF summaries use IVDR rules and sources and remain one page',async()
  const r=model.analysis('classification',answers);assert.equal(r.complete,false);assert.equal(model.summary('classification',{answers,comments:{}}).outcome,'Classification à préciser');
  const changed={...answers,scope:'md'};assert.equal(model.analysis('classification',changed).regulation,'MDR');assert.equal(model.visible('classification',changed).some(q=>q.id.startsWith('ivd')),false);
 });
+
+test('MDR configurations not covered and viable tissues remain directly reviewable, below 100 percent',()=>{
+ for(const overrides of [{multiPurpose:'no'},{tissue:'viable'}]){
+  const answers=complete(overrides);assert.equal(model.analysis('classification',answers).complete,false);
+  const pending=model.visible('classification',answers).filter(q=>!model.resolved(q,answers));assert.ok(pending.length);
+  assert.ok(model.progress('classification',answers).percent<100);
+ }
+});

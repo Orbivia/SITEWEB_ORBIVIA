@@ -51,7 +51,7 @@ function answerQuestion(q,value,clarification){
 }
 function normRow(r){return '<details class="norm-row" data-reference="'+E((r.id+' '+r.title).toLocaleLowerCase('fr'))+'"><summary><span><strong>'+E(r.id)+'</strong><span>'+E(r.title)+'</span></span><span class="row-info" aria-label="Explication et source">i</span></summary><div class="norm-detail"><h3>Pourquoi cette référence ?</h3><ul>'+r.reasons.map(reason=>'<li>'+E(reason)+'</li>').join('')+'</ul><h3>Ce qu’elle couvre</h3><p>'+E(r.scope)+'</p><p>'+E(r.use)+'</p><a href="'+E(r.url)+'" target="_blank" rel="noopener noreferrer">'+E(r.sourceLabel)+' ↗</a><p class="muted">Édition, amendements et statut d’harmonisation à vérifier.</p></div></details>';}
 function renderOrientation(info){
- app.innerHTML='<div class="result-heading"><span class="eyebrow">Orientation du produit</span><h1>'+E(info.title)+'</h1></div><section class="result-card"><p>'+E(info.text)+'</p>'+(info.url?'<p><a href="'+E(info.url)+'" target="_blank" rel="noopener noreferrer">'+E(info.source)+' ↗</a></p>':'')+'</section><div class="question-controls">'+action('Modifier le type de produit','scope-change','primary')+action('M’aider à choisir','scope-help','quiet')+'</div><p class="scope-note">Le questionnaire MDR se poursuit pour un dispositif médical ou un accessoire relevant de ce règlement.</p>';
+ app.innerHTML='<div class="result-heading"><span class="eyebrow">Orientation du produit</span><h1>'+E(info.title)+'</h1></div><section class="result-card"><p>'+E(info.text)+'</p>'+(info.url?'<p><a href="'+E(info.url)+'" target="_blank" rel="noopener noreferrer">'+E(info.source)+' ↗</a></p>':'')+'</section><div class="question-controls">'+(kind==='classification'&&state.answers.scope==='ivd'&&state.answers.ivdQualification==='no'?action('Revoir la qualification IVDR','qualification-change','primary'):'')+action('Modifier le type de produit','scope-change','quiet')+action('M’aider à choisir','scope-help','quiet')+'</div><p class="scope-note">Le parcours de classification se poursuit lorsque le cadre MDR ou IVDR et la destination du produit sont établis.</p>';
 }
 function renderResult(){
  const r=model.analysis(kind,state.answers),isClass=kind==='classification',ivd=isClass&&r.regulation==='IVDR',qs=model.visible(kind,state.answers),pending=qs.filter(q=>!model.resolved(q,state.answers));
@@ -96,6 +96,7 @@ document.addEventListener('click',event=>{
  const b=event.target.closest('[data-answer],[data-action],[data-edit],[data-probe]');if(!b||b.disabled)return;
  const qs=model.visible(kind,state.answers),at=qs.findIndex(q=>q.id===state.cursor),cmd=b.dataset.action;
  const current=qs.find(q=>q.id===state.cursor);
+ if(cmd==='qualification-change'){state.editing=true;reviewMode=false;state.assistance=null;moveTo(qs.find(q=>q.id==='ivdQualification'));return;}
  if(cmd==='scope-change'||cmd==='scope-help'){state.editing=true;reviewMode=false;state.assistance=cmd==='scope-help'?{question:'scope',version:guide.version,path:[]}:null;moveTo(qs.find(q=>q.id==='scope'));return;}
  if(cmd==='assist-start'&&current){state.assistance={question:current.id,version:guide.version,path:[]};save();render();focus();return;}
  if(b.hasAttribute('data-probe')&&state.assistance&&current){
