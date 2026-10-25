@@ -12,7 +12,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ORBIVIA_Compliance_Studio_offline
-          path: outils/compliance/
+          path: |
+            outils/compliance/
+            tests/compliance.test.cjs
+            tests/compliance-models.test.cjs
           if-no-files-found: error
           compression-level: 9
           retention-days: 1
