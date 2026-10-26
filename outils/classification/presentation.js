@@ -1023,6 +1023,11 @@ if(typeof window!=='undefined'){
  window.addEventListener('resize',()=>{const app=document.getElementById('tool-app');if(app)reservePrompt(app);});
  document.fonts?.ready.then(()=>{promptWidth=0;const app=document.getElementById('tool-app');if(app)reservePrompt(app);});
 }
-const api={questions,icons,view,icon,answerIcon,reservePrompt};
+const roleGroups={
+ analysis:{label:'Test, instrument ou logiciel',description:'Réactif, kit, automate d’analyse ou logiciel IVD.',values:['test','instrument','software']},
+ support:{label:'Récipient, produit général ou accessoire',description:'Tube de prélèvement, tampon, produit de lavage ou accessoire dédié.',values:['receptacle','lab','accessory']},
+ reference:{label:'Calibrateur ou contrôle',description:'Produit servant à étalonner l’analyse ou à vérifier ses résultats.',values:['calibrator','assignedControl','unassignedControl']}
+};
+const api={questions,icons,view,icon,answerIcon,reservePrompt,roleGroups};
 if(typeof module==='object'&&module.exports)module.exports=api;else window.ORBIVIA_QUESTION_PRESENTATION=api;
 })();

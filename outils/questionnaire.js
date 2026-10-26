@@ -4,7 +4,7 @@ const kind=document.body.dataset.tool;
 const model=window.ORBIVIA_PUBLIC_TOOLS.create({classification:window.ORBIVIA_CLASSIFICATION,norms:window.ORBIVIA_NORMES_MODEL,questions:window.ORBIVIA_NORMES_QUESTIONS,catalogue:window.ORBIVIA_NORMES_CATALOGUE,explanations:window.ORBIVIA_NORMES_EXPLICATIONS});
 const guide=window.ORBIVIA_CLARIFICATION;
 const E=model.escape,key='orbivia-public-'+kind+'-v1',app=document.getElementById('tool-app');
-let state=model.restore(kind,null),storageOK=true,locked=false,reviewMode=false,reviewSeen=[],reportURL=null;
+let state=model.restore(kind,null),storageOK=true,locked=false,reviewMode=false,reviewSeen=[],reportURL=null,roleGroup=null;
 try{state=model.restore(kind,JSON.parse(localStorage.getItem(key)||'null'));}catch(_error){storageOK=false;}
 reviewMode=state.reviewMode;reviewSeen=state.reviewSeen;
 function save(){state.reviewMode=reviewMode;state.reviewSeen=reviewSeen;try{localStorage.setItem(key,JSON.stringify(state));storageOK=true;}catch(_error){storageOK=false;}}
@@ -25,10 +25,14 @@ function renderQuestion(withoutAssistance=false){
  const isScope=kind==='classification'&&q.id==='scope';
  const presentation=kind==='classification'?window.ORBIVIA_QUESTION_PRESENTATION:null;
  const view=presentation?presentation.view(q):{title:q.label,criterion:q.intro||'',options:q.options,descriptions:q.optionHelp||{}};
- const options=isScope?view.options.filter(([value])=>value!=='annex16'):view.options;
+ const isRole=kind==='classification'&&q.id==='ivdRole',groups=presentation?.roleGroups;
+ if(!isRole)roleGroup=null;
+ const group=isRole?groups?.[roleGroup]:null,isFamily=isRole&&!group;
+ const options=isFamily?Object.entries(groups).map(([id,g])=>[id,g.label]):isRole?view.options.filter(([value])=>group.values.includes(value)):isScope?view.options.filter(([value])=>value!=='annex16'):view.options;
+ const descriptions=isFamily?Object.fromEntries(Object.entries(groups).map(([id,g])=>[id,g.description])):view.descriptions;
  const choiceLayout=options.length>=4?'many':q.options.every(([,label])=>label.length<28)?'short':'long';
  const at=qs.findIndex(x=>x.id===q.id),{percent,theme}=model.progress(kind,state.answers,q.id);
- app.innerHTML='<div class="question-progress"><span>'+E(theme)+(reviewMode?' · À préciser':'')+'<b>'+percent+' % parcouru</b></span><progress aria-label="Avancement du questionnaire" max="100" value="'+percent+'"></progress></div><section class="question-card'+(isScope?' scope-card':'')+'"><div class="question-prompt"><div class="question-heading"><h1>'+E(view.title).replace(/\s+\?$/,'&nbsp;?')+'</h1>'+questionHelp(q)+'</div>'+(view.criterion?'<p class="question-intro">'+E(view.criterion)+'</p>':'')+'</div><div class="answer-list choices-'+choiceLayout+(Object.keys(view.descriptions).length?' explained-choices':'')+(kind==='classification'&&q.id==='scope'?' scope-choices':'')+'">'+options.map(([value,label])=>'<button type="button" class="answer '+(state.answers[q.id]===value?'selected':'')+'" data-answer="'+E(value)+'" data-question="'+E(q.id)+'" aria-pressed="'+(state.answers[q.id]===value)+'">'+(presentation?presentation.answerIcon(q,value):'<span aria-hidden="true"></span>')+'<span class="answer-copy">'+E(label)+(view.descriptions[value]?'<small>'+E(view.descriptions[value])+'</small>':'')+'</span></button>').join('')+'</div>'+(isScope?'':'<button type="button" class="help-choice" data-action="assist-start">Aide au choix</button>')+'</section><div class="question-controls">'+(isScope?'':action('← Précédent','previous'))+action('Reprendre à zéro','restart','quiet')+'</div><p class="save-status" id="save-status" role="status">'+(storageOK?'':'Enregistrement indisponible sur cet appareil.')+'</p>';
+ app.innerHTML='<div class="question-progress"><span>'+E(theme)+(reviewMode?' · À préciser':'')+'<b>'+percent+' % parcouru</b></span><progress aria-label="Avancement du questionnaire" max="100" value="'+percent+'"></progress></div><section class="question-card'+(isScope?' scope-card':'')+'"><div class="question-prompt"><div class="question-heading"><h1>'+E(isFamily?'Quelle famille de produit IVD ?':view.title).replace(/\s+\?$/,'&nbsp;?')+'</h1>'+questionHelp(q)+'</div>'+(view.criterion?'<p class="question-intro">'+E(view.criterion)+'</p>':'')+'</div><div class="answer-list choices-'+choiceLayout+(Object.keys(descriptions).length?' explained-choices':'')+(kind==='classification'&&q.id==='scope'?' scope-choices':'')+'">'+options.map(([value,label])=>'<button type="button" class="answer '+(state.answers[q.id]===value?'selected':'')+'" '+(isFamily?'data-action="role-group" data-group="':'data-answer="')+E(value)+'" data-question="'+E(q.id)+'" aria-pressed="'+(state.answers[q.id]===value)+'">'+(isFamily?'':presentation?presentation.answerIcon(q,value):'<span aria-hidden="true"></span>')+'<span class="answer-copy">'+E(label)+(descriptions[value]?'<small>'+E(descriptions[value])+'</small>':'')+'</span></button>').join('')+'</div>'+(isScope?'':'<button type="button" class="help-choice" data-action="assist-start">Aide au choix</button>')+'</section><div class="question-controls">'+(isScope?'':action(group?'← Familles de produits':'← Précédent',group?'role-back':'previous'))+action('Reprendre à zéro','restart','quiet')+'</div><p class="save-status" id="save-status" role="status">'+(storageOK?'':'Enregistrement indisponible sur cet appareil.')+'</p>';
  if(presentation)presentation.reservePrompt(app);
  const previous=app.querySelector('[data-action="previous"]');if(previous)previous.disabled=at===0;
 }
@@ -125,6 +129,8 @@ document.addEventListener('click',event=>{
  const b=event.target.closest('[data-answer],[data-action],[data-edit],[data-probe]');if(!b||b.disabled)return;
  const qs=model.visible(kind,state.answers),at=qs.findIndex(q=>q.id===state.cursor),cmd=b.dataset.action;
  const current=qs.find(q=>q.id===state.cursor);
+ if(cmd==='role-group'&&current?.id==='ivdRole'&&window.ORBIVIA_QUESTION_PRESENTATION?.roleGroups[b.dataset.group]){roleGroup=b.dataset.group;render();focus();return;}
+ if(cmd==='role-back'&&current?.id==='ivdRole'){roleGroup=null;render();focus();return;}
  if(cmd==='qualification-change'){state.editing=true;reviewMode=false;state.assistance=null;moveTo(qs.find(q=>q.id==='ivdQualification'));return;}
  if(cmd==='scope-change'||cmd==='scope-help'){state.editing=true;reviewMode=false;state.assistance=cmd==='scope-help'?{question:'scope',version:guide.version,path:[]}:null;moveTo(qs.find(q=>q.id==='scope'));return;}
  if(cmd==='assist-start'&&current){state.assistance={question:current.id,version:guide.version,path:[]};save();render();focus();return;}
@@ -152,7 +158,7 @@ document.addEventListener('click',event=>{
  if(cmd==='export-pdf'){preparePDF(b);return;}
  if(cmd==='restart'){document.getElementById('restart-dialog').showModal();return;}
  if(cmd==='cancel-restart'){document.getElementById('restart-dialog').close();return;}
- if(cmd==='confirm-restart'){state=model.restore(kind,null);reviewMode=false;reviewSeen=[];save();document.getElementById('restart-dialog').close();render();focus();}
+ if(cmd==='confirm-restart'){roleGroup=null;state=model.restore(kind,null);reviewMode=false;reviewSeen=[];save();document.getElementById('restart-dialog').close();render();focus();}
 });
 document.addEventListener('input',event=>{
  const input=event.target;

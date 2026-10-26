@@ -29,3 +29,12 @@ test('only concrete entry choices use decorative SVGs; other answers remain text
   assert.equal(presentation.answerIcon(q,'no'),'');
  }
 });
+
+test('IVDR families cover every role exactly once, with three choices per screen',()=>{
+ const groups=Object.values(presentation.roleGroups);
+ assert.equal(groups.length,3);
+ for(const g of groups)assert.equal(g.values.length,3);
+ const values=groups.flatMap(g=>g.values);
+ assert.equal(new Set(values).size,values.length);
+ assert.deepEqual(values.sort(),questions.find(q=>q.id==='ivdRole').options.map(([v])=>v).sort());
+});
