@@ -17,10 +17,10 @@ function questionHelp(q,inline=false){
  const content=(criterion?'<strong>Critère examiné</strong><p>'+E(criterion)+'</p>':'')+'<strong>Pour répondre</strong><p>'+E(text||'Répondez d’après les caractéristiques et les usages prévus du dispositif.')+'</p>'+(kind==='norms'&&n?.example?'<p>'+E(n.example)+'</p>':'')+(examples.length?'<strong class="examples-heading">Exemples de produits</strong><ul class="product-examples">'+examples.map(item=>'<li>'+E(item)+'</li>').join('')+'</ul>':'')+(kind==='norms'?'<strong>Sources pour approfondir</strong><p>'+E(n?.sourceNote||'Applicabilité et édition à vérifier.')+'</p>':'')+(sources||(kind==='classification'?'<a href="https://eur-lex.europa.eu/eli/reg/2017/745/oj" target="_blank" rel="noopener noreferrer">'+(q.id==='scope'?'MDR — définitions et annexe XVI':'MDR — annexe VIII')+' ↗</a><a href="https://health.ec.europa.eu/system/files/2021-10/mdcg_2021-24_en_0.pdf" target="_blank" rel="noopener noreferrer">Guide MDCG 2021-24 rév.1 · avril 2026 ↗</a>':(n?.sources||[]).map(s=>'<a href="'+E(s.url)+'" target="_blank" rel="noopener noreferrer">'+E(s.label)+' ↗</a>').join('')));
  return inline?'<div class="guide-explanation">'+content+'</div>':'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div>'+content+'</div></details>';
 }
-function focus(){const h=app.querySelector('h1');if(h){h.tabIndex=-1;h.focus({preventScroll:true});}window.scrollTo({top:0,behavior:'auto'});}
-function renderQuestion(){
+function focus(){const sheet=app.querySelector('.help-sheet[open]');if(sheet){const title=sheet.querySelector('h3');if(title){title.tabIndex=-1;title.focus({preventScroll:true});}return;}const h=app.querySelector('h1');if(h){h.tabIndex=-1;h.focus({preventScroll:true});}window.scrollTo({top:0,behavior:'auto'});}
+function renderQuestion(withoutAssistance=false){
  const qs=model.visible(kind,state.answers),q=qs.find(q=>q.id===state.cursor)||qs.find(q=>!model.visited(q,state.answers))||qs[0];state.cursor=q.id;
- if(state.assistance?.question===q.id){renderAssistance(q);return;}
+ if(!withoutAssistance&&state.assistance?.question===q.id){renderAssistance(q);return;}
  const isScope=kind==='classification'&&q.id==='scope';
  const presentation=kind==='classification'?window.ORBIVIA_QUESTION_PRESENTATION:null;
  const view=presentation?presentation.view(q):{title:q.label,criterion:q.intro||'',options:q.options,descriptions:q.optionHelp||{}};
@@ -40,6 +40,16 @@ function renderAssistance(q){
  }else{
   const label=view.value==='unresolved'?'Ce point reste à préciser':q.options.find(([v])=>v===view.value)[1];
   content='<span class="eyebrow">'+(view.value==='unresolved'?'Aide non concluante':'Proposition à confirmer')+'</span><h1>'+E(label)+'</h1>'+(view.trace.length?'<details class="guide-rationale"><summary>'+view.trace.length+' précision(s) à l’origine de cette proposition</summary><ul class="guide-trace">'+view.trace.map(item=>'<li>'+E(item.question)+' <strong>'+E(item.answer)+'</strong></li>').join('')+'</ul></details>':'')+'<p class="guide-note">'+E(view.value==='unresolved'?'Vous pouvez continuer. Le résultat restera provisoire et ce point sera accessible directement à la fin.':'Cette proposition repose uniquement sur les précisions que vous venez d’apporter. Confirmez-la si elle correspond à l’usage prévu du produit.')+'</p>'+action(view.value==='unresolved'?'Continuer avec ce point à préciser':'Confirmer et continuer','assist-commit','primary');
+ }
+ if(kind==='classification'){
+  const scroll=window.scrollY;renderQuestion(true);window.scrollTo({top:scroll,behavior:'auto'});
+  const sheet=document.createElement('dialog');sheet.className='help-sheet';sheet.setAttribute('aria-labelledby','help-sheet-title');
+  const title=window.ORBIVIA_QUESTION_PRESENTATION?.view(q).title||q.label;
+  const panel=content.replace('Proposition à confirmer','Réponse proposée').replace('Confirmer et continuer','Utiliser cette réponse').replace('<h1>','<h3 id="help-probe">').replace('</h1>','</h3>');
+  sheet.innerHTML='<header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide pour cette question</h2></div><button type="button" class="sheet-close" data-action="assist-close" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+E(title)+'</p>'+panel+'<details class="guide-context"><summary>Exemples et explication</summary>'+questionHelp(q,true)+'</details><div class="sheet-controls">'+action('← Précision précédente','assist-back','quiet')+'</div><p class="help-sheet-note">Vous précisez la même question. La progression reste inchangée.</p></div>';
+  app.append(sheet);const back=sheet.querySelector('[data-action="assist-back"]');back.disabled=!draft.path.length;back.hidden=!draft.path.length;
+  sheet.addEventListener('cancel',event=>{event.preventDefault();state.assistance=null;save();render();focus();});
+  sheet.showModal();window.scrollTo({top:scroll,behavior:'auto'});return;
  }
  app.innerHTML='<div class="question-progress"><span>'+E(theme)+'<b>'+percent+' % parcouru</b></span><progress aria-label="Avancement du questionnaire" max="100" value="'+percent+'"></progress></div><section class="question-card assistance-card"><p class="guide-parent">Aide au choix · '+E(q.label)+'</p>'+content+'<details class="guide-context"><summary>Exemples et explication de la question</summary>'+questionHelp(q,true)+'</details></section><div class="question-controls">'+action('← Étape précédente','assist-back')+action('Revenir à la question','assist-close','quiet')+'</div>';
  app.querySelector('[data-action="assist-back"]').disabled=!draft.path.length;
