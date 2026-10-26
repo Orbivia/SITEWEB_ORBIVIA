@@ -125,9 +125,16 @@ document.addEventListener('click',event=>{
  if(cmd==='qualification-change'){state.editing=true;reviewMode=false;state.assistance=null;moveTo(qs.find(q=>q.id==='ivdQualification'));return;}
  if(cmd==='scope-change'||cmd==='scope-help'){state.editing=true;reviewMode=false;state.assistance=cmd==='scope-help'?{question:'scope',version:guide.version,path:[]}:null;moveTo(qs.find(q=>q.id==='scope'));return;}
  if(cmd==='assist-examples'&&current){
-  const dialog=document.createElement('dialog');dialog.className='help-examples';dialog.setAttribute('aria-label','Exemples et explication');
-  dialog.innerHTML='<button type="button" class="sheet-close" aria-label="Fermer les exemples">×</button>'+questionHelp(current,true);
-  app.append(dialog);dialog.querySelector('button').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>dialog.remove());dialog.showModal();return;
+  const sheet=app.querySelector('.help-sheet'),content=sheet.querySelector('.help-sheet-content');
+  const choices=document.createElement('div');choices.className='sheet-choice-content';choices.append(...content.childNodes);choices.hidden=true;content.append(choices);
+  const examples=document.createElement('div');examples.className='sheet-example-content';
+  const items=current.examples||window.ORBIVIA_QUESTION_EXAMPLES?.[kind]?.[current.id]||[];
+  examples.innerHTML='<h3>Exemples et explication</h3><p>'+E(current.example||'')+'</p>'+(items.length?'<ul>'+items.slice(0,2).map(text=>'<li>'+E(text)+'</li>').join('')+'</ul>':'')+action('← Revenir aux choix','assist-examples-back','quiet');
+  content.append(examples);fitHelpSheet(sheet);examples.querySelector('h3').tabIndex=-1;examples.querySelector('h3').focus({preventScroll:true});return;
+ }
+ if(cmd==='assist-examples-back'){
+  const sheet=app.querySelector('.help-sheet'),content=sheet.querySelector('.help-sheet-content'),choices=content.querySelector('.sheet-choice-content');
+  content.querySelector('.sheet-example-content').remove();content.append(...choices.childNodes);choices.remove();fitHelpSheet(sheet);focus();return;
  }
  if(cmd==='assist-start'&&current){state.assistance={question:current.id,version:guide.version,path:[]};save();render();focus();return;}
  if(b.hasAttribute('data-probe')&&state.assistance&&current){

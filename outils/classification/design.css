@@ -252,8 +252,8 @@ body:has(.help-sheet[open]){overflow:hidden}
 .help-sheet[data-density="3"] .help-sheet-header{padding:6px 14px}
 .help-sheet[data-density="3"] h3{font-size:15px}
 .help-sheet[data-density="3"] .guide-answers{gap:5px}
-.help-examples{width:min(580px,calc(100% - 32px));max-height:85dvh;border:1px solid #dfe4de;border-radius:16px;padding:20px;background:white;color:#202a32}
-.help-examples::backdrop{background:#17263a55}
-.help-examples>.sheet-close{margin-left:auto}
-.help-examples .guide-explanation{font-size:14px;line-height:1.5}
 @media(max-width:700px){.help-sheet:has(.guide-answers .answer:nth-child(4)){max-height:calc(100dvh - 16px)}}
+
+.sheet-example-content{font-size:14px;line-height:1.5}
+.help-sheet[data-density="2"] .sheet-example-content,.help-sheet[data-density="3"] .sheet-example-content{font-size:12px;line-height:1.4}
+.sheet-example-content li{margin-bottom:10px}
