@@ -291,6 +291,10 @@ body:has(.help-sheet[open]){overflow:hidden}
 @media(max-width:700px){
  [data-tool="classification"].is-question #tool-app{display:flex;flex-direction:column;min-height:calc(100svh - 120px)}
  [data-tool="classification"].is-question #tool-app>.question-controls{margin-top:auto;padding-top:12px;background:#f6f7f5f5}
- [data-tool="classification"] .question-controls>[data-action="restart"]{margin-left:auto;border:1px solid #dce2dc;border-radius:10px;background:#fff;padding:10px;min-height:44px}
  [data-tool="classification"].is-question #tool-app>.save-status:empty{display:none}
 }
+
+/* Reset is a visible secondary button on every screen size. */
+[data-tool="classification"] [data-action="restart"]{border:1px solid #cbd3cd;border-radius:10px;background:#fff;color:#34443b;padding:10px 16px;min-height:44px;text-decoration:none}
+[data-tool="classification"] .question-controls>[data-action="restart"]{margin-left:auto}
+[data-tool="classification"] [data-action="restart"]:hover{border-color:#bd8515;background:#fff8e9}
