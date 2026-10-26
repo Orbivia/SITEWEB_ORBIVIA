@@ -39,13 +39,13 @@ function selectedOption(q){if(q.type==="single")return q.options.find(o=>o[0]===
 function optionMarkup(q,o){
  const [id,label,description,picto]=o,selected=q.type==="single"?answers[q.id]===id:has(q.id,id);
  const mark=selected?(q.type==="priority"?String((answers[q.id]||[]).indexOf(id)+1):"✓"):"";
- return '<button class="answer cx-option" type="button" data-option="'+esc(id)+'" aria-pressed="'+selected+'"><span class="choice-icon cx-icon"><img src="'+icon(picto)+'" alt=""></span><span class="answer-copy cx-option-copy"><strong>'+esc(label)+'</strong>'+(description?'<small>'+esc(description)+'</small>':'')+'</span>'+(q.type==="single"?'':'<span class="cx-check" aria-hidden="true">'+esc(mark)+'</span>')+'</button>';
+ return '<button class="answer cx-option" type="button" data-option="'+esc(id)+'" aria-pressed="'+selected+'">'+(['peer','power','infra'].includes(q.id)?'<span class="choice-icon cx-icon"><img src="'+icon(picto)+'" alt=""></span>':'')+'<span class="answer-copy cx-option-copy"><strong>'+esc(label)+'</strong>'+(description?'<small>'+esc(description)+'</small>':'')+'</span>'+(q.type==="single"?'':'<span class="cx-check" aria-hidden="true">'+esc(mark)+'</span>')+'</button>';
 }
-function optionEditor(q){const multi=q.type!=="single";return '<div class="cx-options" data-columns="'+(q.options.length>=5?"two":"one")+'" data-multi="'+multi+'">'+q.options.map(o=>optionMarkup(q,o)).join("")+'</div>'+(q.type==="priority"?'<p class="cx-secondary" id="priority-count">'+((answers[q.id]||[]).length)+'/3 critères sélectionnés</p>':"")}
+function optionEditor(q){const multi=q.type!=="single";return '<div class="cx-options" data-columns="'+"one"+'" data-multi="'+multi+'">'+q.options.map(o=>optionMarkup(q,o)).join("")+'</div>'+(q.type==="priority"?'<p class="cx-secondary" id="priority-count">'+((answers[q.id]||[]).length)+'/3 critères sélectionnés</p>':"")}
 function editor(q){return optionEditor(q)}
 function current(){const qs=active();pos=Math.min(Math.max(0,pos),qs.length-1);return qs[pos]}
 
-let helpOpen=false;
+let helpOpen=false,renderedQuestion=null;
 function render(){
  if(result){renderResult();return}
  const q=current(),qs=active(),position=Q.findIndex(x=>x.id===q.id)+1;
@@ -60,9 +60,14 @@ function render(){
  +'<div class="question-prompt cx-question-prompt"><div class="question-heading cx-head"><h1 id="question-title">'+esc(q.title)+'</h1>'
  +'<button class="cx-info-button" type="button" data-action="toggle-help" aria-expanded="'+expanded+'" aria-label="Explication de la question">i</button></div>'
  +'<div class="cx-help" '+(helpOpen?'':'hidden')+'><p>'+esc(q.help)+'</p><small>'+esc(q.example)+'</small></div>'
- +'<button class="cx-help-trigger" type="button" data-action="toggle-help" aria-expanded="'+expanded+'"><span class="cx-help-symbol" aria-hidden="true">?</span>'+ (helpOpen?"Masquer l’aide":"Aide au choix")+'</button>'
- +'</div><div class="cx-options-wrapper">'+editor(q)+'</div></section>'
+ +'</div><div class="cx-options-wrapper">'+editor(q)+'</div><button class="cx-help-trigger" type="button" data-action="toggle-help" aria-expanded="'+expanded+'"><span class="cx-help-symbol" aria-hidden="true">?</span>'+ (helpOpen?"Masquer l’aide":"Aide au choix")+'</button>'
+ +'</section>'
  +'<div class="question-controls cx-controls">'+back+'<div class="cx-control-right">'+nextButton+restart+'</div></div>';
+ if(renderedQuestion!==q.id&&typeof window!=='undefined'){
+  const heading=root.querySelector('h1');if(heading){heading.tabIndex=-1;heading.focus?.({preventScroll:true});}
+  window.scrollTo({top:0,behavior:'auto'});
+ }
+ renderedQuestion=q.id;
 }
 function updateContinue(){const b=root.querySelector('[data-action="next"]');if(b)b.disabled=!done(current())}
 function next(){if(!done(current()))return;const qs=active();helpOpen=false;if(pos>=qs.length-1){result=true;render();return}pos++;render()}
@@ -106,7 +111,7 @@ function renderResult(){
  +'<h1>Premières pistes de connectivité</h1><p class="cx-header-note">Présélection indicative selon les réponses. Les caractéristiques et la sécurité de la solution doivent être confirmées lors de la conception.</p>'
  +'<div class="cx-picks">'+options+'</div>'
  +'<div class="cx-result-warning"><strong>À vérifier avant conception.</strong> Portée sur site, consommation globale, intégration de l’antenne, authentification, chiffrement et mises à jour sécurisées. La technologie radio seule ne garantit pas la cybersécurité.</div>'
- +'<h2 class="cx-result-title">Votre profil de besoin</h2><div class="cx-summary-list">'+rows+'</div>'
+ +'<details class="cx-profile"><summary>Relire mes réponses</summary><div class="cx-summary-list">'+rows+'</div></details>'
  +'</section><div class="cx-result-actions"><button type="button" class="tool-button cx-button" data-action="edit">← Modifier les réponses</button><button type="button" class="tool-button quiet cx-button" data-action="reset">Reprendre à zéro</button></div>'
  +'<p class="cx-note">Il s’agit d’une aide à la présélection, non d’une validation de faisabilité ou d’une certification. Aucune réponse n’est envoyée à Orbivia.</p>';
 }

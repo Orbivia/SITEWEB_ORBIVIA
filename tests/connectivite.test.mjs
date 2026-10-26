@@ -12,7 +12,7 @@ function harness(){
  const localStorage={getItem(k){return memory[k]??null},setItem(k,v){memory[k]=v},removeItem(k){delete memory[k]}};
  vm.runInNewContext(js,{document,localStorage});
  return {
-  get html(){return html},get saved(){return memory["orbivia-connectivite-v1"]},
+  get html(){return html},get saved(){return memory["orbivia-connectivite-v2"]},
   option(id){callbacks.click({target:{closest(sel){return sel==="[data-option]"?{dataset:{option:id}}:null}}})},
   action(id){callbacks.click({target:{closest(sel){return sel==="[data-action]"?{dataset:{action:id}}:null}}})},
   slide(n){callbacks.input({target:{id:"range-control",value:String(n)}})}
@@ -20,7 +20,7 @@ function harness(){
 }
 test("20 questions, syntaxe valide, icônes locales",()=>{
  new vm.Script(js);
- assert.equal((js.match(/id:"[a-z]+",section:/g)||[]).length,20);
+ assert.equal((js.match(/"?section"?:/g)||[]).length,20);
  for(const m of js.matchAll(/icon\("([a-z]+)"\)/g))assert.ok(fs.existsSync(path.join(base,"icones",m[1]+".svg")),m[1]);
 });
 test("navigation complète sans blocage et synthèse",()=>{
@@ -31,7 +31,7 @@ test("navigation complète sans blocage et synthèse",()=>{
   t.action("next");
  }
  assert.match(t.html,/Premières pistes de connectivité/);
- assert.match(t.html,/Points à vérifier/);
+ assert.match(t.html,/À vérifier avant conception/);
  assert.ok(t.saved?.includes("priorities"));
  t.action("reset");
  assert.match(t.html,/Avec quoi votre objet doit-il communiquer/);
