@@ -1,0 +1,30 @@
+/* Hub : liste homogène avec le questionnaire MDR (860px) */
+body.tool-page:has(.orbivia-tool-list){background:#f6f7f5;color:#202a32}
+.tool-hub:has(.orbivia-tool-list){width:min(860px,calc(100% - 48px));margin:30px auto 62px;padding:0}
+.tool-hub .hub-topline{font-size:11px;font-weight:650;letter-spacing:.12em;color:#6c756d;margin:0 0 12px}
+.tool-hub .hub-topline span{padding:0 7px;color:#bd922f}
+.tool-hub:has(.orbivia-tool-list) h1{font-size:clamp(29px,3.8vw,38px);letter-spacing:-1.1px;line-height:1.2;font-weight:650;margin:0 0 24px;color:#202a32}
+.orbivia-tool-list{display:grid;gap:12px}
+.orbivia-tool-item{display:flex;align-items:center;gap:18px;min-height:124px;padding:22px 24px;border:1px solid #e0e5df;border-radius:17px;background:#fff;color:#202a32;text-decoration:none;box-shadow:0 6px 25px #28312806;transition:background .18s,border-color .18s,transform .18s}
+.orbivia-tool-item:hover{background:#fffdf7;border-color:#d4b365;transform:translateY(-1px)}
+.orbivia-tool-item:focus-visible{outline:3px solid #e7a116;outline-offset:3px}
+.orbivia-tool-icon{display:grid;place-items:center;flex:none;width:54px;height:54px;border:1px solid #e3e7e1;border-radius:13px;background:#fafbf9}
+.orbivia-tool-icon svg{height:28px;width:28px;stroke:#202a32}
+.orbivia-tool-body{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.orbivia-tool-category{font-size:11px;font-weight:600;letter-spacing:.025em;color:#9a721b}
+.orbivia-tool-body strong{font-size:clamp(17px,2.8vw,22px);line-height:1.2;letter-spacing:-.35px;font-weight:650;color:#202a32}
+.orbivia-tool-description{font-size:12px;line-height:1.5;color:#68766d;margin-top:2px}
+.orbivia-tool-link{flex:none;display:grid;place-items:center;background:#f9f3e4;color:#865f0d;border:1px solid #e8d6a9;width:37px;height:37px;border-radius:10px;font-size:19px}
+.orbivia-tool-item:hover .orbivia-tool-link{background:#e7a116;border-color:#e7a116;color:#202a32}
+@media(max-width:700px){
+.tool-hub:has(.orbivia-tool-list){width:calc(100% - 28px);margin:16px auto 36px}
+.tool-hub:has(.orbivia-tool-list) h1{font-size:29px;margin-bottom:19px}
+.orbivia-tool-list{gap:9px}
+.orbivia-tool-item{padding:16px 13px;gap:11px;min-height:100px;border-radius:14px}
+.orbivia-tool-icon{width:41px;height:41px;border-radius:10px}.orbivia-tool-icon svg{width:22px;height:22px}
+.orbivia-tool-body strong{font-size:16px}.orbivia-tool-category{font-size:10px}
+.orbivia-tool-description{font-size:11px;line-height:1.35}
+.orbivia-tool-link{width:28px;height:28px;border-radius:8px;font-size:16px}
+}
+@media(max-width:360px){.orbivia-tool-icon{display:none}.orbivia-tool-item{padding:15px 12px}}
+@media(prefers-reduced-motion:reduce){.orbivia-tool-item{transition:none}}
