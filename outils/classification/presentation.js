@@ -11,7 +11,7 @@ const questions={
    "accessory": "Accessoire dédié à un DM",
    "ivd": "Diagnostic in vitro",
    "annex16": "Produit sans destination médicale de l’annexe XVI",
-   "other": "Autre produit / Je ne sais pas"
+   "other": "Autre produit"
   },
   "descriptions": {
    "md": "Pour soigner ou diagnostiquer : CPAP, thermomètre…",
