@@ -270,11 +270,11 @@ body:has(.help-sheet[open]){overflow:hidden}
 @media(min-width:900px){
  [data-tool="classification"] .tool-shell{width:min(1120px,calc(100% - 80px));margin:34px auto 28px}
  [data-tool="classification"] .question-progress{margin-bottom:26px}
- [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure){display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:42px;row-gap:16px;align-items:start;padding:32px;background:#fff;border:1px solid #e0e5df;border-radius:18px;box-shadow:0 8px 30px #202a3205}
+ [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure){display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:42px;row-gap:16px;grid-template-rows:minmax(0,1fr) auto;min-height:400px;box-sizing:border-box;align-items:start;padding:32px;background:#fff;border:1px solid #e0e5df;border-radius:18px;box-shadow:0 8px 30px #202a3205}
  [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.question-prompt{grid-column:1;grid-row:1;min-height:0}
  [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.answer-list{grid-column:2;grid-row:1 / span 2;grid-template-columns:1fr;gap:10px}
  [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.answer-list:has(.answer:nth-child(5)){grid-template-columns:repeat(2,minmax(0,1fr))}
- [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.help-choice{grid-column:1;grid-row:2;align-self:start;width:auto;margin:0;font-size:13px}
+ [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.help-choice{grid-column:1;grid-row:2;align-self:end;justify-self:start;width:auto;margin:0;font-size:13px}
  [data-tool="classification"] .question-card:not(.assistance-card) .answer{min-height:76px;padding:16px;box-shadow:none;background:#fafbf9}
  [data-tool="classification"] .question-card:not(.assistance-card) .answer:hover{background:#fff8e9}
  [data-tool="classification"] .question-card .question-prompt h1{font-size:29px;line-height:1.22;letter-spacing:-.7px}
