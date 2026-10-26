@@ -240,3 +240,20 @@ body:has(.help-sheet[open]){overflow:hidden}
 
 .help-sheet .help-choice::before{display:none}
 .help-sheet .guide-note:empty{display:none}
+
+/* Choice sheet: no expandable prose mixed with the answers. */
+.help-sheet{max-height:calc(100dvh - 16px)}
+.help-sheet .guide-answers:has(.answer:nth-child(4)){grid-template-columns:repeat(2,minmax(0,1fr))}
+.help-sheet .sheet-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.help-sheet[data-density="1"] .help-sheet-context,.help-sheet[data-density="2"] .help-sheet-context,.help-sheet[data-density="3"] .help-sheet-context{padding:7px 9px;font-size:12px;margin-bottom:10px}
+.help-sheet[data-density="1"] h3,.help-sheet[data-density="2"] h3,.help-sheet[data-density="3"] h3{font-size:17px;margin-bottom:10px}
+.help-sheet[data-density="2"] .answer,.help-sheet[data-density="3"] .answer{font-size:12px!important;padding:8px!important;min-height:44px!important}
+.help-sheet[data-density="2"] .help-sheet-content,.help-sheet[data-density="3"] .help-sheet-content{padding:10px 14px}
+.help-sheet[data-density="3"] .help-sheet-header{padding:6px 14px}
+.help-sheet[data-density="3"] h3{font-size:15px}
+.help-sheet[data-density="3"] .guide-answers{gap:5px}
+.help-examples{width:min(580px,calc(100% - 32px));max-height:85dvh;border:1px solid #dfe4de;border-radius:16px;padding:20px;background:white;color:#202a32}
+.help-examples::backdrop{background:#17263a55}
+.help-examples>.sheet-close{margin-left:auto}
+.help-examples .guide-explanation{font-size:14px;line-height:1.5}
+@media(max-width:700px){.help-sheet:has(.guide-answers .answer:nth-child(4)){max-height:calc(100dvh - 16px)}}

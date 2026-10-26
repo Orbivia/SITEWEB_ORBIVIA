@@ -32,12 +32,20 @@ function renderQuestion(withoutAssistance=false){
  if(presentation)presentation.reservePrompt(app);
  const previous=app.querySelector('[data-action="previous"]');if(previous)previous.disabled=at===0;
 }
+function fitHelpSheet(sheet){
+ const content=sheet.querySelector('.help-sheet-content');
+ for(let density=0;density<=3;density++){
+  sheet.dataset.density=density;
+  if(content.scrollHeight<=content.clientHeight+1)break;
+ }
+}
+window.addEventListener('resize',()=>{const sheet=app.querySelector('.help-sheet[open]');if(sheet)fitHelpSheet(sheet);});
 function renderAssistance(q){
  const draft=state.assistance;if(draft.version!==guide.version){draft.path=[];draft.version=guide.version;}const view=guide.view(kind,q,draft.path);draft.path=view.path;
  const {percent,theme}=model.progress(kind,state.answers,q.id);
  let content;
  if(view.type==='step'){
-  content='<h1>'+E(view.question)+'</h1><div class="answer-list guide-answers'+(view.options.every(([,label])=>label.length<20)?' guide-short':'')+'">'+view.options.map(([value,label])=>'<button type="button" class="answer" data-probe="'+E(value)+'">'+E(label)+'</button>').join('')+'</div><button type="button" class="help-choice" data-probe="?">Passer ce point</button>';
+  content='<h1>'+E(view.question)+'</h1><div class="answer-list guide-answers'+(view.options.every(([,label])=>label.length<20)?' guide-short':'')+'">'+view.options.map(([value,label])=>'<button type="button" class="answer" data-probe="'+E(value)+'">'+E(label)+'</button>').join('')+'</div>';
  }else{
   const label=view.value==='unresolved'?'Ce point reste à préciser':q.options.find(([v])=>v===view.value)[1];
   content='<span class="eyebrow">'+(view.value==='unresolved'?'Aide non concluante':'Proposition à confirmer')+'</span><h1>'+E(label)+'</h1>'+(view.trace.length?'<details class="guide-rationale"><summary>'+view.trace.length+' étape(s) du choix</summary><ul class="guide-trace">'+view.trace.map(item=>'<li>'+E(item.question)+' <strong>'+E(item.answer)+'</strong></li>').join('')+'</ul></details>':'')+'<p class="guide-note">'+E(view.value==='unresolved'?'Ce point restera à préciser.':'')+'</p>'+action(view.value==='unresolved'?'Continuer avec ce point à préciser':'Confirmer et continuer','assist-commit','primary');
@@ -47,10 +55,10 @@ function renderAssistance(q){
   const sheet=document.createElement('dialog');sheet.className='help-sheet';sheet.setAttribute('aria-labelledby','help-sheet-title');
   const title=window.ORBIVIA_QUESTION_PRESENTATION?.view(q).title||q.label;
   const panel=content.replace('Proposition à confirmer','Réponse proposée').replace('Confirmer et continuer','Utiliser cette réponse').replace('<h1>','<h3 id="help-probe">').replace('</h1>','</h3>');
-  sheet.innerHTML='<header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide au choix</h2></div><button type="button" class="sheet-close" data-action="assist-close" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+E(title)+'</p>'+panel+'<details class="guide-context"><summary>Exemples et explication</summary>'+questionHelp(q,true)+'</details><div class="sheet-controls">'+action('← Précision précédente','assist-back','quiet')+'</div></div>';
+  sheet.innerHTML='<header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide au choix</h2></div><button type="button" class="sheet-close" data-action="assist-close" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+E(title)+'</p>'+panel+'<div class="sheet-controls">'+action('Exemples et explication','assist-examples','quiet')+action('← Précision précédente','assist-back','quiet')+'</div></div>';
   app.append(sheet);const back=sheet.querySelector('[data-action="assist-back"]');back.disabled=!draft.path.length;back.hidden=!draft.path.length;
   sheet.addEventListener('cancel',event=>{event.preventDefault();state.assistance=null;save();render();focus();});
-  sheet.showModal();window.scrollTo({top:scroll,behavior:'auto'});return;
+  sheet.showModal();fitHelpSheet(sheet);window.scrollTo({top:scroll,behavior:'auto'});return;
  }
  app.innerHTML='<div class="question-progress"><span>'+E(theme)+'<b>'+percent+' % parcouru</b></span><progress aria-label="Avancement du questionnaire" max="100" value="'+percent+'"></progress></div><section class="question-card assistance-card"><p class="guide-parent">Aide au choix · '+E(q.label)+'</p>'+content+'<details class="guide-context"><summary>Exemples et explication de la question</summary>'+questionHelp(q,true)+'</details></section><div class="question-controls">'+action('← Étape précédente','assist-back')+action('Revenir à la question','assist-close','quiet')+'</div>';
  app.querySelector('[data-action="assist-back"]').disabled=!draft.path.length;
@@ -116,6 +124,11 @@ document.addEventListener('click',event=>{
  const current=qs.find(q=>q.id===state.cursor);
  if(cmd==='qualification-change'){state.editing=true;reviewMode=false;state.assistance=null;moveTo(qs.find(q=>q.id==='ivdQualification'));return;}
  if(cmd==='scope-change'||cmd==='scope-help'){state.editing=true;reviewMode=false;state.assistance=cmd==='scope-help'?{question:'scope',version:guide.version,path:[]}:null;moveTo(qs.find(q=>q.id==='scope'));return;}
+ if(cmd==='assist-examples'&&current){
+  const dialog=document.createElement('dialog');dialog.className='help-examples';dialog.setAttribute('aria-label','Exemples et explication');
+  dialog.innerHTML='<button type="button" class="sheet-close" aria-label="Fermer les exemples">×</button>'+questionHelp(current,true);
+  app.append(dialog);dialog.querySelector('button').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>dialog.remove());dialog.showModal();return;
+ }
  if(cmd==='assist-start'&&current){state.assistance={question:current.id,version:guide.version,path:[]};save();render();focus();return;}
  if(b.hasAttribute('data-probe')&&state.assistance&&current){
   if(locked)return;locked=true;setTimeout(()=>{locked=false;},250);
