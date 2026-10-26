@@ -221,9 +221,9 @@ body:has(.help-sheet[open]){overflow:hidden}
 [data-tool="classification"] .pending-box{flex-wrap:wrap;gap:12px}
 [data-tool="classification"] .export-actions .tool-button:not(.primary){background:transparent;color:#53615a;text-decoration:underline;min-height:44px}
 
-/* Keep all answer choices on screen, including the nine IVDR product roles. */
+/* Compact mobile choices with a full-width target for each answer. */
 @media(max-width:700px){
- [data-tool="classification"] .question-card:not(.assistance-card) .choices-many:not(.scope-choices){grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ [data-tool="classification"] .question-card:not(.assistance-card) .choices-many:not(.scope-choices){grid-template-columns:1fr;gap:6px}
  [data-tool="classification"] .question-card:not(.assistance-card) .choices-many:not(.scope-choices) .answer{min-height:44px;padding:9px;grid-column:auto}
  [data-tool="classification"] .choices-many:not(.scope-choices) .answer>.answer-copy{font-size:12px;line-height:1.35}
  [data-tool="classification"] .question-card:not(.assistance-card) .answer{min-height:54px;padding:11px}
@@ -285,4 +285,12 @@ body:has(.help-sheet[open]){overflow:hidden}
  [data-tool="classification"] .question-card:not(.assistance-card) .choices-many .answer{min-height:44px;padding:10px 16px}
  [data-tool="classification"] .choices-many .answer>.answer-copy{font-size:14px;line-height:1.35}
  [data-tool="classification"] .question-controls{margin-top:14px}
+}
+
+/* Mobile: stacked choices and navigation at the foot of the question. */
+@media(max-width:700px){
+ [data-tool="classification"].is-question #tool-app{display:flex;flex-direction:column;min-height:calc(100svh - 120px)}
+ [data-tool="classification"].is-question #tool-app>.question-controls{margin-top:auto;padding-top:12px;background:#f6f7f5f5}
+ [data-tool="classification"] .question-controls>[data-action="restart"]{margin-left:auto;border:1px solid #dce2dc;border-radius:10px;background:#fff;padding:10px;min-height:44px}
+ [data-tool="classification"].is-question #tool-app>.save-status:empty{display:none}
 }
