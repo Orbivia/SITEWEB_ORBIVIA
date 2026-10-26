@@ -48,7 +48,7 @@ function renderAssistance(q){
   content='<h1>'+E(view.question)+'</h1><div class="answer-list guide-answers'+(view.options.every(([,label])=>label.length<20)?' guide-short':'')+'">'+view.options.map(([value,label])=>'<button type="button" class="answer" data-probe="'+E(value)+'">'+E(label)+'</button>').join('')+'</div>';
  }else{
   const label=view.value==='unresolved'?'Ce point reste à préciser':q.options.find(([v])=>v===view.value)[1];
-  content='<span class="eyebrow">'+(view.value==='unresolved'?'Aide non concluante':'Proposition à confirmer')+'</span><h1>'+E(label)+'</h1>'+(view.trace.length?'<details class="guide-rationale"><summary>'+view.trace.length+' étape(s) du choix</summary><ul class="guide-trace">'+view.trace.map(item=>'<li>'+E(item.question)+' <strong>'+E(item.answer)+'</strong></li>').join('')+'</ul></details>':'')+'<p class="guide-note">'+E(view.value==='unresolved'?'Ce point restera à préciser.':'')+'</p>'+action(view.value==='unresolved'?'Continuer avec ce point à préciser':'Confirmer et continuer','assist-commit','primary');
+  content='<span class="eyebrow">'+(view.value==='unresolved'?'Aide non concluante':'Proposition à confirmer')+'</span><h1>'+E(label)+'</h1>'+'<p class="guide-note">'+E(view.value==='unresolved'?'Ce point restera à préciser.':'')+'</p>'+action(view.value==='unresolved'?'Continuer avec ce point à préciser':'Confirmer et continuer','assist-commit','primary');
  }
  if(kind==='classification'){
   const scroll=window.scrollY;renderQuestion(true);window.scrollTo({top:scroll,behavior:'auto'});
@@ -56,8 +56,9 @@ function renderAssistance(q){
   const title=window.ORBIVIA_QUESTION_PRESENTATION?.view(q).title||q.label;
   const examples=q.examples||window.ORBIVIA_QUESTION_EXAMPLES?.[kind]?.[q.id]||[];
   const explanation='<div class="sheet-inline-explanation"><p>'+E(q.example||'')+'</p>'+(examples.length?'<ul>'+examples.slice(0,2).map(text=>'<li>'+E(text)+'</li>').join('')+'</ul>':'')+'</div>';
-  const panel=content.replace('Proposition à confirmer','Réponse proposée').replace('Confirmer et continuer','Utiliser cette réponse').replace('<h1>','<h3 id="help-probe">').replace('</h1>','</h3>');
-  sheet.innerHTML='<header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide au choix</h2></div><button type="button" class="sheet-close" data-action="assist-close" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+E(title)+'</p>'+panel+explanation+'<div class="sheet-controls">'+action('← Précision précédente','assist-back','quiet')+'</div></div>';
+  const proposed=window.ORBIVIA_QUESTION_PRESENTATION?.view(q).options.find(([value])=>value===view.value)?.[1]||q.options.find(([value])=>value===view.value)?.[1];
+  const panel=content.replace('Proposition à confirmer','Ce choix correspond à vos réponses').replace('Confirmer et continuer',E('Continuer avec « '+proposed+' »')).replace('<h1>','<h3 id="help-probe">').replace('</h1>','</h3>');
+  sheet.innerHTML='<header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide au choix</h2></div><button type="button" class="sheet-close" data-action="assist-close" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+E(title)+'</p>'+panel+explanation+'<div class="sheet-controls">'+action(view.type==='proposal'?'Modifier mon choix':'← Retour','assist-back','quiet')+'</div></div>';
   app.append(sheet);const back=sheet.querySelector('[data-action="assist-back"]');back.disabled=!draft.path.length;back.hidden=!draft.path.length;
   sheet.addEventListener('cancel',event=>{event.preventDefault();state.assistance=null;save();render();focus();});
   sheet.showModal();fitHelpSheet(sheet);window.scrollTo({top:scroll,behavior:'auto'});return;
