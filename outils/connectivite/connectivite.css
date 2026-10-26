@@ -81,3 +81,66 @@ body[data-tool="connectivite"]{--tool-ink:#202a32;--tool-gold:#e7a116;background
 .cx-result-grid{grid-template-columns:1fr}.cx-controls{gap:5px}.cx-button{font-size:12px;padding:10px 12px}
 }
 @media(prefers-reduced-motion:reduce){.cx-option,.cx-track>div{transition:none}}
+
+/* V2 — harmonisation avec le questionnaire de classification MDR */
+[data-tool="connectivite"] .question-progress{margin-bottom:18px}
+[data-tool="connectivite"] .question-progress>span{font-size:12px;color:#5c6964}
+[data-tool="connectivite"] .question-progress b{font-size:11px;font-variant-numeric:tabular-nums}
+[data-tool="connectivite"] .question-progress progress{display:block;width:100%;height:4px;margin-top:10px;border:0;border-radius:5px;appearance:none;background:#e1e5df;accent-color:#e7a116}
+[data-tool="connectivite"] .question-progress progress::-webkit-progress-bar{background:#e1e5df}
+[data-tool="connectivite"] .question-progress progress::-webkit-progress-value{background:#e7a116}
+[data-tool="connectivite"] .question-progress progress::-moz-progress-bar{background:#e7a116}
+[data-tool="connectivite"] .question-card{padding:30px 32px 20px;border:1px solid #e0e5df;border-radius:20px;box-shadow:0 12px 40px #28312806;background:#fff}
+[data-tool="connectivite"] .question-heading{gap:12px;align-items:start;margin:0 0 14px}
+[data-tool="connectivite"] .question-heading h1{font-size:30px;line-height:1.25;letter-spacing:-.8px;font-weight:650;max-width:none;color:#202a32}
+.cx-info-dot{width:32px;height:32px;border:1px solid #d6ded4;border-radius:50%;background:#f6f8f4;display:grid;place-items:center;flex:none;font:600 15px Georgia,serif;color:#52644f}
+[data-tool="connectivite"] .cx-help{display:block;border:0;background:transparent;padding:0;border-radius:0;color:#59645e;margin:0 0 22px}
+[data-tool="connectivite"] .cx-help p{font-size:14px;line-height:1.55;margin:0}
+[data-tool="connectivite"] .cx-help small{font-size:12px;line-height:1.5;color:#748078;display:block;margin-top:5px}
+[data-tool="connectivite"] .cx-options{gap:10px}
+[data-tool="connectivite"] .answer.cx-option{font:inherit;min-height:60px;padding:13px 16px;display:flex;align-items:center;gap:12px;border:1px solid #dce2dc;border-radius:12px;background:#fff;color:#26323c;box-shadow:none;line-height:1.4}
+[data-tool="connectivite"] .answer.cx-option:hover{background:#fffaf0;border-color:#c28c20;box-shadow:0 2px 8px #9e721310}
+[data-tool="connectivite"] .answer.cx-option[aria-pressed="true"]{border-color:#c88c0d;background:#fff6df;box-shadow:inset 0 0 0 1px #c88c0d}
+[data-tool="connectivite"] .answer .choice-icon.cx-icon{display:block;flex:0 0 38px;width:38px;height:38px;background:transparent;border:0;border-radius:0}
+[data-tool="connectivite"] .answer .choice-icon.cx-icon img{display:block;width:100%;height:100%}
+[data-tool="connectivite"] .answer .answer-copy.cx-option-copy{display:block;min-width:0;flex:1;font-size:14px;font-weight:600;line-height:1.4}
+[data-tool="connectivite"] .cx-option-copy strong{display:block;font-weight:600}
+[data-tool="connectivite"] .cx-option-copy small{display:block;margin-top:5px;font-size:12px;line-height:1.4;font-weight:400;color:#68766d}
+[data-tool="connectivite"] .cx-check{display:none}
+[data-tool="connectivite"] .cx-options[data-multi="true"] .cx-check{width:18px;height:18px;flex:none;display:grid;place-items:center;border:1px solid #b4bfb4;border-radius:5px;font-size:11px;font-weight:700}
+[data-tool="connectivite"] .cx-options[data-multi="true"] .cx-option[aria-pressed="true"] .cx-check{background:#e7a116;border-color:#e7a116}
+[data-tool="connectivite"] .question-controls.cx-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 6px;background:transparent}
+.cx-control-right{display:flex;gap:10px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+[data-tool="connectivite"] .cx-button{font-family:inherit;font-size:13px;line-height:1.5;font-weight:600;border-radius:10px;min-height:46px}
+[data-tool="connectivite"] .cx-button.primary{background:#e7a116;border-color:#e7a116;color:#202a32}
+[data-tool="connectivite"] .cx-button.primary:hover{background:#f1b637}
+[data-tool="connectivite"] .cx-button.quiet{color:#6c766f;font-weight:500}
+[data-tool="connectivite"] .cx-note{margin:10px 0 0;font-size:11px;color:#69746c}
+[data-tool="connectivite"] .cx-range-label b{font-size:30px;font-weight:650;letter-spacing:-.6px}
+[data-tool="connectivite"] .cx-pill{font:600 12px/1.3 "Segoe UI",Arial,sans-serif;min-height:40px}
+[data-tool="connectivite"] .cx-card h1:not(#question-title){font-size:30px;line-height:1.25}
+[data-tool="connectivite"] .cx-result-actions{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}
+@media(max-width:700px){
+ [data-tool="connectivite"] .question-progress{margin-bottom:12px}
+ [data-tool="connectivite"] .question-card{padding:18px 16px 12px;border-radius:16px}
+ [data-tool="connectivite"] .question-heading{margin-bottom:12px}
+ [data-tool="connectivite"] .question-heading h1{font-size:23px;line-height:1.25;letter-spacing:-.6px}
+ [data-tool="connectivite"] .cx-info-dot{width:30px;height:30px}
+ [data-tool="connectivite"] .cx-help{margin-bottom:16px}
+ [data-tool="connectivite"] .cx-help p{font-size:12px}
+ [data-tool="connectivite"] .cx-help small{font-size:11px}
+ [data-tool="connectivite"] .cx-options{gap:8px}
+ [data-tool="connectivite"] .answer.cx-option{min-height:53px;padding:10px 12px;gap:10px;border-radius:10px}
+ [data-tool="connectivite"] .answer .choice-icon.cx-icon{width:32px;height:32px;flex-basis:32px}
+ [data-tool="connectivite"] .answer .answer-copy.cx-option-copy{font-size:13px}
+ [data-tool="connectivite"] .cx-option-copy small{font-size:11px;margin-top:3px}
+ [data-tool="connectivite"] .question-controls.cx-controls{margin-top:10px;gap:6px}
+ [data-tool="connectivite"] .cx-button{font-size:12px;min-height:44px;padding:10px 12px}
+ [data-tool="connectivite"] .cx-control-right{gap:5px}
+ [data-tool="connectivite"] .cx-card h1:not(#question-title){font-size:26px}
+}
+@media(max-width:360px){
+ [data-tool="connectivite"] .question-card{padding:14px 12px 10px}
+ [data-tool="connectivite"] .question-heading h1{font-size:21px}
+ [data-tool="connectivite"] .answer .choice-icon.cx-icon{width:28px;height:28px;flex-basis:28px}
+}
