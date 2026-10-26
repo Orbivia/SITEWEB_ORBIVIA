@@ -54,8 +54,10 @@ function renderAssistance(q){
   const scroll=window.scrollY;renderQuestion(true);window.scrollTo({top:scroll,behavior:'auto'});
   const sheet=document.createElement('dialog');sheet.className='help-sheet';sheet.setAttribute('aria-labelledby','help-sheet-title');
   const title=window.ORBIVIA_QUESTION_PRESENTATION?.view(q).title||q.label;
+  const examples=q.examples||window.ORBIVIA_QUESTION_EXAMPLES?.[kind]?.[q.id]||[];
+  const explanation='<div class="sheet-inline-explanation"><p>'+E(q.example||'')+'</p>'+(examples.length?'<ul>'+examples.slice(0,2).map(text=>'<li>'+E(text)+'</li>').join('')+'</ul>':'')+'</div>';
   const panel=content.replace('Proposition à confirmer','Réponse proposée').replace('Confirmer et continuer','Utiliser cette réponse').replace('<h1>','<h3 id="help-probe">').replace('</h1>','</h3>');
-  sheet.innerHTML='<header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide au choix</h2></div><button type="button" class="sheet-close" data-action="assist-close" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+E(title)+'</p>'+panel+'<div class="sheet-controls">'+action('Exemples et explication','assist-examples','quiet')+action('← Précision précédente','assist-back','quiet')+'</div></div>';
+  sheet.innerHTML='<header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide au choix</h2></div><button type="button" class="sheet-close" data-action="assist-close" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+E(title)+'</p>'+panel+explanation+'<div class="sheet-controls">'+action('← Précision précédente','assist-back','quiet')+'</div></div>';
   app.append(sheet);const back=sheet.querySelector('[data-action="assist-back"]');back.disabled=!draft.path.length;back.hidden=!draft.path.length;
   sheet.addEventListener('cancel',event=>{event.preventDefault();state.assistance=null;save();render();focus();});
   sheet.showModal();fitHelpSheet(sheet);window.scrollTo({top:scroll,behavior:'auto'});return;
@@ -124,18 +126,6 @@ document.addEventListener('click',event=>{
  const current=qs.find(q=>q.id===state.cursor);
  if(cmd==='qualification-change'){state.editing=true;reviewMode=false;state.assistance=null;moveTo(qs.find(q=>q.id==='ivdQualification'));return;}
  if(cmd==='scope-change'||cmd==='scope-help'){state.editing=true;reviewMode=false;state.assistance=cmd==='scope-help'?{question:'scope',version:guide.version,path:[]}:null;moveTo(qs.find(q=>q.id==='scope'));return;}
- if(cmd==='assist-examples'&&current){
-  const sheet=app.querySelector('.help-sheet'),content=sheet.querySelector('.help-sheet-content');
-  const choices=document.createElement('div');choices.className='sheet-choice-content';choices.append(...content.childNodes);choices.hidden=true;content.append(choices);
-  const examples=document.createElement('div');examples.className='sheet-example-content';
-  const items=current.examples||window.ORBIVIA_QUESTION_EXAMPLES?.[kind]?.[current.id]||[];
-  examples.innerHTML='<h3>Exemples et explication</h3><p>'+E(current.example||'')+'</p>'+(items.length?'<ul>'+items.slice(0,2).map(text=>'<li>'+E(text)+'</li>').join('')+'</ul>':'')+action('← Revenir aux choix','assist-examples-back','quiet');
-  content.append(examples);fitHelpSheet(sheet);examples.querySelector('h3').tabIndex=-1;examples.querySelector('h3').focus({preventScroll:true});return;
- }
- if(cmd==='assist-examples-back'){
-  const sheet=app.querySelector('.help-sheet'),content=sheet.querySelector('.help-sheet-content'),choices=content.querySelector('.sheet-choice-content');
-  content.querySelector('.sheet-example-content').remove();content.append(...choices.childNodes);choices.remove();fitHelpSheet(sheet);focus();return;
- }
  if(cmd==='assist-start'&&current){state.assistance={question:current.id,version:guide.version,path:[]};save();render();focus();return;}
  if(b.hasAttribute('data-probe')&&state.assistance&&current){
   if(locked)return;locked=true;setTimeout(()=>{locked=false;},250);
