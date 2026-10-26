@@ -982,6 +982,7 @@ const icons={
  tube:'<path d="M10 9h12v15a6 6 0 0 1-12 0z" fill="currentColor"/><rect x="8" y="2" width="16" height="7" rx="2" fill="#e7a116"/><path d="M12 14h4m-4 4h4" stroke="white" stroke-width="1.5"/><path d="M12 24v-1l8-4v5a4 4 0 0 1-8 0" fill="#e7a116"/>',
  combined:'<path d="m11 2 10 5v13l-10 5-10-5V7z" fill="currentColor"/><path d="m1 7 10 5 10-5M11 12v13" stroke="#e7a116" stroke-width="1.5" fill="none"/><rect x="15" y="14" width="15" height="15" rx="2" fill="currentColor" stroke="white"/><path d="m21 18-3 3 3 3m3-6 3 3-3 3" stroke="#e7a116" stroke-width="1.5" fill="none"/>'
 };
+Object.assign(questions.ivdRole.options,{test:'Réactif, test ou kit',instrument:'Instrument d’analyse seul',software:'Logiciel IVD',receptacle:'Récipient sans test intégré',lab:'Produit général pour usage IVD',accessory:'Accessoire de DIV',calibrator:'Calibrateur',assignedControl:'Contrôle à valeur assignée',unassignedControl:'Contrôle sans valeur assignée'});
 const optionIcons={
  scope:{md:'medical',accessory:'link',ivd:'tube',other:'unknown'},
  form:{physical:'product',software:'software',combined:'combined'}
