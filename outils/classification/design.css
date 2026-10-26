@@ -29,9 +29,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 [data-tool="classification"] .help-choice::before{content:'?';display:inline-grid;place-items:center;border:1px solid #d8c689;border-radius:50%;width:19px;height:19px;flex:none;margin-right:8px;font-size:12px}
 [data-tool="classification"] .help-choice:hover{text-decoration:underline;text-underline-offset:4px}
 [data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{width:73%;margin-top:12px}
-[data-tool="classification"] .question-card:not(.assistance-card)>.comment{width:26%;text-align:right;font-size:12px;color:#68766d;margin-top:12px}
-[data-tool="classification"] .question-card:not(.assistance-card)>.comment[open]{width:100%;text-align:left}
-[data-tool="classification"] .comment summary{font-weight:400;color:#68766d;min-height:44px;align-content:center}
 [data-tool="classification"] .question-controls{margin-top:16px;align-items:center}
 [data-tool="classification"] .tool-button{border-radius:10px;color:#26323c}
 [data-tool="classification"] .question-controls .tool-button:not(.quiet){border-color:#dce2dc;background:#fff}
@@ -72,8 +69,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
  [data-tool="classification"] .explained-choices .answer:last-child{min-height:60px}
  [data-tool="classification"] .choices-short .answer{min-height:64px}
  [data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{width:100%;margin-top:8px;min-height:44px;font-size:12px}
- [data-tool="classification"] .question-card:not(.assistance-card)>.comment{display:block;width:100%;margin:0;text-align:left;border-top:1px solid #edf0eb;font-size:11px}
- [data-tool="classification"] .comment summary{min-height:36px;padding:6px 0}
  [data-tool="classification"] .question-controls{margin-top:10px;background:#f6f7f5f5;border-radius:10px}
  [data-tool="classification"] .question-controls .tool-button{font-size:12px;min-height:44px}
  [data-tool="classification"] .assistance-card h1{font-size:21px}
@@ -94,8 +89,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 @media(max-width:700px){
  [data-tool="classification"] .question-card::before{left:16px;width:30px}
  [data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{width:73%;font-size:11px}
- [data-tool="classification"] .question-card:not(.assistance-card)>.comment{display:inline-block;vertical-align:middle;width:26%;text-align:right;border:0;margin-top:8px}
- [data-tool="classification"] .question-card:not(.assistance-card)>.comment[open]{display:block;width:100%;text-align:left}
 }
 @media(max-width:700px) and (max-height:740px){
  [data-tool="classification"] .tool-shell,[data-tool="classification"] .tool-shell:has(.explained-choices){width:calc(100% - 24px);margin-top:8px;margin-bottom:8px}
@@ -143,8 +136,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 [data-tool="classification"] .answer>.answer-copy{flex:1;min-width:0;font-size:15px;line-height:1.4}
 [data-tool="classification"] .answer>.answer-copy small{font-size:13px;color:#59645e;line-height:1.45}
 [data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{display:flex;width:100%;min-height:44px;margin:18px 0 8px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
-[data-tool="classification"] .question-card:not(.assistance-card)>.comment{display:block;width:100%;text-align:left;border-top:1px solid #dfe4de;border-bottom:1px solid #dfe4de;margin:0;padding:2px 0;font-size:13px}
-[data-tool="classification"] .comment summary{min-height:44px;font-size:13px}
 [data-tool="classification"] .question-controls{background:transparent;margin-top:18px}
 [data-tool="classification"] .result-card{border-radius:14px;box-shadow:none;padding:28px;border:1px solid #dfe4de}
 [data-tool="classification"] .class-value{display:block;position:relative;padding-bottom:20px;margin-bottom:20px;font-size:76px;line-height:1.1;letter-spacing:-2px}
@@ -217,7 +208,6 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
 .help-sheet .guide-explanation{font-size:13px;line-height:1.5}
 .sheet-controls{margin-top:10px}
 .sheet-controls .tool-button{font-size:12px;padding:8px 0;min-height:40px}
-.help-sheet-note{font-size:12px;line-height:1.4;color:#68716f;margin:10px 0 0}
 .help-sheet .guide-note{font-size:14px;line-height:1.5}
 .help-sheet .guide-rationale{font-size:13px;margin-bottom:14px}
 .help-sheet .primary{width:100%;min-height:48px;white-space:normal;text-align:center}
@@ -226,3 +216,7 @@ body:has(.help-sheet[open]){overflow:hidden}
 @media(max-width:700px){.help-sheet-header{padding-inline:18px}.help-sheet-content{padding-inline:18px}.help-sheet h3{font-size:19px}.help-sheet-header h2{font-size:18px}}
 
 .help-sheet [hidden]{display:none!important}
+
+[data-tool="classification"] .pending-result .class-value{font-size:28px;letter-spacing:-.5px;padding-bottom:14px;margin-bottom:14px}
+[data-tool="classification"] .pending-box{flex-wrap:wrap;gap:12px}
+[data-tool="classification"] .export-actions .tool-button:not(.primary){background:transparent;color:#53615a;text-decoration:underline;min-height:44px}
