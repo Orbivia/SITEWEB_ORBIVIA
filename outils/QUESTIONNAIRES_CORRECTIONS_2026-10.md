@@ -53,6 +53,19 @@ Le rendu utilise toujours la nomenclature `question-<id>.svg`. La version de cha
 
 Les tests `tests/questionnaire-ui.test.cjs` contrôlent la différence entre le nouvel SVG et l'ancien pictogramme dupliqué. La validation visuelle au sein du navigateur reste à confirmer.
 
+
+### Lot 2.3 — Connectivité, questions 1 à 4 (intégré sur GitHub, 27 octobre 2026)
+
+Les quatre images validées ont été adaptées en **SVG 32 × 32 transparents**, sans texte ni bordure, en privilégiant leur lisibilité à 28 px :
+- `question-peer.svg` : objet connecté + ondes + smartphone ;
+- `question-range.svg` : point émetteur + trois arcs de portée ;
+- `question-payload.svg` : deux documents et flèches dans les deux sens ;
+- `question-frequency.svg` : horloge entourée de flèches de répétition.
+
+Le chemin des icônes reste identique. L'URL de cache passe à `.svg?v=4` et la page charge `connectivite.js?v=11`. Un test de non-régression vérifie quatre dessins distincts, sans texte ni image embarquée, et les couleurs ORBIVIA.
+
+**Prochain lot à valider avant toute intégration :** Environnement, Alimentation, Autonomie, Réseaux disponibles.
+
 ### Lots suivants (non appliqués)
 
 - **Lot 2.2** : sélectionner quatre nouvelles questions prioritaires, et contrôler les icônes individuellement avant de les publier.
