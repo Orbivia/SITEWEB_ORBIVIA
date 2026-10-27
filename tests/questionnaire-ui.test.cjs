@@ -148,17 +148,22 @@ test("Audit graphique : 20 SVG Connectivite uniques, bicolores, sans textes ni i
 });
 
 
-test("MDR/IVDR : les 96 questions référencent un PNG et un SVG de secours", () => {
+test("MDR/IVDR : 96 chemins PNG de la planche déposée, repli SVG présent", () => {
  const presentation = require("../outils/classification/presentation.js");
  const questions = Object.keys(presentation.questions);
  assert.equal(questions.length, 96);
+ const matched = new Set();
  for (const id of questions) {
   const markup = presentation.questionIcon({id});
-  assert.ok(markup.includes("icones-raster/" + encodeURIComponent(id) + ".png?v=1"), id);
-  assert.ok(markup.includes("mdr-svg-fallback"), id);
-  assert.ok(markup.includes("mdr-raster-icon"), id);
+  const number = markup.match(/icones-raster\/icones\/icon-(\d{2})\.png\?v=2/);
+  assert.ok(number, "image non associée : " + id);
+  const num = Number(number[1]);
+  assert.ok(num >= 1 && num <= 96, "numéro incorrect : " + id);
+  matched.add(num);
+  const iconPath = "outils/classification/icones-raster/icones/icon-" + number[1] + ".png";
+  assert.ok(fs.existsSync(path.join(root, iconPath)), "PNG absent : " + iconPath);
+  assert.ok(markup.includes("mdr-svg-fallback"), "SVG de secours absent : " + id);
  }
- const stylesheet = load("outils/classification/design.css");
- assert.match(stylesheet, /mdr-question-art/);
- assert.match(stylesheet, /mdr-question-art \[hidden\]/);
+ assert.equal(matched.size, 57, "correspondance modifiée sans révision graphique");
+ assert.match(load("outils/classification/design.css"), /mdr-question-art/);
 });
