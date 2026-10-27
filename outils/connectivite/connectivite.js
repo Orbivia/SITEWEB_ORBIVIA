@@ -74,7 +74,7 @@ function render(){
  const expanded=infoOpen?"true":"false";
  root.innerHTML='<div class="question-progress cx-progress"><span>'+esc(q.section)+' · Connectivité<b>'+progress+' % parcouru</b></span><progress max="100" value="'+progress+'" aria-label="Avancement du questionnaire"></progress></div>'
  +'<section class="question-card cx-card" aria-labelledby="question-title">'
- +'<div class="question-prompt cx-question-prompt"><div class="question-heading cx-head"><h1 id="question-title"><img class="cx-question-icon" src="'+icon("question-"+q.id)+'" alt="">'+esc(q.title)+'</h1>'
+ +'<div class="question-prompt cx-question-prompt"><div class="question-heading cx-head"><h1 id="question-title">'+esc(q.title)+'</h1>'
  +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pour répondre</strong><p>'+esc(q.help)+'</p><strong>Exemple de produit</strong><p>'+esc(q.example)+'</p>'+choiceNotes(q)+'</div></details></div>'
  +'</div><div class="cx-options-wrapper">'+editor(q)+'</div><button class="cx-help-trigger" type="button" data-action="toggle-help" aria-expanded="'+(helpOpen?"true":"false")+'"><span class="cx-help-symbol" aria-hidden="true">?</span>'+ (helpOpen?"Masquer l’aide":"Aide au choix")+'</button>'
  +'</section>'
