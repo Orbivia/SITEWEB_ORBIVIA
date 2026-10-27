@@ -167,3 +167,36 @@ test("MDR/IVDR : 96 chemins PNG de la planche déposée, repli SVG présent", ()
  assert.equal(matched.size, 57, "correspondance modifiée sans révision graphique");
  assert.match(load("outils/classification/design.css"), /mdr-question-art/);
 });
+
+
+test("MDR/IVDR : bibliothèque nettoyée et uniquement les 57 images utilisées", () => {
+ const presentation = require("../outils/classification/presentation.js");
+ const folder = path.join(root, "outils/classification/icones-raster/icones");
+ const actual = fs.readdirSync(folder).filter(name => /^icon-\d{2}\.png$/.test(name)).sort();
+ const referenced = [...new Set(Object.keys(presentation.questions).map(id => {
+  const match = presentation.questionIcon({id}).match(/icones-raster\/icones\/(icon-\d{2}\.png)/);
+  assert.ok(match, id + " doit avoir son PNG");
+  return match[1];
+ }))].sort();
+ assert.equal(actual.length, 57);
+ assert.deepEqual(actual, referenced, "aucun PNG inutilisé ni PNG manquant");
+});
+
+test("MDR/IVDR : affichage adaptatif sans slider et sans masquer les choix", () => {
+ const html = load("outils/classification/index.html");
+ assert.match(html, /viewport\.css\?v=\d+/);
+ assert.match(html, /viewport\.js\?v=\d+/);
+ assert.ok(html.indexOf("questionnaire-ui.css") < html.indexOf("viewport.css"));
+ assert.ok(html.indexOf("questionnaire.js") < html.indexOf("viewport.js"));
+ const css = load("outils/classification/viewport.css");
+ const script = load("outils/classification/viewport.js");
+ assert.match(css, /100dvh/);
+ assert.match(css, /question-density-compact/);
+ assert.match(css, /question-density-dense/);
+ assert.match(css, /question-density-tight/);
+ assert.match(css, /question-allow-scroll/);
+ assert.match(script, /requestAnimationFrame\(fit\)/);
+ assert.match(script, /scrollHeight/);
+ assert.doesNotMatch(script, /display\s*:\s*none|\.hidden\s*=\s*true/);
+ assert.doesNotThrow(() => new vm.Script(script));
+});
