@@ -38,8 +38,24 @@ Textes ciblés dans `classification/presentation.js` :
 
 Références réglementaires : règlement (UE) 2017/745, annexe VIII (règles de classification) ; règlement (UE) 2017/746, annexe VIII, notamment règles 2 et 4 ; guide MDCG 2020-16 rev.5.
 
-## Lots suivants (non appliqués)
+## Lot 2 — Pictogrammes, par lots de quatre
 
-2. Revoir les pictogrammes question par question dans le même style ORBIVIA, en éliminant les doublons strictement identiques lorsque le sens est différent.
-3. Uniformiser les bulles d'aide, ajouter des exemples adaptés et simplifier les titres particulièrement longs sans changer l'effet réglementaire.
-4. Vérifier l'ergonomie de bout en bout sur téléphone et ordinateur, les résultats sur cas représentatifs et les recommandations de connectivité.
+### Lot 2.1 — Connectivité (effectué, 27 octobre 2026)
+
+Quatre SVG de question ont été redessinés individuellement et prévisualisés en 128 px et en 28 px, avec la palette ORBIVIA (#17263a / #e7a116) :
+
+- `question-autonomy.svg` : batterie + cadran horaire ; différent du symbole d'alimentation.
+- `question-mobility.svg` : produit en déplacement + flèche ; différent de la règle de portée.
+- `question-offline.svg` : signal Wi-Fi coupé ; différent du bouclier de sécurité.
+- `question-priorities.svg` : podium avec étoile ; différent du réseau d'appareils.
+
+Le rendu utilise toujours la nomenclature `question-<id>.svg`. La version de chargement des icônes est passée de `v=2` à `v=3`, et celle de `connectivite.js` à `v=10` dans la page. Les 16 autres icônes de connectivité et les 96 icônes MDR/IVDR n'ont pas été modifiées dans ce lot.
+
+Les tests `tests/questionnaire-ui.test.cjs` contrôlent la différence entre le nouvel SVG et l'ancien pictogramme dupliqué. La validation visuelle au sein du navigateur reste à confirmer.
+
+### Lots suivants (non appliqués)
+
+- **Lot 2.2** : sélectionner quatre nouvelles questions prioritaires, et contrôler les icônes individuellement avant de les publier.
+- **Lot 2.x MDR/IVDR** : appliquer la même méthode par petits ensembles de questions réglementaires.
+- **Lot 3** : uniformiser les bulles d'aide, ajouter des exemples adaptés et simplifier les titres particulièrement longs sans changer la règle réglementaire.
+- **Lot 4** : tester l'ensemble du parcours, les résultats et les recommandations sur mobile et ordinateur.
