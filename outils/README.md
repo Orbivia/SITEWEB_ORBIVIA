@@ -6,7 +6,7 @@ Trois outils autonomes, accessibles depuis l’onglet **Outils** de la navigatio
 
 - `/outils/classification/` : **Classification MDR / IVDR**, questionnaire conditionnel, résultat justifié et réponses à préciser. Aucun champ projet, fabricant ou relecteur.
 - `/outils/connectivite/` : **Choix de connectivité**, questionnaire de présélection selon l’usage, l’autonomie, les réseaux, la sécurité et les coûts.
-- `/outils/etiquettes-tracabilite/` : **Étiquettes et traçabilité**, identification interne Code 128/QR et UDI GS1 DataMatrix pour dispositifs médicaux avec GTIN fourni par l'utilisateur, validations élémentaires, formats imprimables 60×30 / 70×40 / 100×50 mm, exports SVG / PNG et impression PDF du navigateur. La librairie bwip-js v4.11.4 est chargée depuis cdnjs ; la page n'envoie pas les valeurs des champs au serveur.
+- `/outils/etiquettes-tracabilite/` : **Étiquetage de dispositifs médicaux (MDR)**, questionnaire conditionnel de sélection des informations et références de symboles à examiner pour une étiquette. Synthèse indicative imprimable, pas encore un composeur d'étiquettes.
 
 Le questionnaire `/outils/normes/` reste maintenu dans les sources, sans publication actuellement.
 
@@ -85,11 +85,13 @@ Corrections : les configurations MDR non couvertes et les tissus viables restent
 
 Chaque bulle renvoie désormais à une ou deux références liées à son thème. Les fiches officielles identifiées sont liées directement ; les autres liens portent explicitement « Rechercher … — catalogue ISO/IEC » et transmettent la référence au catalogue de l’éditeur. Le lien IVDR remplace le MDR pour la définition du diagnostic in vitro. Les pages AFNOR des masques, gants et textiles ont été recherchées en tenant compte des versions remplacées ; aucun numéro d’édition n’est imposé par le questionnaire. Une note distingue ces sources d’une décision d’applicabilité ou d’harmonisation. La suite comporte 334 tests, dont le contrôle des sources des 64 bulles.
 
-## Limites du générateur d'étiquettes (v1)
+## Étiquetage de dispositifs médicaux : périmètre v1
 
-- Le mode médical **ne délivre pas** de GTIN/UDI-DI et ne vérifie pas les droits d'attribution GS1. Il contrôle seulement la longueur et la clé GTIN-14.
-- L'étiquette est un **gabarit d'identification**, et non une étiquette finale certifiée MDR : adresse complète du fabricant, statut stérile, mandataire éventuel, marquage CE et symboles EN ISO 15223-1 exigent une composition adaptée au dispositif et à son conditionnement.
-- Le DataMatrix est généré à l'aide de l'encodeur GS1 de bwip-js, pas comme un DataMatrix texte générique : les AI (01), (11), (17), (10), (21) et les séparateurs requis sont traités par l'encodeur. Vérifier la lecture avec un scanner GS1 (identifiant de symbologie ]d2).
-- L'export SVG conserve les dimensions physiques en mm et le PNG est rasterisé en 300 dpi, mais un test de lisibilité sur le support et l'imprimante cible demeure obligatoire.
-- Les modes internes ne créent pas de registre central de fabrication ou de suivi et ne sont pas adaptés à la traçabilité réglementaire à eux seuls.
-- Pour une version suivante : champs réglementaires complémentaires, prévisualisation optimisée pour petites étiquettes, planches PDF/CSV, bibliothèque de symboles normalisés avec validation du contexte, tests sur lecteurs GS1 et bibliothèque BWIP hébergée localement.
+- Périmètre : dispositif médical MDR (UE) 2017/745. Le diagnostic in vitro (IVDR), les marchés hors UE et les cas spéciaux nécessitent une analyse complémentaire.
+- Une question par écran, réponses automatiques et navigation conditionnelle ; choix multiples sur conservation, substances et notices. Enregistrement temporaire via sessionStorage et confirmation « Reprendre à zéro ».
+- Questions : statut commercial/investigation/sur mesure/prototype, marché, support, niveaux de conditionnement, classe MDR, autorisation CE, fabricant, importateur, implantabilité, usage unique ou réutilisable, retraitement, stérilité, méthode, système de barrière, restérilisation, péremption, traçabilité (lot/série), conservation, matériaux sensibles, notice/avertissements, électronique, surface d'étiquette, langues.
+- Synthèse : « mentions et symboles à prévoir », « éléments conditionnels », « points à confirmer », références MDR et ISO 15223-1:2021+A1:2025. Les vignettes de résultat affichent la référence et un texte indicatif, pas les pictogrammes ISO imprimables.
+- Éléments particuliers : CE uniquement si autorisé, ON si applicable, Basic UDI-DI jamais imprimé, UDI direct pour dispositifs nécessitant retraitement selon règles et échéances, contenu d'emballage stérile (annexe I, 23.3), importer/mandataire si concernés, règles eIFU (2021/2226 amendé par 2025/1234).
+- La V1 **n'émet plus de code-barres ni d'étiquette PDF/SVG/PNG** : c'est l'étape préparatoire de détermination des éléments. Le générateur d'étiquettes sera une étape ultérieure, après validation de cette logique et des véritables fichiers vectoriels des symboles normalisés.
+- Tests : validation de syntaxe JavaScript et de quelques scénarios métier au moyen de simulations JS. Contrôle visuel multi-écran et tests fonctionnels navigateur de production restant à effectuer. Aucun marquage industriel/clinique sans revue de conformité.
+
