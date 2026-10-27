@@ -1106,12 +1106,24 @@ const questionIconTypes={
  ivdCongenital:'baby',ivdNewborn:'baby',ivdSelf:'medical',
  ivdSelfException:'medical',ivdNear:'medical'
 };
+/* PNG raster prévus dans icones-raster/. Une image non encore publiée ne doit
+ * jamais empêcher l'affichage du pictogramme vectoriel existant. */
+if(typeof document!=='undefined')document.addEventListener('error',function(event){
+ const img=event.target;
+ if(!img || !img.classList || !img.classList.contains('mdr-raster-icon'))return;
+ img.hidden=true;
+ const fallback=img.nextElementSibling;
+ if(fallback)fallback.hidden=false;
+},true);
 function questionIcon(q){
  const type=questionIconTypes[q.id]||'medical';
  const svg=medicalQuestionIcons[type]||icons[type];
- return svg
-  ?'<span class="mdr-question-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg></span>'
-  :'<img class="mdr-question-icon" src="../connectivite/icones/'+type+'.svg?v=2" alt="" aria-hidden="true">';
+ const original=svg
+  ?'<span class="mdr-question-icon mdr-svg-fallback" hidden aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg></span>'
+  :'<img class="mdr-question-icon mdr-svg-fallback" hidden src="../connectivite/icones/'+type+'.svg?v=2" alt="">';
+ return '<span class="mdr-question-art" aria-hidden="true">'+
+   '<img class="mdr-question-icon mdr-raster-icon" loading="eager" alt="" src="icones-raster/'+encodeURIComponent(q.id)+'.png?v=1">'+
+   original+'</span>';
 }
 
 const api={questions,icons,view,icon,answerIcon,questionIcon,reservePrompt,roleGroups};
