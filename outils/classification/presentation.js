@@ -1115,15 +1115,18 @@ if(typeof document!=='undefined')document.addEventListener('error',function(even
  const fallback=img.nextElementSibling;
  if(fallback)fallback.hidden=false;
 },true);
+/* Correspondance : ordre des 96 clés de questions ↔ numéros PNG de la planche. */
+const sheetIconNumbers=[1,56,58,65,28,30,36,38,48,49,9,18,9,8,40,7,23,42,7,45,95,2,13,39,39,6,36,34,5,55,54,5,29,29,29,21,50,49,19,41,46,40,38,50,34,27,6,41,25,20,2,36,6,47,27,27,26,36,44,43,5,5,30,29,17,83,3,86,80,24,66,85,24,34,20,19,56,70,47,66,33,47,47,35,11,36,41,41,5,21,22,11,12,71,67,15];
+const iconByQuestion=Object.fromEntries(Object.keys(questions).map((id,i)=>[id,sheetIconNumbers[i]]));
 function questionIcon(q){
  const type=questionIconTypes[q.id]||'medical';
  const svg=medicalQuestionIcons[type]||icons[type];
+ const n=iconByQuestion[q.id];
  const original=svg
-  ?'<span class="mdr-question-icon mdr-svg-fallback" hidden aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg></span>'
-  :'<img class="mdr-question-icon mdr-svg-fallback" hidden src="../connectivite/icones/'+type+'.svg?v=2" alt="">';
- return '<span class="mdr-question-art" aria-hidden="true">'+
-   '<img class="mdr-question-icon mdr-raster-icon" loading="eager" alt="" src="icones-raster/'+encodeURIComponent(q.id)+'.png?v=1">'+
-   original+'</span>';
+  ?'<span class="mdr-question-icon mdr-svg-fallback" '+(n?'hidden ':'')+'aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg></span>'
+  :'<img class="mdr-question-icon mdr-svg-fallback" '+(n?'hidden ':'')+'src="../connectivite/icones/'+type+'.svg?v=2" alt="">';
+ const raster=n?'<img class="mdr-question-icon mdr-raster-icon" loading="eager" alt="" src="icones-raster/icones/icon-'+String(n).padStart(2,'0')+'.png?v=2">':'';
+ return '<span class="mdr-question-art" aria-hidden="true">'+raster+original+'</span>';
 }
 
 const api={questions,icons,view,icon,answerIcon,questionIcon,reservePrompt,roleGroups};
