@@ -111,86 +111,174 @@ function selectChoice(value){
 }
 function listContains(id,v){return Array.isArray(answers[id])&&answers[id].includes(v);}
 function conclusions(){
+ /* Deux niveaux distincts : exigences MDR pour l'information, symboles ISO utilisables pour la représenter.
+  * On ne reproduit aucun graphisme normatif dans cet outil.
+  */
  const required=[],conditional=[],review=[];
  const add=(target,code,title,detail,source,tag)=>target.push({code,title,detail,source:source||"",tag:tag||""});
- const r=(c,t,d,s,tag)=>add(required,c,t,d,s,tag),c=(c,t,d,s,tag)=>add(conditional,c,t,d,s,tag),v=(t,d)=>add(review,"?",t,d);
- const market=answers.status==="market";
- r("Texte","Nom du dispositif et identification","Nom commercial, modèle et identification du contenu/usage si nécessaire.","MDR annexe I, 23.2 a–b","Mention");
- r("5.1.1","Fabricant légal","Nom ou raison sociale et adresse du siège du fabricant.","MDR annexe I, 23.2 c");
- if(answers.tracking==="unknown")v("Identification des unités","Définir le numéro de lot ou de série et sa traçabilité avant création de l’étiquette.");
- c("5.1.6","Référence catalogue / modèle","Utile pour identifier sans ambiguïté la version commerciale ; à distinguer de l'UDI.","ISO 15223-1, 5.1.6");
- c("5.7.7","Dispositif médical (MD)","À utiliser lorsque la nature médicale du produit n'est pas évidente.","MDR annexe I, 23.2 q");
- if(market&&answers.territory!=="outside"){
-  r("5.7.10","Identifiant UDI : AIDC + HRI","UDI-DI attribué par une entité habilitée et UDI-PI selon données de production. Le Basic UDI-DI n'est pas imprimé.","MDR annexe VI, partie C");
-  if(answers.ce==="ce-nb")r("CE + ON","Marquage CE et numéro de l'organisme notifié","Utiliser le graphisme officiel CE et le numéro vérifié de l'organisme notifié.","MDR articles 20 et 52","Marquage réglementaire");
-  else if(answers.ce==="ce-alone")r("CE","Marquage CE","Seulement si la procédure de conformité est effectivement achevée et sans numéro d'ON exigible.","MDR article 20","Marquage réglementaire");
-  else v("Marquage CE non confirmé","Ne pas imprimer le CE tant que la procédure appropriée et, le cas échéant, le numéro d'organisme notifié ne sont pas établis.");
- }else if(market&&answers.territory==="outside"){v("Marché hors UE","L'analyse MDR est informative seulement. Vérifier les exigences du ou des pays visés.");}
- else if(answers.status==="custom"){v("Dispositif sur mesure","Vérifier les mentions « dispositif sur mesure », l'annexe XIII et les règles spécifiques ; UDI/CE commerciaux ne sont pas présumés.");}
- else if(answers.status==="investigation"){v("Investigation clinique","Vérifier la mention « exclusivement destiné à une investigation clinique » et les règles associées ; pas de CE commercial présumé.");}
- else v("Prototype en cours","Ne pas apposer de CE ou d'UDI commercial non attribué. Limiter les mentions aux informations effectivement établies.");
- if(answers.manufacturer==="outside"&&answers.territory!=="outside"){r("5.1.2","Mandataire / représentant autorisé","Nom et adresse de l'entité mandatée dans l'UE ; vérifier la version du symbole après amendement ISO 15223-1:2025.","MDR annexe I, 23.2 d");}
- else if(answers.manufacturer==="unknown")v("Fabricant légal","Établir le siège du fabricant et l'éventuel mandataire européen.");
- if(answers.import==="yes")c("5.1.8","Importateur","Nom et coordonnées de l'importateur : sur dispositif, emballage ou document d'accompagnement selon l'article 13(3).","MDR art. 13(3)");
- else if(answers.import==="unknown")v("Importateur","Déterminer si un opérateur importe effectivement le produit dans l'UE.");
- if(answers.tracking==="lot"||answers.tracking==="both")r("5.1.5","Numéro de lot (LOT)","Le lot doit correspondre aux documents de production et, le cas échéant, à l'UDI-PI.","ISO 15223-1, 5.1.5");
- if(answers.tracking==="serial"||answers.tracking==="both")r("5.1.7","Numéro de série (SN)","Identifiant de l'unité, cohérent avec l'UDI-PI.","ISO 15223-1, 5.1.7");
- if(answers.tracking==="unknown")v("Identification des unités","Définir lot, numéro de série, et structure UDI-PI avant génération.");
- if(answers.implant==="active"&&answers.tracking!=="serial"&&answers.tracking!=="both")v("Implant actif : numéro de série requis","La partie UDI-PI doit contenir le numéro de série pour les dispositifs actifs implantables.");
- if(answers.implant==="passive"&&answers.tracking==="unknown")v("Implant : UDI-PI","Définir au minimum lot ou série approprié et la règle d'identification avant implantation.");
- if(answers.implant==="unknown")v("Implantabilité","La nature implantable du dispositif n'est pas déterminée.");
- if(answers.expiry==="yes")r("5.1.4","Date limite d'utilisation","Indiquer la date validée, notamment sur les emballages maintenant l'état stérile.","MDR annexe I, 23.2 i");
- else if(answers.expiry==="no")r("5.1.3","Date de fabrication","En l'absence de date limite, la date de fabrication doit être identifiable.","MDR annexe I, 23.2 j");
- else v("Durée de conservation","Déterminer la présence d'une date limite ou, sinon, les modalités d'indication de la fabrication.");
- if(answers.sterile==="sterile"){
-  if(answers.resterilize==="no")c("5.2.6","Ne pas restériliser","À afficher uniquement si une seconde stérilisation est interdite ; distinct de l’usage unique.","ISO 15223-1, 5.2.6");
-  else if(answers.resterilize==="unknown")v("Restérilisation","Clarifier la possibilité de restériliser après ouverture et les instructions applicables.");
-  r("5.2.1","État stérile","Indication de l'état stérile et de la méthode de stérilisation effectivement utilisée.","MDR annexe I, 23.2 l");
-  const map={eo:["5.2.3","Stérilisé à l'oxyde d'éthylène"],radiation:["5.2.4","Stérilisé par irradiation"],steam:["5.2.5","Stérilisé par vapeur ou chaleur sèche"],aseptic:["5.2.2","Traitement aseptique"]};
-  if(map[answers.sterilmethod])r(map[answers.sterilmethod][0],map[answers.sterilmethod][1],"Symbole à confirmer avec le procédé validé.","ISO 15223-1, 5.2");
-  else v("Méthode de stérilisation","Sélectionner et valider le procédé avant le choix du symbole.");
-  const barriers={single:["5.2.11","Système de barrière stérile simple"],double:["5.2.12","Système de barrière stérile double"],inner:["5.2.13","Barrière stérile + protection intérieure"],outer:["5.2.14","Barrière stérile + protection extérieure"]};
-  if(barriers[answers.barrier])c(barriers[answers.barrier][0],barriers[answers.barrier][1],"À placer selon l'architecture du conditionnement réellement validée.","ISO 15223-1, 5.2.11–5.2.14");
-  else v("Système de barrière stérile","Préciser le type de barrière et les protections.");
-  c("5.2.8","Ne pas utiliser si emballage endommagé","La conduite à tenir doit être définie dans la notice ; sur emballage stérile, l'information est particulièrement importante.","MDR annexe I, 23.3 j");
-  if(answers.support==="sterile")r("Texte","Mentions spécifiques sur l'emballage stérile","Description du dispositif, fabricant, fabrication (mois et année), limite d'utilisation, indication stérile et méthode, consigne en cas d'emballage endommagé.","MDR annexe I, 23.3","Mention");
-  if(answers.expiry!=="yes")v("Stérile sans date limite","Vérifier la durée de conservation du système de barrière stérile et le besoin d'une date limite validée.");
- }else if(answers.sterile==="before"){
-  c("5.2.7","Non stérile","Le dispositif est livré non stérile ; indiquer clairement les opérations validées à effectuer avant utilisation.","MDR annexe I, 23.4 m");
- }else if(answers.sterile==="unknown")v("État de stérilité","Définir si le dispositif est fourni stérile et, le cas échéant, sa méthode.");
- if(answers.reuse==="single")r("5.4.2","Ne pas réutiliser / usage unique","Mention explicite de l'usage unique lorsque le dispositif est prévu pour une seule utilisation.","MDR annexe I, 23.2 n");
- else if(["reusable","limited"].includes(answers.reuse)){
-  c("Notice","Retraitement et réutilisation","Vérifier les procédés validés de nettoyage/désinfection/stérilisation ; signaler les critères de fin de vie.","MDR annexe I, 23.4 n","Information");
-  if(market&&["clean","disinfect","sterilize"].includes(answers.reprocess))c("UDI direct","Marquage UDI permanent sur le dispositif","À examiner si le dispositif subit un retraitement entre patients, sauf dérogation documentée. Échéance classe I : 26 mai 2027 ; classes IIa/IIb/III : déjà applicable.","MDR annexe VI, partie C, 6.2","Marquage");
-  if(answers.reuse==="limited")c("Notice","Nombre maximal de réutilisations","Indiquer la limite validée et les critères de retrait du service.","MDR annexe I, 23.4 n","Information");
-  if(answers.reprocess==="unknown")v("Retraitement","Il faut définir les cycles et procédés validés.");
- }else v("Usage unique ou réutilisable","Décision nécessaire pour éviter des instructions contradictoires.");
- const storage=[["temperature","5.3.7","Limites de température"],["humidity","5.3.8","Limites d'humidité"],["dry","5.3.4","Garder au sec"],["sunlight","5.3.2","Tenir à l'abri de la lumière solaire"],["fragile","5.3.1","Fragile : manipuler avec précaution"]];
- storage.forEach(x=>{if(listContains("storage",x[0]))c(x[1],x[2],"Spécifier les limites et conditions validées, si applicables.","MDR annexe I, 23.2 k");});
- if(listContains("storage","unknown"))v("Stockage","Évaluer stabilité, transport, conditions de conservation et risques de manutention.");
- if(listContains("substances","latex"))c("5.4.5","Contient du latex naturel","La déclaration doit refléter les matériaux et la conformité avec les exigences de sécurité.","ISO 15223-1, 5.4.5");
- [["cmr","CMR / perturbateurs endocriniens"],["med","Substance médicamenteuse"],["human","Origine humaine"],["animal","Origine animale"]].forEach(x=>{
-  if(listContains("substances",x[0]))c("MDR","Mention de composition : "+x[1],"Examiner les exigences spécifiques ; ne pas remplacer une évaluation réglementaire par un pictogramme seul.","MDR annexe I, 23.2 e–f","Mention");
- });
- if(listContains("substances","unknown"))v("Substances et matériaux","Vérifier latex, CMR, substances médicamenteuses et dérivés humains/animaux.");
- if(listContains("instructions","ifu")||listContains("instructions","electronic"))c("5.4.3","Consulter le mode d’emploi","Notice conforme et accessible dans les langues requises.","ISO 15223-1, 5.4.3");
- if(listContains("instructions","electronic"))v("Notice électronique","Vérifier séparément si les conditions du règlement d'exécution eIFU sont satisfaites ; ne pas supposer qu'une notice numérique remplace toujours le papier.");
- if(listContains("instructions","warning"))r("5.4.4","Avertissements critiques","Avertissements nécessaires à l'utilisation sûre : texte et/ou symbole, à confirmer par l'analyse de risques.","MDR annexe I, 23.2 m");
- if(listContains("instructions","damaged"))c("5.2.8","Ne pas utiliser si emballage endommagé","Indication à vérifier selon l'état de l'emballage et le risque.","ISO 15223-1, 5.2.8");
- if(listContains("instructions","unknown"))v("Notices et avertissements","Définir les messages critiques et la nécessité d'une notice.");
- if(answers.electronic==="yes")v("Marquages hors ISO 15223-1","Évaluer les obligations éventuelles (sécurité électrique, DEEE, batterie, symbole applicable) séparément.");
- if(answers.electronic==="unknown")v("Électricité / électronique","La présence de circuits et d'une alimentation peut imposer d'autres marquages.");
- if(answers.pack==="multiple")v("Plusieurs conditionnements","Prévoir les UDI-DI et étiquettes de chaque niveau commercial, hors conteneurs logistiques.");
- if(answers.support==="unknown")v("Support de l'étiquette","Identifier le dispositif, l'emballage primaire et le conditionnement extérieur.");
- if(answers.space==="tiny"||answers.space==="small")v("Surface réduite","Étudier la lisibilité du DataMatrix et des mentions ; une petite surface n'autorise pas à omettre des informations obligatoires.");
- if(answers.space==="unknown")v("Dimensions d'étiquette","Mesurer la surface disponible et prévoir une vérification physique de lisibilité.");
- if(answers.language==="eu"||answers.language==="other")v("Langues et pays","Vérifier les langues exigées dans chaque État membre et les prescriptions supplémentaires hors UE.");
- if(answers.language==="unknown")v("Marché linguistique","Définir les pays de commercialisation avant la validation de l'étiquette.");
- if(answers.class==="unknown")v("Classe MDR","Déterminer la classification et la procédure d'évaluation avant finalisation.");
- if(answers.ce==="ce-alone"&&["is","iia","iib","iii"].includes(answers.class))v("Incohérence possible CE / organisme notifié","La classe déclarée impose de vérifier l'intervention de l'organisme notifié et le numéro de marquage.");
- if(answers.ce==="ce-nb"&&answers.class==="i")v("Incohérence possible classe I","Confirmer pourquoi un organisme notifié intervient, ou corriger la classe déclarée.");
- if(answers.territory==="unknown")v("Marché cible","Vérifier le champ territorial du règlement MDR.");
- if(answers.manufacturer==="outside"&&answers.territory==="outside")v("Mandataire UE","Un mandataire UE n'est pas automatiquement exigé si aucun dispositif n'est commercialisé dans l'UE.");
+ const r=(code,title,detail,source,tag)=>add(required,code,title,detail,source,tag);
+ const c=(code,title,detail,source,tag)=>add(conditional,code,title,detail,source,tag);
+ const v=(title,detail)=>add(review,"!",title,detail,"Contrôle");
+ const a=answers;
+ const market=a.status==="market",draft=a.status==="draft",custom=a.status==="custom",investigation=a.status==="investigation";
+ const isEU=a.territory!=="outside";
+ const isDevice=a.support==="device",sterilePack=a.support==="sterile";
+ const label=!isDevice;
+ const sterile=a.sterile==="sterile";
+ const trackingLot=a.tracking==="lot"||a.tracking==="both",trackingSerial=a.tracking==="serial"||a.tracking==="both";
+ const reused=a.reuse==="reusable"||a.reuse==="limited";
+ const reprocessed=["clean","disinfect","sterilize"].includes(a.reprocess);
+ const iso="ISO 15223-1:2021";
+ const mdr="MDR (UE) 2017/745";
+
+ r("Texte","Nom et identification du produit","Préciser la dénomination, le modèle et le contenu de l'emballage si nécessaire.",mdr+" annexe I, 23.2(a–b)","Mention");
+ if(label){
+  r("5.1.1","Fabricant légal et adresse","Indiquer le nom légal et l'adresse du siège du fabricant. Le symbole 5.1.1 peut introduire ces coordonnées.",mdr+" annexe I, 23.2(c)","Mention");
+  if(!draft){
+   r("5.7.7","Indication « dispositif médical »","Le MDR exige cette indication. Le symbole MD (5.7.7) est une manière possible de la présenter.",mdr+" annexe I, 23.2(q)","Mention");
+  }
+  if(a.manufacturer==="outside"&&isEU&&!draft){
+   r("5.1.2","Mandataire dans l'Union et adresse","Utiliser les coordonnées du mandataire UE ; symbole 5.1.2 dans la version amendée A1:2025 (code de juridiction).",mdr+" annexe I, 23.2(d) ; "+iso+" / A1:2025","Mention");
+  }
+ }else{
+  c("Texte","Marquage du dispositif","Privilégier l'identification durable adaptée au produit. Le marquage direct n'est pas identique à l'étiquette complète du conditionnement.",mdr+" annexe I, 23.1 et 23.2","Support");
+  v("Étiquettes des emballages distinctes","Le questionnaire porte ici sur le dispositif lui-même. Prévoir séparément l'étiquette de l'unité de vente et, le cas échéant, du conditionnement stérile.");
+ }
+
+ if(custom&&label)r("Texte","Mention « dispositif sur mesure »","Mention spécifique requise ; les conditions de l'annexe XIII doivent être vérifiées.",mdr+" annexe I, 23.2(p), annexe XIII","Mention");
+ if(investigation&&label)r("Texte","Mention « exclusivement destiné à une investigation clinique »","Ne pas assimiler à une étiquette commerciale marquée CE.",mdr+" annexe I, 23.2(q)","Mention");
+ if(draft)v("Produit en développement","Ne pas faire apparaître de marquage CE ou d'UDI commercial non attribué sur une étiquette de prototype.");
+ if(custom||investigation)v("Procédure particulière","Vérifier l'étiquetage et la documentation spécifiques aux dispositifs sur mesure ou aux investigations cliniques ; le régime commercial standard ne s'applique pas automatiquement.");
+
+ if(market&&isEU){
+  if(a.ce==="ce-alone")r("CE","Marquage CE","Ne l'apposer qu'après achèvement de la procédure de conformité applicable. Utiliser le graphisme réglementaire officiel.",mdr+" articles 20 et 52, annexe V","Marquage");
+  else if(a.ce==="ce-nb")r("CE + ON","CE et numéro d'organisme notifié","Confirmer le numéro de l'ON et sa participation à la procédure de conformité, sans l'inférer automatiquement de la classe.",mdr+" articles 20 et 52, annexe V","Marquage");
+  else v("Marquage CE non autorisé","La procédure de conformité n'est pas achevée : ne pas imprimer le CE.");
+  if(label)r("UDI (AIDC + HRI)","Support UDI","Placer un identifiant UDI attribué avec sa représentation lisible par machine et par l'homme suivant l'entité d'attribution et les exemptions applicables ; le Basic UDI-DI n'est pas imprimé.",mdr+" article 27 ; annexe VI, partie C","Traçabilité");
+  if(a.carrier==="multiple"&&label)c("5.7.10","Pictogramme UDI (facultatif)","Le symbole 5.7.10 permet de repérer le support UDI en présence de plusieurs supports de données ; il ne constitue pas le support UDI lui-même.",iso+" 5.7.10","Symbole");
+ }else if(market&&!isEU){
+  v("Commercialisation hors Union européenne","Les mentions MDR ci-dessous sont seulement indicatives pour ce marché. Les règles locales restent à établir.");
+ }
+
+ if(label&&!draft){
+  if(trackingLot)r("5.1.5","Numéro de lot (LOT)","La valeur LOT doit être cohérente avec la production et l'UDI-PI applicable.",mdr+" annexe I, 23.2(g) ; "+iso+" 5.1.5","Traçabilité");
+  if(trackingSerial)r("5.1.7","Numéro de série (SN)","La valeur SN doit être cohérente avec la production et l'UDI-PI applicable.",mdr+" annexe I, 23.2(g) ; "+iso+" 5.1.7","Traçabilité");
+  if(sterilePack){
+   r("5.1.3","Date de fabrication (mois/année)","Information propre à l'emballage maintenant l'état stérile, même si une péremption est indiquée.",mdr+" annexe I, 23.3(h)","Date");
+   r("5.1.4","Date limite d'utilisation (année/mois minimum)","L'emballage stérile doit indiquer la limite d'utilisation ou d'implantation sûre.",mdr+" annexe I, 23.3(i)","Date");
+   if(a.expiry==="no")v("Date limite manquante pour l'emballage stérile","La réponse « aucune date limite » ne satisfait pas la liste d'informations prévue à l'annexe I, 23.3(i).");
+  }else if(a.expiry==="yes"){
+   r("5.1.4","Date limite d'utilisation","Indiquer la date limite déterminée par les données de durée de vie et la stabilité.",mdr+" annexe I, 23.2(i)","Date");
+  }else{
+   r("5.1.3","Date de fabrication","En l'absence de limite d'utilisation renseignée, la date de fabrication doit être identifiable.",mdr+" annexe I, 23.2(j)","Date");
+  }
+  c("5.1.6","Référence catalogue / modèle","À utiliser si nécessaire pour identifier sans ambiguïté la version du produit, distincte de l'UDI.",iso+" 5.1.6","Identification");
+ }else if(draft&&label){
+  c("5.1.6","Référence du prototype","Utiliser une référence interne et une révision documentée, sans la présenter comme UDI-DI.",iso+" 5.1.6","Identification");
+ }
+
+ if(a.implant==="active"&&!trackingSerial)v("Implant actif : numéro de série requis","Pour un dispositif actif implantable, l'UDI-PI doit comprendre un numéro de série.");
+ if(a.implant==="passive"&&!trackingSerial&&!trackingLot)v("Implant : lot ou série","Pour les autres dispositifs implantables, l'UDI-PI doit au minimum identifier lot ou série.");
+
+ if(sterile){
+  const methods={
+   eo:["5.2.3","Stérilisé à l'oxyde d'éthylène"],
+   radiation:["5.2.4","Stérilisé par irradiation"],
+   steam:["5.2.5","Stérilisé par vapeur ou chaleur sèche"],
+   aseptic:["5.2.2","Préparation aseptique"],
+   vph:["5.2.10","Stérilisé au peroxyde d'hydrogène vaporisé"],
+   other:["5.2.1","Stérile — autre procédé"]
+  };
+  const method=methods[a.sterilmethod];
+  if(label){
+   if(method)r(method[0],method[1],"Choisir ce symbole selon le procédé effectivement validé. Ne PAS ajouter le symbole générique 5.2.1 lorsqu'une méthode spécifique 5.2.2 à 5.2.5 ou 5.2.10 est affichée.",mdr+" annexe I, 23.2(l) ; "+iso+" 5.2","Stérilité");
+   if(a.sterilmethod==="other")v("Méthode de stérilisation à préciser","La mention du procédé validé est exigée. Le symbole générique ne suffit pas à donner cette information.");
+  }
+  const barriers={
+   single:["5.2.11","Barrière stérile simple"],
+   double:["5.2.12","Barrière stérile double"],
+   inner:["5.2.13","Barrière stérile et protection intérieure"],
+   outer:["5.2.14","Barrière stérile et protection extérieure"]
+  };
+  const barrier=barriers[a.barrier];
+  if(label&&barrier)c(barrier[0],barrier[1],"Symbole à placer près du symbole de stérilisation si utilisé. Il faut distinguer barrière microbienne et emballage de protection.",iso+" 5.2.11–5.2.14","Conditionnement");
+  if(label&&a.resterilize==="no"){
+   if(reused&&a.reprocess==="sterilize")v("Incompatibilité entre réutilisation et restérilisation","Vous avez prévu une stérilisation entre utilisations mais déclaré « ne pas restériliser ». Ne pas proposer le symbole 5.2.6 avant correction.");
+   else c("5.2.6","Ne pas restériliser","Réservé aux dispositifs portant un symbole stérile et ne devant pas être restérilisés. Ne pas l'utiliser pour un dispositif réutilisable stérilisé entre les usages.",iso+" 5.2.6","Utilisation");
+  }
+  if(sterilePack){
+   r("Texte","Identification de l'emballage stérile","L'emballage doit être reconnaissable comme maintenant l'état stérile et identifier le dispositif, le fabricant, et le procédé de stérilisation.",mdr+" annexe I, 23.3(a–e)","Emballage");
+   r("Texte","Consigne en cas d'emballage endommagé","Prévoir une indication invitant à consulter la notice sur la conduite à tenir si l'emballage stérile est ouvert ou endommagé.",mdr+" annexe I, 23.3(j)","Emballage");
+  }
+ }else{
+  if(a.fluidpath==="yes"&&label){
+   r("5.2.9","Chemin de fluide stérile","À retenir uniquement si le chemin de fluide est stérile alors que le dispositif dans son ensemble ne l'est pas. Identifier la partie concernée et la méthode de stérilisation.",iso+" 5.2.9","Stérilité");
+  }
+  if(a.nonsterilevariants==="yes"&&label){
+   c("5.2.7","Non stérile","Symbole utile pour distinguer une version non stérile d'une version identique ou similaire commercialisée stérile.",iso+" 5.2.7","Stérilité");
+  }
+  if(a.sterile==="before"){
+   v("Stérilisation avant utilisation","Fournir un procédé validé, les paramètres et les instructions correspondantes dans la notice.");
+  }
+  if(sterilePack)v("Support incohérent avec l'état déclaré","Un conditionnement maintenant la stérilité ne peut pas correspondre à un dispositif déclaré fourni non stérile.");
+ }
+
+ if(a.reuse==="single"&&label&&!draft)r("5.4.2","À usage unique — ne pas réutiliser","L'indication d'usage unique est requise si le dispositif est conçu pour une seule procédure sur un patient.",mdr+" annexe I, 23.2(n) ; "+iso+" 5.4.2","Utilisation");
+ if(reused){
+  if(a.patient==="same"&&label)c("5.4.12","Un seul patient, plusieurs utilisations","Adapté uniquement au matériel réutilisable sur un même patient, et non sur plusieurs patients.",iso+" 5.4.12","Utilisation");
+  if(a.reprocess==="none"&&a.patient==="multiple")v("Retraitement entre patients à justifier","Le dispositif est déclaré réutilisable sur plusieurs patients sans retraitement entre les utilisations : évaluer la sécurité et la justification technique.");
+  c("Notice","Instructions de retraitement","Documenter les procédés validés, limites de cycles et critères de fin de vie du dispositif.",mdr+" annexe I, 23.4(n)","Notice");
+  if(a.reuse==="limited")c("Notice","Nombre maximal de réutilisations","La limite validée doit être portée dans la documentation et communiquée à l'utilisateur.",mdr+" annexe I, 23.4(n)","Notice");
+  if(market&&isEU&&reprocessed){
+   if(isDevice){
+    r("UDI direct","Marquage direct UDI permanent","L'UDI des dispositifs retraités entre usages doit pouvoir être lu après chaque cycle, sauf exemption pour impossibilité technique ou impact sur la sécurité et la performance.",mdr+" annexe VI, C, 6.2 ; 4.10","Traçabilité");
+   }else{
+    v("UDI direct sur le dispositif","Le dispositif retraité entre utilisations peut nécessiter un marquage permanent, distinct du support UDI figurant sur l'emballage. Exemptions et échéance de classe I à vérifier (26 mai 2027).");
+   }
+  }
+ }
+
+ const storage=[
+  ["temperature","5.3.7","Limites de température"],
+  ["humidity","5.3.8","Limites d'humidité"],
+  ["pressure","5.3.9","Limites de pression atmosphérique"],
+  ["dry","5.3.4","Conserver au sec"],
+  ["sunlight","5.3.2","Protéger de la lumière solaire"],
+  ["fragile","5.3.1","Fragile : manipuler avec soin"]
+ ];
+ if(label){
+  storage.forEach(item=>{if(listContains("storage",item[0]))r(item[1],item[2],"Ajouter les valeurs et limites validées si le symbole le requiert ; ne pas inventer des seuils.",mdr+" annexe I, 23.2(k) ; "+iso+" 5.3","Stockage");});
+  const substances=[
+   ["latex","5.4.5","Latex de caoutchouc naturel"],
+   ["blood","5.4.6","Dérivés du sang ou du plasma humain"],
+   ["med","5.4.7","Substance médicamenteuse incorporée"],
+   ["animal","5.4.8","Matériau biologique d'origine animale"],
+   ["human","5.4.9","Matériau biologique d'origine humaine"],
+   ["cmr","5.4.10","Substances dangereuses (CMR / perturbateurs endocriniens)"],
+   ["nano","5.4.11","Nanomatériaux"]
+  ];
+  substances.forEach(item=>{
+   if(listContains("substances",item[0])){
+    if(item[0]==="nano"||item[0]==="latex")
+     c(item[1],item[2],"Vérifier que le symbole correspond aux matériaux et risques documentés du produit.",iso+" "+item[1],"Composition");
+    else r(item[1],item[2],"Évaluer la mention réglementaire exacte à partir de la composition, de l'analyse de risques et des seuils applicables.",mdr+" annexe I, 23.2(e–f) ; "+iso+" "+item[1],"Composition");
+   }
+  });
+  if(listContains("instructions","ifu")||listContains("instructions","electronic"))c("5.4.3","Consulter la notice","Le symbole peut renvoyer aux instructions d'utilisation, papier ou électronique dans les conditions réglementaires applicables.",iso+" 5.4.3","Notice");
+  if(listContains("instructions","warning"))r("5.4.4","Attention et avertissements particuliers","La nature et le placement des avertissements doivent venir de l'analyse de risques, le pictogramme seul ne remplace pas le texte nécessaire.",mdr+" annexe I, 23.2(m) ; "+iso+" 5.4.4","Sécurité");
+  if(listContains("instructions","damaged")&&!sterilePack)c("5.2.8","Emballage endommagé : consulter la notice","À envisager si l'intégrité de l'emballage conditionne l'utilisation sûre du produit.",iso+" 5.2.8","Emballage");
+ }
+ if(listContains("instructions","electronic"))v("Notice électronique","Vérifier l'éligibilité au régime de notice électronique avant de supprimer toute notice papier.");
+ if(a.electronic==="yes")v("Marquages électriques complémentaires","Évaluer, si applicables, les exigences issues des normes électriques, des batteries et de la réglementation DEEE, hors ISO 15223-1.");
+ if(a.pack==="multiple"&&market)v("Niveaux commerciaux de conditionnement","Examiner séparément l'UDI-DI et l'étiquette de chaque niveau de commercialisation, en excluant les conteneurs purement logistiques.");
+ if(["tiny","small"].includes(a.space))v("Place réduite pour les marquages","Vérifier la lisibilité des symboles, des caractères et de l'UDI après impression. Une surface réduite ne dispense pas automatiquement des mentions obligatoires.");
+ if(["eu","other"].includes(a.language))v("Langues applicables","Vérifier les exigences linguistiques des États membres ciblés et, le cas échéant, celles des pays hors UE.");
+ if(a.ce==="ce-alone"&&["is","iia","iib","iii"].includes(a.class))v("CE / organisme notifié : déclaration incohérente","La classe ou les caractéristiques déclarées demandent une vérification de la procédure et du numéro d'organisme notifié.");
+ if(a.ce==="ce-nb"&&a.class==="i")v("Classe I et organisme notifié","Vérifier pourquoi un organisme notifié intervient, ou corriger la classification.");
+ if(a.class==="i"&&sterile&&market)v("Classe I stérile","Vérifier si la classification doit être Is et si un organisme notifié doit intervenir pour les aspects liés à la stérilité.");
+ if(a.manufacturer==="outside"&&!isEU&&market)v("Mandataire et opérateurs hors UE","Les obligations relatives aux représentants dépendent du marché de destination ; ne pas appliquer automatiquement la règle européenne.");
+ if(a.import==="yes"&&isEU&&label)c("5.1.8","Importateur","Coordonnées requises par l'article 13(3), qui peuvent figurer sur le dispositif, son emballage ou un document d'accompagnement ; pas nécessairement sur cette étiquette.",mdr+" article 13(3) ; "+iso+" 5.1.8","Opérateur");
+
  const unique=items=>items.filter((x,i)=>items.findIndex(y=>y.code===x.code&&y.title===x.title)===i);
  return {required:unique(required),conditional:unique(conditional),review:unique(review)};
 }
