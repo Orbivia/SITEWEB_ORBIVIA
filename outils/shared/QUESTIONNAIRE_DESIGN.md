@@ -2,31 +2,41 @@
 
 ## Objectif
 
-Les questionnaires **Classification MDR/IVDR** et **Choix de connectivité** utilisent un système visuel partagé. Chaque nouveau questionnaire doit reprendre ce système, plutôt que recopier des correctifs CSS d'un outil à l'autre.
+Les questionnaires **Classification MDR/IVDR**, **Choix de connectivité** et **Étiquetage médical** utilisent un système visuel partagé. Chaque nouveau questionnaire doit reprendre ce système, plutôt que recopier des correctifs CSS d'un outil à l'autre.
 
 ## Fichiers
 
 - `/outils/questionnaire.css` : base historique des composants de questionnaire et présentation générique.
 - `/outils/shared/questionnaire-ui.css` : **référence visuelle actuelle** pour les titres, icônes, choix, sous-titres conditionnels et info-bulles flottantes.
 - `/outils/shared/questionnaire-ui.js` : comportement commun des info-bulles (fermeture extérieure / Échap).
+- `/outils/shared/questionnaire-layout.css` : grille ordinateur, empilement mobile, dimensions, navigation et densités partagées.
+- `/outils/shared/questionnaire-layout.js` : détecte automatiquement la phase question et réduit les espaces si nécessaire (sans masquer les réponses).
 - `/outils/shared/help-sheet.css` : panneau « Aide au choix » distinct de la petite bulle d'information.
 - `/outils/<outil>/...css` : uniquement ce qui est spécifique à l'outil (mise en page, résultats et cas particuliers).
 
 ## Brancher un nouveau questionnaire
 
-Dans la page HTML, ajouter `data-questionnaire-ui="v1"` sur `<body>`. Charger `/outils/questionnaire.css`, puis la feuille CSS spécifique de l'outil, puis **en dernier** `/outils/shared/questionnaire-ui.css`. Charger `/outils/shared/questionnaire-ui.js` une seule fois.
+Dans la page HTML, ajouter `data-questionnaire-ui="v1"` sur `<body>`. Charger `/outils/questionnaire.css`, puis la feuille CSS spécifique de l'outil, puis `/outils/shared/questionnaire-ui.css`, et **en dernier** `/outils/shared/questionnaire-layout.css`. Charger `/outils/shared/questionnaire-ui.js` une seule fois, puis `/outils/shared/questionnaire-layout.js` **après** le script qui affiche les questions.
 
 Respecter les classes HTML communes :
 
 - `.question-progress` pour l'avancement ;
 - `.question-card` et `.question-heading` ;
-- icône spécifique à la **question**, en SVG bicolore ou raster avec SVG de secours, dans `h1` ; Sur **ordinateur (≥ 900 px)**, le pictogramme de la question est **centré sous le titre** (140 × 140 px), comme dans le parcours Connectivité. Sur **téléphone**, il reste **à gauche du texte**, sans déplacement des réponses. Ce comportement est défini dans le CSS commun pour Classification, Connectivité et Étiquetage médical. Aucune icône dans les boutons de réponse ;
+- icône spécifique à la **question**, en SVG bicolore ou raster avec SVG de secours, dans `h1` ; Sur **ordinateur (≥ 900 px)**, le pictogramme de la question est **centré sous le titre** (taille adaptée à la hauteur de l'écran, jusqu'à 140 × 140 px), comme dans le parcours Connectivité. Sur **téléphone**, il reste **à gauche du texte**, sans déplacement des réponses. Ce comportement est défini dans le CSS de mise en page commun pour les trois questionnaires. Aucune icône dans les boutons de réponse ;
 - `.answer` contenant `.answer-copy` et, **seulement si nécessaire**, `<small>` avec une explication brève ;
 - `<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div>...</div></details>` à côté du titre ; cette bulle flotte par-dessus le contenu sans le déplacer ;
 - « Aide au choix » réservée aux questions qui demandent une assistance plus approfondie ;
 - navigation avec « Précédent », « Continuer » uniquement lorsque nécessaire, et « Reprendre à zéro » comme vrai bouton secondaire.
 
 Les icônes des questions de classification sont définies dans `classification/presentation.js`; celles de connectivité dans `connectivite/icones/question-*.svg`. Conserver le bleu nuit `#17263a` et le doré `#e7a116`. Les informations optionnelles ne doivent pas rendre tous les boutons inutilement hauts.
+
+## Affichage sur un seul écran
+
+Tous les outils présentent la question dans le même cadre, avec le pictogramme et « Aide au choix » à gauche (si disponible), et les réponses à droite sur ordinateur. Sur téléphone, les réponses s'empilent sous le titre. Le pied de page est masqué pendant le questionnaire, mais réapparaît sur les résultats.
+
+Le script commun ajoute temporairement `quiz-active`, puis les classes `quiz-compact`, `quiz-dense` ou `quiz-tight` si les réponses dépassent la fenêtre. Si elles ne tiennent toujours pas, `quiz-scroll` réactive le défilement. **Ne jamais masquer ou couper une réponse pour tenir artificiellement dans la fenêtre.** Les aides modales et les synthèses restent indépendantes. Le moteur ne modifie aucune valeur métier.
+
+Un nouvel outil doit disposer d'un conteneur principal détectable et d'une `.question-card` (hors résultats), contenant ses réponses dans `.answer-list`, `.cx-options` ou `.label-options`. Adapter la détection de la racine commune si le conteneur d'un nouvel outil diffère.
 
 ## Points de contrôle
 
