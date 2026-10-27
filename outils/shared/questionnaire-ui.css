@@ -17,20 +17,6 @@ body[data-questionnaire-ui] .question-heading h1{
  min-width:0;
  text-wrap:pretty;
 }
-body[data-questionnaire-ui] .question-heading .cx-question-icon,
-body[data-questionnaire-ui] .question-heading .mdr-question-icon{
- display:block;
- flex:0 0 32px;
- width:32px;
- height:32px;
- object-fit:contain;
- color:#17263a;
-}
-body[data-questionnaire-ui] .question-heading .mdr-question-icon svg{
- display:block;
- width:100%;
- height:100%;
-}
 
 /* Réponses : la précision est facultative. Une seule ligne lorsque le libellé
  * suffit ; une ligne secondaire lisible sous le libellé lorsqu'elle aide à choisir. */
@@ -94,12 +80,6 @@ body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer .answer
  }
 }
 @media(max-width:700px){
- body[data-questionnaire-ui] .question-heading .cx-question-icon,
- body[data-questionnaire-ui] .question-heading .mdr-question-icon{
-  flex-basis:28px;
-  width:28px;
-  height:28px;
- }
  body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer .answer-copy{
   font-size:14px;
  }
@@ -211,35 +191,5 @@ body[data-questionnaire-ui] .question-heading .info-bubble summary:focus-visible
  body[data-questionnaire-ui] .question-card:not(.assistance-card) .question-prompt,
  body[data-questionnaire-ui] .question-card:not(.assistance-card) .cx-question-prompt{
   min-height:0;
- }
-}
-
-
-/* Sur ordinateur, icône de question centrée SOUS le titre.
- * Une seule règle pour classification MDR, connectivité et étiquetage médical.
- * Sur téléphone, l'icône reste à gauche, alignée sur le texte. */
-@media (min-width:900px) {
- body[data-questionnaire-ui] .question-card .question-heading h1:has(> .cx-question-icon, > .mdr-question-icon, > .mdr-question-art) {
-  display:block;
-  position:relative;
-  padding-bottom:172px;
- }
- body[data-questionnaire-ui] .question-card .question-heading h1 > .cx-question-icon,
- body[data-questionnaire-ui] .question-card .question-heading h1 > .mdr-question-icon,
- body[data-questionnaire-ui] .question-card .question-heading h1 > .mdr-question-art {
-  position:absolute;
-  top:auto;
-  bottom:12px;
-  left:50%;
-  transform:translateX(-50%);
-  display:block;
-  width:140px;
-  height:140px;
-  min-width:140px;
-  min-height:140px;
-  max-width:none;
-  max-height:none;
-  flex:none;
-  object-fit:contain;
  }
 }
