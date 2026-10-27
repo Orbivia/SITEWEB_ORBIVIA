@@ -170,8 +170,7 @@ body[data-questionnaire-ui].quiz-active .save-status:not(:empty) {
  min-height:0;
  margin:4px 0 0;
 }
-/* Un même ordre visuel sur ordinateur : question + icône à gauche, réponses à droite,
-   aide en bas à gauche. */
+/* Sur ordinateur, question à gauche, réponses à droite, aide en bas à gauche. */
 @media(min-width:900px){
  body[data-questionnaire-ui].quiz-active .tool-shell{
   width:min(1120px,calc(100% - 80px));
@@ -208,33 +207,12 @@ body[data-questionnaire-ui].quiz-active .save-status:not(:empty) {
   margin:0;
   width:auto;
  }
- body[data-questionnaire-ui].quiz-active .question-card .question-heading h1:has(> :is(.cx-question-icon,.mdr-question-icon,.mdr-question-art)){
-  position:relative;
-  display:block;
-  padding-bottom:calc(clamp(72px,13dvh,140px) + 16px);
- }
- body[data-questionnaire-ui].quiz-active .question-card .question-heading h1 > :is(.cx-question-icon,.mdr-question-icon,.mdr-question-art){
-  position:absolute;
-  display:block;
-  top:auto;
-  left:50%;
-  bottom:8px;
-  transform:translateX(-50%);
-  width:clamp(72px,13dvh,140px);
-  height:clamp(72px,13dvh,140px);
-  min-width:0;
-  min-height:0;
-  max-width:none;
-  max-height:none;
-  flex:none;
-  object-fit:contain;
- }
  body[data-questionnaire-ui].quiz-active .question-card > :is(.answer-list,.label-options,.cx-options-wrapper) .answer{
   min-height:clamp(46px,6dvh,60px);
   padding:clamp(8px,1.1dvh,12px) 14px;
  }
 }
-/* Téléphones et tablettes : titre et icône sur une ligne, toutes les réponses en colonne. */
+/* Téléphones et tablettes : titre et réponses empilés. */
 @media(max-width:899px){
  body[data-questionnaire-ui].quiz-active .tool-shell{
   width:calc(100% - 28px);
@@ -271,14 +249,6 @@ body[data-questionnaire-ui].quiz-active .save-status:not(:empty) {
  }
  body[data-questionnaire-ui].quiz-active .question-card .question-heading h1 {
   font-size:clamp(18px,2.7dvh,22px);
- }
- body[data-questionnaire-ui].quiz-active .question-card .question-heading h1 > :is(.cx-question-icon,.mdr-question-icon,.mdr-question-art) {
-  display:block;
-  position:static;
-  transform:none;
-  width:32px;
-  height:32px;
-  flex:0 0 32px;
  }
  body[data-questionnaire-ui].quiz-active .question-card .question-intro{margin-bottom:7px}
  body[data-questionnaire-ui].quiz-active .question-card .question-heading{margin-bottom:8px}
