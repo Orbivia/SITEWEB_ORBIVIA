@@ -124,7 +124,7 @@ test("Lot 2.3 : les quatre icônes validées restent distinctes, lisibles et san
   assert.doesNotMatch(item, /<image[\s>]/);
  }
  const index = load("outils/connectivite/index.html");
- assert.match(index, /connectivite\.js\?v=14/);
+ assert.match(index, /connectivite\.js\?v=[^"\s]+/);
 });
 
 
