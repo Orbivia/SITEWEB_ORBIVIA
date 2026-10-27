@@ -42,7 +42,6 @@ const Q=[
 
 const $=(sel)=>root.querySelector(sel);
 const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function icon(id){const names={"file":"payload","layers2":"layers","refresh":"repeat","circuit":"sensor","lang":"language"};return '<img class="mdr-question-icon" src="../shared/icons/'+(names[id]||id)+'.svg?v=solid1" alt="">';}
 
 let answers={},position=0,finished=false;
 try{const saved=JSON.parse(sessionStorage.getItem(STORE)||"{}");if(saved&&saved.answers&&typeof saved.answers==="object"){answers=saved.answers;position=Math.max(0,Math.min(30,Number(saved.position)||0));finished=!!saved.finished;}}catch(_){}
@@ -71,7 +70,7 @@ function choiceNotes(q){const seen=new Set([q.help]);const notes=q.options.filte
 function showQuestion(){
  const q=current(),qs=applicable(),pct=Math.round(position/qs.length*100);
  root.innerHTML='<div class="question-progress"><span>'+escapeHTML(q.s)+' · Étiquette MDR <b>Question '+(position+1)+' / '+qs.length+'</b></span><progress max="100" value="'+pct+'" aria-label="Progression"></progress></div>'
- +'<section class="question-card"><div class="question-prompt"><div class="question-heading"><h1 id="question-title">'+icon(q.icon)+escapeHTML(q.title)+'</h1>'
+ +'<section class="question-card"><div class="question-prompt"><div class="question-heading"><h1 id="question-title">'+escapeHTML(q.title)+'</h1>'
  +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pourquoi cette question ?</strong><p>'+escapeHTML(q.help)+'</p>'+choiceNotes(q)+'</div></details></div></div>'
  +'<div class="label-options">'+q.options.map(o=>optionMarkup(q,o)).join("")+'</div></section>'
  +'<div class="question-controls label-controls"><button class="tool-button" data-action="back" type="button" '+(position===0?"disabled":"")+'>← Précédent</button>'
