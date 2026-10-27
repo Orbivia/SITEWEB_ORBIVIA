@@ -43,17 +43,6 @@ test("des indications optionnelles sont disponibles dans les choix de connectivi
  assert.doesNotThrow(() => new vm.Script(js));
 });
 
-test("classification affiche une icône par question, jamais une icône pour chaque réponse", () => {
- const presentation = load("outils/classification/presentation.js");
- const app = load("outils/questionnaire.js");
- assert.match(presentation, /function questionIcon\(q\)/);
- assert.match(app, /presentation\.questionIcon\(q\)/);
- assert.doesNotMatch(app, /presentation\.answerIcon\(q,value\)/);
- assert.doesNotThrow(() => new vm.Script(presentation));
- assert.doesNotThrow(() => new vm.Script(app));
-});
-
-
 test("Lot 1 : fréquence de connectivité sans regroupement secondes/minutes", () => {
  const source = load("outils/connectivite/connectivite.js");
  const start = source.indexOf("const Q=[");
@@ -90,72 +79,6 @@ test("Lot 1 : les 96 questions MDR/IVDR conservent les identifiants réglementai
  assert.match(presentation.questions.ivdSelfException.title, /autotest/);
 });
 
-
-test("Lot 2.1 : chaque nouvelle icône de question est distincte de son ancien doublon", () => {
- const pairs = [
-  ["autonomy", "power"],
-  ["mobility", "range"],
-  ["offline", "security"],
-  ["priorities", "peer"]
- ];
- for (const [updated, original] of pairs) {
-  const revised = load("outils/connectivite/icones/question-" + updated + ".svg");
-  const previous = load("outils/connectivite/icones/question-" + original + ".svg");
-  assert.notEqual(revised, previous, updated + " ne doit plus répéter " + original);
-  assert.match(revised, /viewBox="0 0 32 32"/);
-  assert.match(revised, /#17263a/);
-  assert.match(revised, /#e7a116/);
-  assert.doesNotMatch(revised, /<text[\s>]/);
- }
- const source = load("outils/connectivite/connectivite.js");
- assert.match(source, /\.svg\?v=[a-z0-9]+/);
-});
-
-
-test("Lot 2.3 : les quatre icônes validées restent distinctes, lisibles et sans texte", () => {
- const ids = ["peer", "range", "payload", "frequency"];
- const svg = ids.map(id => load("outils/connectivite/icones/question-" + id + ".svg"));
- assert.equal(new Set(svg).size, 4);
- for (const item of svg) {
-  assert.match(item, /viewBox="0 0 32 32"/);
-  assert.match(item, /#17263a/);
-  assert.match(item, /#e7a116/);
-  assert.doesNotMatch(item, /<text[\s>]/);
-  assert.doesNotMatch(item, /<image[\s>]/);
- }
- const index = load("outils/connectivite/index.html");
- assert.match(index, /connectivite\.js\?v=[^"\s]+/);
-});
-
-
-test("Audit graphique : 20 SVG Connectivite uniques, bicolores, sans textes ni images raster", () => {
- const ids = [
-  "peer", "range", "payload", "frequency", "environment", "power",
-  "autonomy", "infra", "mobility", "volume", "weight", "security",
-  "control", "offline", "latency", "updates", "budget", "monthly",
-  "quantity", "priorities"
- ];
- const all = ids.map(id => load("outils/connectivite/icones/question-" + id + ".svg"));
- assert.equal(new Set(all).size, ids.length, "une icône est réutilisée pour une autre question");
- for(let i = 0; i < ids.length; i++){
-  const svg = all[i];
-  assert.match(svg, /<svg[^>]*viewBox="0 0 32 32"/, ids[i]);
-  assert.match(svg, /#17263a/, ids[i]);
-  assert.match(svg, /#e7a116/, ids[i]);
-  assert.doesNotMatch(svg, /<(?:text|image|foreignObject)\b/i, ids[i]);
-  assert.doesNotMatch(svg, /(?:href|src)="https?:/i, ids[i]);
- }
-});
-
-
-test("MDR/IVDR : 96 questions disposent de pictogrammes pleins locaux",()=>{
- const presentation=require('../outils/classification/presentation.js');
- assert.equal(Object.keys(presentation.questions).length,96);
- for(const id of Object.keys(presentation.questions)){
-  const match=presentation.questionIcon({id}).match(/shared\/icons\/([a-z]+\.svg)/);assert.ok(match,id);
-  const svg=load('outils/shared/icons/'+match[1]);assert.match(svg,/#17263a/);assert.match(svg,/#e7a116/);assert.doesNotMatch(svg,/<(?:text|image|foreignObject)\b/i);
- }
-});
 
 test("les pictogrammes partagés restent des SVG simples sans ressources externes",()=>{
  for(const file of fs.readdirSync(path.join(root,'outils/shared/icons'))){const svg=load('outils/shared/icons/'+file);assert.match(svg,/viewBox="0 0 32 32"/);assert.doesNotMatch(svg,/<(?:script|image|foreignObject|text)\b|https?:[^/]/i);}
@@ -197,7 +120,7 @@ test("le responsive ne change pas les valeurs métier ni la synthèse",()=>{
  for(const source of [classification,connectivity,labelling])
   assert.doesNotThrow(()=>new vm.Script(source));
  assert.doesNotMatch(connectivity+labelling,/type=["']range["']/);
- assert.match(classification,/shared\/icons\//);
+ assert.doesNotMatch(classification,/questionIconTypes|function questionIcon/);
  assert.match(connectivity,/function renderResult/);
  assert.match(labelling,/function summary/);
 });
@@ -244,4 +167,20 @@ test("le moteur d'affichage passe de la question à la synthèse sans piéger l'
   assert.ok(!classes.has("quiz-active"),rootId+" summary");
   assert.ok(!classes.has("quiz-compact"),rootId+" summary density cleared");
  }
+});
+
+
+test("aucun des trois outils ne génère de pictogramme dans le titre des questions",()=>{
+ const mdr=load("outils/questionnaire.js");
+ const classification=load("outils/classification/presentation.js");
+ const connectivity=load("outils/connectivite/connectivite.js");
+ const label=load("outils/etiquettes-tracabilite/questionnaire.js");
+ const sharedCss=load("outils/shared/questionnaire-ui.css")+load("outils/shared/questionnaire-layout.css");
+ assert.doesNotMatch(mdr,/presentation\.questionIcon\(/);
+ assert.doesNotMatch(classification,/function questionIcon\(|questionIconTypes/);
+ assert.doesNotMatch(connectivity,/<img class="cx-question-icon"/);
+ assert.doesNotMatch(label,/\+icon\(q\.icon\)/);
+ assert.doesNotMatch(sharedCss,/\.cx-question-icon|\.mdr-question-icon|\.mdr-question-art/);
+ for(const file of ["outils/classification/design.css","outils/connectivite/connectivite.css","outils/etiquettes-tracabilite/questionnaire.css"])
+  assert.doesNotMatch(load(file),/\.cx-question-icon|\.mdr-question-icon|\.mdr-question-art/,file);
 });
