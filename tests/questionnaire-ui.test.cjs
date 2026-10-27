@@ -6,10 +6,10 @@ const vm = require("node:vm");
 const root = path.join(__dirname, "..");
 const load = p => fs.readFileSync(path.join(root, p), "utf8");
 
-test("MDR/IVDR et connectivité chargent le même thème de questionnaire en dernier", () => {
- for (const page of ["outils/classification/index.html", "outils/connectivite/index.html"]) {
+test("les trois questionnaires chargent le même thème de base après leur CSS métier", () => {
+ for (const page of ["outils/classification/index.html", "outils/connectivite/index.html", "outils/etiquettes-tracabilite/index.html"]) {
   const html = load(page);
-  const localCss = page.includes("classification") ? "design.css" : "connectivite.css";
+  const localCss = page.includes("classification") ? "design.css" : page.includes("connectivite") ? "connectivite.css" : "questionnaire.css";
   assert.match(html, /data-questionnaire-ui="v1"/);
   assert.ok(html.indexOf(localCss) < html.indexOf("questionnaire-ui.css"), page);
   assert.match(html, /shared\/questionnaire-ui\.js\?v=\d+/);
@@ -221,4 +221,48 @@ test("le responsive ne change pas les valeurs métier ni la synthèse",()=>{
  assert.match(classification,/const iconByQuestion=Object\.freeze/);
  assert.match(connectivity,/function renderResult/);
  assert.match(labelling,/function summary/);
+});
+
+
+test("le moteur d'affichage passe de la question à la synthèse sans piéger l'écran",()=>{
+ const source=load("outils/shared/questionnaire-layout.js");
+ for(const rootId of ["tool-app","connect-app","label-app"]){
+  let cardPresent=true,observerCallback,runFrame;
+  const classes=new Set();
+  const classList={
+   add(...names){names.forEach(n=>classes.add(n))},
+   remove(...names){names.forEach(n=>classes.delete(n))},
+   toggle(name,on){if(on)classes.add(name);else classes.delete(name)}
+  };
+  const card={
+   clientHeight:400,
+   get scrollHeight(){return classes.has("quiz-compact")?400:500},
+   getBoundingClientRect(){return{bottom:680}},
+   querySelector(){return null}
+  };
+  const rootNode={querySelector(selector){
+   if(selector.startsWith(".question-card"))return cardPresent?card:null;
+   if(selector===".question-controls")return{getBoundingClientRect(){return{bottom:700}}};
+   return null;
+  }};
+  const documentFake={
+   body:{classList},
+   documentElement:{scrollHeight:740},
+   querySelector(){return rootNode}
+  };
+  const windowFake={innerHeight:750,addEventListener(){}};
+  const VMObserver=class{constructor(cb){observerCallback=cb}observe(){}};
+  const request=cb=>(runFrame=cb,1);
+  const context={document:documentFake,window:windowFake,
+   MutationObserver:VMObserver,requestAnimationFrame:request,
+   cancelAnimationFrame(){}};
+  vm.runInNewContext(source,context,{filename:"questionnaire-layout.js"});
+  runFrame();
+  assert.ok(classes.has("quiz-active"),rootId);
+  assert.ok(classes.has("quiz-compact"),rootId);
+  assert.ok(!classes.has("quiz-scroll"),rootId);
+  cardPresent=false;observerCallback();runFrame();
+  assert.ok(!classes.has("quiz-active"),rootId+" summary");
+  assert.ok(!classes.has("quiz-compact"),rootId+" summary density cleared");
+ }
 });
