@@ -150,3 +150,6 @@ body[data-tool="etiquettes"] .label-result-card header h2{font-size:18px}
  .label-additional{display:none!important}
  body[data-tool="etiquettes"] .label-result-card{box-shadow:none}
 }
+
+/* Contexte du support évalué dans la synthèse. */
+body[data-tool="etiquettes"] .label-result-heading .label-result-support{font-size:12px;font-weight:650;line-height:1.35;color:#966e19;margin:-1px 0 8px}
