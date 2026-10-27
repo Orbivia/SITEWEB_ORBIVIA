@@ -70,7 +70,7 @@ function completed(q){const v=answers[q.id];return q.type==="multi"?Array.isArra
 function current(){const qs=applicable();position=Math.max(0,Math.min(qs.length-1,position));return qs[position];}
 function optionMarkup(q,option) {
  const value=option[0],label=option[1],desc=option[2]||"",sel=q.type==="single"?answers[q.id]===value:(answers[q.id]||[]).includes(value);
- return '<button type="button" class="answer label-option" data-choice="'+escapeHTML(value)+'" aria-pressed="'+sel+'"><span class="answer-copy">'+escapeHTML(label)+(desc?'<small>'+escapeHTML(desc)+'</small>':"")+'</span>'+(q.type==="multi"?'<span class="label-checkbox" aria-hidden="true">'+(sel?"✓":"")+'</span>':"")+'</button>';
+ return '<button type="button" class="answer label-option" data-choice="'+escapeHTML(value)+'" aria-pressed="'+sel+'"><div class="answer-copy">'+escapeHTML(label)+(desc?'<small>'+escapeHTML(desc)+'</small>':"")+'</div></button>';
 }
 function showQuestion(){
  const q=current(),qs=applicable(),pct=Math.round(position/qs.length*100);
