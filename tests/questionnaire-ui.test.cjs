@@ -182,21 +182,43 @@ test("MDR/IVDR : bibliothèque nettoyée et uniquement les 57 images utilisées"
  assert.deepEqual(actual, referenced, "aucun PNG inutilisé ni PNG manquant");
 });
 
-test("MDR/IVDR : affichage adaptatif sans slider et sans masquer les choix", () => {
- const html = load("outils/classification/index.html");
- assert.match(html, /viewport\.css\?v=\d+/);
- assert.match(html, /viewport\.js\?v=\d+/);
- assert.ok(html.indexOf("questionnaire-ui.css") < html.indexOf("viewport.css"));
- assert.ok(html.indexOf("questionnaire.js") < html.indexOf("viewport.js"));
- const css = load("outils/classification/viewport.css");
- const script = load("outils/classification/viewport.js");
+test("les trois questionnaires utilisent une seule mise en page responsive", () => {
+ const pages=["outils/classification/index.html","outils/connectivite/index.html","outils/etiquettes-tracabilite/index.html"];
+ const css=load("outils/shared/questionnaire-layout.css");
+ const script=load("outils/shared/questionnaire-layout.js");
+ for(const page of pages){
+  const html=load(page);
+  assert.match(html, /questionnaire-layout\\.css\\?v=\\d+/);
+  assert.match(html, /questionnaire-layout\\.js\\?v=\\d+/);
+  assert.ok(html.indexOf("questionnaire-ui.css")<html.indexOf("questionnaire-layout.css"),page);
+  const app=page.includes("classification")?"../questionnaire.js":page.includes("connectivite")?"connectivite.js":"questionnaire.js";
+  assert.ok(html.indexOf(app)<html.indexOf("questionnaire-layout.js"),page);
+  assert.doesNotMatch(html, /(?:href|src)="viewport\\.(?:css|js)/);
+ }
  assert.match(css, /100dvh/);
- assert.match(css, /question-density-compact/);
- assert.match(css, /question-density-dense/);
- assert.match(css, /question-density-tight/);
- assert.match(css, /question-allow-scroll/);
- assert.match(script, /requestAnimationFrame\(fit\)/);
+ assert.match(css, /quiz-scroll/);
+ assert.match(css, /quiz-compact/);
+ assert.match(css, /quiz-dense/);
+ assert.match(css, /quiz-tight/);
+ assert.match(css, /max-width:899px/);
+ assert.match(css, /min-width:900px/);
+ assert.match(css, /min-height:44px/);
+ assert.match(css, /\\.question-heading h1/);
+ assert.match(script, /MutationObserver/);
+ assert.match(script, /requestAnimationFrame\\(fit\\)/);
  assert.match(script, /scrollHeight/);
- assert.doesNotMatch(script, /display\s*:\s*none|\.hidden\s*=\s*true/);
- assert.doesNotThrow(() => new vm.Script(script));
+ assert.doesNotMatch(script, /display\\s*:\\s*none|\\.hidden\\s*=\\s*true/);
+ assert.doesNotThrow(()=>new vm.Script(script));
+});
+
+test("le responsive ne change pas les valeurs métier ni la synthèse",()=>{
+ const classification=load("outils/classification/presentation.js");
+ const connectivity=load("outils/connectivite/connectivite.js");
+ const labelling=load("outils/etiquettes-tracabilite/questionnaire.js");
+ for(const source of [classification,connectivity,labelling])
+  assert.doesNotThrow(()=>new vm.Script(source));
+ assert.doesNotMatch(connectivity+labelling,/type=["']range["']/);
+ assert.match(classification,/const iconByQuestion=Object\\.freeze/);
+ assert.match(connectivity,/function renderResult/);
+ assert.match(labelling,/function summary/);
 });
