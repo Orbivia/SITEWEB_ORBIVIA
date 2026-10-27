@@ -26,7 +26,7 @@ const Q=[
 {id:"priorities",section:"Budget",icon:"network",title:"Quels sont vos critères prioritaires ?",help:"Choisissez au maximum trois critères, en commençant par le plus important. Le numéro affiché indique le rang de priorité ; touchez un critère sélectionné pour le retirer.",example:"Une longue autonomie et un faible encombrement peuvent conduire à privilégier une solution différente d'un système de vidéo.",type:"priority",options:[["autonomy","Autonomie","","battery"],["cost","Coût matériel","","euro"],["size","Encombrement","","box"],["weight","Poids","","weight"],["reach","Portée","","distance"],["speed","Débit et réactivité","","clock"],["easy","Simplicité d'installation","","phone"],["reliable","Fiabilité","","shield"]]}
 ];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const icon=name=>prefix+encodeURIComponent(name||"help")+".svg?v=7";
+const icon=name=>prefix+encodeURIComponent(name||"help")+".svg?v=solid1";
 function restore(){
  try{
   const x=JSON.parse(localStorage.getItem(storeKey)||"null"),clean={};

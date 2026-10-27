@@ -1001,15 +1001,7 @@ const hints={
  "ivdMarkers": "Vérifiez la liste de la règle 2 de l'annexe VIII IVDR et la destination du test. Tous les marqueurs du système Rhésus ne sont pas nécessairement équivalents.",
  "ivdLinkedClass": "Si le produit est associé à plusieurs DIV, retenez la classe la plus élevée effectivement documentée parmi eux, et « classe non documentée » en cas d'incertitude."
 };
-const icons={
- medical:'<rect x="3" y="3" width="26" height="26" rx="5" fill="currentColor"/><path d="M13 8h6v5h5v6h-5v5h-6v-5H8v-6h5z" fill="#e7a116"/>',
 
- product:'<path d="M12 5a4 4 0 0 1 8 0v14a7 7 0 1 1-8 0z" fill="currentColor"/><path d="M16 8v15" stroke="#e7a116" stroke-width="3"/><circle cx="16" cy="24" r="3" fill="#e7a116"/><path d="M20 9h3m-3 4h3" stroke="currentColor" stroke-width="1.5"/>',
- link:'<path d="M8 13v9a7 7 0 0 0 14 0v-9" stroke="currentColor" stroke-width="3" fill="none"/><rect x="4" y="6" width="8" height="11" rx="2" fill="currentColor"/><rect x="19" y="6" width="6" height="11" rx="2" fill="currentColor"/><path d="M6 2h4v5H6zm14 0h4v5h-4z" fill="#e7a116"/>',
- software:'<rect x="2" y="3" width="28" height="21" rx="3" fill="currentColor"/><rect x="5" y="6" width="22" height="15" rx="1" fill="white"/><path d="M5 10h22" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r=".7" fill="#e7a116"/><path d="M8 16h4l2-3 3 6 2-3h5" stroke="#e7a116" stroke-width="1.6" fill="none"/><path d="M13 25v3h-4m10-3v3h4M9 28h14" stroke="currentColor" stroke-width="2" fill="none"/>',
- tube:'<path d="M10 9h12v15a6 6 0 0 1-12 0z" fill="currentColor"/><rect x="8" y="2" width="16" height="7" rx="2" fill="#e7a116"/><path d="M12 14h4m-4 4h4" stroke="white" stroke-width="1.5"/><path d="M12 24v-1l8-4v5a4 4 0 0 1-8 0" fill="#e7a116"/>',
-
-};
 Object.assign(questions.ivdRole.options,{test:'Réactif, test ou kit',instrument:'Instrument d’analyse seul',software:'Logiciel IVD',receptacle:'Récipient sans test intégré',lab:'Produit général pour usage IVD',accessory:'Accessoire de DIV',calibrator:'Calibrateur',assignedControl:'Contrôle à valeur assignée',unassignedControl:'Contrôle sans valeur assignée'});
 function view(q){const p=questions[q.id];if(!p)return {title:q.label,criterion:q.intro||'',options:q.options,descriptions:q.optionHelp||{}};
  return {title:p.title,criterion:hints[q.id]||p.criterion||q.intro||'',options:q.options.map(([value,label])=>[value,p.options[value]||label]),descriptions:{...q.optionHelp,...p.descriptions}};}
@@ -1054,24 +1046,7 @@ const roleGroups={
 };
 
 /* Anciens pictogrammes SVG conservés uniquement comme secours si le PNG ne charge pas. */
-const medicalQuestionIcons={
- heart:'<path d="M16 29C8 23 3 18 3 11a7 7 0 0 1 13-3 7 7 0 0 1 13 3c0 7-5 12-13 18z" fill="currentColor"/><path d="M6 16h5l2-4 4 9 3-5h6" fill="none" stroke="#e7a116" stroke-width="2.5"/>',
- wound:'<rect x="4" y="6" width="24" height="20" rx="7" transform="rotate(-22 16 16)" fill="currentColor"/><path d="M10 12l12 8M12 8l12 8M8 16l12 8" stroke="#e7a116" stroke-width="2.5"/>',
- implant:'<path d="M10 3h12v6l-3 3v14l-3 4-3-4V12l-3-3z" fill="currentColor"/><path d="M10 9h12M14 16h4M14 21h4" stroke="#e7a116" stroke-width="2"/>',
- tooth:'<path d="M9 4c-6 0-7 6-5 12l5 13c2 2 4-7 7-7s5 9 7 7l5-13c2-6 1-12-5-12-3 0-4 2-7 2S12 4 9 4z" fill="currentColor"/><path d="M11 10h10" stroke="#e7a116" stroke-width="2.5"/>',
- pill:'<rect x="4" y="4" width="24" height="24" rx="12" fill="currentColor"/><path d="M8 24 24 8" stroke="#e7a116" stroke-width="3"/><path d="M12 12l8 8" stroke="white" stroke-width="1.5"/>',
- lungs:'<path d="M14 3v11C11 8 7 9 5 15l-3 11c0 5 10 5 12-2zM18 3v11c3-6 7-5 9 1l3 11c0 5-10 5-12-2z" fill="currentColor"/><path d="M16 2v15M8 17l5 3m11-3-5 3" stroke="#e7a116" stroke-width="2" fill="none"/>',
- radiation:'<circle cx="16" cy="16" r="14" fill="currentColor"/><circle cx="16" cy="16" r="3" fill="#e7a116"/><path d="M14 11 9 4M20 15l9 2M14 20l-3 9" stroke="#e7a116" stroke-width="5"/>',
- dna:'<path d="M10 2c14 8-2 19 12 28M22 2C8 10 24 21 10 30" fill="none" stroke="currentColor" stroke-width="4"/><path d="M12 6h8M12 12h8M12 19h8M12 26h8" stroke="#e7a116" stroke-width="2.5"/>',
- blood:'<path d="M16 2C10 11 5 17 5 22a11 11 0 0 0 22 0c0-5-5-11-11-20z" fill="currentColor"/><path d="M11 23c0 4 4 5 7 4" fill="none" stroke="#e7a116" stroke-width="3"/>',
- baby:'<circle cx="16" cy="10" r="7" fill="currentColor"/><path d="M4 30c0-9 4-13 12-13s12 4 12 13" fill="currentColor"/><path d="M12 10h8M11 24l5 3 5-3" stroke="#e7a116" stroke-width="2" fill="none"/>',
- cells:'<circle cx="12" cy="12" r="10" fill="currentColor"/><circle cx="23" cy="22" r="8" fill="currentColor"/><circle cx="12" cy="12" r="3" fill="#e7a116"/><circle cx="23" cy="22" r="2.5" fill="#e7a116"/>',
- surgery:'<path d="M5 3h6v15l5 4 5-4V3h6v17l-11 10L5 20z" fill="currentColor"/><path d="M16 11v13M10 16h12" stroke="#e7a116" stroke-width="2.5"/>',
- needle:'<path d="m6 25 18-18 3 3L9 28z" fill="currentColor"/><path d="m21 5 6 6M5 22l5 5" stroke="#e7a116" stroke-width="2.5"/><path d="m5 27-3 3" stroke="currentColor" stroke-width="2"/>',
- skin:'<path d="M3 8c7-6 12 6 19 0 3-2 5-2 7-1v19H3z" fill="currentColor"/><path d="M3 16c7-6 12 6 19 0 3-2 5-2 7-1" stroke="#e7a116" stroke-width="2.5" fill="none"/>',
- microbe:'<circle cx="16" cy="16" r="10" fill="currentColor"/><path d="M16 1v5m0 20v5M1 16h5m20 0h5M5 5l4 4m14 14 4 4M27 5l-4 4M9 23l-4 4" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="2" fill="#e7a116"/><circle cx="20" cy="18" r="3" fill="#e7a116"/>',
- medical:'<rect x="3" y="3" width="26" height="26" rx="5" fill="currentColor"/><path d="M13 8h6v5h5v6h-5v5h-6v-5H8v-6h5z" fill="#e7a116"/>'
-};
+
 const questionIconTypes={
  scope:'medical',form:'product',multiPurpose:'box',ivdAllUses:'box',
  active:'battery',therapyEnergy:'battery',energyHazard:'shield',contact:'skin',
@@ -1101,123 +1076,9 @@ const questionIconTypes={
  ivdCongenital:'baby',ivdNewborn:'baby',ivdSelf:'medical',
  ivdSelfException:'medical',ivdNear:'medical'
 };
-/* Un PNG absent ou invalide laisse automatiquement apparaître son SVG de secours. */
-if(typeof document!=='undefined')document.addEventListener('error',function(event){
- const img=event.target;
- if(!img || !img.classList || !img.classList.contains('mdr-raster-icon'))return;
- img.hidden=true;
- const fallback=img.nextElementSibling;
- if(fallback)fallback.hidden=false;
-},true);
-/* Correspondance : ordre des 96 clés de questions ↔ numéros PNG de la planche. */
-/* Correspondance explicite, indépendante de l'ordre des questions dans l'objet. */
-const iconByQuestion=Object.freeze({
- "scope":1,
- "form":56,
- "multiPurpose":58,
- "ivdAllUses":65,
- "active":28,
- "therapyEnergy":30,
- "energyHazard":36,
- "contact":38,
- "animalIntact":48,
- "nanoContact":49,
- "wound":9,
- "woundDeep":18,
- "woundBarrier":9,
- "orificeCavity":8,
- "orificeAbsorb":40,
- "implant":7,
- "implantActive":23,
- "implantSpecial":42,
- "dental":7,
- "reusableSurgical":45,
- "duration":95,
- "medicinal":2,
- "contraception":13,
- "inhalation":39,
- "inhalationRisk":39,
- "surgMedicine":6,
- "surgMedicineRisk":36,
- "ivdCompanion":34,
- "ivdLevelsRisk":5,
- "cleaning":55,
- "ivdSterile":54,
- "xrecord":5,
- "surgIonising":29,
- "therapyIonising":29,
- "diagnosticXray":29,
- "tissue":21,
- "nano":50,
- "nanoExposure":49,
- "substance":19,
- "substanceSystemic":41,
- "substanceGI":46,
- "substanceLocal":40,
- "bioAbsorb":38,
- "chemical":50,
- "invitroSubstance":34,
- "channel":27,
- "bloodBag":6,
- "channelBody":41,
- "modify":25,
- "modifySimple":20,
- "administer":2,
- "adminHazard":36,
- "ivdDonor":6,
- "ivdBloodAgent":47,
- "channelActive":27,
- "orificeActive":27,
- "controlTherapy":26,
- "ivdAccessoryCritical":36,
- "heartDefect":44,
- "centralContact":43,
- "softwareVital":5,
- "diagnostic":5,
- "diagnosticEnergy":30,
- "radiopharm":29,
- "diagnosticUse":17,
- "softwareMonitor":83,
- "ivdInstrumentIndependent":3,
- "closedLoop":86,
- "closedLoopDiagnostic":80,
- "softwareRole":24,
- "softwareDecision":66,
- "softwareImpact":85,
- "ivdSoftwareRole":24,
- "ivdQualification":34,
- "ivdRole":20,
- "ivdGeneral":19,
- "ivdAdditional":56,
- "ivdLinkedClass":70,
- "ivdLoad":47,
- "ivdStaging":66,
- "ivdPropagation":33,
- "ivdInfection":47,
- "ivdSexual":47,
- "ivdInfectionHarm":35,
- "ivdPrenatalImmune":11,
- "ivdImmuneRisk":36,
- "ivdCompatibility":41,
- "ivdMarkers":41,
- "ivdLifeManagement":5,
- "ivdCancer":21,
- "ivdGenetic":22,
- "ivdCongenital":11,
- "ivdNewborn":12,
- "ivdSelf":71,
- "ivdSelfException":67,
- "ivdNear":15
-});
 function questionIcon(q){
  const type=questionIconTypes[q.id]||'medical';
- const svg=medicalQuestionIcons[type]||icons[type];
- const n=iconByQuestion[q.id];
- const original=svg
-  ?'<span class="mdr-question-icon mdr-svg-fallback" '+(n?'hidden ':'')+'aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg></span>'
-  :'<img class="mdr-question-icon mdr-svg-fallback" '+(n?'hidden ':'')+'src="../connectivite/icones/'+type+'.svg?v=2" alt="">';
- const raster=n?'<img class="mdr-question-icon mdr-raster-icon" loading="eager" alt="" src="icones-raster/icones/icon-'+String(n).padStart(2,'0')+'.png?v=2">':'';
- return '<span class="mdr-question-art" aria-hidden="true">'+raster+original+'</span>';
+ return '<span class="mdr-question-art" aria-hidden="true"><img class="mdr-question-icon" loading="eager" alt="" src="../shared/icons/'+type+'.svg?v=solid1"></span>';
 }
 
 const api={questions,view,questionIcon,reservePrompt,roleGroups};

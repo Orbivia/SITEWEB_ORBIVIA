@@ -9,7 +9,7 @@ body.tool-page:has(.orbivia-tool-list){background:#f6f7f5;color:#202a32}
 .orbivia-tool-item:hover{background:#fffdf7;border-color:#d4b365;transform:translateY(-1px)}
 .orbivia-tool-item:focus-visible{outline:3px solid #e7a116;outline-offset:3px}
 .orbivia-tool-icon{display:grid;place-items:center;flex:none;width:54px;height:54px;border:1px solid #e3e7e1;border-radius:13px;background:#fafbf9}
-.orbivia-tool-icon svg{height:28px;width:28px;stroke:#202a32}
+.orbivia-tool-icon svg,.orbivia-tool-icon img{height:28px;width:28px;stroke:#202a32}
 .orbivia-tool-body{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
 .orbivia-tool-category{font-size:11px;font-weight:600;letter-spacing:.025em;color:#9a721b}
 .orbivia-tool-body strong{font-size:clamp(17px,2.8vw,22px);line-height:1.2;letter-spacing:-.35px;font-weight:650;color:#202a32}
@@ -21,7 +21,7 @@ body.tool-page:has(.orbivia-tool-list){background:#f6f7f5;color:#202a32}
 .tool-hub:has(.orbivia-tool-list) h1{font-size:29px;margin-bottom:19px}
 .orbivia-tool-list{gap:9px}
 .orbivia-tool-item{padding:16px 13px;gap:11px;min-height:100px;border-radius:14px}
-.orbivia-tool-icon{width:41px;height:41px;border-radius:10px}.orbivia-tool-icon svg{width:22px;height:22px}
+.orbivia-tool-icon{width:41px;height:41px;border-radius:10px}.orbivia-tool-icon svg,.orbivia-tool-icon img{width:22px;height:22px}
 .orbivia-tool-body strong{font-size:16px}.orbivia-tool-category{font-size:10px}
 .orbivia-tool-description{font-size:11px;line-height:1.35}
 .orbivia-tool-link{width:28px;height:28px;border-radius:8px;font-size:16px}
