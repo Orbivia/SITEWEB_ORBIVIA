@@ -1053,8 +1053,7 @@ const roleGroups={
  reference:{label:'Calibrateur ou contrôle',description:'Produit servant à étalonner l’analyse ou à vérifier ses résultats.',values:['calibrator','assignedControl','unassignedControl']}
 };
 
-/* Pictogramme placé dans le titre de chaque question, jamais dans les réponses.
-   Les thèmes génériques réutilisent exactement le pack SVG de Connectivité. */
+/* Anciens pictogrammes SVG conservés uniquement comme secours si le PNG ne charge pas. */
 const medicalQuestionIcons={
  heart:'<path d="M16 29C8 23 3 18 3 11a7 7 0 0 1 13-3 7 7 0 0 1 13 3c0 7-5 12-13 18z" fill="currentColor"/><path d="M6 16h5l2-4 4 9 3-5h6" fill="none" stroke="#e7a116" stroke-width="2.5"/>',
  wound:'<rect x="4" y="6" width="24" height="20" rx="7" transform="rotate(-22 16 16)" fill="currentColor"/><path d="M10 12l12 8M12 8l12 8M8 16l12 8" stroke="#e7a116" stroke-width="2.5"/>',
@@ -1102,8 +1101,7 @@ const questionIconTypes={
  ivdCongenital:'baby',ivdNewborn:'baby',ivdSelf:'medical',
  ivdSelfException:'medical',ivdNear:'medical'
 };
-/* PNG raster prévus dans icones-raster/. Une image non encore publiée ne doit
- * jamais empêcher l'affichage du pictogramme vectoriel existant. */
+/* Un PNG absent ou invalide laisse automatiquement apparaître son SVG de secours. */
 if(typeof document!=='undefined')document.addEventListener('error',function(event){
  const img=event.target;
  if(!img || !img.classList || !img.classList.contains('mdr-raster-icon'))return;
