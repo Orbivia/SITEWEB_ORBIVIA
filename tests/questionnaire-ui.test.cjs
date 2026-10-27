@@ -52,3 +52,40 @@ test("classification affiche une icône par question, jamais une icône pour cha
  assert.doesNotThrow(() => new vm.Script(presentation));
  assert.doesNotThrow(() => new vm.Script(app));
 });
+
+
+test("Lot 1 : fréquence de connectivité sans regroupement secondes/minutes", () => {
+ const source = load("outils/connectivite/connectivite.js");
+ const start = source.indexOf("const Q=[");
+ const end = source.indexOf("];", start) + 2;
+ const questions = vm.runInNewContext(source.slice(start, end) + "\nQ");
+ const frequency = questions.find(q => q.id === "frequency");
+ assert.deepEqual(Array.from(frequency.options, o => o[0]), [
+  "rare", "daily", "minutes", "seconds", "continuous", "unknown"
+ ]);
+ assert.match(frequency.options.find(o => o[0] === "minutes")[1], /minutes/);
+ assert.match(frequency.options.find(o => o[0] === "seconds")[1], /secondes/);
+ assert.equal(questions.find(q => q.id === "peer").type, "single");
+ assert.equal(questions.find(q => q.id === "security").type, "multi");
+ assert.match(source, /q\.id==="security"&&id==="normal"/);
+ assert.match(source, /q\.id==="infra"&&id==="none"/);
+});
+
+test("Lot 1 : les 96 questions MDR/IVDR conservent les identifiants réglementaires", () => {
+ const mdr = require("../outils/shared/classification-engine.js");
+ const ivdr = require("../outils/shared/ivdr-engine.js");
+ const presentation = require("../outils/classification/presentation.js");
+ const all = [...mdr.allQuestions, ...ivdr.allQuestions];
+ assert.equal(all.length, 96);
+ for (const q of all) {
+  assert.ok(presentation.questions[q.id], "question absente : " + q.id);
+  const expectedKeys = q.options.map(o => o[0]);
+  const actualKeys = Object.keys(presentation.questions[q.id].options);
+  assert.deepEqual(actualKeys, expectedKeys, "valeurs changées : " + q.id);
+ }
+ const contact = presentation.questions.contact.options;
+ assert.match(contact.none, /contact externe possible/);
+ assert.match(presentation.questions.diagnosticUse.options.routine, /sans danger vital immédiat/);
+ assert.match(presentation.questions.ivdMarkers.descriptions.listed, /RHW1/);
+ assert.match(presentation.questions.ivdSelfException.title, /autotest/);
+});
