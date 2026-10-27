@@ -1,0 +1,100 @@
+/* Orbivia — Questionnaire d'applicabilité de l'étiquetage MDR */
+body[data-tool="etiquettes"]{background:#f6f7f5;color:#202a32;--tool-gold:#e7a116;}
+body[data-tool="etiquettes"] .tool-shell{width:min(860px,calc(100% - 32px));margin:18px auto 44px}
+body[data-tool="etiquettes"] .tool-breadcrumb{display:flex;gap:12px;align-items:center;margin-bottom:18px;font-size:12px;color:#68716f}
+body[data-tool="etiquettes"] .tool-breadcrumb a{text-decoration:none;color:inherit}
+body[data-tool="etiquettes"] .tool-breadcrumb a:hover{text-decoration:underline}
+body[data-tool="etiquettes"] .question-progress{margin-bottom:18px}
+body[data-tool="etiquettes"] .question-progress span{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:#5c6964}
+body[data-tool="etiquettes"] .question-progress b{font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
+body[data-tool="etiquettes"] .question-progress progress{display:block;width:100%;height:4px;margin:10px 0 0;appearance:none;border:0;border-radius:4px;accent-color:#e7a116;background:#e1e5df}
+body[data-tool="etiquettes"] .question-progress progress::-webkit-progress-bar{background:#e1e5df;border-radius:4px}
+body[data-tool="etiquettes"] .question-progress progress::-webkit-progress-value{background:#e7a116;border-radius:4px}
+body[data-tool="etiquettes"] .question-progress progress::-moz-progress-bar{background:#e7a116;border-radius:4px}
+body[data-tool="etiquettes"] .question-card{background:#fff;border:1px solid #e0e5df;border-radius:18px;box-shadow:0 8px 30px #202a3205;padding:28px}
+body[data-tool="etiquettes"] .question-prompt{display:flex;flex-direction:column;min-width:0}
+body[data-tool="etiquettes"] .question-heading{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+body[data-tool="etiquettes"] .question-heading h1{flex:1;min-width:0;margin:0;font-size:26px;line-height:1.25;letter-spacing:-.6px;font-weight:650;color:#202a32;text-wrap:pretty}
+body[data-tool="etiquettes"] .label-options{display:grid;grid-template-columns:1fr;gap:10px;min-width:0}
+body[data-tool="etiquettes"] .answer.label-option{font:inherit;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;border:1px solid #dce2dc;border-radius:12px;padding:13px 16px;background:#fafbf9;color:#26323c;text-align:left;cursor:pointer;transition:background .15s,border-color .15s}
+body[data-tool="etiquettes"] .answer.label-option:hover{border-color:#c28c20;background:#fff8e9}
+body[data-tool="etiquettes"] .answer.label-option[aria-pressed="true"]{border-color:#c88c0d;background:#fff6df;box-shadow:inset 0 0 0 1px #c88c0d}
+body[data-tool="etiquettes"] .answer.label-option .answer-copy{font-size:15px;font-weight:600;line-height:1.4}
+body[data-tool="etiquettes"] .answer.label-option .answer-copy small{display:block;margin-top:4px;font-size:12px;color:#68766d;line-height:1.4;font-weight:400}
+.label-checkbox{display:grid;place-items:center;width:19px;height:19px;border:1px solid #b4bfb4;border-radius:5px;flex:none;color:#26323c;font-size:13px}
+.label-option[aria-pressed="true"] .label-checkbox{background:#e7a116;border-color:#e7a116}
+body[data-tool="etiquettes"] .question-controls.label-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px;flex-wrap:wrap}
+.label-controls-right{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+body[data-tool="etiquettes"] .tool-button{font:600 13px/1.4 inherit;border:1px solid #dce2dc;border-radius:10px;padding:11px 15px;background:white;color:#26323c;min-height:42px;cursor:pointer}
+body[data-tool="etiquettes"] .tool-button.primary{background:#e7a116;border-color:#e7a116;color:#202a32}
+body[data-tool="etiquettes"] .tool-button.quiet{border:0;background:transparent;color:#68766d;font-weight:500}
+body[data-tool="etiquettes"] .tool-button:disabled{opacity:.4;cursor:not-allowed}
+body[data-tool="etiquettes"] .tool-button:focus-visible,body[data-tool="etiquettes"] .answer:focus-visible{outline:3px solid #e7a116;outline-offset:2px}
+body[data-tool="etiquettes"] .question-heading .mdr-question-icon{flex:0 0 32px;width:32px;height:32px}
+.label-result-heading{margin:0 0 22px}
+.label-result-heading h1{font-size:clamp(28px,3.7vw,36px);font-weight:650;color:#202a32;letter-spacing:-.8px;line-height:1.2;margin:10px 0 12px}
+.label-result-heading p{color:#68766d;font-size:13px;max-width:720px;line-height:1.65}
+.label-result-eyebrow{color:#986d13;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.label-result-card{background:#fff;border:1px solid #e0e5df;border-radius:16px;margin:0 0 14px;padding:24px;box-shadow:0 8px 30px #202a3205}
+.label-result-card header{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #eef0ed;padding-bottom:13px;margin-bottom:7px}
+.label-result-card header h2{font-size:20px;font-weight:650;margin:0;letter-spacing:-.4px}
+.label-result-card header span{font-size:11px;color:#867037;white-space:nowrap}
+.label-items{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.label-item{display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid #eef0ed;padding:14px 0;min-width:0}
+.label-symbol{display:grid;place-items:center;flex:0 0 50px;width:50px;min-height:48px;padding:5px 3px;background:#fafbf9;border:1px solid #e0e5df;border-radius:10px;color:#52605e;text-align:center;font-size:10px;font-weight:750;overflow-wrap:anywhere;line-height:1.25}
+.label-item-copy{min-width:0}
+.label-item-title{font-size:14px;font-weight:650;color:#202a32;line-height:1.3;margin-bottom:4px}
+.label-item p{font-size:12px;line-height:1.5;color:#66746c;margin:0 0 6px}
+.label-item small{font-size:10px;color:#987019;line-height:1.4}
+.label-review-list{margin:0;padding:5px 0 0 20px;color:#516059;font-size:12px;line-height:1.65}
+.label-review-list li{margin:8px 0}
+.label-review-list strong{color:#27332d}
+.label-empty{font-size:13px;color:#69746c}
+.label-answers summary{font-size:13px;font-weight:650;cursor:pointer;padding:6px 0}
+.label-answers dl>div{display:grid;grid-template-columns:minmax(180px,1fr) 1fr;gap:12px;padding:11px 0;border-bottom:1px solid #e7ece6;font-size:12px}
+.label-answers dt{color:#65726d}
+.label-answers dd{margin:0;font-weight:600;color:#26323c}
+.label-disclaimer{font-size:11px;line-height:1.65;color:#68766d;padding:0 4px;margin:20px 0}
+#restart-label-dialog{width:min(440px,calc(100vw - 28px));padding:24px;border:1px solid #dce2dc;border-radius:16px;box-shadow:0 18px 56px #16202b30}
+#restart-label-dialog::backdrop{background:#141e2880}
+#restart-label-dialog h2{font-size:21px;margin:0 0 11px}
+#restart-label-dialog p{font-size:13px;color:#68766d}
+#restart-label-dialog>div{display:flex;justify-content:flex-end;gap:9px;margin-top:23px}
+@media(min-width:900px){
+ body[data-tool="etiquettes"] .tool-shell{width:min(1120px,calc(100% - 80px));margin:32px auto 32px}
+ body[data-tool="etiquettes"] .question-card{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:38px;align-items:start;min-height:400px;padding:32px;box-sizing:border-box}
+ body[data-tool="etiquettes"] .question-heading h1{font-size:29px}
+ body[data-tool="etiquettes"] .label-options:has(.answer:nth-child(6)) .answer{padding:10px 13px;min-height:50px}
+ body[data-tool="etiquettes"] .label-options:has(.answer:nth-child(6)){gap:8px}
+}
+@media(max-width:899px){body[data-tool="etiquettes"] .question-card{display:flex;flex-direction:column;gap:6px}}
+@media(max-width:600px){
+ body[data-tool="etiquettes"] .tool-shell{width:calc(100% - 28px);margin:10px auto 26px}
+ body[data-tool="etiquettes"] .tool-breadcrumb{margin-bottom:10px}
+ body[data-tool="etiquettes"] .question-progress{margin-bottom:12px}
+ body[data-tool="etiquettes"] .question-card{padding:16px 14px;border-radius:16px}
+ body[data-tool="etiquettes"] .question-heading{margin-bottom:12px;gap:9px}
+ body[data-tool="etiquettes"] .question-heading h1{font-size:20px;line-height:1.25}
+ body[data-tool="etiquettes"] .question-heading .mdr-question-icon{flex-basis:28px;width:28px;height:28px}
+ body[data-tool="etiquettes"] .label-options{gap:8px}
+ body[data-tool="etiquettes"] .answer.label-option{padding:11px 12px;min-height:52px}
+ body[data-tool="etiquettes"] .answer.label-option .answer-copy{font-size:14px}
+ body[data-tool="etiquettes"] .answer.label-option .answer-copy small{font-size:11px}
+ body[data-tool="etiquettes"] .question-controls.label-controls{gap:7px}
+ body[data-tool="etiquettes"] .tool-button{padding:10px 9px;font-size:12px}
+ .label-controls-right{gap:5px}
+ .label-result-card{padding:16px}
+ .label-result-card header h2{font-size:17px}
+ .label-items{grid-template-columns:1fr}
+ .label-result-heading h1{font-size:29px}
+ .label-answers dl>div{display:block}
+ .label-answers dd{margin-top:6px}
+}
+@media print{
+ .header,.site-footer,.tool-breadcrumb,.label-controls,#restart-label-dialog,.skip{display:none!important}
+ body[data-tool="etiquettes"] .tool-shell{width:100%;margin:0}
+ body[data-tool="etiquettes"]{background:white}
+ .label-result-card{box-shadow:none;break-inside:avoid;border:1px solid #ddd}
+ .label-result-card header{break-after:avoid}
+ .label-result-heading{margin-bottom:12px}
+}
