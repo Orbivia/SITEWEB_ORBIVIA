@@ -1015,6 +1015,12 @@ function view(q){const p=questions[q.id];if(!p)return {title:q.label,criterion:q
  return {title:p.title,criterion:hints[q.id]||p.criterion||q.intro||'',options:q.options.map(([value,label])=>[value,p.options[value]||label]),descriptions:{...q.optionHelp,...p.descriptions}};}
 let promptWidth=0,promptHeight=0;
 function reservePrompt(app){
+ // Sur téléphone et tablette, la hauteur est déjà gérée par le CSS responsive.
+ // Éviter de créer et mesurer 96 titres invisibles à chaque changement de largeur.
+ if(typeof window!=='undefined'&&window.matchMedia&&window.matchMedia('(max-width: 899px)').matches){
+  app.style.removeProperty('--question-prompt-height');
+  return;
+ }
  const prompt=app.querySelector('.question-prompt');if(!prompt)return;
  const width=Math.round(prompt.getBoundingClientRect().width);if(!width)return;
  if(width!==promptWidth){
