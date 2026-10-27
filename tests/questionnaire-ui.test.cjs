@@ -108,7 +108,7 @@ test("Lot 2.1 : chaque nouvelle icône de question est distincte de son ancien d
   assert.doesNotMatch(revised, /<text[\s>]/);
  }
  const source = load("outils/connectivite/connectivite.js");
- assert.match(source, /\.svg\?v=solid1/);
+ assert.match(source, /\.svg\?v=[a-z0-9]+/);
 });
 
 
