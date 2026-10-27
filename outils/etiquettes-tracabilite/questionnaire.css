@@ -151,3 +151,53 @@ body[data-tool="etiquettes"] .label-result-card header h2{font-size:18px}
 
 /* Contexte du support évalué dans la synthèse. */
 body[data-tool="etiquettes"] .label-result-heading .label-result-support{font-size:12px;font-weight:650;line-height:1.35;color:#966e19;margin:-1px 0 8px}
+
+/* Résultats : véritables PNG ISO 15223-1 fournis par l'utilisateur.
+   Ne jamais associer un symbole à un code différent ni l'utiliser comme
+   preuve de conformité de l'étiquette. */
+body[data-tool="etiquettes"] .label-short-list .label-symbol-img,
+body[data-tool="etiquettes"] .label-reference-heading .label-symbol-img {
+ display:block;
+ box-sizing:border-box;
+ width:44px;
+ height:44px;
+ flex:0 0 44px;
+ padding:3px;
+ object-fit:contain;
+ border:1px solid #e9ede7;
+ border-radius:8px;
+ background:#fff;
+}
+body[data-tool="etiquettes"] .label-reference-heading{
+ display:flex;
+ align-items:center;
+ gap:10px;
+}
+body[data-tool="etiquettes"] .label-reference-heading .label-symbol-img.label-symbol-small{
+ width:36px;
+ height:36px;
+ flex-basis:36px;
+ padding:2px;
+ border-radius:7px;
+}
+body[data-tool="etiquettes"] .label-short-list li:has(.label-symbol-img){
+ gap:12px;
+}
+body[data-tool="etiquettes"] .label-short-list li .label-short-name{
+ overflow-wrap:anywhere;
+}
+@media(max-width:600px){
+ body[data-tool="etiquettes"] .label-short-list .label-symbol-img{
+  width:40px;
+  height:40px;
+  flex-basis:40px;
+ }
+ body[data-tool="etiquettes"] .label-short-list li:has(.label-symbol-img){gap:8px}
+}
+@media print{
+ body[data-tool="etiquettes"] .label-symbol-img{
+  print-color-adjust:exact;
+  -webkit-print-color-adjust:exact;
+ }
+ body[data-tool="etiquettes"] .label-short-list li{break-inside:avoid}
+}
