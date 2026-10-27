@@ -25,6 +25,7 @@ const Q=[
 {id:"sterile",s:"Stérilité",icon:"spark",title:"Comment le dispositif est-il fourni ?",help:"Le caractère stérile se réfère à l'état du dispositif livré, pas à un nettoyage ultérieur. Un dispositif non stérile devant être stérilisé par l'utilisateur requiert des instructions adaptées.",type:"single",options:[["sterile","Fourni stérile"],["nonsterile","Fourni non stérile"],["before","Fourni non stérile, à stériliser avant utilisation"],["unknown","Non défini"]]},
 {id:"sterilmethod",s:"Stérilité",icon:"sun",title:"Quelle méthode de stérilisation est utilisée ?",help:"Le symbole est lié à une méthode validée. Ne pas sélectionner par défaut un procédé simplement parce qu'il est courant.",type:"single",when:a=>a.sterile==="sterile",options:[["eo","Oxyde d'éthylène (EO)"],["radiation","Irradiation"],["steam","Vapeur d'eau ou chaleur sèche"],["aseptic","Techniques de préparation aseptique"],["other","Autre procédé / procédé mixte"],["unknown","À confirmer"]]},
 {id:"barrier",s:"Stérilité",icon:"layers2",title:"Quel système de barrière stérile est utilisé ?",help:"La barrière stérile doit être distinguée de l'emballage protecteur. Des symboles ISO 15223-1 décrivent les différents agencements.",type:"single",when:a=>a.sterile==="sterile",options:[["single","Une barrière stérile"],["double","Deux barrières stériles"],["inner","Une barrière stérile avec protection interne"],["outer","Une barrière stérile avec protection externe"],["unknown","À déterminer"]]},
+{id:"resterilize",s:"Stérilité",icon:"refresh",title:"Le dispositif peut-il être restérilisé après ouverture ?",help:"Ne pas confondre « ne pas restériliser » (ISO 15223-1, 5.2.6) et « ne pas réutiliser » (5.4.2). Les deux informations ne sont pas interchangeables.",type:"single",when:a=>a.sterile==="sterile",options:[["no","Non, ne pas restériliser"],["yes","Oui, un procédé validé existe"],["unknown","À déterminer"]]},
 {id:"expiry",s:"Durée de vie",icon:"hourglass",title:"Existe-t-il une date limite d'utilisation ou d'implantation ?",help:"Une date limite peut être pertinente pour un dispositif stérile ou non stérile. En l'absence de date limite, la date de fabrication doit normalement être indiquée sur l'étiquette.",type:"single",options:[["yes","Oui, une date limite est définie"],["no","Non, pas de date limite pertinente"],["unknown","À déterminer"]]},
 {id:"tracking",s:"Traçabilité",icon:"barcode",title:"Comment les unités fabriquées sont-elles identifiées ?",help:"Le lot et/ou la série sont les données de production (UDI-PI) lorsqu'elles sont applicables. Pour un actif implantable, la série doit être présente. La date de péremption affichée doit aussi figurer dans l'UDI-PI.",type:"single",options:[["lot","Par numéro de lot"],["serial","Par numéro de série"],["both","Lot et numéro de série"],["unknown","La traçabilité n'est pas définie"]]},
 {id:"storage",s:"Conservation",icon:"thermo",title:"Quelles précautions de stockage doivent être indiquées ?",help:"Vous pouvez sélectionner plusieurs conditions réellement imposées par les spécifications et la gestion des risques. Un symbole sans limite chiffrée appropriée peut être insuffisant.",type:"multi",options:[["temperature","Limites de température"],["humidity","Limites d'humidité"],["dry","Garder au sec"],["sunlight","Protéger du soleil"],["fragile","Fragile / manutention spécifique"],["none","Aucune condition particulière"],["unknown","Pas encore défini"]]},
@@ -99,7 +100,7 @@ function conclusions(){
  const market=answers.status==="market";
  r("Texte","Nom du dispositif et identification","Nom commercial, modèle et identification du contenu/usage si nécessaire.","MDR annexe I, 23.2 a–b","Mention");
  r("5.1.1","Fabricant légal","Nom ou raison sociale et adresse du siège du fabricant.","MDR annexe I, 23.2 c");
- r("5.1.5 / 5.1.7","Lot ou numéro de série","Les informations de traçabilité doivent correspondre à la stratégie et aux données effectivement apposées.","MDR annexe I, 23.2 g");
+ if(answers.tracking==="unknown")v("Identification des unités","Définir le numéro de lot ou de série et sa traçabilité avant création de l’étiquette.");
  c("5.1.6","Référence catalogue / modèle","Utile pour identifier sans ambiguïté la version commerciale ; à distinguer de l'UDI.","ISO 15223-1, 5.1.6");
  c("5.7.7","Dispositif médical (MD)","À utiliser lorsque la nature médicale du produit n'est pas évidente.","MDR annexe I, 23.2 q");
  if(market&&answers.territory!=="outside"){
@@ -125,6 +126,8 @@ function conclusions(){
  else if(answers.expiry==="no")r("5.1.3","Date de fabrication","En l'absence de date limite, la date de fabrication doit être identifiable.","MDR annexe I, 23.2 j");
  else v("Durée de conservation","Déterminer la présence d'une date limite ou, sinon, les modalités d'indication de la fabrication.");
  if(answers.sterile==="sterile"){
+  if(answers.resterilize==="no")c("5.2.6","Ne pas restériliser","À afficher uniquement si une seconde stérilisation est interdite ; distinct de l’usage unique.","ISO 15223-1, 5.2.6");
+  else if(answers.resterilize==="unknown")v("Restérilisation","Clarifier la possibilité de restériliser après ouverture et les instructions applicables.");
   r("5.2.1","État stérile","Indication de l'état stérile et de la méthode de stérilisation effectivement utilisée.","MDR annexe I, 23.2 l");
   const map={eo:["5.2.3","Stérilisé à l'oxyde d'éthylène"],radiation:["5.2.4","Stérilisé par irradiation"],steam:["5.2.5","Stérilisé par vapeur ou chaleur sèche"],aseptic:["5.2.2","Traitement aseptique"]};
   if(map[answers.sterilmethod])r(map[answers.sterilmethod][0],map[answers.sterilmethod][1],"Symbole à confirmer avec le procédé validé.","ISO 15223-1, 5.2");
@@ -141,7 +144,7 @@ function conclusions(){
  if(answers.reuse==="single")r("5.4.2","Ne pas réutiliser / usage unique","Mention explicite de l'usage unique lorsque le dispositif est prévu pour une seule utilisation.","MDR annexe I, 23.2 n");
  else if(["reusable","limited"].includes(answers.reuse)){
   c("Notice","Retraitement et réutilisation","Vérifier les procédés validés de nettoyage/désinfection/stérilisation ; signaler les critères de fin de vie.","MDR annexe I, 23.4 n","Information");
-  if(market)c("UDI direct","Marquage UDI permanent sur le dispositif","À examiner si un retraitement est requis entre patients et sauf dérogation documentée.","MDR annexe VI, partie C, 6.2","Marquage");
+  if(market&&["clean","disinfect","sterilize"].includes(answers.reprocess))c("UDI direct","Marquage UDI permanent sur le dispositif","À examiner si le dispositif subit un retraitement entre patients, sauf dérogation documentée. Échéance classe I : 26 mai 2027 ; classes IIa/IIb/III : déjà applicable.","MDR annexe VI, partie C, 6.2","Marquage");
   if(answers.reuse==="limited")c("Notice","Nombre maximal de réutilisations","Indiquer la limite validée et les critères de retrait du service.","MDR annexe I, 23.4 n","Information");
   if(answers.reprocess==="unknown")v("Retraitement","Il faut définir les cycles et procédés validés.");
  }else v("Usage unique ou réutilisable","Décision nécessaire pour éviter des instructions contradictoires.");
@@ -174,7 +177,7 @@ function conclusions(){
  const unique=items=>items.filter((x,i)=>items.findIndex(y=>y.code===x.code&&y.title===x.title)===i);
  return {required:unique(required),conditional:unique(conditional),review:unique(review)};
 }
-function renderItems(items){return items.length?items.map(it=>'<article class="label-item"><div class="label-symbol" aria-hidden="true">'+escapeHTML(it.code.replace(/5\.\d+\.\d+/g,"ISO").slice(0,12))+'</div><div class="label-item-copy"><div class="label-item-title">'+escapeHTML(it.title)+'</div><p>'+escapeHTML(it.detail)+'</p><small>'+escapeHTML(it.source)+'</small></div></article>').join(""):'<p class="label-empty">Aucun élément dans cette catégorie pour les réponses actuelles.</p>';}
+function renderItems(items){return items.length?items.map(it=>'<article class="label-item"><div class="label-symbol" aria-hidden="true">'+escapeHTML(it.code.slice(0,17))+'</div><div class="label-item-copy"><div class="label-item-title">'+escapeHTML(it.title)+'</div><p>'+escapeHTML(it.detail)+'</p><small>'+escapeHTML(it.source)+'</small></div></article>').join(""):'<p class="label-empty">Aucun élément dans cette catégorie pour les réponses actuelles.</p>';}
 function renderReview(items){return items.length?'<ul class="label-review-list">'+items.map(it=>'<li><strong>'+escapeHTML(it.title)+'</strong> — '+escapeHTML(it.detail)+'</li>').join("")+'</ul>':'<p class="label-empty">Aucune vérification supplémentaire identifiée par les règles de cette version.</p>';}
 function summary(){
  const result=conclusions();
@@ -184,7 +187,7 @@ function summary(){
  +'<section class="label-result-card"><header><h2>Éléments conditionnels</h2><span>'+result.conditional.length+' éléments</span></header><div class="label-items">'+renderItems(result.conditional)+'</div></section>'
  +'<section class="label-result-card"><header><h2>Points à confirmer avant impression</h2><span>'+result.review.length+' contrôles</span></header>'+renderReview(result.review)+'</section>'
  +'<section class="label-result-card label-answers"><details><summary>Voir mes réponses</summary><dl>'+answersHTML+'</dl></details></section>'
- +'<p class="label-disclaimer">Référentiel : règlement (UE) 2017/745, annexe I, chap. III, section 23 ; annexe VI pour l’UDI ; ISO 15223-1:2021 et amendement 1:2025. Cette synthèse ne garantit ni l’exhaustivité réglementaire ni la conformité de l’étiquetage. Les mentions, symboles exacts, conditions d’emploi et impressions doivent être revus pour le dispositif et son marché.</p>'
+ +'<p class="label-disclaimer">Référentiel : règlement (UE) 2017/745, annexe I, chap. III, section 23 ; annexe VI pour l’UDI ; ISO 15223-1:2021 et amendement 1:2025 ; règlement 2021/2226 modifié par 2025/1234 pour la notice électronique. Cette synthèse ne garantit ni l’exhaustivité réglementaire ni la conformité de l’étiquetage. Les mentions, symboles exacts, conditions d’emploi et impressions doivent être revus pour le dispositif et son marché.</p>'
  +'<div class="question-controls label-controls"><button class="tool-button" type="button" data-action="back">← Modifier mes réponses</button><div class="label-controls-right"><button class="tool-button" type="button" data-action="print">Imprimer cette synthèse</button><button class="tool-button quiet" type="button" data-action="reset">Reprendre à zéro</button></div></div>';
 }
 function render(){if(finished)summary();else showQuestion();}
