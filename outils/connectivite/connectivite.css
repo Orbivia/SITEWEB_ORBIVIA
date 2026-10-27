@@ -164,13 +164,11 @@ html{scrollbar-gutter:stable}
  [data-tool="connectivite"] .cx-options:has(.cx-option:nth-child(8)){gap:5px}
 }
 
-.cx-question-icon{width:32px;height:32px;object-fit:contain;display:block;margin:0;flex:0 0 32px}
 [data-tool="connectivite"] .info-bubble summary{width:44px;height:44px;font:600 15px Georgia,serif;background:#f6f8f4;border:1px solid #d6ded4;color:#52644f}
-@media(max-width:700px){.cx-question-icon{width:28px;height:28px;margin:0;flex-basis:28px}}
 
 [data-tool="connectivite"] .question-heading h1{display:flex;align-items:center;gap:12px}
 
-/* Larger answer targets; the pictogram is centered against the complete title. */
+/* Cibles de réponse plus grandes. */
 @media(min-width:900px){
  [data-tool="connectivite"] .cx-options-wrapper>.cx-options .answer.cx-option{min-height:64px;padding:16px}
  [data-tool="connectivite"] .cx-options-wrapper>.cx-options .cx-option-copy{font-size:15px;line-height:1.4}
@@ -203,7 +201,7 @@ html{scrollbar-gutter:stable}
  [data-tool="connectivite"] .cx-options-wrapper>.cx-options{gap:8px}
 }
 
-/* Desktop : icône de question visible et aide alignée sur le bas des réponses. */
+/* Desktop : aide alignée sur le bas des réponses. */
 @media(min-width:900px){
  [data-tool="connectivite"] .question-card:not(.result-card){
   grid-template-rows:minmax(0,1fr) auto;
@@ -219,55 +217,5 @@ html{scrollbar-gutter:stable}
   justify-self:start;
   margin:0;
  }
- [data-tool="connectivite"] .question-heading .cx-question-icon{
-  width:54px;
-  height:54px;
-  flex:0 0 54px;
- }
  [data-tool="connectivite"] .question-heading h1{gap:18px}
-}
-
-/* Ordinateur : pictogramme centré sous le titre, sans toucher au mobile. */
-@media(min-width:900px){
- [data-tool="connectivite"] .question-heading h1{
-  position:relative;
-  display:block;
-  padding-bottom:142px;
- }
- [data-tool="connectivite"] .question-heading h1 .cx-question-icon{
-  position:absolute;
-  top:auto;
-  bottom:12px;
-  left:50%;
-  transform:translateX(-50%);
-  width:112px;
-  height:112px;
-  max-width:none;
- }
-}
-
-/* Correctif de spécificité : le thème commun chargé après cette feuille fixe
-   sinon le pictogramme à 32px même sur grand écran. */
-@media(min-width:900px){
- body[data-questionnaire-ui][data-tool="connectivite"] .question-heading h1{
-  position:relative;
-  display:block;
-  padding-bottom:172px;
- }
- body[data-questionnaire-ui][data-tool="connectivite"] .question-heading h1 .cx-question-icon{
-  position:absolute;
-  top:auto;
-  bottom:12px;
-  left:50%;
-  transform:translateX(-50%);
-  display:block;
-  width:140px;
-  height:140px;
-  min-width:140px;
-  min-height:140px;
-  max-width:none;
-  max-height:none;
-  flex:0 0 140px;
-  object-fit:contain;
- }
 }
