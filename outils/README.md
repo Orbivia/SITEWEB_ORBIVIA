@@ -1,15 +1,16 @@
-> Publication actuelle : les questionnaires Classification MDR/IVDR et Choix de connectivité sont accessibles. Le parcours normes reste en source, retiré de l’accueil et du sitemap, et exclu de GitHub Pages par `_config.yml`.
+> Publication actuelle : les questionnaires Classification MDR/IVDR et Choix de connectivité, ainsi que le générateur d'étiquettes de traçabilité, sont accessibles. Le parcours normes reste en source, retiré de l’accueil et du sitemap, et exclu de GitHub Pages par `_config.yml`.
 
 # Outils publics ORBIVIA
 
-Deux outils autonomes, accessibles depuis l’onglet **Outils** de la navigation du site :
+Trois outils autonomes, accessibles depuis l’onglet **Outils** de la navigation du site :
 
 - `/outils/classification/` : **Classification MDR / IVDR**, questionnaire conditionnel, résultat justifié et réponses à préciser. Aucun champ projet, fabricant ou relecteur.
 - `/outils/connectivite/` : **Choix de connectivité**, questionnaire de présélection selon l’usage, l’autonomie, les réseaux, la sécurité et les coûts.
+- `/outils/etiquettes-tracabilite/` : **Étiquettes et traçabilité**, identification interne Code 128/QR et UDI GS1 DataMatrix pour dispositifs médicaux avec GTIN fourni par l'utilisateur, validations élémentaires, formats imprimables 60×30 / 70×40 / 100×50 mm, exports SVG / PNG et impression PDF du navigateur. La librairie bwip-js v4.11.4 est chargée depuis cdnjs ; la page n'envoie pas les valeurs des champs au serveur.
 
 Le questionnaire `/outils/normes/` reste maintenu dans les sources, sans publication actuellement.
 
-L’accueil `/outils/` présente ces deux outils. Compliance Studio est désormais une application privée conservée dans Google Drive. Il n’est plus publié sur orbivia.fr.
+L’accueil `/outils/` présente ces trois outils. Compliance Studio est désormais une application privée conservée dans Google Drive. Il n’est plus publié sur orbivia.fr.
 
 ## Code commun
 
@@ -83,3 +84,12 @@ Corrections : les configurations MDR non couvertes et les tissus viables restent
 ### Sources des 64 aides normatives
 
 Chaque bulle renvoie désormais à une ou deux références liées à son thème. Les fiches officielles identifiées sont liées directement ; les autres liens portent explicitement « Rechercher … — catalogue ISO/IEC » et transmettent la référence au catalogue de l’éditeur. Le lien IVDR remplace le MDR pour la définition du diagnostic in vitro. Les pages AFNOR des masques, gants et textiles ont été recherchées en tenant compte des versions remplacées ; aucun numéro d’édition n’est imposé par le questionnaire. Une note distingue ces sources d’une décision d’applicabilité ou d’harmonisation. La suite comporte 334 tests, dont le contrôle des sources des 64 bulles.
+
+## Limites du générateur d'étiquettes (v1)
+
+- Le mode médical **ne délivre pas** de GTIN/UDI-DI et ne vérifie pas les droits d'attribution GS1. Il contrôle seulement la longueur et la clé GTIN-14.
+- L'étiquette est un **gabarit d'identification**, et non une étiquette finale certifiée MDR : adresse complète du fabricant, statut stérile, mandataire éventuel, marquage CE et symboles EN ISO 15223-1 exigent une composition adaptée au dispositif et à son conditionnement.
+- Le DataMatrix est généré à l'aide de l'encodeur GS1 de bwip-js, pas comme un DataMatrix texte générique : les AI (01), (11), (17), (10), (21) et les séparateurs requis sont traités par l'encodeur. Vérifier la lecture avec un scanner GS1 (identifiant de symbologie ]d2).
+- L'export SVG conserve les dimensions physiques en mm et le PNG est rasterisé en 300 dpi, mais un test de lisibilité sur le support et l'imprimante cible demeure obligatoire.
+- Les modes internes ne créent pas de registre central de fabrication ou de suivi et ne sont pas adaptés à la traçabilité réglementaire à eux seuls.
+- Pour une version suivante : champs réglementaires complémentaires, prévisualisation optimisée pour petites étiquettes, planches PDF/CSV, bibliothèque de symboles normalisés avec validation du contexte, tests sur lecteurs GS1 et bibliothèque BWIP hébergée localement.
