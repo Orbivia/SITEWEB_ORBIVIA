@@ -1047,40 +1047,6 @@ const roleGroups={
 
 /* Anciens pictogrammes SVG conservés uniquement comme secours si le PNG ne charge pas. */
 
-const questionIconTypes={
- scope:'medical',form:'product',multiPurpose:'box',ivdAllUses:'box',
- active:'battery',therapyEnergy:'battery',energyHazard:'shield',contact:'skin',
- animalIntact:'skin',nanoContact:'cells',wound:'wound',woundDeep:'wound',woundBarrier:'wound',
- orificeCavity:'lungs',orificeAbsorb:'blood',implant:'implant',implantActive:'implant',
- implantSpecial:'implant',dental:'tooth',reusableSurgical:'surgery',duration:'clock',
- medicinal:'pill',contraception:'shield',inhalation:'lungs',inhalationRisk:'lungs',
- surgMedicine:'needle',surgMedicineRisk:'shield',ivdCompanion:'pill',ivdLevelsRisk:'blood',
- cleaning:'shield',ivdSterile:'shield',xrecord:'radiation',surgIonising:'radiation',
- therapyIonising:'radiation',diagnosticXray:'radiation',tissue:'cells',nano:'cells',
- nanoExposure:'cells',substance:'pill',substanceSystemic:'blood',substanceGI:'pill',
- substanceLocal:'pill',bioAbsorb:'cells',chemical:'cells',invitroSubstance:'tube',
- channel:'network',bloodBag:'blood',channelBody:'blood',modify:'cells',modifySimple:'cells',
- administer:'needle',adminHazard:'shield',ivdDonor:'blood',ivdBloodAgent:'microbe',
- channelActive:'network',orificeActive:'link',controlTherapy:'network',
- ivdAccessoryCritical:'shield',heartDefect:'heart',centralContact:'heart',
- softwareVital:'heart',diagnostic:'sensor',diagnosticEnergy:'battery',
- radiopharm:'radiation',diagnosticUse:'medical',softwareMonitor:'software',
- ivdInstrumentIndependent:'sensor',closedLoop:'network',closedLoopDiagnostic:'network',
- softwareRole:'software',softwareDecision:'software',softwareImpact:'shield',
- ivdSoftwareRole:'software',ivdQualification:'tube',ivdRole:'tube',
- ivdGeneral:'tube',ivdAdditional:'medical',ivdLinkedClass:'network',
- ivdLoad:'microbe',ivdStaging:'medical',ivdPropagation:'microbe',
- ivdInfection:'microbe',ivdSexual:'microbe',ivdInfectionHarm:'microbe',
- ivdPrenatalImmune:'baby',ivdImmuneRisk:'shield',ivdCompatibility:'blood',
- ivdMarkers:'blood',ivdLifeManagement:'heart',ivdCancer:'cells',ivdGenetic:'dna',
- ivdCongenital:'baby',ivdNewborn:'baby',ivdSelf:'medical',
- ivdSelfException:'medical',ivdNear:'medical'
-};
-function questionIcon(q){
- const type=questionIconTypes[q.id]||'medical';
- return '<span class="mdr-question-art" aria-hidden="true"><img class="mdr-question-icon" loading="eager" alt="" src="../shared/icons/'+type+'.svg?v=solid1"></span>';
-}
-
-const api={questions,view,questionIcon,reservePrompt,roleGroups};
+const api={questions,view,reservePrompt,roleGroups};
 if(typeof module==='object'&&module.exports)module.exports=api;else window.ORBIVIA_QUESTION_PRESENTATION=api;
 })();
