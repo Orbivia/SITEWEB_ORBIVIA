@@ -1028,6 +1028,64 @@ const roleGroups={
  support:{label:'Récipient, produit général ou accessoire',description:'Tube de prélèvement, tampon, produit de lavage ou accessoire dédié.',values:['receptacle','lab','accessory']},
  reference:{label:'Calibrateur ou contrôle',description:'Produit servant à étalonner l’analyse ou à vérifier ses résultats.',values:['calibrator','assignedControl','unassignedControl']}
 };
-const api={questions,icons,view,icon,answerIcon,reservePrompt,roleGroups};
+
+/* Pictogramme placé dans le titre de chaque question, jamais dans les réponses.
+   Les thèmes génériques réutilisent exactement le pack SVG de Connectivité. */
+const medicalQuestionIcons={
+ heart:'<path d="M16 29C8 23 3 18 3 11a7 7 0 0 1 13-3 7 7 0 0 1 13 3c0 7-5 12-13 18z" fill="currentColor"/><path d="M6 16h5l2-4 4 9 3-5h6" fill="none" stroke="#e7a116" stroke-width="2.5"/>',
+ wound:'<rect x="4" y="6" width="24" height="20" rx="7" transform="rotate(-22 16 16)" fill="currentColor"/><path d="M10 12l12 8M12 8l12 8M8 16l12 8" stroke="#e7a116" stroke-width="2.5"/>',
+ implant:'<path d="M10 3h12v6l-3 3v14l-3 4-3-4V12l-3-3z" fill="currentColor"/><path d="M10 9h12M14 16h4M14 21h4" stroke="#e7a116" stroke-width="2"/>',
+ tooth:'<path d="M9 4c-6 0-7 6-5 12l5 13c2 2 4-7 7-7s5 9 7 7l5-13c2-6 1-12-5-12-3 0-4 2-7 2S12 4 9 4z" fill="currentColor"/><path d="M11 10h10" stroke="#e7a116" stroke-width="2.5"/>',
+ pill:'<rect x="4" y="4" width="24" height="24" rx="12" fill="currentColor"/><path d="M8 24 24 8" stroke="#e7a116" stroke-width="3"/><path d="M12 12l8 8" stroke="white" stroke-width="1.5"/>',
+ lungs:'<path d="M14 3v11C11 8 7 9 5 15l-3 11c0 5 10 5 12-2zM18 3v11c3-6 7-5 9 1l3 11c0 5-10 5-12-2z" fill="currentColor"/><path d="M16 2v15M8 17l5 3m11-3-5 3" stroke="#e7a116" stroke-width="2" fill="none"/>',
+ radiation:'<circle cx="16" cy="16" r="14" fill="currentColor"/><circle cx="16" cy="16" r="3" fill="#e7a116"/><path d="M14 11 9 4M20 15l9 2M14 20l-3 9" stroke="#e7a116" stroke-width="5"/>',
+ dna:'<path d="M10 2c14 8-2 19 12 28M22 2C8 10 24 21 10 30" fill="none" stroke="currentColor" stroke-width="4"/><path d="M12 6h8M12 12h8M12 19h8M12 26h8" stroke="#e7a116" stroke-width="2.5"/>',
+ blood:'<path d="M16 2C10 11 5 17 5 22a11 11 0 0 0 22 0c0-5-5-11-11-20z" fill="currentColor"/><path d="M11 23c0 4 4 5 7 4" fill="none" stroke="#e7a116" stroke-width="3"/>',
+ baby:'<circle cx="16" cy="10" r="7" fill="currentColor"/><path d="M4 30c0-9 4-13 12-13s12 4 12 13" fill="currentColor"/><path d="M12 10h8M11 24l5 3 5-3" stroke="#e7a116" stroke-width="2" fill="none"/>',
+ cells:'<circle cx="12" cy="12" r="10" fill="currentColor"/><circle cx="23" cy="22" r="8" fill="currentColor"/><circle cx="12" cy="12" r="3" fill="#e7a116"/><circle cx="23" cy="22" r="2.5" fill="#e7a116"/>',
+ surgery:'<path d="M5 3h6v15l5 4 5-4V3h6v17l-11 10L5 20z" fill="currentColor"/><path d="M16 11v13M10 16h12" stroke="#e7a116" stroke-width="2.5"/>',
+ needle:'<path d="m6 25 18-18 3 3L9 28z" fill="currentColor"/><path d="m21 5 6 6M5 22l5 5" stroke="#e7a116" stroke-width="2.5"/><path d="m5 27-3 3" stroke="currentColor" stroke-width="2"/>',
+ skin:'<path d="M3 8c7-6 12 6 19 0 3-2 5-2 7-1v19H3z" fill="currentColor"/><path d="M3 16c7-6 12 6 19 0 3-2 5-2 7-1" stroke="#e7a116" stroke-width="2.5" fill="none"/>',
+ microbe:'<circle cx="16" cy="16" r="10" fill="currentColor"/><path d="M16 1v5m0 20v5M1 16h5m20 0h5M5 5l4 4m14 14 4 4M27 5l-4 4M9 23l-4 4" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="2" fill="#e7a116"/><circle cx="20" cy="18" r="3" fill="#e7a116"/>',
+ medical:'<rect x="3" y="3" width="26" height="26" rx="5" fill="currentColor"/><path d="M13 8h6v5h5v6h-5v5h-6v-5H8v-6h5z" fill="#e7a116"/>'
+};
+const questionIconTypes={
+ scope:'medical',form:'product',multiPurpose:'box',ivdAllUses:'box',
+ active:'battery',therapyEnergy:'battery',energyHazard:'shield',contact:'skin',
+ animalIntact:'skin',nanoContact:'cells',wound:'wound',woundDeep:'wound',woundBarrier:'wound',
+ orificeCavity:'lungs',orificeAbsorb:'blood',implant:'implant',implantActive:'implant',
+ implantSpecial:'implant',dental:'tooth',reusableSurgical:'surgery',duration:'clock',
+ medicinal:'pill',contraception:'shield',inhalation:'lungs',inhalationRisk:'lungs',
+ surgMedicine:'needle',surgMedicineRisk:'shield',ivdCompanion:'pill',ivdLevelsRisk:'blood',
+ cleaning:'shield',ivdSterile:'shield',xrecord:'radiation',surgIonising:'radiation',
+ therapyIonising:'radiation',diagnosticXray:'radiation',tissue:'cells',nano:'cells',
+ nanoExposure:'cells',substance:'pill',substanceSystemic:'blood',substanceGI:'pill',
+ substanceLocal:'pill',bioAbsorb:'cells',chemical:'cells',invitroSubstance:'tube',
+ channel:'network',bloodBag:'blood',channelBody:'blood',modify:'cells',modifySimple:'cells',
+ administer:'needle',adminHazard:'shield',ivdDonor:'blood',ivdBloodAgent:'microbe',
+ channelActive:'network',orificeActive:'link',controlTherapy:'network',
+ ivdAccessoryCritical:'shield',heartDefect:'heart',centralContact:'heart',
+ softwareVital:'heart',diagnostic:'sensor',diagnosticEnergy:'battery',
+ radiopharm:'radiation',diagnosticUse:'medical',softwareMonitor:'software',
+ ivdInstrumentIndependent:'sensor',closedLoop:'network',closedLoopDiagnostic:'network',
+ softwareRole:'software',softwareDecision:'software',softwareImpact:'shield',
+ ivdSoftwareRole:'software',ivdQualification:'tube',ivdRole:'tube',
+ ivdGeneral:'tube',ivdAdditional:'medical',ivdLinkedClass:'network',
+ ivdLoad:'microbe',ivdStaging:'medical',ivdPropagation:'microbe',
+ ivdInfection:'microbe',ivdSexual:'microbe',ivdInfectionHarm:'microbe',
+ ivdPrenatalImmune:'baby',ivdImmuneRisk:'shield',ivdCompatibility:'blood',
+ ivdMarkers:'blood',ivdLifeManagement:'heart',ivdCancer:'cells',ivdGenetic:'dna',
+ ivdCongenital:'baby',ivdNewborn:'baby',ivdSelf:'medical',
+ ivdSelfException:'medical',ivdNear:'medical'
+};
+function questionIcon(q){
+ const type=questionIconTypes[q.id]||'medical';
+ const svg=medicalQuestionIcons[type]||icons[type];
+ return svg
+  ?'<span class="mdr-question-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg></span>'
+  :'<img class="mdr-question-icon" src="../connectivite/icones/'+type+'.svg?v=2" alt="" aria-hidden="true">';
+}
+
+const api={questions,icons,view,icon,answerIcon,questionIcon,reservePrompt,roleGroups};
 if(typeof module==='object'&&module.exports)module.exports=api;else window.ORBIVIA_QUESTION_PRESENTATION=api;
 })();
