@@ -108,7 +108,7 @@ test("Lot 2.1 : chaque nouvelle icône de question est distincte de son ancien d
   assert.doesNotMatch(revised, /<text[\s>]/);
  }
  const source = load("outils/connectivite/connectivite.js");
- assert.match(source, /\.svg\?v=4/);
+ assert.match(source, /\.svg\?v=5/);
 });
 
 
@@ -124,5 +124,5 @@ test("Lot 2.3 : les quatre icônes validées restent distinctes, lisibles et san
   assert.doesNotMatch(item, /<image[\s>]/);
  }
  const index = load("outils/connectivite/index.html");
- assert.match(index, /connectivite\.js\?v=11/);
+ assert.match(index, /connectivite\.js\?v=12/);
 });
