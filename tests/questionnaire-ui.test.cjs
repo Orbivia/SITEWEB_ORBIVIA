@@ -89,3 +89,24 @@ test("Lot 1 : les 96 questions MDR/IVDR conservent les identifiants réglementai
  assert.match(presentation.questions.ivdMarkers.descriptions.listed, /RHW1/);
  assert.match(presentation.questions.ivdSelfException.title, /autotest/);
 });
+
+
+test("Lot 2.1 : chaque nouvelle icône de question est distincte de son ancien doublon", () => {
+ const pairs = [
+  ["autonomy", "power"],
+  ["mobility", "range"],
+  ["offline", "security"],
+  ["priorities", "peer"]
+ ];
+ for (const [updated, original] of pairs) {
+  const revised = load("outils/connectivite/icones/question-" + updated + ".svg");
+  const previous = load("outils/connectivite/icones/question-" + original + ".svg");
+  assert.notEqual(revised, previous, updated + " ne doit plus répéter " + original);
+  assert.match(revised, /viewBox="0 0 32 32"/);
+  assert.match(revised, /#17263a/);
+  assert.match(revised, /#e7a116/);
+  assert.doesNotMatch(revised, /<text[\s>]/);
+ }
+ const source = load("outils/connectivite/connectivite.js");
+ assert.match(source, /\.svg\?v=3/);
+});
