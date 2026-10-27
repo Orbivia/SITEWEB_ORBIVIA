@@ -55,8 +55,9 @@ function selectedOption(q){if(q.type==="single")return q.options.find(o=>o[0]===
 function optionMarkup(q,o){
  const [id,label,description,picto]=o,selected=q.type==="single"?answers[q.id]===id:has(q.id,id);
  const mark=selected?(q.type==="priority"?String((answers[q.id]||[]).indexOf(id)+1):"✓"):"";
- return '<button class="answer cx-option" type="button" data-option="'+esc(id)+'" aria-pressed="'+selected+'">'+'<span class="answer-copy cx-option-copy"><strong>'+esc(label)+'</strong>'+(description?'<small>'+esc(description)+'</small>':'')+'</span>'+(q.type==="single"?'':'<span class="cx-check" aria-hidden="true">'+esc(mark)+'</span>')+'</button>';
+ return '<button class="answer cx-option" type="button" data-option="'+esc(id)+'" aria-pressed="'+selected+'">'+'<span class="answer-copy cx-option-copy"><strong>'+esc(label)+'</strong>'+'</span>'+(q.type==="single"?'':'<span class="cx-check" aria-hidden="true">'+esc(mark)+'</span>')+'</button>';
 }
+function choiceNotes(q){const seen=new Set([q.help,q.example]);const notes=q.options.filter(o=>o[2]&&!seen.has(o[2])&&seen.add(o[2])).map(o=>'<li><strong>'+esc(o[1])+'</strong><p>'+esc(o[2])+'</p></li>').join('');return notes?'<strong>Précisions sur les choix</strong><ul>'+notes+'</ul>':'';}
 function optionEditor(q){const multi=q.type!=="single";return '<div class="cx-options" data-columns="'+"one"+'" data-multi="'+multi+'">'+q.options.map(o=>optionMarkup(q,o)).join("")+'</div>'+(q.type==="priority"?'<p class="cx-secondary" id="priority-count">'+((answers[q.id]||[]).length)+'/3 critères sélectionnés</p>':"")}
 function editor(q){return optionEditor(q)}
 function current(){const qs=active();pos=Math.min(Math.max(0,pos),qs.length-1);return qs[pos]}
@@ -74,7 +75,7 @@ function render(){
  root.innerHTML='<div class="question-progress cx-progress"><span>'+esc(q.section)+' · Connectivité<b>'+progress+' % parcouru</b></span><progress max="100" value="'+progress+'" aria-label="Avancement du questionnaire"></progress></div>'
  +'<section class="question-card cx-card" aria-labelledby="question-title">'
  +'<div class="question-prompt cx-question-prompt"><div class="question-heading cx-head"><h1 id="question-title"><img class="cx-question-icon" src="'+icon("question-"+q.id)+'" alt="">'+esc(q.title)+'</h1>'
- +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pour répondre</strong><p>'+esc(q.help)+'</p><strong>Exemple de produit</strong><p>'+esc(q.example)+'</p></div></details></div>'
+ +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pour répondre</strong><p>'+esc(q.help)+'</p><strong>Exemple de produit</strong><p>'+esc(q.example)+'</p>'+choiceNotes(q)+'</div></details></div>'
  +'</div><div class="cx-options-wrapper">'+editor(q)+'</div><button class="cx-help-trigger" type="button" data-action="toggle-help" aria-expanded="'+(helpOpen?"true":"false")+'"><span class="cx-help-symbol" aria-hidden="true">?</span>'+ (helpOpen?"Masquer l’aide":"Aide au choix")+'</button>'
  +'</section>'
  +'<div class="question-controls cx-controls">'+back+'<div class="cx-control-right">'+nextButton+restart+'</div></div>';

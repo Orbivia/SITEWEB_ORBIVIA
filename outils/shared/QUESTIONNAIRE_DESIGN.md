@@ -43,7 +43,7 @@ Un nouvel outil doit disposer d'un conteneur principal détectable et d'une `.qu
 Vérifier sur téléphone (largeurs 320, 360, 390 px) et sur ordinateur (768, 1280 px) :
 
 1. les icônes sont correctement alignées avec le titre, et jamais répétées dans les réponses ;
-2. une réponse avec `<small>` reste lisible et cliquable, sans déborder ;
+2. seuls la question et les intitulés des réponses sont visibles ; les sous-titres et précisions des choix sont regroupés dans la bulle `i`, sans doublons ;
 3. ouvrir/fermer la bulle `i` **ne change ni la hauteur de la page, ni la position des boutons** ; clic extérieur et Échap ferment ;
 4. l'aide et les réponses restent utilisables au clavier et au toucher ;
 5. l'avancement, l'aide, le retour, la réinitialisation et la synthèse fonctionnent sans changer les valeurs métier.
