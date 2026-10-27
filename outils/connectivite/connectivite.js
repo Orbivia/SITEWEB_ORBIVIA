@@ -27,14 +27,30 @@ const Q=[
 ];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const icon=name=>prefix+encodeURIComponent(name||"help")+".svg?v=7";
-function restore(){try{const x=JSON.parse(localStorage.getItem(storeKey)||"null");return x&&typeof x==="object"&&!Array.isArray(x)?x:{}}catch{return {}}}
+function restore(){
+ try{
+  const x=JSON.parse(localStorage.getItem(storeKey)||"null"),clean={};
+  if(!x||typeof x!=="object"||Array.isArray(x))return clean;
+  for(const q of Q){
+   const valid=value=>q.options.some(option=>option[0]===value);
+   if(q.type==="single"){if(valid(x[q.id]))clean[q.id]=x[q.id];}
+   else if(Array.isArray(x[q.id])){
+    let values=[...new Set(x[q.id].filter(valid))];
+    const exclusive=values.find(value=>value==="unknown"||(q.id==="security"&&value==="normal")||(q.id==="infra"&&value==="none"));
+    if(exclusive)values=[exclusive];
+    clean[q.id]=q.type==="priority"?values.slice(0,3):values;
+   }
+  }
+  return clean;
+ }catch{return {}}
+}
 let answers=restore(),pos=0,result=false;
 const byId=id=>Q.find(q=>q.id===id);
 const has=(id,value)=>Array.isArray(answers[id])&&answers[id].includes(value);
 function visible(q){if(q.id==="autonomy")return !["mains"].includes(answers.power);if(q.id==="latency")return ["settings","actuate","critical"].includes(answers.control)||has("payload","audio")||has("payload","video");return true}
 const active=()=>Q.filter(visible);
 function save(){try{localStorage.setItem(storeKey,JSON.stringify(answers))}catch{}}
-function done(q){const a=answers[q.id];if(q.type==="multi"||q.type==="priority")return Array.isArray(a)&&a.length>0;return typeof a==="string"}
+function done(q){const a=answers[q.id],valid=value=>q.options.some(option=>option[0]===value);if(q.type==="multi"||q.type==="priority")return Array.isArray(a)&&a.length>0&&a.every(valid);return valid(a)}
 function selectedOption(q){if(q.type==="single")return q.options.find(o=>o[0]===answers[q.id])?.[1]||"Non renseigné";if(q.type==="multi"||q.type==="priority")return (q.options||[]).filter(o=>has(q.id,o[0])).map(o=>o[1]).join(", ")||"Non renseigné";return "Non renseigné"}
 function optionMarkup(q,o){
  const [id,label,description,picto]=o,selected=q.type==="single"?answers[q.id]===id:has(q.id,id);
@@ -84,6 +100,7 @@ function updateContinue(){const b=root.querySelector('[data-action="next"]');if(
 function next(){if(!done(current()))return;const qs=active();helpOpen=false;infoOpen=false;if(pos>=qs.length-1){result=true;render();return}pos++;render()}
 function choose(id){
  const q=current();
+ if(!q.options.some(option=>option[0]===id))return;
  if(q.type==="single"){answers[q.id]=id;save();next();return}
  if(!["multi","priority"].includes(q.type))return;
  let values=Array.isArray(answers[q.id])?[...answers[q.id]]:[];

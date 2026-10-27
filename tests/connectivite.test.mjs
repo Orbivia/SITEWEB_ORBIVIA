@@ -5,8 +5,8 @@ import vm from "node:vm";
 import path from "node:path";
 const base=path.resolve("outils/connectivite");
 const js=fs.readFileSync(path.join(base,"connectivite.js"),"utf8");
-function harness(){
- let html="";const callbacks={};let memory={};
+function harness(saved){
+ let html="";const callbacks={};let memory=saved===undefined?{}:{"orbivia-connectivite-v2":saved};
  const root={set innerHTML(value){html=value},get innerHTML(){return html},addEventListener(name,fn){callbacks[name]=fn},querySelector(){return {disabled:false}}};
  const document={getElementById(){return root},activeElement:null};
  const localStorage={getItem(k){return memory[k]??null},setItem(k,v){memory[k]=v},removeItem(k){delete memory[k]}};
@@ -18,6 +18,18 @@ function harness(){
   slide(n){callbacks.input({target:{id:"range-control",value:String(n)}})}
  };
 }
+
+test("restauration des anciennes réponses et données invalides",()=>{
+ const t=harness(JSON.stringify({peer:"obsolete",range:"room",payload:["video","video","bogus"],priorities:["bogus"]}));
+ t.action("next");
+ assert.match(t.html,/data-option="phone"/);
+ t.option("phone");
+ const restored=JSON.parse(t.saved);
+ assert.equal(restored.peer,"phone");
+ assert.deepEqual(restored.payload,["video"]);
+ assert.deepEqual(restored.priorities,[]);
+ assert.equal(restored.range,"room");
+});
 test("20 questions, syntaxe valide, icônes locales",()=>{
  new vm.Script(js);
  assert.equal((js.match(/"?section"?:/g)||[]).length,20);
@@ -34,7 +46,9 @@ test("navigation complète sans blocage et synthèse",()=>{
  assert.match(t.html,/À vérifier avant conception/);
  assert.ok(t.saved?.includes("priorities"));
  t.action("reset");
- assert.match(t.html,/Avec quoi votre objet doit-il communiquer/);
+ assert.match(t.html,/data-option="phone"/);
+ assert.match(t.html,/0 % parcouru/);
+ assert.equal(t.saved,undefined);
 });
 test("autonomie conditionnelle lorsque l'objet est alimenté",()=>{
  const t=harness();

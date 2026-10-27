@@ -56,17 +56,17 @@ def check(source, ref, base=None):
 public = [p for p in files if p.relative_to(ROOT).parts[0] not in ('tests', 'scripts', 'docs')]
 for p in public:
     if p.suffix == '.html':
-        pages[p.resolve()] = Page(p.read_text())
+        pages[p.resolve()] = Page(p.read_text(encoding='utf-8'))
 for p, page in pages.items():
     for ref in page.refs:
         check(p, ref)
 for p in public:
     if p.suffix == '.css':
-        for ref in re.findall(r'url\([\s\'"]*([^\)\'"\s]+)', p.read_text()):
+        for ref in re.findall(r'url\([\s\'"]*([^\)\'"\s]+)', p.read_text(encoding='utf-8')):
             check(p, ref)
-    elif p.suffix == '.js' and 'vendor' not in p.parts:
+    elif p.suffix in ('.js', '.mjs') and 'vendor' not in p.parts:
         # Project data uses paths relative to the site root, shared by root/nested pages.
-        for ref in re.findall(r'[\'"]((?:\.\./|/)?img/[^\'"\s]+)[\'"]', p.read_text()):
+        for ref in re.findall(r'[\'"]((?:\.\./|/)?img/[^\'"\s]+)[\'"]', p.read_text(encoding='utf-8')):
             check(p, ref, ROOT)
 
 if errors:

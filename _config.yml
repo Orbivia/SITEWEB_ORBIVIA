@@ -9,6 +9,11 @@ exclude:
   - outils/CLARIFICATION_MAINTENANCE.md
   - outils/CLASSIFICATION_VALIDATION.md
   - outils/IVDR_VALIDATION.md
+  - outils/QUESTIONNAIRES_CORRECTIONS_2026-10.md
+  - outils/shared/QUESTIONNAIRE_DESIGN.md
+  - outils/classification/icones-raster/README.md
+  - outils/connectivite/icones/README.md
+  - outils/etiquettes-tracabilite/tests
   - _preview
   - .openai
   - outils/normes
