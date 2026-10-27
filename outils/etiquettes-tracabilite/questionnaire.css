@@ -102,3 +102,51 @@ body[data-tool="etiquettes"] .question-heading .mdr-question-icon{flex:0 0 32px;
 /* Élimine les pastilles héritées de .answer > span du CSS historique. */
 body[data-tool="etiquettes"] .question-card .answer.label-option > .answer-copy{display:block;flex:1 1 auto;width:auto;height:auto;min-width:0;border:0;border-radius:0}
 body[data-tool="etiquettes"] .question-card .answer.label-option > .label-checkbox{display:none}
+
+/* Synthèse épurée : des lignes courtes et des explications facultatives. */
+body[data-tool="etiquettes"] .label-result-heading{margin-bottom:16px}
+body[data-tool="etiquettes"] .label-result-heading h1{margin:8px 0 8px}
+body[data-tool="etiquettes"] .label-result-heading p{margin:0;font-size:13px;line-height:1.55}
+body[data-tool="etiquettes"] .label-result-card{padding:18px 22px;margin-bottom:12px}
+body[data-tool="etiquettes"] .label-result-card header{margin-bottom:0;padding-bottom:12px}
+body[data-tool="etiquettes"] .label-result-card header h2{font-size:18px}
+.label-short-list{list-style:none;margin:0;padding:0}
+.label-short-list li{display:flex;justify-content:space-between;gap:16px;align-items:center;border-bottom:1px solid #edf0ec;padding:11px 0;min-height:44px}
+.label-short-list li:last-child{border:0;padding-bottom:2px}
+.label-short-name{font-size:14px;font-weight:550;line-height:1.4;color:#26332f;flex:1;min-width:0}
+.label-short-code{font:650 11px/1.3 "Segoe UI",Arial,sans-serif;color:#80621c;background:#faf5e8;border:1px solid #eee2c6;padding:5px 8px;border-radius:7px;white-space:nowrap;flex:none}
+.label-checks{list-style:none;margin:0;padding:0}
+.label-checks li{display:grid;gap:3px;padding:11px 0;border-bottom:1px solid #edf0ec}
+.label-checks li:last-child{border:0}
+.label-checks strong{font-size:13px;color:#26332f;font-weight:650}
+.label-checks span{font-size:12px;line-height:1.5;color:#68766d}
+.label-additional{padding:9px 20px!important}
+.label-additional details{border-bottom:1px solid #edf0ec}
+.label-additional details:last-child{border:0}
+.label-additional summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;min-height:46px;padding:11px 1px;font-size:13px;font-weight:600;color:#41504a}
+.label-additional summary::-webkit-details-marker{display:none}
+.label-additional summary::after{content:"+";font-size:19px;color:#886b30;font-weight:400}
+.label-additional details[open]>summary::after{content:"−"}
+.label-additional details>div{padding:2px 0 14px}
+.label-additional h3{font-size:13px;letter-spacing:0;color:#283832;margin:17px 0 5px}
+.label-reference{padding:9px 0;border-bottom:1px solid #f0f1ed}
+.label-reference:last-child{border-bottom:0}
+.label-reference strong{font-size:12px;color:#273530}
+.label-reference p{font-size:12px;line-height:1.5;color:#67736b;margin:4px 0}
+.label-reference small{font-size:10px;color:#856720}
+.label-additional dl>div{display:grid;grid-template-columns:minmax(200px,1fr) 1fr;gap:15px;padding:9px 0;border-bottom:1px solid #edf0ec;font-size:12px}
+.label-additional dt{color:#68766d}
+.label-additional dd{margin:0;color:#26332f;font-weight:600}
+@media(max-width:600px){
+ body[data-tool="etiquettes"] .label-result-card{padding:14px 16px}
+ .label-short-list li{padding:10px 0;gap:8px}
+ .label-short-name{font-size:13px}
+ .label-short-code{font-size:10px;padding:4px 6px}
+ .label-additional{padding:6px 15px!important}
+ .label-additional dl>div{display:block}
+ .label-additional dd{margin-top:5px}
+}
+@media print {
+ .label-additional{display:none!important}
+ body[data-tool="etiquettes"] .label-result-card{box-shadow:none}
+}
