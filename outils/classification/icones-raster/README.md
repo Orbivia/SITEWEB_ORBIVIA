@@ -36,4 +36,4 @@ Si la correspondance est modifiée, reprendre le tableau de l'archive, en gardan
 
 ## Affichage sur un seul écran
 
-La feuille `../viewport.css` et le script `../viewport.js` utilisent la hauteur de la fenêtre pour présenter l'intitulé, les réponses, l'aide et les commandes sur un écran, avec adaptation de densité selon l'espace disponible. Sur les très petits écrans ou en zoom important, le défilement reste autorisé si le texte ne tient pas sans masquer de choix.
+Les fichiers communs `../../shared/questionnaire-layout.css` et `../../shared/questionnaire-layout.js` gèrent la disposition et la densité sur **Classification MDR/IVDR**, **Connectivité** et **Étiquetage médical**. Sur un écran trop petit ou avec un zoom important, le défilement reste possible pour ne jamais masquer une réponse.
