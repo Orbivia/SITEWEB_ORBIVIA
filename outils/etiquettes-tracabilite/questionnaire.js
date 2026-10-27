@@ -87,13 +87,14 @@ function completed(q){const v=answers[q.id];return q.type==="multi"?Array.isArra
 function current(){const qs=applicable();position=Math.max(0,Math.min(qs.length-1,position));return qs[position];}
 function optionMarkup(q,option) {
  const value=option[0],label=option[1],desc=option[2]||"",sel=q.type==="single"?answers[q.id]===value:(answers[q.id]||[]).includes(value);
- return '<button type="button" class="answer label-option" data-choice="'+escapeHTML(value)+'" aria-pressed="'+sel+'"><div class="answer-copy">'+escapeHTML(label)+(desc?'<small>'+escapeHTML(desc)+'</small>':"")+'</div></button>';
+ return '<button type="button" class="answer label-option" data-choice="'+escapeHTML(value)+'" aria-pressed="'+sel+'"><div class="answer-copy">'+escapeHTML(label)+'</div></button>';
 }
+function choiceNotes(q){const seen=new Set([q.help]);const notes=q.options.filter(o=>o[2]&&!seen.has(o[2])&&seen.add(o[2])).map(o=>'<li><strong>'+escapeHTML(o[1])+'</strong><p>'+escapeHTML(o[2])+'</p></li>').join('');return notes?'<strong>Précisions sur les choix</strong><ul>'+notes+'</ul>':'';}
 function showQuestion(){
  const q=current(),qs=applicable(),pct=Math.round(position/qs.length*100);
  root.innerHTML='<div class="question-progress"><span>'+escapeHTML(q.s)+' · Étiquette MDR <b>Question '+(position+1)+' / '+qs.length+'</b></span><progress max="100" value="'+pct+'" aria-label="Progression"></progress></div>'
  +'<section class="question-card"><div class="question-prompt"><div class="question-heading"><h1 id="question-title">'+icon(q.icon)+escapeHTML(q.title)+'</h1>'
- +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pourquoi cette question ?</strong><p>'+escapeHTML(q.help)+'</p></div></details></div></div>'
+ +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pourquoi cette question ?</strong><p>'+escapeHTML(q.help)+'</p>'+choiceNotes(q)+'</div></details></div></div>'
  +'<div class="label-options">'+q.options.map(o=>optionMarkup(q,o)).join("")+'</div></section>'
  +'<div class="question-controls label-controls"><button class="tool-button" data-action="back" type="button" '+(position===0?"disabled":"")+'>← Précédent</button>'
  +'<div class="label-controls-right">'+(q.type==="multi"?'<button class="tool-button primary" data-action="next" type="button" '+(!completed(q)?"disabled":"")+'>'+(position===qs.length-1?"Voir les résultats":"Continuer")+' →</button>':"")
