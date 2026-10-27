@@ -1,6 +1,6 @@
 /* Tests métier du questionnaire d'étiquetage MDR Orbivia.
  * Exécution : node outils/etiquettes-tracabilite/tests/run.mjs
- * Aucun module externe et aucun symbole ISO reproduit.
+ * Aucun module externe ; compare les références aux PNG fournis dans le dépôt.
  */
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
@@ -11,7 +11,7 @@ import vm from "node:vm";
 const file=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../questionnaire.js");
 const source=readFileSync(file,"utf8").replace(
  /render\(\);\s*\}\)\(\);\s*$/,
- 'window.__probe={Q,answers,applicable,current,selectChoice,next,conclusions,get finished(){return finished}};\nrender();})();'
+ 'window.__probe={Q,answers,applicable,current,selectChoice,next,conclusions,symbolImage,renderShortList,get finished(){return finished}};\nrender();})();'
 );
 assert(source.includes("window.__probe="),"Test hook injection failed");
 
@@ -67,6 +67,20 @@ assert(!has(scenario({reuse:"reusable",patient:"multiple",reprocess:"clean",supp
 assert(has(scenario({reuse:"reusable",patient:"multiple",reprocess:"clean",support:"device",class:"i"}).conditional,"UDI direct"));
 assert(titleHas(scenario({tracking:"lot",implant:"active"}).review,"numéro de série requis"));
 assert(titleHas(scenario({support:"sterile",sterile:"nonsterile"}).review,"Support incohérent"));
+
+// Le pictogramme n'est affiché qu'avec une référence ISO exactement indexée.
+// Ne jamais substituer un symbole à une mention CE, UDI ou à une autre référence ISO.
+const visual=create();
+assert.match(visual.symbolImage("5.1.1"),/symboles-iso\/5\.1\.1\.png/);
+assert.match(visual.symbolImage("5.2.3"),/symboles-iso\/5\.2\.3\.png/);
+assert.match(visual.symbolImage("5.4.11"),/symboles-iso\/5\.4\.11\.png/);
+for(const code of ["5.7.7","5.7.10","CE","CE + ON","UDI (AIDC + HRI)","Texte","Notice"])
+ assert.equal(visual.symbolImage(code),"","Symbole graphique inexistant pour "+code);
+const visualItems=[{code:"5.1.1",title:"Fabricant"},{code:"UDI (AIDC + HRI)",title:"Support UDI"}];
+const rendered=visual.renderShortList(visualItems);
+assert.match(rendered,/symboles-iso\/5\.1\.1\.png/);
+assert.equal((rendered.match(/class="label-symbol-img/g)||[]).length,1);
+
 const app=create();
 assert(app.Q.length>=27);
 assert(app.Q.every(q=>q.options.every(option=>option[0]!=="unknown")),"No undefined answers");
