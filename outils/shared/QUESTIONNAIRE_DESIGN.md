@@ -50,6 +50,6 @@ Vérifier sur téléphone (largeurs 320, 360, 390 px) et sur ordinateur (768, 12
 
 Exécuter `node --test tests/*.test.*` et `python scripts/check-site.py` avant publication. Les tests statiques ne remplacent pas une inspection visuelle dans un navigateur.
 
-## Pictogrammes pleins
+## Ressources
 
-La famille commune se trouve dans `shared/icons/` : silhouettes simples sur une grille 32 × 32, bleu nuit et accent doré. Classification et Étiquetage chargent ces SVG ; Connectivité utilise les variantes de la même famille dans son dossier d’icônes. Ne pas réintroduire de PNG, de traits fins, de dégradés ni de textes dans les icônes. Les symboles servent à repérer les questions et ne constituent pas des marquages réglementaires imprimables.
+Les questionnaires et leurs synthèses sont textuels. Les trois SVG de `shared/icons/` restent utilisés sur la page d’accueil des outils. Les bulles d’information restent accessibles.

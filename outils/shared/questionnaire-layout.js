@@ -13,7 +13,7 @@
   body.classList.remove(...sizes,"quiz-scroll");
  }
  function currentCard(){
-  return root.querySelector(".question-card:not(.result-card):not(.assistance-card):not(.prompt-measure)");
+  return root.querySelector(".question-card:not(.result-card):not(.assistance-card)");
  }
  function overflowing(card){
   const viewport=Math.min(window.innerHeight,window.visualViewport?.height||window.innerHeight);

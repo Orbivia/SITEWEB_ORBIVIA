@@ -24,21 +24,6 @@ test('IVDR families cover every role exactly once, with three choices per screen
  assert.deepEqual(values.sort(),questions.find(q=>q.id==='ivdRole').options.map(([v])=>v).sort());
 });
 
-test('mobile presentation skips needless offscreen measurement of 96 questions',()=>{
- const prior=global.window;
- let cleared=false;
- global.window={matchMedia:query=>({matches:query==='(max-width: 899px)'})};
- try{
-  presentation.reservePrompt({
-   querySelector(){throw new Error('DOM measurement must not run on mobile')},
-   style:{removeProperty(key){assert.equal(key,'--question-prompt-height');cleared=true;}}
-  });
-  assert.ok(cleared);
- }finally{
-  if(prior===undefined)delete global.window;else global.window=prior;
- }
-});
-
 test('MDR and IVDR questions render without decorative question icons',()=>{
  assert.equal(Object.keys(presentation.questions).length,96);
  assert.equal(typeof presentation.questionIcon,'undefined');

@@ -1005,40 +1005,6 @@ const hints={
 Object.assign(questions.ivdRole.options,{test:'Réactif, test ou kit',instrument:'Instrument d’analyse seul',software:'Logiciel IVD',receptacle:'Récipient sans test intégré',lab:'Produit général pour usage IVD',accessory:'Accessoire de DIV',calibrator:'Calibrateur',assignedControl:'Contrôle à valeur assignée',unassignedControl:'Contrôle sans valeur assignée'});
 function view(q){const p=questions[q.id];if(!p)return {title:q.label,criterion:q.intro||'',options:q.options,descriptions:q.optionHelp||{}};
  return {title:p.title,criterion:hints[q.id]||p.criterion||q.intro||'',options:q.options.map(([value,label])=>[value,p.options[value]||label]),descriptions:{...q.optionHelp,...p.descriptions}};}
-let promptWidth=0,promptHeight=0;
-function reservePrompt(app){
- // Sur téléphone et tablette, la hauteur est déjà gérée par le CSS responsive.
- // Éviter de créer et mesurer 96 titres invisibles à chaque changement de largeur.
- if(typeof window!=='undefined'&&window.matchMedia&&window.matchMedia('(max-width: 899px)').matches){
-  app.style.removeProperty('--question-prompt-height');
-  return;
- }
- const prompt=app.querySelector('.question-prompt');if(!prompt)return;
- const width=Math.round(prompt.getBoundingClientRect().width);if(!width)return;
- if(width!==promptWidth){
-  const measure=document.createElement('div');measure.className='question-card prompt-measure';
-  measure.setAttribute('aria-hidden','true');measure.inert=true;
-  Object.assign(measure.style,{position:'absolute',visibility:'hidden',pointerEvents:'none',width:width+'px',padding:'0',left:'0',top:'0'});
-  for(const [id,p] of Object.entries(questions)){
-   const item=document.createElement('div');item.className='question-prompt';
-   const heading=document.createElement('div');heading.className='question-heading';
-   const title=document.createElement('h1');title.textContent=p.title.replace(/\s+\?$/,'\u00a0?');
-   const info=document.createElement('details');info.className='info-bubble';
-   const summary=document.createElement('summary');summary.textContent='i';info.append(summary);heading.append(title,info);item.append(heading);
-   const text=hints[id]||p.criterion;
-   if(text){const note=document.createElement('p');note.className='question-intro';note.textContent=text;item.append(note);}
-   measure.append(item);
-  }
-  app.append(measure);
-  promptHeight=Math.ceil(Math.max(...Array.from(measure.children,item=>item.getBoundingClientRect().height)));
-  promptWidth=width;measure.remove();
- }
- app.style.setProperty('--question-prompt-height',promptHeight+'px');
-}
-if(typeof window!=='undefined'){
- window.addEventListener('resize',()=>{const app=document.getElementById('tool-app');if(app)reservePrompt(app);});
- document.fonts?.ready.then(()=>{promptWidth=0;const app=document.getElementById('tool-app');if(app)reservePrompt(app);});
-}
 const roleGroups={
  analysis:{label:'Test, instrument ou logiciel',description:'Réactif, kit, automate d’analyse ou logiciel IVD.',values:['test','instrument','software']},
  support:{label:'Récipient, produit général ou accessoire',description:'Tube de prélèvement, tampon, produit de lavage ou accessoire dédié.',values:['receptacle','lab','accessory']},
@@ -1047,6 +1013,6 @@ const roleGroups={
 
 /* Anciens pictogrammes SVG conservés uniquement comme secours si le PNG ne charge pas. */
 
-const api={questions,view,reservePrompt,roleGroups};
+const api={questions,view,roleGroups};
 if(typeof module==='object'&&module.exports)module.exports=api;else window.ORBIVIA_QUESTION_PRESENTATION=api;
 })();

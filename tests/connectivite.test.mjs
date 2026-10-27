@@ -30,10 +30,10 @@ test("restauration des anciennes réponses et données invalides",()=>{
  assert.deepEqual(restored.priorities,[]);
  assert.equal(restored.range,"room");
 });
-test("20 questions, syntaxe valide, icônes locales",()=>{
+test("20 questions, syntaxe valide, présentation sans pictogrammes",()=>{
  new vm.Script(js);
  assert.equal((js.match(/"?section"?:/g)||[]).length,20);
- for(const m of js.matchAll(/icon\("([a-z]+)"\)/g))assert.ok(fs.existsSync(path.join(base,"icones",m[1]+".svg")),m[1]);
+ assert.doesNotMatch(harness().html, /<img|<svg/);
 });
 test("navigation complète sans blocage et synthèse",()=>{
  const t=harness();
