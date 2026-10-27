@@ -1,0 +1,215 @@
+/* ORBIVIA — Questionnaire UI v1
+ * Styles transversaux aux questionnaires publics. Chargement APRES la feuille
+ * propre à l'outil (connectivite.css, classification/design.css, etc.).
+ * Pour un nouvel outil : data-questionnaire-ui="v1" sur <body>.
+ */
+body[data-questionnaire-ui]{
+ --quiz-ink:#202a32;
+ --quiz-gold:#e7a116;
+ --quiz-border:#dce2dc;
+ --quiz-paper:#fafbf9;
+ --quiz-hint:#68766d;
+}
+body[data-questionnaire-ui] .question-heading h1{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ min-width:0;
+ text-wrap:pretty;
+}
+body[data-questionnaire-ui] .question-heading .cx-question-icon,
+body[data-questionnaire-ui] .question-heading .mdr-question-icon{
+ display:block;
+ flex:0 0 32px;
+ width:32px;
+ height:32px;
+ object-fit:contain;
+ color:#17263a;
+}
+body[data-questionnaire-ui] .question-heading .mdr-question-icon svg{
+ display:block;
+ width:100%;
+ height:100%;
+}
+
+/* Réponses : la précision est facultative. Une seule ligne lorsque le libellé
+ * suffit ; une ligne secondaire lisible sous le libellé lorsqu'elle aide à choisir. */
+body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer{
+ display:flex;
+ align-items:center;
+ justify-content:flex-start;
+ min-width:0;
+ min-height:64px;
+ padding:14px 16px;
+ gap:14px;
+ border:1px solid var(--quiz-border);
+ border-radius:12px;
+ background:var(--quiz-paper);
+ color:#26323c;
+ text-align:left;
+ box-shadow:none;
+}
+body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer:hover{
+ border-color:#c28c20;
+ background:#fff8e9;
+ box-shadow:none;
+}
+body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer.selected,
+body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer[aria-pressed="true"]{
+ border-color:#c88c0d;
+ background:#fff6df;
+ box-shadow:inset 0 0 0 1px #c88c0d;
+}
+body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer .answer-copy{
+ display:block;
+ flex:1 1 auto;
+ width:auto;
+ height:auto;
+ min-width:0;
+ font-size:15px;
+ font-weight:600;
+ line-height:1.4;
+ text-align:left;
+}
+body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer .answer-copy small{
+ display:block;
+ margin-top:5px;
+ font-size:12px;
+ font-weight:400;
+ line-height:1.45;
+ color:var(--quiz-hint);
+}
+/* Choix nombreux : compacter sans réduire la lisibilité du texte. */
+@media(min-width:900px){
+ body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer-list:has(.answer:nth-child(5)) .answer,
+ body[data-questionnaire-ui] .question-card:not(.assistance-card) .cx-options:has(.cx-option:nth-child(5)) .answer{
+  min-height:52px;
+  padding:11px 16px;
+ }
+}
+@media(max-width:899px){
+ body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer{
+  min-height:54px;
+  padding:11px 12px;
+ }
+}
+@media(max-width:700px){
+ body[data-questionnaire-ui] .question-heading .cx-question-icon,
+ body[data-questionnaire-ui] .question-heading .mdr-question-icon{
+  flex-basis:28px;
+  width:28px;
+  height:28px;
+ }
+ body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer .answer-copy{
+  font-size:14px;
+ }
+ body[data-questionnaire-ui] .question-card:not(.assistance-card) .answer .answer-copy small{
+  font-size:12px;
+  line-height:1.4;
+ }
+}
+
+/* Informations : vraie fenêtre flottante (mobile inclus), sans déplacement
+ * de la question ou des réponses. <details> reste accessible au clavier. */
+body[data-questionnaire-ui] .question-card{overflow:visible}
+body[data-questionnaire-ui] .question-heading{
+ position:relative;
+ isolation:auto;
+}
+body[data-questionnaire-ui] .question-heading:has(.info-bubble[open]){
+ flex-wrap:nowrap;
+ z-index:30;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble,
+body[data-questionnaire-ui] .question-heading .info-bubble[open]{
+ position:relative;
+ z-index:31;
+ flex:0 0 auto;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble summary{
+ box-sizing:border-box;
+ display:grid;
+ place-items:center;
+ width:44px;
+ height:44px;
+ min-width:44px;
+ min-height:44px;
+ margin:0;
+ padding:0;
+ border-radius:50%;
+ background:#f6f8f4;
+ border:1px solid #d6ded4;
+ color:#52644f;
+ font:600 15px Georgia,serif;
+ cursor:pointer;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble[open] summary{
+ background:#202a32;
+ border-color:#202a32;
+ color:#fff;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble[open]>div{
+ box-sizing:border-box;
+ display:block;
+ position:absolute;
+ top:calc(100% + 12px);
+ right:0;
+ left:auto;
+ z-index:32;
+ width:min(360px,calc(100vw - 32px));
+ max-width:calc(100vw - 32px);
+ max-height:min(62dvh,460px);
+ margin:0;
+ padding:18px 20px;
+ overflow-y:auto;
+ overscroll-behavior:contain;
+ border:1px solid #dfe4de;
+ border-radius:14px;
+ background:#fff;
+ color:#28352f;
+ box-shadow:0 12px 38px #17263a25;
+ font-size:13px;
+ line-height:1.55;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble[open]>div::before{
+ content:"";
+ position:sticky;
+ display:none;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble>div strong{
+ display:block;
+ font-size:13px;
+ font-weight:650;
+ margin:0 0 5px;
+ color:#25332b;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble>div p{
+ margin:0 0 13px;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble>div p:last-child{margin-bottom:0}
+body[data-questionnaire-ui] .question-heading .info-bubble>div a{
+ color:#73500c;
+ text-decoration:underline;
+ text-underline-offset:3px;
+ overflow-wrap:anywhere;
+}
+body[data-questionnaire-ui] .question-heading .info-bubble summary:focus-visible{
+ outline:3px solid #e7a116aa;
+ outline-offset:3px;
+}
+@media(max-width:700px){
+ body[data-questionnaire-ui] .question-heading .info-bubble[open]>div{
+  width:min(350px,calc(100vw - 32px));
+  max-height:55dvh;
+  padding:16px;
+  font-size:12px;
+ }
+}
+/* Eviter de réserver un grand vide entre titre et choix sur téléphone :
+ * les réponses restent visibles sans défilement excessif. */
+@media(max-width:700px){
+ body[data-questionnaire-ui] .question-card:not(.assistance-card) .question-prompt,
+ body[data-questionnaire-ui] .question-card:not(.assistance-card) .cx-question-prompt{
+  min-height:0;
+ }
+}
