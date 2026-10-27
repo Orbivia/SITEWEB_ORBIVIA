@@ -303,3 +303,32 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
   min-height:48px;padding:9px 11px
  }
 }
+
+/* Icônes MDR/IVDR générées : conserver la qualité PNG avec un SVG de secours.
+   Le style commun chargé après ce fichier impose 32px ; sélecteur plus précis ici. */
+body[data-questionnaire-ui][data-tool="classification"] .mdr-question-art{
+ display:block;
+ position:relative;
+ flex:0 0 64px;
+ width:64px;
+ height:64px;
+}
+body[data-questionnaire-ui][data-tool="classification"] .question-heading h1 .mdr-question-art .mdr-question-icon{
+ display:block;
+ width:100%;
+ height:100%;
+ min-width:0;
+ min-height:0;
+ max-width:none;
+ max-height:none;
+ flex:none;
+ object-fit:contain;
+}
+body[data-questionnaire-ui][data-tool="classification"] .mdr-question-art [hidden]{display:none!important}
+@media(max-width:700px){
+ body[data-questionnaire-ui][data-tool="classification"] .mdr-question-art{
+  flex-basis:36px;
+  width:36px;
+  height:36px;
+ }
+}
