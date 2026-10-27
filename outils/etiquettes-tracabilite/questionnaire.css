@@ -30,7 +30,6 @@ body[data-tool="etiquettes"] .tool-button.primary{background:#e7a116;border-colo
 body[data-tool="etiquettes"] .tool-button.quiet{border:0;background:transparent;color:#68766d;font-weight:500}
 body[data-tool="etiquettes"] .tool-button:disabled{opacity:.4;cursor:not-allowed}
 body[data-tool="etiquettes"] .tool-button:focus-visible,body[data-tool="etiquettes"] .answer:focus-visible{outline:3px solid #e7a116;outline-offset:2px}
-body[data-tool="etiquettes"] .question-heading .mdr-question-icon{flex:0 0 32px;width:32px;height:32px}
 .label-result-heading{margin:0 0 22px}
 .label-result-heading h1{font-size:clamp(28px,3.7vw,36px);font-weight:650;color:#202a32;letter-spacing:-.8px;line-height:1.2;margin:10px 0 12px}
 .label-result-heading p{color:#68766d;font-size:13px;max-width:720px;line-height:1.65}
@@ -75,7 +74,6 @@ body[data-tool="etiquettes"] .question-heading .mdr-question-icon{flex:0 0 32px;
  body[data-tool="etiquettes"] .question-card{padding:16px 14px;border-radius:16px}
  body[data-tool="etiquettes"] .question-heading{margin-bottom:12px;gap:9px}
  body[data-tool="etiquettes"] .question-heading h1{font-size:20px;line-height:1.25}
- body[data-tool="etiquettes"] .question-heading .mdr-question-icon{flex-basis:28px;width:28px;height:28px}
  body[data-tool="etiquettes"] .label-options{gap:8px}
  body[data-tool="etiquettes"] .answer.label-option{padding:11px 12px;min-height:52px}
  body[data-tool="etiquettes"] .answer.label-option .answer-copy{font-size:14px}
