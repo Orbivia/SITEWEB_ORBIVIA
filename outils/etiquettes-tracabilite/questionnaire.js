@@ -112,7 +112,7 @@ function conclusions(){
  else if(answers.status==="custom"){v("Dispositif sur mesure","Vérifier les mentions « dispositif sur mesure », l'annexe XIII et les règles spécifiques ; UDI/CE commerciaux ne sont pas présumés.");}
  else if(answers.status==="investigation"){v("Investigation clinique","Vérifier la mention « exclusivement destiné à une investigation clinique » et les règles associées ; pas de CE commercial présumé.");}
  else v("Prototype en cours","Ne pas apposer de CE ou d'UDI commercial non attribué. Limiter les mentions aux informations effectivement établies.");
- if(answers.manufacturer==="outside"){r("5.1.2","Mandataire / représentant autorisé","Nom et adresse de l'entité mandatée dans l'UE ; vérifier la version du symbole après amendement ISO 15223-1:2025.","MDR annexe I, 23.2 d");}
+ if(answers.manufacturer==="outside"&&answers.territory!=="outside"){r("5.1.2","Mandataire / représentant autorisé","Nom et adresse de l'entité mandatée dans l'UE ; vérifier la version du symbole après amendement ISO 15223-1:2025.","MDR annexe I, 23.2 d");}
  else if(answers.manufacturer==="unknown")v("Fabricant légal","Établir le siège du fabricant et l'éventuel mandataire européen.");
  if(answers.import==="yes")c("5.1.8","Importateur","Nom et coordonnées de l'importateur : sur dispositif, emballage ou document d'accompagnement selon l'article 13(3).","MDR art. 13(3)");
  else if(answers.import==="unknown")v("Importateur","Déterminer si un opérateur importe effectivement le produit dans l'UE.");
@@ -148,7 +148,7 @@ function conclusions(){
   if(answers.reuse==="limited")c("Notice","Nombre maximal de réutilisations","Indiquer la limite validée et les critères de retrait du service.","MDR annexe I, 23.4 n","Information");
   if(answers.reprocess==="unknown")v("Retraitement","Il faut définir les cycles et procédés validés.");
  }else v("Usage unique ou réutilisable","Décision nécessaire pour éviter des instructions contradictoires.");
- const storage=[["temperature","5.3.7","Limites de température"],["humidity","5.3.8","Limites d'humidité"],["dry","5.3.4","Garder au sec"],["sunlight","5.3.2","Tenir à l'abri de la lumière solaire"],["fragile","Conditionnel","Précautions de manutention (fragile)"]];
+ const storage=[["temperature","5.3.7","Limites de température"],["humidity","5.3.8","Limites d'humidité"],["dry","5.3.4","Garder au sec"],["sunlight","5.3.2","Tenir à l'abri de la lumière solaire"],["fragile","5.3.1","Fragile : manipuler avec précaution"]];
  storage.forEach(x=>{if(listContains("storage",x[0]))c(x[1],x[2],"Spécifier les limites et conditions validées, si applicables.","MDR annexe I, 23.2 k");});
  if(listContains("storage","unknown"))v("Stockage","Évaluer stabilité, transport, conditions de conservation et risques de manutention.");
  if(listContains("substances","latex"))c("5.4.5","Contient du latex naturel","La déclaration doit refléter les matériaux et la conformité avec les exigences de sécurité.","ISO 15223-1, 5.4.5");
