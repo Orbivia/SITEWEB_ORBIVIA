@@ -19,8 +19,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 [data-tool="classification"] .answer.selected{border-color:#c88c0d;background:#fff6df;box-shadow:inset 0 0 0 1px #c88c0d}
 [data-tool="classification"] .answer>.answer-copy{font-weight:600;font-size:14px}
 [data-tool="classification"] .answer>.answer-copy small{font-size:12px;color:#68766d;line-height:1.45;margin-top:6px;font-weight:400}
-[data-tool="classification"] .answer>span:first-child:not(.answer-copy){display:block;width:18px;height:18px;border:1px solid #b4bfb4;border-radius:50%;flex:none}
-[data-tool="classification"] .answer.selected>span:first-child:not(.answer-copy){border:5px solid #c88c0d}
 [data-tool="classification"] .choices-many .answer{text-align:left;justify-content:start;gap:12px}
 [data-tool="classification"] .explained-choices .answer{align-items:start;min-height:92px}
 [data-tool="classification"] .explained-choices .answer:last-child{min-height:72px;background:#f8faf7}
@@ -65,7 +63,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
  [data-tool="classification"] .answer>.answer-copy{font-size:13px}
  [data-tool="classification"] .answer>.answer-copy small{font-size:11px;line-height:1.35;margin-top:4px}
  [data-tool="classification"] .explained-choices .answer{min-height:91px;padding:10px;gap:7px}
- [data-tool="classification"] .explained-choices .answer>span:first-child:not(.answer-copy){display:none}
  [data-tool="classification"] .explained-choices .answer:last-child{min-height:60px}
  [data-tool="classification"] .choices-short .answer{min-height:64px}
  [data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{width:100%;margin-top:8px;min-height:44px;font-size:12px}
@@ -110,7 +107,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 [data-tool="classification"] .scope-card .question-heading h1{flex:1;min-width:0}
 [data-tool="classification"] .scope-card .info-bubble{flex:none}
 [data-tool="classification"] .scope-choices .answer{align-items:center}
-[data-tool="classification"] .scope-choices .answer::after{content:'›';font-size:25px;font-weight:400;color:#68716f;margin-left:auto;flex:none}
 [data-tool="classification"] .scope-choices .answer-copy{flex:1;min-width:0}
 [data-tool="classification"] .scope-card+.question-controls{justify-content:flex-end}
 @media(max-width:700px){
@@ -130,9 +126,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 [data-tool="classification"] .question-heading h1{flex:1;min-width:0}
 [data-tool="classification"] .question-intro{font-size:14px;line-height:1.55;color:#59645e;margin:-4px 0 22px;max-width:720px}
 [data-tool="classification"] .question-card:not(.assistance-card) .answer{align-items:center;gap:16px;padding:18px;min-height:86px}
-[data-tool="classification"] .answer>span.choice-icon:first-child:not(.answer-copy),
-[data-tool="classification"] .answer.selected>span.choice-icon:first-child:not(.answer-copy){display:block;width:38px;height:38px;border:0;border-radius:0;flex:0 0 38px;color:#17263a}
-[data-tool="classification"] .choice-icon svg{display:block;width:100%;height:100%}
 [data-tool="classification"] .answer>.answer-copy{flex:1;min-width:0;font-size:15px;line-height:1.4}
 [data-tool="classification"] .answer>.answer-copy small{font-size:13px;color:#59645e;line-height:1.45}
 [data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{display:flex;width:100%;min-height:44px;margin:18px 0 8px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
@@ -239,10 +232,9 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
 [data-tool="classification"] [data-action="restart"]:hover{border-color:#bd8515;background:#fff8e9}
 
 
-/* Harmonisation finale MDR/IVDR ↔ Connectivité : une icône par question,
-   aucune icône dans les choix, mêmes cibles tactiles sur desktop et mobile. */
+/* Questions MDR/IVDR : une icône dans chaque titre, jamais dans les choix. */
 [data-tool="classification"] .question-heading h1{display:flex;align-items:center;gap:12px}
-[data-tool="classification"] .mdr-question-icon{display:block;flex:0 0 32px;width:32px;height:32px;object-fit:contain;color:#17263a}
+[data-tool="classification"] .mdr-question-icon{display:block;object-fit:contain;color:#17263a}
 [data-tool="classification"] .mdr-question-icon svg{display:block;width:100%;height:100%}
 [data-tool="classification"] .question-card:not(.assistance-card) .answer{
  display:flex;align-items:center;justify-content:flex-start;gap:16px;
@@ -278,7 +270,6 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
  [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list .answer>.answer-copy small{font-size:12px;line-height:1.45;margin-top:4px}
 }
 @media(max-width:700px){
- [data-tool="classification"] .mdr-question-icon{width:28px;height:28px;flex-basis:28px}
  [data-tool="classification"] .question-heading h1{gap:12px}
  [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list .answer{min-height:54px;padding:11px}
  [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list:has(.answer:nth-child(7)){gap:6px}
@@ -304,8 +295,7 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
  }
 }
 
-/* Icônes MDR/IVDR générées : conserver la qualité PNG avec un SVG de secours.
-   Le style commun chargé après ce fichier impose 32px ; sélecteur plus précis ici. */
+/* PNG MDR/IVDR et SVG de secours : dimensions propres, sans tailles contradictoires. */
 body[data-questionnaire-ui][data-tool="classification"] .mdr-question-art{
  display:block;
  position:relative;
