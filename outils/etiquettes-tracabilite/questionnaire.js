@@ -230,10 +230,13 @@ function conclusions(){
   c("Notice","Instructions de retraitement","Documenter les procédés validés, limites de cycles et critères de fin de vie du dispositif.",mdr+" annexe I, 23.4(n)","Notice");
   if(a.reuse==="limited")c("Notice","Nombre maximal de réutilisations","La limite validée doit être portée dans la documentation et communiquée à l'utilisateur.",mdr+" annexe I, 23.4(n)","Notice");
   if(market&&isEU&&reprocessed){
-   if(isDevice){
-    r("UDI direct","Marquage direct UDI permanent","L'UDI des dispositifs retraités entre usages doit pouvoir être lu après chaque cycle, sauf exemption pour impossibilité technique ou impact sur la sécurité et la performance.",mdr+" annexe VI, C, 6.2 ; 4.10","Traçabilité");
+   const directRequired=!["i","is"].includes(a.class);
+   if(isDevice&&directRequired){
+    r("UDI direct","Marquage direct UDI permanent","L'UDI des dispositifs retraités entre usages doit être lisible après chaque cycle, sauf exemption documentée en cas d'impossibilité technique ou d'incidence sur la sécurité et la performance.",mdr+" annexe VI, partie C, 6.2 et 4.10","Traçabilité");
+   }else if(isDevice){
+    c("UDI direct","Marquage direct UDI (classe I : 26 mai 2027)","Obligation applicable à partir du 26 mai 2027 pour la classe I, sauf dérogation documentée. Vérifier l'applicabilité anticipée éventuelle.",mdr+" article 123(3)(g) ; annexe VI, partie C","Traçabilité");
    }else{
-    v("UDI direct sur le dispositif","Le dispositif retraité entre utilisations peut nécessiter un marquage permanent, distinct du support UDI figurant sur l'emballage. Exemptions et échéance de classe I à vérifier (26 mai 2027).");
+    v("UDI direct sur le dispositif","Étudier le marquage UDI permanent du dispositif retraité. Classes III/implantables : depuis 2023 ; classes IIa/IIb : depuis 2025 ; classe I : à partir du 26 mai 2027. Exemptions à justifier.");
    }
   }
  }
@@ -305,6 +308,7 @@ function renderReferences(result){
 }
 function summary(){
  const result=conclusions();
+ const supportName=Q.find(q=>q.id==="support")?.options.find(o=>o[0]===answers.support)?.[1]||"Support d'étiquette";
  const answersHTML=applicable().map(q=>{
  const val=answers[q.id],values=Array.isArray(val)?val:[val];
  const labels=values.map(v=>q.options.find(o=>o[0]===v)?.[1]||"Non renseigné").join(", ");
@@ -312,8 +316,8 @@ function summary(){
  }).join("");
  root.innerHTML=
  '<div class="label-result-heading"><span class="label-result-eyebrow">Étiquetage médical · MDR 2017/745</span>'+
- '<h1>Votre étiquette : les éléments à prévoir</h1>'+
- '<p>Liste indicative basée sur vos réponses. Les références indiquées servent à identifier les symboles à vérifier, pas à les reproduire.</p></div>'+
+ '<h1>Éléments à prévoir</h1><p class="label-result-support">'+escapeHTML(supportName)+'</p>'+
+ '<p>Cette liste précise les informations à intégrer sur le support choisi. Les codes ISO indiquent des symboles possibles : leur emploi n’est pas automatiquement obligatoire.</p></div>'+
  '<section class="label-result-card"><header><h2>À prévoir</h2><span>'+result.required.length+' éléments</span></header>'+
  renderShortList(result.required)+'</section>'+
  (result.conditional.length?'<section class="label-result-card"><header><h2>Selon votre dispositif</h2><span>'+result.conditional.length+' éléments</span></header>'+renderShortList(result.conditional)+'</section>':'')+
