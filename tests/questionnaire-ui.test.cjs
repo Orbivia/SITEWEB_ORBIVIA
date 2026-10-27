@@ -108,7 +108,7 @@ test("Lot 2.1 : chaque nouvelle icône de question est distincte de son ancien d
   assert.doesNotMatch(revised, /<text[\s>]/);
  }
  const source = load("outils/connectivite/connectivite.js");
- assert.match(source, /\.svg\?v=6/);
+ assert.match(source, /\.svg\?v=7/);
 });
 
 
@@ -124,5 +124,25 @@ test("Lot 2.3 : les quatre icônes validées restent distinctes, lisibles et san
   assert.doesNotMatch(item, /<image[\s>]/);
  }
  const index = load("outils/connectivite/index.html");
- assert.match(index, /connectivite\.js\?v=13/);
+ assert.match(index, /connectivite\.js\?v=14/);
+});
+
+
+test("Audit graphique : 20 SVG Connectivite uniques, bicolores, sans textes ni images raster", () => {
+ const ids = [
+  "peer", "range", "payload", "frequency", "environment", "power",
+  "autonomy", "infra", "mobility", "volume", "weight", "security",
+  "control", "offline", "latency", "updates", "budget", "monthly",
+  "quantity", "priorities"
+ ];
+ const all = ids.map(id => load("outils/connectivite/icones/question-" + id + ".svg"));
+ assert.equal(new Set(all).size, ids.length, "une icône est réutilisée pour une autre question");
+ for(let i = 0; i < ids.length; i++){
+  const svg = all[i];
+  assert.match(svg, /<svg[^>]*viewBox="0 0 32 32"/, ids[i]);
+  assert.match(svg, /#17263a/, ids[i]);
+  assert.match(svg, /#e7a116/, ids[i]);
+  assert.doesNotMatch(svg, /<(?:text|image|foreignObject)\b/i, ids[i]);
+  assert.doesNotMatch(svg, /(?:href|src)="https?:/i, ids[i]);
+ }
 });
