@@ -146,3 +146,19 @@ test("Audit graphique : 20 SVG Connectivite uniques, bicolores, sans textes ni i
   assert.doesNotMatch(svg, /(?:href|src)="https?:/i, ids[i]);
  }
 });
+
+
+test("MDR/IVDR : les 96 questions référencent un PNG et un SVG de secours", () => {
+ const presentation = require("../outils/classification/presentation.js");
+ const questions = Object.keys(presentation.questions);
+ assert.equal(questions.length, 96);
+ for (const id of questions) {
+  const markup = presentation.questionIcon({id});
+  assert.ok(markup.includes("icones-raster/" + encodeURIComponent(id) + ".png?v=1"), id);
+  assert.ok(markup.includes("mdr-svg-fallback"), id);
+  assert.ok(markup.includes("mdr-raster-icon"), id);
+ }
+ const stylesheet = load("outils/classification/design.css");
+ assert.match(stylesheet, /mdr-question-art/);
+ assert.match(stylesheet, /mdr-question-art \[hidden\]/);
+});
