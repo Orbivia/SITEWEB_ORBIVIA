@@ -7,7 +7,7 @@ Les questionnaires **Classification MDR/IVDR**, **Choix de connectivité** et **
 ## Fichiers
 
 - `/outils/questionnaire.css` : base historique des composants de questionnaire et présentation générique.
-- `/outils/shared/questionnaire-ui.css` : **référence visuelle actuelle** pour les titres, icônes, choix, sous-titres conditionnels et info-bulles flottantes.
+- `/outils/shared/questionnaire-ui.css` : **référence visuelle actuelle** pour les titres, choix, sous-titres conditionnels et info-bulles flottantes.
 - `/outils/shared/questionnaire-ui.js` : comportement commun des info-bulles (fermeture extérieure / Échap).
 - `/outils/shared/questionnaire-layout.css` : grille ordinateur, empilement mobile, dimensions, navigation et densités partagées.
 - `/outils/shared/questionnaire-layout.js` : détecte automatiquement la phase question et réduit les espaces si nécessaire (sans masquer les réponses).
@@ -22,17 +22,17 @@ Respecter les classes HTML communes :
 
 - `.question-progress` pour l'avancement ;
 - `.question-card` et `.question-heading` ;
-- icône spécifique à la **question**, en SVG plein bicolore, sans raster ni effets 3D, dans `h1` ; Sur **ordinateur (≥ 900 px)**, le pictogramme de la question est **centré sous le titre** (taille adaptée à la hauteur de l'écran, jusqu'à 140 × 140 px), comme dans le parcours Connectivité. Sur **téléphone**, il reste **à gauche du texte**, sans déplacement des réponses. Ce comportement est défini dans le CSS de mise en page commun pour les trois questionnaires. Aucune icône dans les boutons de réponse ;
+- le titre de chaque question est uniquement textuel : **aucun pictogramme dans le titre ni dans les réponses** ;
 - `.answer` contenant `.answer-copy` et, **seulement si nécessaire**, `<small>` avec une explication brève ;
 - `<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div>...</div></details>` à côté du titre ; cette bulle flotte par-dessus le contenu sans le déplacer ;
 - « Aide au choix » réservée aux questions qui demandent une assistance plus approfondie ;
 - navigation avec « Précédent », « Continuer » uniquement lorsque nécessaire, et « Reprendre à zéro » comme vrai bouton secondaire.
 
-Les icônes des questions de classification sont définies dans `classification/presentation.js`; celles de connectivité dans `connectivite/icones/question-*.svg`. Conserver le bleu nuit `#17263a` et le doré `#e7a116`. Les informations optionnelles ne doivent pas rendre tous les boutons inutilement hauts.
+Conserver le bleu nuit `#17263a` et le doré `#e7a116` pour les éléments de navigation et de sélection. Les informations optionnelles ne doivent pas rendre tous les boutons inutilement hauts.
 
 ## Affichage sur un seul écran
 
-Tous les outils présentent la question dans le même cadre, avec le pictogramme et « Aide au choix » à gauche (si disponible), et les réponses à droite sur ordinateur. Sur téléphone, les réponses s'empilent sous le titre. Le pied de page est masqué pendant le questionnaire, mais réapparaît sur les résultats.
+Tous les outils présentent la question dans le même cadre, avec le titre et « Aide au choix » à gauche (si disponible), et les réponses à droite sur ordinateur. Sur téléphone, les réponses s'empilent sous le titre. Le pied de page est masqué pendant le questionnaire, mais réapparaît sur les résultats.
 
 Le script commun ajoute temporairement `quiz-active`, puis les classes `quiz-compact`, `quiz-dense` ou `quiz-tight` si les réponses dépassent la fenêtre. Si elles ne tiennent toujours pas, `quiz-scroll` réactive le défilement. **Ne jamais masquer ou couper une réponse pour tenir artificiellement dans la fenêtre.** Les aides modales et les synthèses restent indépendantes. Le moteur ne modifie aucune valeur métier.
 
@@ -42,7 +42,7 @@ Un nouvel outil doit disposer d'un conteneur principal détectable et d'une `.qu
 
 Vérifier sur téléphone (largeurs 320, 360, 390 px) et sur ordinateur (768, 1280 px) :
 
-1. les icônes sont correctement alignées avec le titre, et jamais répétées dans les réponses ;
+1. les titres des questions ne contiennent aucune icône et ne réservent pas de grand espace vide ;
 2. seuls la question et les intitulés des réponses sont visibles ; les sous-titres et précisions des choix sont regroupés dans la bulle `i`, sans doublons ;
 3. ouvrir/fermer la bulle `i` **ne change ni la hauteur de la page, ni la position des boutons** ; clic extérieur et Échap ferment ;
 4. l'aide et les réponses restent utilisables au clavier et au toucher ;
