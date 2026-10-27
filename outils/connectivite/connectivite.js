@@ -39,7 +39,7 @@ function selectedOption(q){if(q.type==="single")return q.options.find(o=>o[0]===
 function optionMarkup(q,o){
  const [id,label,description,picto]=o,selected=q.type==="single"?answers[q.id]===id:has(q.id,id);
  const mark=selected?(q.type==="priority"?String((answers[q.id]||[]).indexOf(id)+1):"✓"):"";
- return '<button class="answer cx-option" type="button" data-option="'+esc(id)+'" aria-pressed="'+selected+'">'+(['peer','power','infra'].includes(q.id)?'<span class="choice-icon cx-icon"><img src="'+icon(picto)+'" alt=""></span>':'')+'<span class="answer-copy cx-option-copy"><strong>'+esc(label)+'</strong>'+(description?'<small>'+esc(description)+'</small>':'')+'</span>'+(q.type==="single"?'':'<span class="cx-check" aria-hidden="true">'+esc(mark)+'</span>')+'</button>';
+ return '<button class="answer cx-option" type="button" data-option="'+esc(id)+'" aria-pressed="'+selected+'">'+'<span class="answer-copy cx-option-copy"><strong>'+esc(label)+'</strong>'+(description?'<small>'+esc(description)+'</small>':'')+'</span>'+(q.type==="single"?'':'<span class="cx-check" aria-hidden="true">'+esc(mark)+'</span>')+'</button>';
 }
 function optionEditor(q){const multi=q.type!=="single";return '<div class="cx-options" data-columns="'+"one"+'" data-multi="'+multi+'">'+q.options.map(o=>optionMarkup(q,o)).join("")+'</div>'+(q.type==="priority"?'<p class="cx-secondary" id="priority-count">'+((answers[q.id]||[]).length)+'/3 critères sélectionnés</p>':"")}
 function editor(q){return optionEditor(q)}
