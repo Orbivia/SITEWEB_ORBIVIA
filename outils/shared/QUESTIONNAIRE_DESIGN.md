@@ -20,7 +20,7 @@ Respecter les classes HTML communes :
 
 - `.question-progress` pour l'avancement ;
 - `.question-card` et `.question-heading` ;
-- icône spécifique à la **question** au début de `h1`, en SVG bicolore 32×32 (28×28 sur mobile), sans icône dans les boutons de réponse ;
+- icône spécifique à la **question**, en SVG bicolore ou raster avec SVG de secours, dans `h1` ; Sur **ordinateur (≥ 900 px)**, le pictogramme de la question est **centré sous le titre** (140 × 140 px), comme dans le parcours Connectivité. Sur **téléphone**, il reste **à gauche du texte**, sans déplacement des réponses. Ce comportement est défini dans le CSS commun pour Classification, Connectivité et Étiquetage médical. Aucune icône dans les boutons de réponse ;
 - `.answer` contenant `.answer-copy` et, **seulement si nécessaire**, `<small>` avec une explication brève ;
 - `<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div>...</div></details>` à côté du titre ; cette bulle flotte par-dessus le contenu sans le déplacer ;
 - « Aide au choix » réservée aux questions qui demandent une assistance plus approfondie ;
