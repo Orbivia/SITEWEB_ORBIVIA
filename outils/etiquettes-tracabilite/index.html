@@ -1,294 +1,31 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#202a32">
-<title>Générateur d'étiquettes de traçabilité et UDI | ORBIVIA</title>
-<meta name="description" content="Créez une étiquette de traçabilité pour un prototype, un produit électronique ou un dispositif médical : GS1 DataMatrix UDI, QR Code, Code 128, export SVG et PNG.">
+<title>Étiquetage des dispositifs médicaux : symboles et mentions | ORBIVIA</title>
+<meta name="description" content="Questionnaire gratuit pour identifier les symboles ISO 15223-1 et informations d'étiquetage MDR à examiner selon votre dispositif médical.">
 <link rel="canonical" href="https://orbivia.fr/outils/etiquettes-tracabilite/">
 <link rel="icon" href="../../img/logo.webp" type="image/webp">
 <link rel="stylesheet" href="../../css/style.css?v=20261025-footer">
+<link rel="stylesheet" href="../questionnaire.css?v=5">
+<link rel="stylesheet" href="questionnaire.css?v=1">
+<link rel="stylesheet" href="../shared/questionnaire-ui.css?v=1">
+<script defer src="../shared/questionnaire-ui.js?v=1"></script>
 <script defer src="../../js/site.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/bwip-js/4.11.4/bwip-js-min.js"></script>
-<style>
-body.tool-page{background:#f6f7f5;color:#202a32}
-.label-shell{width:min(1120px,calc(100% - 48px));margin:24px auto 68px}
-.tool-breadcrumb{display:flex;align-items:center;gap:12px;color:#788078;font-size:12px;margin:0 0 26px}
-.tool-breadcrumb a{color:#5a6259;text-decoration:none}
-.tool-breadcrumb a:hover{text-decoration:underline}
-.label-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;color:#916c1a;text-transform:uppercase}
-.label-shell h1{font-size:clamp(29px,4vw,40px);font-weight:680;line-height:1.15;letter-spacing:-1.2px;color:#202a32;margin:12px 0}
-.label-intro{font-size:14px;line-height:1.6;color:#64706a;max-width:690px;margin:0 0 26px}
-.label-flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.95fr);gap:22px;align-items:start}
-.label-panel{border:1px solid #e0e5df;border-radius:18px;background:white;box-shadow:0 5px 24px #19271806;padding:25px;min-width:0}
-.label-panel h2{font-size:19px;color:#202a32;letter-spacing:-.4px;margin:0 0 6px;font-weight:680}
-.label-panel .panel-intro{font-size:12px;color:#718078;margin:0 0 22px;line-height:1.5}
-.label-section{padding:0 0 18px;margin:0 0 19px;border-bottom:1px solid #edf0eb}
-.label-section:last-of-type{border:0;margin-bottom:0;padding-bottom:0}
-.label-section-title{font-size:12px;font-weight:750;letter-spacing:.035em;color:#303b3e;text-transform:uppercase;margin-bottom:12px}
-.label-modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.label-mode{min-width:0;border:1px solid #e0e5df;background:#fff;border-radius:12px;cursor:pointer;padding:14px 9px;text-align:left;color:#283339;min-height:100px;transition:border-color .18s,background .18s}
-.label-mode:hover{border-color:#c8ae77}.label-mode[aria-pressed="true"]{border:2px solid #dca12e;padding:13px 8px;background:#fffcf5}
-.label-mode svg{width:23px;height:23px;stroke:#303d43;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;display:block;margin-bottom:11px}
-.label-mode strong{font-size:12px;display:block;line-height:1.25}.label-mode small{font-size:10px;color:#778078;line-height:1.35;display:block;margin-top:4px}
-.label-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
-.label-field{display:flex;flex-direction:column;gap:6px;min-width:0}
-.label-field.span-all{grid-column:1/-1}
-.label-field label{font-size:12px;font-weight:650;color:#3d4948}
-.label-field input,.label-field select{width:100%;min-width:0;height:44px;padding:0 11px;background:#fff;border:1px solid #dce2db;border-radius:9px;color:#26343a;font:inherit;font-size:14px}
-.label-field input:focus,.label-field select:focus{border-color:#dca12e;outline:2px solid #f4e3b9;outline-offset:0}
-.label-field input::placeholder{color:#a0a9a3}
-.field-hint{font-size:10px;line-height:1.4;color:#77837c}
-.label-inline-note{font-size:11px;color:#7a7f77;line-height:1.5;margin:10px 0 0}
-.label-preview-panel{position:sticky;top:18px}
-.label-preview-head{display:flex;gap:8px;align-items:start;justify-content:space-between}
-.label-chip{font-size:10px;color:#8c6617;background:#fff8e6;border:1px solid #f3e5bd;padding:6px 9px;border-radius:99px;white-space:nowrap}
-.label-canvas-wrap{background:#f6f7f5;border:1px dashed #d7ded6;border-radius:13px;margin:19px 0 12px;padding:22px 14px;min-height:256px;display:flex;align-items:center;justify-content:center;overflow:auto}
-#label-render{width:100%;display:flex;justify-content:center}
-#label-render svg{display:block;max-width:100%;height:auto;max-height:290px;background:white;border:1px solid #dde2dc;box-shadow:0 4px 22px #26302b15}
-.label-status{font-size:12px;line-height:1.5;min-height:42px;padding:11px 12px;background:#f6f7f5;border-radius:10px;color:#56615a}
-.label-status.error{color:#964b24;background:#fff5ee}.label-status.ok{background:#f0f7f1;color:#366344}
-.label-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px}
-.label-btn{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;border-radius:10px;border:1px solid #dce2db;background:#fff;cursor:pointer;color:#26343a;font:inherit;font-size:13px;font-weight:650;white-space:nowrap}
-.label-btn:hover{background:#faf6ed;border-color:#dab560}.label-btn.primary{background:#e7a116;border-color:#e7a116;color:#202a32}
-.label-btn.primary:hover{background:#d99810}
-.label-btn:disabled{opacity:.45;cursor:not-allowed}
-.label-btn:focus-visible,.label-mode:focus-visible{outline:3px solid #dca12e;outline-offset:2px}
-.label-explain{margin-top:19px;padding:16px;border:1px solid #ece7dd;border-radius:12px;background:#fefcf7}
-.label-explain strong{font-size:12px;color:#4c442e}.label-explain p{font-size:11px;line-height:1.6;color:#716d62;margin:6px 0 0}
-.label-disclaimer{font-size:11px;line-height:1.65;color:#738078;margin:14px 0 0}
-.label-disclaimer a{color:#855f16}
-.label-meta{font-size:11px;color:#718078;margin:8px 0 0;text-align:center}
-[hidden]{display:none!important}
-@media(max-width:850px){.label-flow{grid-template-columns:1fr}.label-preview-panel{position:static}.label-canvas-wrap{min-height:200px}}
-@media(max-width:560px){.label-shell{width:calc(100% - 28px);margin:16px auto 40px}.label-panel{padding:17px;border-radius:14px}.label-modes{grid-template-columns:1fr}.label-mode{min-height:0;display:grid;grid-template-columns:25px 1fr;gap:0 12px;align-items:center;padding:12px}.label-mode[aria-pressed=true]{padding:11px}.label-mode svg{grid-row:1/3;margin:0}.label-mode strong{font-size:13px}.label-mode small{margin-top:3px}.label-fields{gap:12px 10px}.label-field input,.label-field select{font-size:16px}.label-actions{gap:7px}.label-btn{font-size:12px}.label-shell h1{font-size:28px}}
-@media print{
-@page{margin:0}
-body{margin:0!important;background:#fff!important}
-body *{visibility:hidden!important}
-.label-canvas-wrap,.label-canvas-wrap *,#label-render,#label-render *{visibility:visible!important}
-.label-canvas-wrap{position:fixed!important;left:0!important;top:0!important;margin:0!important;padding:0!important;min-height:0!important;border:0!important;border-radius:0!important;background:white!important;overflow:visible!important;width:auto!important;height:auto!important}
-#label-render{display:block!important;width:auto!important}
-#label-render svg{max-width:none!important;max-height:none!important;box-shadow:none!important;border:0!important;width:var(--printed-width)!important;height:var(--printed-height)!important}
-}
-</style>
+<script defer src="questionnaire.js?v=1"></script>
 </head>
-<body class="tool-page">
-<a class="skip" href="#contenu">Aller au contenu</a>
-<header class="header"><a class="brand" href="../../index.html" aria-label="Orbivia — Accueil">Orbivia</a><button type="button" class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button><nav id="navigation" aria-label="Navigation principale"><a href="../../index.html#expertises">Expertises</a><a href="../../realisations.html">Réalisations</a><a href="../" aria-current="page">Outils</a><a href="../../estimer-mon-projet.html">Estimer mon projet</a><a href="../../contact.html" class="nav-cta">Demander un devis ↗</a></nav></header>
-<main class="label-shell" id="contenu">
-  <div class="tool-breadcrumb"><a href="../">← Tous les outils</a><span>Étiquettes &amp; traçabilité</span></div>
-  <span class="label-eyebrow">Orbivia / Outils gratuits</span>
-  <h1>Étiquettes &amp; traçabilité</h1>
-  <p class="label-intro">Créez une étiquette pour identifier vos prototypes, équipements ou dispositifs médicaux. Renseignez les informations, vérifiez l'aperçu et exportez le fichier prêt à imprimer.</p>
-  <div class="label-flow">
-  <section class="label-panel" aria-label="Paramètres de l'étiquette">
-    <h2>Composer l'étiquette</h2><p class="panel-intro">Les informations restent dans votre navigateur. Aucun compte nécessaire.</p>
-    <div class="label-section">
-      <div class="label-section-title">01 — Type de produit</div>
-      <div class="label-modes" id="mode-buttons" role="group" aria-label="Type de produit">
-        <button class="label-mode" data-mode="prototype" aria-pressed="true" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16v11H4zM8 8V5h8v3M9 19v3m6-3v3M7 12h10m-8 4h6"/></svg><strong>Prototype R&amp;D</strong><small>Identification interne</small>
-        </button>
-        <button class="label-mode" data-mode="electronique" aria-pressed="false" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h3v3H7zM14 9h4M14 13h4M7 16h11"/></svg><strong>Électronique</strong><small>Série et référence</small>
-        </button>
-        <button class="label-mode" data-mode="medical" aria-pressed="false" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 7v8M8 11h8M8 18h8"/></svg><strong>Dispositif médical</strong><small>UDI / GS1 DataMatrix</small>
-        </button>
-      </div>
-    </div>
-    <div class="label-section">
-      <div class="label-section-title">02 — Identification</div>
-      <div class="label-fields">
-        <div class="label-field span-all"><label for="product-name">Nom du produit</label><input id="product-name" maxlength="48" value="Prototype capteur" autocomplete="off"></div>
-        <div class="label-field span-all"><label for="manufacturer">Fabricant / organisation</label><input id="manufacturer" maxlength="48" placeholder="Nom du fabricant" autocomplete="organization"></div>
-        <div class="label-field"><label for="product-ref">Référence</label><input id="product-ref" maxlength="40" value="PROTO-001" autocomplete="off"></div>
-        <div class="label-field" id="rev-field"><label for="revision">Révision</label><input id="revision" maxlength="20" value="A" autocomplete="off"></div>
-        <div class="label-field span-all" id="gtin-field" hidden><label for="gtin">GTIN / UDI-DI GS1 à 14 chiffres</label><input id="gtin" inputmode="numeric" maxlength="14" placeholder="Ex. : 09504000059118" autocomplete="off"><span class="field-hint">Utilisez un GTIN réellement attribué à votre produit. L'outil contrôle la clé de vérification, pas l'attribution GS1.</span></div>
-        <div class="label-field"><label for="serial">Numéro de série</label><input id="serial" maxlength="20" value="SN-0001" autocomplete="off"></div>
-        <div class="label-field"><label for="lot">Lot</label><input id="lot" maxlength="20" placeholder="Ex. LOT-2026-01" autocomplete="off"></div>
-        <div class="label-field"><label for="production">Date de fabrication</label><input id="production" type="date"></div>
-        <div class="label-field"><label for="expiry">Date d'expiration</label><input id="expiry" type="date"></div>
-      </div>
-      <p class="label-inline-note" id="mode-note">Mode interne : une référence ou un numéro de série suffit à identifier votre prototype. Ce code n'est pas un UDI.</p>
-    </div>
-    <div class="label-section">
-      <div class="label-section-title">03 — Mise en page</div>
-      <div class="label-fields">
-        <div class="label-field"><label for="size">Dimensions</label><select id="size"><option value="70x40">70 × 40 mm</option><option value="60x30">60 × 30 mm</option><option value="100x50">100 × 50 mm</option></select></div>
-        <div class="label-field"><label for="code-type">Code à imprimer</label><select id="code-type"><option value="code128">Code 128 (interne)</option><option value="qrcode">QR Code (interne)</option></select></div>
-      </div>
-    </div>
-    <button id="clear" type="button" class="label-btn" style="min-width:180px">Reprendre à zéro</button>
-  </section>
-  <aside class="label-panel label-preview-panel" aria-label="Aperçu et exports">
-    <div class="label-preview-head"><div><h2>Aperçu de l'étiquette</h2><p class="panel-intro" style="margin:0">Actualisation automatique</p></div><span id="format-chip" class="label-chip">70 × 40 mm</span></div>
-    <div class="label-canvas-wrap"><div id="label-render" role="img" aria-label="Aperçu graphique de l'étiquette"><span>Préparation de l'aperçu…</span></div></div>
-    <p class="label-meta">La bordure grise sert de repère visuel ; elle ne sera pas imprimée.</p>
-    <div class="label-status" id="status" role="status" aria-live="polite">Chargement du moteur de codes…</div>
-    <div class="label-actions">
-      <button class="label-btn primary" id="export-svg" type="button" disabled>Exporter SVG</button>
-      <button class="label-btn" id="export-png" type="button" disabled>Exporter PNG</button>
-      <button class="label-btn" id="print-label" type="button" disabled style="grid-column:1/-1">Imprimer / Enregistrer en PDF</button>
-    </div>
-    <div class="label-explain" id="explain"><strong>Traçabilité interne</strong><p>La référence et le numéro de série servent à identifier le produit. La traçabilité complète implique aussi un registre de fabrication, de contrôle et de livraison.</p></div>
-    <p class="label-disclaimer">Outil d'aide à la composition, sans validation réglementaire ou de qualité d'impression. Pour un DM, l'étiquette complète doit être vérifiée au regard du MDR, des symboles applicables et des règles de l'entité d'attribution. <a href="https://health.ec.europa.eu/medical-devices-topics-interest/unique-device-identifier-udi_fr" target="_blank" rel="noopener">UDI — Commission européenne ↗</a></p>
-  </aside>
-  </div>
+<body class="tool-page" data-questionnaire-ui="v1" data-tool="etiquettes">
+<a class="skip" href="#label-app">Aller au questionnaire</a>
+<header class="header"><a class="brand" href="../../index.html" aria-label="Orbivia — Accueil">Orbivia</a>
+<button type="button" class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale"><a href="../../index.html#expertises">Expertises</a><a href="../../realisations.html">Réalisations</a><a href="../" aria-current="page">Outils</a><a href="../../estimer-mon-projet.html">Estimer mon projet</a><a href="../../contact.html" class="nav-cta">Demander un devis ↗</a></nav></header>
+<main class="tool-shell">
+<div class="tool-breadcrumb"><a href="../">← Tous les outils</a><span>Étiquetage médical MDR</span></div>
+<div id="label-app"><p role="status">Chargement du questionnaire d'étiquetage…</p></div>
+<noscript><p>Activez JavaScript pour utiliser ce questionnaire.</p></noscript>
 </main>
 <footer class="site-footer"><a href="/" class="footer-name">© ORBIVIA</a><nav aria-label="Informations légales"><a href="/mentions-legales.html">Mentions légales</a><a href="/conditions-prestations.html">Conditions générales</a><a href="/confidentialite.html">Confidentialité</a></nav></footer>
-<noscript><p>Activez JavaScript pour générer les étiquettes.</p></noscript>
-<script>
-(function () {
-  "use strict";
-  var mode = "prototype";
-  var fields = ["product-name","manufacturer","product-ref","revision","gtin","serial","lot","production","expiry","size","code-type"];
-  var byId = function (id) { return document.getElementById(id); };
-  var renderTarget = byId("label-render");
-  var status = byId("status");
-  var svgText = "";
-  var pending = 0;
-  var initial = { "product-name":"Prototype capteur", "manufacturer":"", "product-ref":"PROTO-001", "revision":"A", "gtin":"", "serial":"SN-0001", "lot":"", "production":"", "expiry":"", "size":"70x40","code-type":"code128" };
-  var esc = function (str) { return String(str).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c];}); };
-  var short = function (value, max) { var t = String(value||"").trim(); return t.length > max ? t.slice(0,max-1)+"…" : t; };
-  var xmlText = function (value, x, y, size, bold, limit) { return '<text x="'+x+'" y="'+y+'" font-family="Arial,Helvetica,sans-serif" font-size="'+size+'" fill="#202a32" font-weight="'+(bold?700:400)+'">'+esc(short(value,limit||45))+'</text>'; };
-  var gtinValid = function (s) {
-    if (!/^\d{14}$/.test(s)) return false;
-    var sum = 0;
-    for (var i=12;i>=0;i--) sum += Number(s[i])*((12-i)%2===0?3:1);
-    return (10-sum%10)%10===Number(s[13]);
-  };
-  var dateGS1 = function (s) {return s ? s.slice(2,4)+s.slice(5,7)+s.slice(8,10) : "";};
-  var allowed = function (s) { return /^[A-Za-z0-9_.\/\- ]*$/.test(s); };
-  var fileName = function () { return ("orbivia-etiquette-"+(byId("product-ref").value||"produit")).replace(/[^A-Za-z0-9_-]/g,"-").slice(0,65); };
-  function setStatus(message, kind) { status.className="label-status"+(kind?" "+kind:""); status.textContent=message; }
-  function enableExports(on) { ["export-svg","export-png","print-label"].forEach(function(id){byId(id).disabled=!on;}); }
-  function applyMode(next, reset) {
-    mode=next;
-    document.querySelectorAll(".label-mode").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===mode));});
-    byId("gtin-field").hidden=mode!=="medical";
-    byId("rev-field").hidden=mode==="medical";
-    var code=byId("code-type");
-    if (mode==="medical") {
-      code.innerHTML='<option value="gs1datamatrix">GS1 DataMatrix (UDI)</option>';
-      byId("mode-note").textContent="Mode UDI GS1 : GTIN attribué et données de production applicables. Le Basic UDI-DI n'est pas imprimé sur l'étiquette.";
-      byId("explain").innerHTML='<strong>Étiquetage UDI / MDR</strong><p>UDI-DI : GTIN (01). UDI-PI : lot (10), série (21), fabrication (11) ou péremption (17), selon le produit. Le Basic UDI-DI n’apparaît pas dans ce code. La présence du DataMatrix ne suffit pas à rendre l’étiquette conforme MDR.</p>';
-      if(reset){byId("product-name").value="";byId("product-ref").value="";byId("serial").value="";byId("lot").value="";byId("gtin").value="";byId("revision").value="";}
-    } else {
-      code.innerHTML='<option value="code128">Code 128 (interne)</option><option value="qrcode">QR Code (interne)</option>';
-      byId("mode-note").textContent=mode==="prototype"?"Mode interne : une référence ou un numéro de série suffit à identifier votre prototype. Ce code n'est pas un UDI.":"Mode produit électronique : les informations d'identification sont internes. Un marquage CE ou réglementaire éventuel nécessite une analyse séparée.";
-      byId("explain").innerHTML='<strong>Traçabilité interne</strong><p>Le code contient l’identifiant de la pièce. Associez-le à un registre de fabrication et de contrôle pour assurer la traçabilité. Il ne constitue pas un identifiant GS1 attribué.</p>';
-      if(reset){byId("product-name").value=mode==="prototype"?"Prototype capteur":"";byId("product-ref").value=mode==="prototype"?"PROTO-001":"";byId("serial").value=mode==="prototype"?"SN-0001":"";byId("gtin").value="";byId("revision").value=mode==="prototype"?"A":"";byId("lot").value="";}
-    }
-    requestRender();
-  }
-  function validate() {
-    var v = function(id){return byId(id).value.trim();};
-    var name=v("product-name"), ref=v("product-ref"), serial=v("serial"), lot=v("lot"), gtin=v("gtin");
-    if (!name) return {error:"Renseignez le nom du produit."};
-    if (mode==="medical") {
-      if(!gtinValid(gtin)) return {error:"Le GTIN doit contenir 14 chiffres et une clé de contrôle valide. Aucun UDI-DI n'est créé automatiquement."};
-      if(!allowed(lot)||!allowed(serial)) return {error:"Lot et série : utilisez des caractères ASCII simples (lettres, chiffres, tiret, point, barre et espace)."};
-      if(v("expiry")&&v("production")&&v("expiry")<v("production")) return {error:"La date d'expiration est antérieure à la date de fabrication."};
-      var human="(01)"+gtin;
-      var raw=human;
-      if(v("production")) {human+="(11)"+dateGS1(v("production"));raw+="(11)"+dateGS1(v("production"));}
-      if(v("expiry")) {human+="(17)"+dateGS1(v("expiry"));raw+="(17)"+dateGS1(v("expiry"));}
-      if(lot) {human+="(10)"+lot;raw+="(10)"+lot;}
-      if(serial) {human+="(21)"+serial;raw+="(21)"+serial;}
-      return {bcid:"gs1datamatrix",value:raw,human:human,caption:"GS1 UDI",name:name,ref:ref,serial:serial,lot:lot};
-    }
-    var id=serial||ref;
-    if(!id) return {error:"Renseignez un numéro de série ou une référence à encoder."};
-    if(!/^[\x20-\x7E]+$/.test(id))return {error:"Pour le code interne, utilisez un identifiant ASCII imprimable."};
-    var code=byId("code-type").value;
-    var identifier=code==="qrcode"?"REF="+ref+"\nSN="+serial+"\nLOT="+lot:id;
-    return {bcid:code,value:identifier,human:id,caption:code==="qrcode"?"QR interne":"Code 128",name:name,ref:ref,serial:serial,lot:lot};
-  }
-  function barcodeSVG(result) {
-    if (typeof bwipjs==="undefined"||typeof bwipjs.toSVG!=="function") throw Error("Le moteur de génération de codes n'a pas chargé. Vérifiez la connexion réseau puis rechargez la page.");
-    return bwipjs.toSVG({bcid:result.bcid,text:result.value,scale:3,includetext:false,padding:2,backgroundcolor:"ffffff",barcolor:"000000"});
-  }
-  function svgBuild(data, barcode) {
-    var size=byId("size").value.split("x").map(Number), W=size[0]*10,H=size[1]*10;
-    var barcodeBox=Math.min(H-112,W*.38,300), bx=W-barcodeBox-26,by=50,leftWidth=bx-30;
-    var xml=new DOMParser().parseFromString(barcode,"image/svg+xml");
-    var el=xml.documentElement;
-    if(el.tagName.toLowerCase()==="parsererror")throw Error("Le code-barres n'a pas pu être généré.");
-    el.setAttribute("x",String(bx));el.setAttribute("y",String(by));
-    el.setAttribute("width",String(barcodeBox));el.setAttribute("height",String(barcodeBox));
-    el.setAttribute("preserveAspectRatio","xMidYMid meet");
-    var symbol=new XMLSerializer().serializeToString(el);
-    var nameLimit=Math.max(13,Math.floor(leftWidth/13));
-    var refLimit=Math.max(11,Math.floor(leftWidth/9.7));
-    var y=H<=300?65:83;
-    var body=xmlText(data.name,24,y,20,true,nameLimit);
-    if(byId("manufacturer").value.trim())body+=xmlText(byId("manufacturer").value.trim(),24,y+30,13,false,nameLimit+5);
-    body+=xmlText("REF  "+(data.ref||"—"),24,y+(H<=300?60:78),15,true,refLimit);
-    if(mode!=="medical"&&byId("revision").value.trim())body+=xmlText("REV  "+byId("revision").value.trim(),24,y+(H<=300?85:106),14,false,refLimit);
-    if(data.serial)body+=xmlText("SN   "+data.serial,24,y+(H<=300?109:136),14,false,refLimit);
-    if(data.lot)body+=xmlText("LOT  "+data.lot,24,y+(H<=300?135:164),14,false,refLimit);
-    var prod=byId("production").value,exp=byId("expiry").value;
-    var dateLine=(prod?"FAB "+prod.split("-").reverse().join("/")+"  ":"")+(exp?"EXP "+exp.split("-").reverse().join("/"):"");
-    if(dateLine&&H>300)body+=xmlText(dateLine,24,H-75,12,false,Math.floor((W-48)/8));
-    var hri=data.human;
-    var footFont=mode==="medical"?12:13;
-    var maxChars=Math.max(18,Math.floor((W-45)/(footFont*.65)));
-    var lines=[];
-    if(mode==="medical"){
-      var groups=hri.match(/\(\d{2}\)[^()]*/g)||[];
-      var line="";
-      groups.forEach(function(g){if(line&&(line.length+g.length)>maxChars){lines.push(line);line=g;}else line+=g;});
-      if(line)lines.push(line);
-    }else lines=[hri];
-    if(lines.length>2) throw Error("Trop de données à afficher : choisissez une étiquette plus grande ou réduisez les identifiants.");
-    var footY=H-39-(lines.length-1)*17;
-    lines.forEach(function(line,i){body+=xmlText(line,24,footY+i*17,footFont,false,maxChars);});
-    if(lines.some(function(line){return line.length>maxChars;})) throw Error("Identifiants trop longs pour ce format : choisissez une étiquette plus grande.");
-    var title=mode==="medical"?"UDI / GS1 DataMatrix":data.caption;
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="'+size[0]+'mm" height="'+size[1]+'mm" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Étiquette '+esc(short(data.name,48))+'"><rect width="'+W+'" height="'+H+'" fill="white"/>'+xmlText(title,24,35,12,false,50)+body+symbol+'</svg>';
-  }
-  function render() {
-    var data=validate();
-    byId("format-chip").textContent=byId("size").selectedOptions[0].textContent;
-    if(data.error){svgText="";renderTarget.textContent="Complétez les informations pour générer l'étiquette.";setStatus(data.error,"error");enableExports(false);return;}
-    try{
-      svgText=svgBuild(data,barcodeSVG(data));
-      renderTarget.innerHTML=svgText;
-      var mm=byId("size").value.split("x");
-      document.documentElement.style.setProperty("--printed-width",mm[0]+"mm");
-      document.documentElement.style.setProperty("--printed-height",mm[1]+"mm");
-      setStatus(mode==="medical"?"Format GS1 DataMatrix généré. Vérifiez les informations UDI et la lisibilité après impression.":"Étiquette prête. Vérifiez l'identifiant et la lecture du code avant utilisation.","ok");
-      enableExports(true);
-    }catch(e){svgText="";renderTarget.textContent="Aperçu indisponible.";setStatus(String(e.message||e),"error");enableExports(false);}
-  }
-  function requestRender(){clearTimeout(pending);pending=setTimeout(render,100);}
-  document.querySelectorAll(".label-mode").forEach(function(b){b.addEventListener("click",function(){if(b.dataset.mode!==mode)applyMode(b.dataset.mode,true);});});
-  fields.forEach(function(id){byId(id).addEventListener("input",requestRender);byId(id).addEventListener("change",requestRender);});
-  byId("clear").addEventListener("click",function(){
-    if(!window.confirm("Reprendre à zéro ? Les informations saisies dans cet outil seront effacées."))return;
-    fields.forEach(function(id){byId(id).value=initial[id];});
-    applyMode("prototype",false);
-  });
-  function save(blob,name){var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);}
-  byId("export-svg").addEventListener("click",function(){if(svgText)save(new Blob([svgText],{type:"image/svg+xml;charset=utf-8"}),fileName()+".svg");});
-  byId("export-png").addEventListener("click",function(){
-    if(!svgText)return;
-    var mm=byId("size").value.split("x").map(Number),img=new Image(),url=URL.createObjectURL(new Blob([svgText],{type:"image/svg+xml;charset=utf-8"}));
-    img.onload=function(){
-      var canvas=document.createElement("canvas");canvas.width=Math.round(mm[0]*300/25.4);canvas.height=Math.round(mm[1]*300/25.4);
-      var ctx=canvas.getContext("2d");ctx.fillStyle="white";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      canvas.toBlob(function(blob){if(blob)save(blob,fileName()+".png");else setStatus("L'export PNG a échoué.","error");URL.revokeObjectURL(url);},"image/png");
-    };
-    img.onerror=function(){URL.revokeObjectURL(url);setStatus("Impossible d'exporter l'image PNG.","error");};
-    img.src=url;
-  });
-  byId("print-label").addEventListener("click",function(){if(svgText)window.print();});
-  window.addEventListener("load",render);
-  requestRender();
-})();
-</script>
-</body>
-</html>
+<dialog id="restart-label-dialog" aria-labelledby="restart-label-title"><h2 id="restart-label-title">Reprendre à zéro ?</h2><p>Toutes les réponses de ce questionnaire seront effacées.</p>
+<div><button class="tool-button" type="button" data-cancel>Annuler</button><button class="tool-button primary" type="button" data-confirm>Reprendre à zéro</button></div></dialog>
+</body></html>
