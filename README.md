@@ -26,8 +26,19 @@ Après modification, vérifier les liens et ancres locaux, la navigation mobile,
 
 ## Vérifications
 
-`node --test tests/estimateur.test.mjs tests/portfolio.test.cjs` vérifie le calcul indicatif et les liens de galerie avec filtre/projet. Le filtre sélectionné est conservé dans le paramètre `categorie`, et la réalisation ouverte dans `projet`.
+`node --test` exécute toutes les suites découvertes automatiquement : estimateur, contact, galerie, classification MDR/IVDR et interface des questionnaires. `node outils/etiquettes-tracabilite/tests/run.mjs` complète ces contrôles avec les scénarios et le parcours d’étiquetage. Le filtre sélectionné est conservé dans le paramètre `categorie`, et la réalisation ouverte dans `projet`.
 
 Le contrôle structurel s’exécute avec `python scripts/check-site.py` : liens et ancres locaux, images, scripts et feuilles de style, y compris les ressources chargées depuis JavaScript. Les anciens liens de projets restent disponibles sous forme de redirections.
 
 Les tests, documents de maintenance et scripts de contrôle restent dans le dépôt et sont exclus de la publication par `_config.yml`. Les captures de travail et les images inutilisées ne sont plus livrées avec le site. Les fichiers de prévisualisation locaux sont ignorés par Git.
+
+## Outils publics et maintenance
+
+- `outils/classification/` : questionnaire de classification MDR/IVDR ; moteurs et composants communs dans `outils/shared/`.
+- `outils/connectivite/` : questionnaire de présélection des technologies de communication. Les réponses sauvegardées sont filtrées selon les choix actuellement valides.
+- `outils/etiquettes-tracabilite/` : aide à la préparation des mentions et symboles d’étiquetage, avec synthèse imprimable.
+- `outils/normes/` reste exclu de la publication.
+
+Le workflow `.github/workflows/check-site.yml` exécute les tests et le contrôle structurel à chaque pull request et après modification de `main`. Pour bloquer une fusion en cas d’échec, configurer la protection de `main` avec le contrôle requis « Tests et liens du site ». Le déploiement Pages existant reste indépendant de ces vérifications.
+
+Les tests valident le comportement logiciel et des scénarios de référence ; ils ne constituent pas une validation réglementaire des résultats. Les licences des bibliothèques restent publiées avec leurs fichiers.
