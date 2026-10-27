@@ -1,15 +1,21 @@
-> Publication actuelle : seule la classification MDR/IVDR est accessible. Le parcours normes est conservé en source, retiré de l’accueil et du sitemap, et exclu de GitHub Pages par `_config.yml`.
+> Publication actuelle : les questionnaires Classification MDR/IVDR et Choix de connectivité sont accessibles. Le parcours normes reste en source, retiré de l’accueil et du sitemap, et exclu de GitHub Pages par `_config.yml`.
 
 # Outils publics ORBIVIA
 
 Deux outils autonomes, accessibles depuis l’onglet **Outils** de la navigation du site :
 
 - `/outils/classification/` : **Classification MDR / IVDR**, questionnaire conditionnel, résultat justifié et réponses à préciser. Aucun champ projet, fabricant ou relecteur.
-- `/outils/normes/` : **Normes du dispositif**, questionnaire technique, références proposées, motifs fondés sur les réponses actives et liens vers les éditeurs. Aucun arbitrage manuel de chaque norme requis pour obtenir le résultat.
+- `/outils/connectivite/` : **Choix de connectivité**, questionnaire de présélection selon l’usage, l’autonomie, les réseaux, la sécurité et les coûts.
 
-L’accueil `/outils/` présente uniquement ces deux outils. Compliance Studio est désormais une application privée conservée dans Google Drive. Il n’est plus publié sur orbivia.fr.
+Le questionnaire `/outils/normes/` reste maintenu dans les sources, sans publication actuellement.
+
+L’accueil `/outils/` présente ces deux outils. Compliance Studio est désormais une application privée conservée dans Google Drive. Il n’est plus publié sur orbivia.fr.
 
 ## Code commun
+
+- `shared/questionnaire-ui.css` et `shared/questionnaire-ui.js` : système visuel réutilisable pour les questions, réponses avec sous-titre facultatif et info-bulles flottantes (sans décalage du contenu). **À utiliser pour les futurs questionnaires.**
+- `shared/QUESTIONNAIRE_DESIGN.md` : conventions HTML/CSS et contrôles responsive à effectuer avant publication.
+- `connectivite/connectivite.js` : questions, réponses, conditions et moteur de présélection de connectivité ; `connectivite/connectivite.css` : styles spécifiques à ce parcours.
 
 - `questionnaire.js` : interface et navigation des deux questionnaires, commentaires, reprise ciblée, réinitialisation et affichage des résultats.
 - `questionnaire.css` : présentation commune et affichage mobile.
@@ -38,7 +44,7 @@ node --test tests/*.test.*
 git diff --check
 ```
 
-328 tests réussis sur le site public. Le contrôle `python scripts/check-site.py` vérifie également les liens, ancres et ressources locales des 48 pages HTML, y compris les anciennes adresses de projets conservées comme redirections.
+Les tests du site et de l’interface partagée doivent réussir avant publication. Le contrôle `python scripts/check-site.py` vérifie également les liens, ancres et ressources locales des 48 pages HTML, y compris les anciennes adresses de projets conservées comme redirections.
 
 ## Questions et clarifications
 
