@@ -12,7 +12,7 @@ import struct
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-TARGET = ROOT / "outils" / "classification" / "icones-raster"
+TARGET = ROOT / "outils" / "classification" / "icones-raster" / "icones"
 
 def install(zip_path: pathlib.Path) -> int:
     with zipfile.ZipFile(zip_path) as archive:
@@ -20,17 +20,17 @@ def install(zip_path: pathlib.Path) -> int:
         if len(mapping) != 96:
             raise ValueError("Le pack doit contenir exactement 96 associations MDR/IVDR")
         TARGET.mkdir(parents=True, exist_ok=True)
-        for question_id in mapping:
-            if not question_id.replace("_", "").isalnum():
-                raise ValueError(f"Identifiant non conforme : {question_id}")
-            source_path = f"site/{question_id}.png"
+        if len(set(mapping.values())) != 57 or any(not 1 <= number <= 96 for number in mapping.values()):
+            raise ValueError("Correspondance des icônes incompatible avec la planche validée")
+        for number in range(1, 97):
+            source_path = f"extracted/icon-{number:02d}.png"
             png = archive.read(source_path)
             if not png.startswith(b"\x89PNG\r\n\x1a\n"):
                 raise ValueError(f"Ce fichier n'est pas un PNG : {source_path}")
             width, height = struct.unpack(">II", png[16:24])
             if (width, height) != (96, 96):
                 raise ValueError(f"Dimensions invalides : {source_path} ({width}×{height})")
-            (TARGET / f"{question_id}.png").write_bytes(png)
+            (TARGET / f"icon-{number:02d}.png").write_bytes(png)
     print(f"96 PNG installés dans {TARGET.relative_to(ROOT)}")
     print("Vérifier le site, puis versionner les PNG avec Git.")
     return 0
