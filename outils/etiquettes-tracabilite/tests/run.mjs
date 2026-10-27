@@ -21,7 +21,7 @@ function create(){
  const document={getElementById(id){return id==="label-app"?root:null}};
  const sessionStorage={getItem(){return null;},setItem(){}};
  vm.runInNewContext(source,{document,window,sessionStorage});
- return {root,...window.__probe};
+ return Object.assign(window.__probe,{root});
 }
 const base={
  status:"market",territory:"eu",support:"unit",pack:"one",carrier:"one",
