@@ -25,7 +25,7 @@ body[data-tool="etiquettes"] .answer.label-option .answer-copy small{display:blo
 .label-option[aria-pressed="true"] .label-checkbox{background:#e7a116;border-color:#e7a116}
 body[data-tool="etiquettes"] .question-controls.label-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px;flex-wrap:wrap}
 .label-controls-right{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-body[data-tool="etiquettes"] .tool-button{font:600 13px/1.4 inherit;border:1px solid #dce2dc;border-radius:10px;padding:11px 15px;background:white;color:#26323c;min-height:42px;cursor:pointer}
+body[data-tool="etiquettes"] .tool-button{font-family:inherit;font-size:13px;line-height:1.4;font-weight:600;border:1px solid #dce2dc;border-radius:10px;padding:11px 15px;background:white;color:#26323c;min-height:42px;cursor:pointer}
 body[data-tool="etiquettes"] .tool-button.primary{background:#e7a116;border-color:#e7a116;color:#202a32}
 body[data-tool="etiquettes"] .tool-button.quiet{border:0;background:transparent;color:#68766d;font-weight:500}
 body[data-tool="etiquettes"] .tool-button:disabled{opacity:.4;cursor:not-allowed}
