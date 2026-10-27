@@ -240,3 +240,52 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
 [data-tool="classification"] [data-action="restart"]{border:1px solid #cbd3cd;border-radius:10px;background:#fff;color:#34443b;padding:10px 16px;min-height:44px;text-decoration:none}
 [data-tool="classification"] .question-controls>[data-action="restart"]{margin-left:auto}
 [data-tool="classification"] [data-action="restart"]:hover{border-color:#bd8515;background:#fff8e9}
+
+
+/* Harmonisation finale MDR/IVDR ↔ Connectivité : une icône par question,
+   aucune icône dans les choix, mêmes cibles tactiles sur desktop et mobile. */
+[data-tool="classification"] .question-heading h1{display:flex;align-items:center;gap:12px}
+[data-tool="classification"] .mdr-question-icon{display:block;flex:0 0 32px;width:32px;height:32px;object-fit:contain;color:#17263a}
+[data-tool="classification"] .mdr-question-icon svg{display:block;width:100%;height:100%}
+[data-tool="classification"] .question-card:not(.assistance-card) .answer{
+ display:flex;align-items:center;justify-content:flex-start;gap:16px;
+ background:#fafbf9;border:1px solid #dce2dc;border-radius:12px;
+ box-shadow:none;color:#26323c;transition:border-color .16s,background .16s
+}
+[data-tool="classification"] .question-card:not(.assistance-card) .answer:hover{border-color:#c28c20;background:#fff8e9;box-shadow:none}
+[data-tool="classification"] .question-card:not(.assistance-card) .answer.selected{border-color:#c88c0d;background:#fff6df;box-shadow:inset 0 0 0 1px #c88c0d}
+[data-tool="classification"] .question-card:not(.assistance-card) .answer>.answer-copy{
+ display:block;width:auto;height:auto;min-width:0;flex:1;font-size:15px;font-weight:600;line-height:1.4;text-align:left
+}
+[data-tool="classification"] .question-card:not(.assistance-card) .answer>.answer-copy small{
+ font-size:12px;line-height:1.45;font-weight:400;margin-top:6px;color:#68766d
+}
+[data-tool="classification"] .scope-choices .answer:last-child,
+[data-tool="classification"] .explained-choices .answer:last-child{background:#fafbf9}
+[data-tool="classification"] .question-card:not(.assistance-card) .answer.selected:last-child{background:#fff6df}
+[data-tool="classification"] .question-prompt .info-bubble summary{width:44px;height:44px;min-width:44px;min-height:44px}
+[data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{font-size:13px;color:#625522;text-decoration:underline;font-weight:400}
+[data-tool="classification"] .question-card:not(.assistance-card)>.help-choice::before{width:19px;height:19px;margin-right:9px;font-size:12px}
+@media(min-width:900px){
+ [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.answer-list{gap:8px}
+ [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.answer-list .answer{min-height:64px;padding:16px}
+ [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.answer-list:has(.answer:nth-child(5)){gap:6px}
+ [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.answer-list:has(.answer:nth-child(5)) .answer{min-height:44px;padding:10px 16px}
+ [data-tool="classification"] .question-card:not(.assistance-card):not(.prompt-measure)>.answer-list:has(.answer:nth-child(5)) .answer-copy{font-size:14px;line-height:1.35}
+}
+@media(max-width:899px){
+ [data-tool="classification"] .question-card:not(.assistance-card) .question-prompt{min-height:128px}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list{grid-template-columns:1fr;gap:8px}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list .answer{min-height:54px;padding:12px;gap:14px}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list .answer>.answer-copy{font-size:14px;line-height:1.4}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list .answer>.answer-copy small{font-size:12px;line-height:1.45;margin-top:4px}
+}
+@media(max-width:700px){
+ [data-tool="classification"] .mdr-question-icon{width:28px;height:28px;flex-basis:28px}
+ [data-tool="classification"] .question-heading h1{gap:12px}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list .answer{min-height:54px;padding:11px}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list:has(.answer:nth-child(7)){gap:6px}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.answer-list:has(.answer:nth-child(7)) .answer{min-height:48px;padding:9px 11px}
+ [data-tool="classification"] .question-card:not(.assistance-card)>.help-choice{font-size:11px;margin:18px 0 8px}
+ [data-tool="classification"] .question-heading .info-bubble[open]>div{max-width:none}
+}
