@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v1";
+const STORE="orbivia-mdr-label-wizard-v2";
 const Q=[
 {id:"status",s:"Périmètre",icon:"file",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -130,6 +130,11 @@ function conclusions(){
  const reprocessed=["clean","disinfect","sterilize"].includes(a.reprocess);
  const iso="ISO 15223-1:2021";
  const mdr="MDR (UE) 2017/745";
+ if(market&&!isEU){
+  r("Texte","Identification du dispositif","Conserver une identification claire du modèle et de son fabricant.","Information générale","Mention");
+  v("Marché non couvert par cette analyse","Ce questionnaire concerne le MDR européen. Les obligations de marquage pour une commercialisation exclusivement hors UE doivent être établies selon le pays de destination.");
+  return {required,conditional,review};
+ }
 
  r("Texte","Nom et identification du produit","Préciser la dénomination, le modèle et le contenu de l'emballage si nécessaire.",mdr+" annexe I, 23.2(a–b)","Mention");
  if(label){
@@ -209,6 +214,7 @@ function conclusions(){
   if(sterilePack){
    r("Texte","Identification de l'emballage stérile","L'emballage doit être reconnaissable comme maintenant l'état stérile et identifier le dispositif, le fabricant, et le procédé de stérilisation.",mdr+" annexe I, 23.3(a–e)","Emballage");
    r("Texte","Consigne en cas d'emballage endommagé","Prévoir une indication invitant à consulter la notice sur la conduite à tenir si l'emballage stérile est ouvert ou endommagé.",mdr+" annexe I, 23.3(j)","Emballage");
+   c("5.2.8","Pictogramme « emballage endommagé »","Peut accompagner la consigne imposée pour la barrière stérile, en conservant un renvoi compréhensible à la notice.",iso+" 5.2.8","Emballage");
   }
  }else{
   if(a.fluidpath==="yes"&&label){
