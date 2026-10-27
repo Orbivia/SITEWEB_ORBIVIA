@@ -188,12 +188,12 @@ test("les trois questionnaires utilisent une seule mise en page responsive", () 
  const script=load("outils/shared/questionnaire-layout.js");
  for(const page of pages){
   const html=load(page);
-  assert.match(html, /questionnaire-layout\\.css\\?v=\\d+/);
-  assert.match(html, /questionnaire-layout\\.js\\?v=\\d+/);
+  assert.match(html, /questionnaire-layout\.css\?v=\d+/);
+  assert.match(html, /questionnaire-layout\.js\?v=\d+/);
   assert.ok(html.indexOf("questionnaire-ui.css")<html.indexOf("questionnaire-layout.css"),page);
   const app=page.includes("classification")?"../questionnaire.js":page.includes("connectivite")?"connectivite.js":"questionnaire.js";
   assert.ok(html.indexOf(app)<html.indexOf("questionnaire-layout.js"),page);
-  assert.doesNotMatch(html, /(?:href|src)="viewport\\.(?:css|js)/);
+  assert.doesNotMatch(html, /(?:href|src)="viewport\.(?:css|js)/);
  }
  assert.match(css, /100dvh/);
  assert.match(css, /quiz-scroll/);
@@ -203,11 +203,11 @@ test("les trois questionnaires utilisent une seule mise en page responsive", () 
  assert.match(css, /max-width:899px/);
  assert.match(css, /min-width:900px/);
  assert.match(css, /min-height:44px/);
- assert.match(css, /\\.question-heading h1/);
+ assert.match(css, /\.question-heading h1/);
  assert.match(script, /MutationObserver/);
- assert.match(script, /requestAnimationFrame\\(fit\\)/);
+ assert.match(script, /requestAnimationFrame\(fit\)/);
  assert.match(script, /scrollHeight/);
- assert.doesNotMatch(script, /display\\s*:\\s*none|\\.hidden\\s*=\\s*true/);
+ assert.doesNotMatch(script, /display\s*:\s*none|\.hidden\s*=\s*true/);
  assert.doesNotThrow(()=>new vm.Script(script));
 });
 
@@ -218,7 +218,7 @@ test("le responsive ne change pas les valeurs métier ni la synthèse",()=>{
  for(const source of [classification,connectivity,labelling])
   assert.doesNotThrow(()=>new vm.Script(source));
  assert.doesNotMatch(connectivity+labelling,/type=["']range["']/);
- assert.match(classification,/const iconByQuestion=Object\\.freeze/);
+ assert.match(classification,/const iconByQuestion=Object\.freeze/);
  assert.match(connectivity,/function renderResult/);
  assert.match(labelling,/function summary/);
 });
