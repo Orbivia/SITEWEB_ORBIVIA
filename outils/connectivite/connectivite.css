@@ -245,3 +245,29 @@ html{scrollbar-gutter:stable}
   max-width:none;
  }
 }
+
+/* Correctif de spécificité : le thème commun chargé après cette feuille fixe
+   sinon le pictogramme à 32px même sur grand écran. */
+@media(min-width:900px){
+ body[data-questionnaire-ui][data-tool="connectivite"] .question-heading h1{
+  position:relative;
+  display:block;
+  padding-bottom:172px;
+ }
+ body[data-questionnaire-ui][data-tool="connectivite"] .question-heading h1 .cx-question-icon{
+  position:absolute;
+  top:auto;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  display:block;
+  width:140px;
+  height:140px;
+  min-width:140px;
+  min-height:140px;
+  max-width:none;
+  max-height:none;
+  flex:0 0 140px;
+  object-fit:contain;
+ }
+}
