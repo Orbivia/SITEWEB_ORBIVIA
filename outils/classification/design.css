@@ -231,7 +231,7 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
 
 /* Mobile: stacked choices and navigation at the foot of the question. */
 @media(max-width:700px){
- [data-tool="classification"].is-question #tool-app{display:flex;flex-direction:column;min-height:calc(100svh - 120px)}
+ [data-tool="classification"].is-question #tool-app{display:flex;flex-direction:column;min-height:calc(100svh - 109px)}
  [data-tool="classification"].is-question #tool-app>.question-controls{margin-top:auto;padding-top:12px;background:#f6f7f5f5}
  [data-tool="classification"].is-question #tool-app>.save-status:empty{display:none}
 }
