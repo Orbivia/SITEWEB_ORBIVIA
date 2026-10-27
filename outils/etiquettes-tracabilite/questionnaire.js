@@ -39,33 +39,11 @@ const Q=[
 {id:"space",s:"Étiquette",icon:"ruler",title:"Quelle surface est disponible pour l’étiquetage ?",help:"Cette question concerne l'espace sur le support choisi, pas la taille totale du dispositif. La place disponible ne dispense pas des mentions requises : il faudra parfois adapter les niveaux d'emballage.",type:"single",options:[["tiny","Très petite : moins de 20 × 20 mm"],["small","Petite : environ 40 × 20 mm"],["medium","Moyenne : environ 70 × 40 mm"],["large","Grande : 100 × 50 mm ou plus"]]},
 {id:"language",s:"Étiquette",icon:"lang",title:"Pour quels pays les informations seront-elles préparées ?",help:"Les États membres fixent les exigences de langue des informations fournies avec les dispositifs. Des symboles normalisés peuvent aider mais ne remplacent pas tous les textes requis.",type:"single",options:[["fr","France"],["eu","Plusieurs pays de l'UE"],["other","UE et pays hors UE"]]}
 ];
-const ICONS={
-file:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',
-globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-5 5-5 13 0 18M12 3c5 5 5 13 0 18"/>',
-box:'<path d="m3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7M12 11v10"/>',
-layers:'<path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/>',
-shield:'<path d="M12 2 4 5v6c0 5 3 8 8 11 5-3 8-6 8-11V5l-8-3Z"/><path d="m8.5 12 2.5 2.5 5-5" class="accent"/>',
-check:'<circle cx="12" cy="12" r="9"/><path d="m7 12 3.2 3 7-7" class="accent"/>',
-factory:'<path d="M3 21V9l7 4V9l7 4V4h4v17H3Z"/><path d="M7 17h2m4 0h2m4 0h1" class="accent"/>',
-truck:'<path d="M3 6h11v12H3zM14 10h4l3 4v4h-7z"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/>',
-target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" class="accent"/>',
-repeat:'<path d="M5 8h13l-3-3m3 3-3 3M19 16H6l3 3m-3-3 3-3"/>',
-refresh:'<path d="M20 9a8 8 0 0 0-14-3L3 9M4 15a8 8 0 0 0 14 3l3-3"/><path d="M3 4v5h5M21 20v-5h-5" class="accent"/>',
-spark:'<path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z"/><path d="M12 9v6M9 12h6" class="accent"/>',
-sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2m10 10 2 2M19 5l-2 2M7 17l-2 2" class="accent"/>',
-layers2:'<rect x="3" y="4" width="18" height="16" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1" class="accent"/>',
-hourglass:'<path d="M5 3h14M5 21h14M7 3c0 6 5 7 5 9s-5 3-5 9m10-18c0 6-5 7-5 9s5 3 5 9"/>',
-barcode:'<path d="M3 4v16M7 4v16M10 4v16M14 4v16M17 4v16M21 4v16" class="accent"/>',
-thermo:'<path d="M10 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0Z"/><path d="M13 9v9" class="accent"/>',
-flask:'<path d="M9 3h6M10 3v7l-6 9a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-6-9V3M7 16h10" />',
-book:'<path d="M12 6c-3-2-7-2-10-1v14c4-1 7-1 10 1 3-2 6-2 10-1V5c-3-1-7-1-10 1Zm0 0v14"/>',
-circuit:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4"/><rect x="10" y="10" width="4" height="4" class="accent"/>',
-ruler:'<path d="m3 16 13-13 5 5-13 13-5-5Z"/><path d="M9 10l3 3m1-7 3 3M6 13l3 3" class="accent"/>',
-lang:'<path d="M3 5h12M9 3v2M5 9c2 4 5 6 9 7M13 8c-2 5-5 8-10 10M14 21l4-11 4 11m-6.5-4h5" />'
-};
+
 const $=(sel)=>root.querySelector(sel);
 const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function icon(id){return '<svg class="mdr-question-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="#17263a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><style>.accent{stroke:#e7a116}</style>'+(ICONS[id]||ICONS.file)+'</svg>';}
+function icon(id){const names={"file":"payload","layers2":"layers","refresh":"repeat","circuit":"sensor","lang":"language"};return '<img class="mdr-question-icon" src="../shared/icons/'+(names[id]||id)+'.svg?v=solid1" alt="">';}
+
 let answers={},position=0,finished=false;
 try{const saved=JSON.parse(sessionStorage.getItem(STORE)||"{}");if(saved&&saved.answers&&typeof saved.answers==="object"){answers=saved.answers;position=Math.max(0,Math.min(30,Number(saved.position)||0));finished=!!saved.finished;}}catch(_){}
 /* Ignore les choix indéterminés conservés par une ancienne version du questionnaire. */

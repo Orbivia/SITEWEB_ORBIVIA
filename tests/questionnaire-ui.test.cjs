@@ -108,7 +108,7 @@ test("Lot 2.1 : chaque nouvelle icône de question est distincte de son ancien d
   assert.doesNotMatch(revised, /<text[\s>]/);
  }
  const source = load("outils/connectivite/connectivite.js");
- assert.match(source, /\.svg\?v=7/);
+ assert.match(source, /\.svg\?v=solid1/);
 });
 
 
@@ -148,38 +148,17 @@ test("Audit graphique : 20 SVG Connectivite uniques, bicolores, sans textes ni i
 });
 
 
-test("MDR/IVDR : 96 chemins PNG de la planche déposée, repli SVG présent", () => {
- const presentation = require("../outils/classification/presentation.js");
- const questions = Object.keys(presentation.questions);
- assert.equal(questions.length, 96);
- const matched = new Set();
- for (const id of questions) {
-  const markup = presentation.questionIcon({id});
-  const number = markup.match(/icones-raster\/icones\/icon-(\d{2})\.png\?v=2/);
-  assert.ok(number, "image non associée : " + id);
-  const num = Number(number[1]);
-  assert.ok(num >= 1 && num <= 96, "numéro incorrect : " + id);
-  matched.add(num);
-  const iconPath = "outils/classification/icones-raster/icones/icon-" + number[1] + ".png";
-  assert.ok(fs.existsSync(path.join(root, iconPath)), "PNG absent : " + iconPath);
-  assert.ok(markup.includes("mdr-svg-fallback"), "SVG de secours absent : " + id);
+test("MDR/IVDR : 96 questions disposent de pictogrammes pleins locaux",()=>{
+ const presentation=require('../outils/classification/presentation.js');
+ assert.equal(Object.keys(presentation.questions).length,96);
+ for(const id of Object.keys(presentation.questions)){
+  const match=presentation.questionIcon({id}).match(/shared\/icons\/([a-z]+\.svg)/);assert.ok(match,id);
+  const svg=load('outils/shared/icons/'+match[1]);assert.match(svg,/#17263a/);assert.match(svg,/#e7a116/);assert.doesNotMatch(svg,/<(?:text|image|foreignObject)\b/i);
  }
- assert.equal(matched.size, 57, "correspondance modifiée sans révision graphique");
- assert.match(load("outils/classification/design.css"), /mdr-question-art/);
 });
 
-
-test("MDR/IVDR : bibliothèque nettoyée et uniquement les 57 images utilisées", () => {
- const presentation = require("../outils/classification/presentation.js");
- const folder = path.join(root, "outils/classification/icones-raster/icones");
- const actual = fs.readdirSync(folder).filter(name => /^icon-\d{2}\.png$/.test(name)).sort();
- const referenced = [...new Set(Object.keys(presentation.questions).map(id => {
-  const match = presentation.questionIcon({id}).match(/icones-raster\/icones\/(icon-\d{2}\.png)/);
-  assert.ok(match, id + " doit avoir son PNG");
-  return match[1];
- }))].sort();
- assert.equal(actual.length, 57);
- assert.deepEqual(actual, referenced, "aucun PNG inutilisé ni PNG manquant");
+test("les pictogrammes partagés restent des SVG simples sans ressources externes",()=>{
+ for(const file of fs.readdirSync(path.join(root,'outils/shared/icons'))){const svg=load('outils/shared/icons/'+file);assert.match(svg,/viewBox="0 0 32 32"/);assert.doesNotMatch(svg,/<(?:script|image|foreignObject|text)\b|https?:[^/]/i);}
 });
 
 test("les trois questionnaires utilisent une seule mise en page responsive", () => {
@@ -218,7 +197,7 @@ test("le responsive ne change pas les valeurs métier ni la synthèse",()=>{
  for(const source of [classification,connectivity,labelling])
   assert.doesNotThrow(()=>new vm.Script(source));
  assert.doesNotMatch(connectivity+labelling,/type=["']range["']/);
- assert.match(classification,/const iconByQuestion=Object\.freeze/);
+ assert.match(classification,/shared\/icons\//);
  assert.match(connectivity,/function renderResult/);
  assert.match(labelling,/function summary/);
 });

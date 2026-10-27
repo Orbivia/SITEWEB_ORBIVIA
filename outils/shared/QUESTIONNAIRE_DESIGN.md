@@ -22,7 +22,7 @@ Respecter les classes HTML communes :
 
 - `.question-progress` pour l'avancement ;
 - `.question-card` et `.question-heading` ;
-- icône spécifique à la **question**, en SVG bicolore ou raster avec SVG de secours, dans `h1` ; Sur **ordinateur (≥ 900 px)**, le pictogramme de la question est **centré sous le titre** (taille adaptée à la hauteur de l'écran, jusqu'à 140 × 140 px), comme dans le parcours Connectivité. Sur **téléphone**, il reste **à gauche du texte**, sans déplacement des réponses. Ce comportement est défini dans le CSS de mise en page commun pour les trois questionnaires. Aucune icône dans les boutons de réponse ;
+- icône spécifique à la **question**, en SVG plein bicolore, sans raster ni effets 3D, dans `h1` ; Sur **ordinateur (≥ 900 px)**, le pictogramme de la question est **centré sous le titre** (taille adaptée à la hauteur de l'écran, jusqu'à 140 × 140 px), comme dans le parcours Connectivité. Sur **téléphone**, il reste **à gauche du texte**, sans déplacement des réponses. Ce comportement est défini dans le CSS de mise en page commun pour les trois questionnaires. Aucune icône dans les boutons de réponse ;
 - `.answer` contenant `.answer-copy` et, **seulement si nécessaire**, `<small>` avec une explication brève ;
 - `<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div>...</div></details>` à côté du titre ; cette bulle flotte par-dessus le contenu sans le déplacer ;
 - « Aide au choix » réservée aux questions qui demandent une assistance plus approfondie ;
@@ -49,3 +49,7 @@ Vérifier sur téléphone (largeurs 320, 360, 390 px) et sur ordinateur (768, 12
 5. l'avancement, l'aide, le retour, la réinitialisation et la synthèse fonctionnent sans changer les valeurs métier.
 
 Exécuter `node --test tests/*.test.*` et `python scripts/check-site.py` avant publication. Les tests statiques ne remplacent pas une inspection visuelle dans un navigateur.
+
+## Pictogrammes pleins
+
+La famille commune se trouve dans `shared/icons/` : silhouettes simples sur une grille 32 × 32, bleu nuit et accent doré. Classification et Étiquetage chargent ces SVG ; Connectivité utilise les variantes de la même famille dans son dossier d’icônes. Ne pas réintroduire de PNG, de traits fins, de dégradés ni de textes dans les icônes. Les symboles servent à repérer les questions et ne constituent pas des marquages réglementaires imprimables.

@@ -15,20 +15,9 @@ test('every MDR and IVDR question has a presentation with preserved criteria and
   assert.equal(JSON.stringify(q),original,q.id+' engine question must not mutate');
  }
 });
-test('each question has one PNG icon and an SVG fallback; answer buttons stay text-only',()=>{
- const matchedIcons=new Set();
- for(const q of questions){
-  const markup=presentation.questionIcon(q);
-  const asset=markup.match(/icones-raster\/icones\/(icon-\d{2}\.png)/);
-  assert.ok(asset,q.id+' raster');
-  matchedIcons.add(asset[1]);
-  assert.match(markup,/mdr-svg-fallback/);
-  assert.doesNotMatch(markup,/<script|onload=|onerror=|https?:/i);
- }
- assert.equal(matchedIcons.size,57,'the planned reuse of the source artwork is preserved');
- const renderer=require('node:fs').readFileSync(require('node:path').join(__dirname,'../outils/questionnaire.js'),'utf8');
- assert.match(renderer,/presentation\.questionIcon\(q\)/);
- assert.doesNotMatch(renderer,/presentation\.answerIcon\(/);
+test('each question uses one local solid SVG; answers stay text-only',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ for(const q of questions){const markup=presentation.questionIcon(q),asset=markup.match(/src="\.\.\/shared\/icons\/([a-z]+\.svg)/);assert.ok(asset,q.id);assert.equal((markup.match(/<img /g)||[]).length,1);assert.ok(fs.existsSync(path.join(__dirname,'../outils/shared/icons',asset[1])));assert.doesNotMatch(markup,/.png|onerror=|https?:/i);}
 });
 
 test('IVDR families cover every role exactly once, with three choices per screen',()=>{
@@ -40,10 +29,10 @@ test('IVDR families cover every role exactly once, with three choices per screen
  assert.deepEqual(values.sort(),questions.find(q=>q.id==='ivdRole').options.map(([v])=>v).sort());
 });
 
-test('explicit PNG mapping is stable for selected MDR and IVDR questions',()=>{
- assert.match(presentation.questionIcon({id:'scope'}),/icon-01\.png/);
- assert.match(presentation.questionIcon({id:'form'}),/icon-56\.png/);
- assert.match(presentation.questionIcon({id:'ivdNear'}),/icon-15\.png/);
+test('semantic icon mapping is stable for selected MDR and IVDR questions',()=>{
+ assert.match(presentation.questionIcon({id:'scope'}),/medical.svg/);
+ assert.match(presentation.questionIcon({id:'form'}),/product.svg/);
+ assert.match(presentation.questionIcon({id:'tissue'}),/cells.svg/);
 });
 
 test('mobile presentation skips needless offscreen measurement of 96 questions',()=>{
