@@ -3,7 +3,7 @@
 'use strict';
 const questions={
  "scope": {
-  "title": "Quel type de produit ?",
+  "title": "À quelle catégorie appartient votre produit ?",
   "criterion": "",
   "sourceLabel": "Le produit est-il déjà qualifié de dispositif médical ?",
   "options": {
@@ -14,10 +14,10 @@ const questions={
    "other": "Autre produit"
   },
   "descriptions": {
-   "md": "Pour soigner ou diagnostiquer : CPAP, thermomètre…",
+   "md": "Dispositif à destination médicale : prévention, diagnostic, surveillance, traitement ou compensation.",
    "accessory": "Pour permettre ou assister l’utilisation d’un dispositif médical.",
-   "ivd": "Pour analyser un prélèvement humain : test de grossesse…",
-   "other": "Quelques questions pour vous aider à choisir."
+   "ivd": "Analyse in vitro de prélèvements humains, par exemple un test de grossesse.",
+   "other": "Votre produit ne correspond pas clairement aux catégories précédentes."
   }
  },
  "form": {
@@ -72,7 +72,7 @@ const questions={
   }
  },
  "energyHazard": {
-  "title": "L’énergie peut-elle être administrée de façon dangereuse ?",
+  "title": "L'énergie thérapeutique peut-elle présenter un danger lors de son administration ?",
   "criterion": "Cette énergie peut-elle être administrée d’une manière potentiellement dangereuse compte tenu de sa nature, densité et site ?",
   "sourceLabel": "Cette énergie peut-elle être administrée d’une manière potentiellement dangereuse compte tenu de sa nature, densité et site ?",
   "options": {
@@ -81,14 +81,19 @@ const questions={
   }
  },
  "contact": {
-  "title": "Comment le produit entre-t-il en contact avec le corps ?",
+  "title": "Par quelle voie le dispositif entre-t-il en contact avec le corps ?",
   "criterion": "",
   "sourceLabel": "Comment le produit entre-t-il en contact avec le corps ?",
   "options": {
-   "none": "Il ne pénètre pas dans le corps",
-   "orifice": "Par un orifice, sans pénétration chirurgicale",
-   "surgical": "À travers la peau / une muqueuse ou dans le cadre d’un acte chirurgical",
+   "none": "Sans pénétration dans le corps (contact externe possible)",
+   "orifice": "Par un orifice corporel (naturel ou stomie), sans pénétration chirurgicale",
+   "surgical": "Par pénétration à travers les tissus ou dans le cadre d'un acte chirurgical",
    "multiple": "Plusieurs voies ou situations à analyser séparément"
+  },
+  "descriptions": {
+   "none": "Par exemple un appareil sur peau intacte ou un pansement sur une plaie.",
+   "orifice": "Par exemple nez, bouche, oreille ou stomie permanente.",
+   "surgical": "Notamment par la peau ou une muqueuse lors d'une intervention."
   }
  },
  "animalIntact": {
@@ -283,7 +288,7 @@ const questions={
   }
  },
  "cleaning": {
-  "title": "Le produit sert-il à traiter d’autres dispositifs médicaux ?",
+  "title": "Le produit sert-il à nettoyer, désinfecter ou stériliser des dispositifs médicaux ?",
   "criterion": "Le produit est-il spécifiquement destiné au traitement de dispositifs médicaux ?",
   "sourceLabel": "Le produit est-il spécifiquement destiné au traitement de dispositifs médicaux ?",
   "options": {
@@ -368,6 +373,9 @@ const questions={
    "low": "Faible",
    "negligible": "Négligeable",
    "unknown": "Évaluation de l’exposition non disponible"
+  },
+  "descriptions": {
+   "unknown": "À sélectionner si aucune évaluation d'exposition interne n'est disponible."
   }
  },
  "substance": {
@@ -609,14 +617,18 @@ const questions={
   }
  },
  "diagnosticUse": {
-  "title": "Dans quel contexte clinique le produit est-il utilisé ?",
+  "title": "Le diagnostic ou la surveillance présente-t-il un danger vital immédiat ?",
   "criterion": "Dans quel contexte le diagnostic ou la surveillance est-il utilisé ?",
   "sourceLabel": "Dans quel contexte le diagnostic ou la surveillance est-il utilisé ?",
   "options": {
-   "routine": "Diagnostic / mesure courante (EEG, ECG, température…)",
-   "critical": "Surveillance / diagnostic avec danger immédiat",
-   "other": "Autre fonction, hors diagnostic direct / processus vitaux",
-   "unclear": "Contexte clinique non défini"
+   "routine": "Diagnostic ou surveillance sans danger vital immédiat identifié",
+   "critical": "Surveillance ou diagnostic avec danger immédiat pour le patient",
+   "other": "Autre fonction, hors diagnostic ou surveillance physiologique",
+   "unclear": "Usage clinique ou niveau de risque encore indéterminé"
+  },
+  "descriptions": {
+   "routine": "Selon l'usage prévu, même avec un ECG ou un EEG.",
+   "critical": "Les variations surveillées peuvent mettre immédiatement le patient en danger."
   }
  },
  "softwareMonitor": {
@@ -664,6 +676,11 @@ const questions={
    "independent": "Il a une fonction médicale propre",
    "drives": "Il commande ou influence seulement l’utilisation du dispositif physique",
    "both": "Il commande le dispositif et possède aussi une fonction médicale propre"
+  },
+  "descriptions": {
+   "independent": "Le logiciel contribue lui-même à une finalité médicale.",
+   "drives": "Il pilote le dispositif physique sans finalité médicale propre indépendante.",
+   "both": "Il pilote le dispositif et fournit aussi une fonction médicale propre."
   }
  },
  "softwareDecision": {
@@ -682,7 +699,7 @@ const questions={
   "options": {
    "death": "Décès ou détérioration irréversible de la santé",
    "serious": "Détérioration grave ou intervention chirurgicale",
-   "other": "Autres conséquences"
+   "other": "Autres conséquences, sans gravité des deux catégories précédentes"
   }
  },
  "ivdSoftwareRole": {
@@ -721,7 +738,7 @@ const questions={
   }
  },
  "ivdGeneral": {
-  "title": "S’agit-il d’un produit général IVD de la règle 5a ?",
+  "title": "Est-ce un produit général destiné aux analyses de laboratoire IVD ?",
   "criterion": "Le produit correspond-il à un produit général IVD de la règle 5a ?",
   "sourceLabel": "Le produit correspond-il à un produit général IVD de la règle 5a ?",
   "options": {
@@ -832,13 +849,17 @@ const questions={
   }
  },
  "ivdMarkers": {
-  "title": "Le test couvre-t-il un des marqueurs de groupe explicitement classés D ?",
+  "title": "Le test recherche-t-il un marqueur de groupe sanguin de la liste de classe D ?",
   "criterion": "",
   "sourceLabel": "Le test couvre-t-il un des marqueurs de groupe explicitement classés D ?",
   "options": {
    "other": "Non, uniquement d’autres marqueurs de compatibilité",
-   "listed": "Oui : ABO, Rhésus listé, K (Kell), Kidd ou Duffy listé",
+   "listed": "Oui, un marqueur explicitement listé par la règle 2",
    "unknown": "La liste des marqueurs n’est pas établie"
+  },
+  "descriptions": {
+   "listed": "ABO ; Rh D/C/c/E/e et RHW1 ; Kell K ; Kidd Jka/Jkb ; Duffy Fya/Fyb.",
+   "other": "Autres marqueurs de compatibilité uniquement."
   }
  },
  "ivdLifeManagement": {
@@ -887,7 +908,7 @@ const questions={
   }
  },
  "ivdSelf": {
-  "title": "Un non-professionnel réalise-t-il une étape du test ?",
+  "title": "Une personne non professionnelle réalise-t-elle une étape de l'analyse ?",
   "criterion": "Une personne non professionnelle réalise-t-elle au moins une étape du test lui-même ?",
   "sourceLabel": "Une personne non professionnelle réalise-t-elle au moins une étape du test lui-même ?",
   "options": {
@@ -896,7 +917,7 @@ const questions={
   }
  },
  "ivdSelfException": {
-  "title": "L’autotest correspond-il à une exception de classe B ?",
+  "title": "Quelle analyse est réalisée par cet autotest ?",
   "criterion": "L’autotest est-il limité à l’une des exceptions de classe B ?",
   "sourceLabel": "L’autotest est-il limité à l’une des exceptions de classe B ?",
   "options": {
@@ -905,10 +926,13 @@ const questions={
    "cholesterol": "Mesure du cholestérol uniquement",
    "urine": "Uniquement glucose, érythrocytes, leucocytes ou bactéries dans les urines",
    "other": "Autre test ou panel comportant d’autres marqueurs"
+  },
+  "descriptions": {
+   "other": "Autre marqueur ou panel plus large que les exceptions listées."
   }
  },
  "ivdNear": {
-  "title": "Le test est-il réalisé par un professionnel près du patient, hors laboratoire ?",
+  "title": "Le test est-il effectué près du patient par un professionnel ?",
   "criterion": "",
   "sourceLabel": "Le test est-il réalisé par un professionnel près du patient, hors laboratoire ?",
   "options": {
@@ -925,7 +949,7 @@ const hints={
  "xrecord": "Enregistrement spécifique de l’image diagnostique générée par les rayons X.",
  "tissue": "Tissus, cellules ou dérivés d’origine humaine ou animale, y compris non viables.",
  "nanoContact": "Contact direct ou indirect possible entre le composant contenant le nanomatériau et une personne.",
- "nanoExposure": "Appuyez-vous sur l’évaluation documentée de l’exposition interne.",
+ "nanoExposure": "Les niveaux doivent provenir d'une évaluation documentée de l'exposition interne. Ne déduisez pas le niveau de la seule présence de nanoparticules.",
  "substance": "Substances appliquées sur la peau ou introduites par un orifice, puis absorbées ou dispersées dans le corps.",
  "substanceSystemic": "L’absorption du produit ou de ses métabolites dans la circulation générale est nécessaire à son effet.",
  "substanceGI": "Action dans l’estomac ou le tube digestif inférieur, avec absorption systémique du produit ou de ses métabolites.",
@@ -941,22 +965,22 @@ const hints={
  "centralContact": "Usage spécifique en contact direct avec le cœur, la circulation centrale ou le système nerveux central.",
  "implantSpecial": "Implant mammaire, treillis chirurgical, prothèse articulaire totale ou partielle, ou dispositif rachidien visé par la règle. Consultez le « i » pour les exceptions.",
  "therapyEnergy": "Administration ou échange d’énergie avec le corps à des fins thérapeutiques.",
- "energyHazard": "Tenez compte de la nature de l’énergie, de sa densité et du site d’application.",
+ "energyHazard": "Évaluez la nature de l'énergie, sa densité, son mode d'administration et le site traité. Une réponse « Non » doit être justifiable au regard de l'usage prévu.",
  "therapyIonising": "Émission thérapeutique de rayonnements ionisants, ou commande ou surveillance directe d’un tel dispositif.",
  "controlTherapy": "Commande, surveillance ou influence directe sur un autre dispositif thérapeutique actif.",
- "diagnosticUse": "Précisez la destination clinique du diagnostic ou de la surveillance physiologique.",
+ "diagnosticUse": "La destination clinique prime sur le nom de la technologie : un ECG ou un EEG peut être courant ou critique selon les paramètres surveillés et les décisions associées.",
  "diagnosticXray": "Émission de rayonnements ionisants pour le diagnostic ou la radiologie interventionnelle, ou commande ou surveillance d’un tel dispositif.",
  "administer": "Un dispositif actif fait entrer ou sortir de l’air, un liquide ou une autre substance du corps.",
  "adminHazard": "Tenez compte de la substance, du site et du mode d’administration ou de retrait.",
  "closedLoopDiagnostic": "Distinguez une fonction diagnostique sur le patient d’une simple régulation technique.",
  "softwareRole": "Distinguez la fonction médicale propre du logiciel du pilotage d’un dispositif physique.",
- "softwareImpact": "Retenez la conséquence la plus grave d’une décision diagnostique ou thérapeutique erronée.",
+ "softwareImpact": "Évaluez la conséquence la plus grave d'une décision diagnostique ou thérapeutique erronée. Les catégories supérieures concernent le décès, l'atteinte irréversible, une détérioration grave ou une intervention chirurgicale.",
  "softwareVital": "Surveillance de paramètres vitaux dont les variations peuvent présenter un danger immédiat pour la vie.",
  "multiPurpose": "Un seul dispositif, tous ses usages et variantes, en retenant les situations les plus contraignantes.",
  "ivdQualification": "Examen médical in vitro humain, récipient de prélèvement ou accessoire dédié à un DIV, selon la destination du fabricant.",
  "ivdRole": "Classez chaque élément selon sa propre destination, sans confondre un kit complet avec un composant.",
  "ivdInstrumentIndependent": "Une mesure indépendante, réalisée sans nécessiter de réactif supplémentaire.",
- "ivdGeneral": "Produits généraux IVD, tampons, solutions de lavage, milieux généraux ou colorants histologiques. Vérifiez les limites dans le « i ».",
+ "ivdGeneral": "Vérifiez la règle 5a : produits généraux de laboratoire, tampons, solutions de lavage, milieux généraux et colorants histologiques dont le fabricant prévoit un usage IVD spécifique. Ne classez pas automatiquement un réactif analytique comme produit général.",
  "ivdAdditional": "Une fonction d’analyse ou une autre destination s’ajoute à la fonction déjà décrite.",
  "ivdPropagation": "Détection d’un agent causant une maladie mortelle avec un fort risque de propagation.",
  "ivdLoad": "Mesure d’une charge infectieuse dont le suivi est critique pour une maladie mortelle.",
@@ -969,9 +993,13 @@ const hints={
  "ivdLevelsRisk": "Suivi d’un médicament, d’une substance ou d’un composant biologique : une erreur peut mener à une décision menaçant la vie.",
  "ivdLifeManagement": "Prise en charge d’une maladie ou d’un état menaçant la vie.",
  "ivdNewborn": "Dépistage d’une anomalie chez le nouveau-né dont l’absence de traitement risque un décès ou un handicap grave.",
- "ivdSelf": "Une personne non professionnelle réalise au moins une étape du test lui-même.",
- "ivdSelfException": "L’autotest doit être limité à l’une des destinations indiquées. Un panel plus large relève d’un autre cas.",
- "ivdAllUses": "L’ensemble des destinations du produit et sa configuration complète ont été examinés."
+ "ivdSelf": "Visez les étapes du test lui-même (par exemple ajouter un réactif ou appliquer le prélèvement sur une cassette). Le seul prélèvement ou sa conservation ne fait pas, à lui seul, un autotest.",
+ "ivdSelfException": "Les exceptions de classe B concernent uniquement les destinations précisément énumérées à la règle 4 : grossesse, fertilité, cholestérol, ou glucose, érythrocytes, leucocytes et bactéries dans les urines. Un panel plus large est à examiner selon les autres règles applicables.",
+ "ivdAllUses": "L’ensemble des destinations du produit et sa configuration complète ont été examinés.",
+ "contact": "Distinguez contact externe, pénétration par un orifice corporel et pénétration invasive chirurgicale selon les définitions MDR (annexe VIII).",
+ "ivdNear": "Test hors laboratoire, généralement auprès du patient, réalisé par un professionnel de santé et non destiné à l'autotest. Le lieu de réalisation ne détermine pas seul la classe.",
+ "ivdMarkers": "Vérifiez la liste de la règle 2 de l'annexe VIII IVDR et la destination du test. Tous les marqueurs du système Rhésus ne sont pas nécessairement équivalents.",
+ "ivdLinkedClass": "Si le produit est associé à plusieurs DIV, retenez la classe la plus élevée effectivement documentée parmi eux, et « classe non documentée » en cas d'incertitude."
 };
 const icons={
  medical:'<rect x="3" y="3" width="26" height="26" rx="5" fill="currentColor"/><path d="M13 8h6v5h5v6h-5v5h-6v-5H8v-6h5z" fill="#e7a116"/>',
