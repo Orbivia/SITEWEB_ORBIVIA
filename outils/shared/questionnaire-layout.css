@@ -39,7 +39,7 @@ body[data-questionnaire-ui].quiz-active .question-progress progress{
  height:4px;
  margin:7px 0 0;
 }
-body[data-questionnaire-ui].quiz-active .question-card:not(.result-card):not(.assistance-card):not(.prompt-measure) {
+body[data-questionnaire-ui].quiz-active .question-card:not(.result-card):not(.assistance-card) {
  flex:1 1 auto;
  min-height:0;
  box-sizing:border-box;
@@ -175,7 +175,7 @@ body[data-questionnaire-ui].quiz-active .save-status:not(:empty) {
  body[data-questionnaire-ui].quiz-active .tool-shell{
   width:min(1120px,calc(100% - 80px));
  }
- body[data-questionnaire-ui].quiz-active .question-card:not(.result-card):not(.assistance-card):not(.prompt-measure){
+ body[data-questionnaire-ui].quiz-active .question-card:not(.result-card):not(.assistance-card){
   display:grid;
   grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
   grid-template-rows:minmax(0,1fr) auto;
@@ -217,7 +217,7 @@ body[data-questionnaire-ui].quiz-active .save-status:not(:empty) {
  body[data-questionnaire-ui].quiz-active .tool-shell{
   width:calc(100% - 28px);
  }
- body[data-questionnaire-ui].quiz-active .question-card:not(.result-card):not(.assistance-card):not(.prompt-measure){
+ body[data-questionnaire-ui].quiz-active .question-card:not(.result-card):not(.assistance-card){
   display:flex;
   flex-direction:column;
   gap:0;
@@ -262,7 +262,7 @@ body[data-questionnaire-ui].quiz-compact .question-card .answer{min-height:44px;
 body[data-questionnaire-ui].quiz-compact .question-controls{margin-top:4px}
 body[data-questionnaire-ui].quiz-dense .tool-shell{margin-top:5px;margin-bottom:2px}
 body[data-questionnaire-ui].quiz-dense .question-progress{margin-bottom:3px}
-body[data-questionnaire-ui].quiz-dense .question-card:not(.result-card):not(.assistance-card):not(.prompt-measure){padding:5px 9px}
+body[data-questionnaire-ui].quiz-dense .question-card:not(.result-card):not(.assistance-card){padding:5px 9px}
 body[data-questionnaire-ui].quiz-dense .question-card .question-heading{margin-bottom:3px}
 body[data-questionnaire-ui].quiz-dense .question-card .question-heading h1{font-size:18px;line-height:1.18}
 body[data-questionnaire-ui].quiz-dense .question-card .question-intro{font-size:12px;line-height:1.25;margin-bottom:3px}
@@ -278,7 +278,7 @@ body[data-questionnaire-ui].quiz-active.quiz-scroll{
 }
 body[data-questionnaire-ui].quiz-active.quiz-scroll .tool-shell,
 body[data-questionnaire-ui].quiz-active.quiz-scroll :is(#tool-app,#connect-app,#label-app),
-body[data-questionnaire-ui].quiz-active.quiz-scroll .question-card:not(.result-card):not(.assistance-card):not(.prompt-measure){
+body[data-questionnaire-ui].quiz-active.quiz-scroll .question-card:not(.result-card):not(.assistance-card){
  flex:initial;
  min-height:max-content;
 }

@@ -31,8 +31,6 @@ body[data-tool="connectivite"]{--tool-ink:#202a32;--tool-gold:#e7a116;background
 [data-tool="connectivite"] .answer.cx-option{font-family:inherit;display:flex;align-items:center;gap:12px;min-width:0;min-height:76px;background:#fafbf9;border:1px solid #dce2dc;border-radius:12px;padding:14px 16px;color:#26323c;text-align:left;line-height:1.4;cursor:pointer;box-shadow:none;transition:border-color .16s,background .16s}
 [data-tool="connectivite"] .answer.cx-option:hover{border-color:#c28c20;background:#fff8e9}
 [data-tool="connectivite"] .answer.cx-option[aria-pressed="true"]{border-color:#c88c0d;background:#fff6df;box-shadow:inset 0 0 0 1px #c88c0d}
-[data-tool="connectivite"] .answer .choice-icon.cx-icon{display:block;width:38px;height:38px;flex:0 0 38px;border:0;border-radius:0;background:transparent}
-.cx-icon img{width:100%;height:100%;display:block}
 [data-tool="connectivite"] .answer .answer-copy.cx-option-copy{display:block;flex:1;min-width:0;font-size:14px;font-weight:600}
 .cx-option-copy strong{display:block;font-weight:600}
 .cx-option-copy small{display:block;font-size:12px;line-height:1.45;color:#68766d;font-weight:400;margin-top:6px}
@@ -50,7 +48,6 @@ body[data-tool="connectivite"]{--tool-ink:#202a32;--tool-gold:#e7a116;background
 .cx-card h1:not(#question-title){font-size:30px;line-height:1.25;letter-spacing:-.7px}
 .cx-picks{display:grid;gap:10px;margin:15px 0}
 .cx-pick{display:flex;align-items:flex-start;gap:14px;padding:16px;border:1px solid #e0e5df;background:#fafbf9;border-radius:12px}
-.cx-pick img{width:34px;height:34px;flex:none}
 .cx-pick strong{font-size:15px;display:block}
 .cx-pick p{font-size:12px;color:#68766d;line-height:1.55;margin:6px 0 0}
 .cx-pick em{font-style:normal;text-transform:uppercase;font-size:10px;letter-spacing:.05em;color:#90610d;display:block;margin-bottom:5px}
@@ -90,7 +87,6 @@ body[data-tool="connectivite"]{--tool-ink:#202a32;--tool-gold:#e7a116;background
  .cx-help{font-size:12px;line-height:1.45}.cx-help small{font-size:11px}
  .cx-options{gap:7px}
  [data-tool="connectivite"] .answer.cx-option{min-height:52px;padding:9px 10px;gap:8px;border-radius:10px}
- [data-tool="connectivite"] .answer .choice-icon.cx-icon{width:34px;height:34px;flex-basis:34px}
  [data-tool="connectivite"] .answer .answer-copy.cx-option-copy{font-size:12px}
  .cx-option-copy small{font-size:12px;line-height:1.45;margin-top:4px}
  [data-tool="connectivite"] .question-controls.cx-controls{margin-top:8px;gap:7px}
@@ -133,7 +129,6 @@ body[data-tool="connectivite"]{--tool-ink:#202a32;--tool-gold:#e7a116;background
  [data-tool="connectivite"] .cx-options:has(.cx-option:nth-child(5)) .cx-option{padding:9px 11px}
  [data-tool="connectivite"] .cx-options:has(.cx-option:nth-child(5)) .cx-option-copy{font-size:12px}
  [data-tool="connectivite"] .answer.cx-option{min-height:54px;padding:11px}
- [data-tool="connectivite"] .cx-options:has(.cx-option:nth-child(5)) .cx-icon{width:34px;height:34px;flex-basis:34px}
  .cx-control-right{margin-left:auto;flex-wrap:wrap;justify-content:flex-end;padding:0}
  [data-tool="connectivite"] .question-controls.cx-controls{background:#f6f7f5f5;padding-block:8px;align-items:start}
 }
@@ -143,8 +138,6 @@ html{scrollbar-gutter:stable}
  #connect-app:not(:has(.result-card)){display:flex;flex-direction:column;min-height:calc(100svh - 109px)}
  [data-tool="connectivite"] #connect-app>.cx-controls{margin-top:auto;padding-top:12px}
 }
-
-[data-tool="connectivite"] .help-sheet .cx-icon{display:none!important}
 [data-tool="connectivite"] .help-sheet .answer-copy{display:block!important;font-size:inherit!important}
 [data-tool="connectivite"] .help-sheet .cx-options .cx-option{min-height:44px;padding:10px 12px}
 
@@ -155,12 +148,9 @@ html{scrollbar-gutter:stable}
 [data-tool="connectivite"] .help-sheet .cx-option-copy strong{font-weight:500}
 
 @media(min-width:900px){
- [data-tool="connectivite"] .cx-options:has(.cx-icon) .cx-option-copy{font-size:15px;line-height:1.4}
  [data-tool="connectivite"] .answer.cx-option{gap:16px}
 }
 @media(max-width:700px){
- [data-tool="connectivite"] .cx-options:has(.cx-icon) .cx-option-copy{font-size:14px;line-height:1.4}
- [data-tool="connectivite"] .cx-options:has(.cx-icon) .cx-option{padding:11px;gap:14px}
  [data-tool="connectivite"] .cx-options:has(.cx-option:nth-child(8)){gap:5px}
 }
 
