@@ -39,3 +39,24 @@ test('IVDR families cover every role exactly once, with three choices per screen
  assert.equal(new Set(values).size,values.length);
  assert.deepEqual(values.sort(),questions.find(q=>q.id==='ivdRole').options.map(([v])=>v).sort());
 });
+
+test('explicit PNG mapping is stable for selected MDR and IVDR questions',()=>{
+ assert.match(presentation.questionIcon({id:'scope'}),/icon-01\.png/);
+ assert.match(presentation.questionIcon({id:'form'}),/icon-56\.png/);
+ assert.match(presentation.questionIcon({id:'ivdNear'}),/icon-15\.png/);
+});
+
+test('mobile presentation skips needless offscreen measurement of 96 questions',()=>{
+ const prior=global.window;
+ let cleared=false;
+ global.window={matchMedia:query=>({matches:query==='(max-width: 899px)'})};
+ try{
+  presentation.reservePrompt({
+   querySelector(){throw new Error('DOM measurement must not run on mobile')},
+   style:{removeProperty(key){assert.equal(key,'--question-prompt-height');cleared=true;}}
+  });
+  assert.ok(cleared);
+ }finally{
+  if(prior===undefined)delete global.window;else global.window=prior;
+ }
+});
