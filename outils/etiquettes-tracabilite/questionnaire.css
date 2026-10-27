@@ -98,3 +98,7 @@ body[data-tool="etiquettes"] .question-heading .mdr-question-icon{flex:0 0 32px;
  .label-result-card header{break-after:avoid}
  .label-result-heading{margin-bottom:12px}
 }
+
+/* Élimine les pastilles héritées de .answer > span du CSS historique. */
+body[data-tool="etiquettes"] .question-card .answer.label-option > .answer-copy{display:block;flex:1 1 auto;width:auto;height:auto;min-width:0;border:0;border-radius:0}
+body[data-tool="etiquettes"] .question-card .answer.label-option > .label-checkbox{display:none}
