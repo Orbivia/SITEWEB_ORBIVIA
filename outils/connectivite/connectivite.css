@@ -151,3 +151,7 @@ html{scrollbar-gutter:stable}
  #connect-app:not(:has(.result-card)){display:flex;flex-direction:column;min-height:calc(100svh - 120px)}
  [data-tool="connectivite"] #connect-app>.cx-controls{margin-top:auto;padding-top:12px}
 }
+
+[data-tool="connectivite"] .help-sheet .cx-icon{display:none!important}
+[data-tool="connectivite"] .help-sheet .answer-copy{display:block!important;font-size:inherit!important}
+[data-tool="connectivite"] .help-sheet .cx-options .cx-option{min-height:44px;padding:10px 12px}

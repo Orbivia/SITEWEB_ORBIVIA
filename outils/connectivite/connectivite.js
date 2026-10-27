@@ -26,7 +26,7 @@ const Q=[
 {id:"priorities",section:"Budget",icon:"network",title:"Quels sont vos trois critères prioritaires ?",help:"Choisissez jusqu'à trois critères dans l'ordre d'importance. Les besoins indispensables restent prioritaires sur ce classement.",example:"Une longue autonomie et un faible encombrement peuvent conduire à privilégier une solution différente d'un système de vidéo.",type:"priority",options:[["autonomy","Autonomie","","battery"],["cost","Coût matériel","","euro"],["size","Encombrement","","box"],["weight","Poids","","weight"],["reach","Portée","","distance"],["speed","Débit et réactivité","","clock"],["easy","Simplicité d'installation","","phone"],["reliable","Fiabilité","","shield"]]}
 ];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const icon=name=>prefix+encodeURIComponent(name||"help")+".svg";
+const icon=name=>prefix+encodeURIComponent(name||"help")+".svg?v=2";
 function restore(){try{const x=JSON.parse(localStorage.getItem(storeKey)||"null");return x&&typeof x==="object"&&!Array.isArray(x)?x:{}}catch{return {}}}
 let answers=restore(),pos=0,result=false;
 const byId=id=>Q.find(q=>q.id===id);
@@ -45,7 +45,7 @@ function optionEditor(q){const multi=q.type!=="single";return '<div class="cx-op
 function editor(q){return optionEditor(q)}
 function current(){const qs=active();pos=Math.min(Math.max(0,pos),qs.length-1);return qs[pos]}
 
-let helpOpen=false,renderedQuestion=null;
+let helpOpen=false,infoOpen=false,renderedQuestion=null;
 function render(){
  if(result){renderResult();return}
  const q=current(),qs=active(),position=Q.findIndex(x=>x.id===q.id)+1;
@@ -54,13 +54,13 @@ function render(){
  const back='<button type="button" class="tool-button cx-button" data-action="back" '+(pos===0?"disabled":"")+'>← Précédent</button>';
  const restart='<button type="button" class="tool-button quiet cx-button" data-action="reset">Reprendre à zéro</button>';
  const nextButton=single?"":'<button type="button" class="tool-button primary cx-button" data-action="next" '+(!done(q)?"disabled":"")+'>'+(pos===qs.length-1?"Voir ma synthèse →":"Continuer →")+'</button>';
- const expanded=helpOpen?"true":"false";
+ const expanded=infoOpen?"true":"false";
  root.innerHTML='<div class="question-progress cx-progress"><span>'+esc(q.section)+' · Connectivité<b>'+progress+' % parcouru</b></span><progress max="100" value="'+progress+'" aria-label="Avancement du questionnaire"></progress></div>'
  +'<section class="question-card cx-card" aria-labelledby="question-title">'
  +'<div class="question-prompt cx-question-prompt"><div class="question-heading cx-head"><h1 id="question-title">'+esc(q.title)+'</h1>'
- +'<button class="cx-info-button" type="button" data-action="toggle-help" aria-expanded="'+expanded+'" aria-label="Explication de la question">i</button></div>'
- +'<div class="cx-help" '+(helpOpen?'':'hidden')+'><p>'+esc(q.help)+'</p><small>'+esc(q.example)+'</small></div>'
- +'</div><div class="cx-options-wrapper">'+editor(q)+'</div><button class="cx-help-trigger" type="button" data-action="toggle-help" aria-expanded="'+expanded+'"><span class="cx-help-symbol" aria-hidden="true">?</span>'+ (helpOpen?"Masquer l’aide":"Aide au choix")+'</button>'
+ +'<button class="cx-info-button" type="button" data-action="toggle-info" aria-expanded="'+expanded+'" aria-label="Explication de la question">i</button></div>'
+ +'<div class="cx-help" '+(infoOpen?'':'hidden')+'><p>'+esc(q.help)+'</p><small>'+esc(q.example)+'</small></div>'
+ +'</div><div class="cx-options-wrapper">'+editor(q)+'</div><button class="cx-help-trigger" type="button" data-action="toggle-help" aria-expanded="'+(helpOpen?"true":"false")+'"><span class="cx-help-symbol" aria-hidden="true">?</span>'+ (helpOpen?"Masquer l’aide":"Aide au choix")+'</button>'
  +'</section>'
  +'<div class="question-controls cx-controls">'+back+'<div class="cx-control-right">'+nextButton+restart+'</div></div>';
  if(renderedQuestion!==q.id&&typeof window!=='undefined'){
@@ -68,9 +68,21 @@ function render(){
   window.scrollTo({top:0,behavior:'auto'});
  }
  renderedQuestion=q.id;
+ if(helpOpen)showChoiceHelp(q);
+}
+function showChoiceHelp(q){
+ const panel='<dialog class="help-sheet" aria-labelledby="help-sheet-title"><header class="help-sheet-header"><div><span class="sheet-handle" aria-hidden="true"></span><h2 id="help-sheet-title">Aide au choix</h2></div><button type="button" class="sheet-close" data-action="close-help" aria-label="Fermer l’aide">×</button></header><div class="help-sheet-content"><p class="help-sheet-context">'+esc(q.title)+'</p><h3 id="help-probe">'+(q.type==='priority'?'Quels critères comptent le plus pour vous ?':q.type==='single'?'Quel choix correspond à votre produit ?':'Quels choix correspondent à votre produit ?')+'</h3><div class="guide-answers cx-options" data-multi="'+(q.type!=='single')+'">'+q.options.map(o=>optionMarkup(q,o)).join('')+'</div><div class="sheet-inline-explanation"><p>'+esc(q.help)+'</p><p>'+esc(q.example)+'</p></div>'+(q.type==='single'?'':'<div class="sheet-controls"><button type="button" class="tool-button primary" data-action="next" '+(!done(q)?'disabled':'')+'>Continuer →</button></div>')+'</div></dialog>';
+ root.insertAdjacentHTML?.('beforeend',panel);
+ const sheet=root.querySelector('.help-sheet');
+ if(!sheet?.showModal)return;
+ sheet.addEventListener('cancel',event=>{event.preventDefault();helpOpen=false;render();});
+ sheet.showModal();
+ const content=sheet.querySelector('.help-sheet-content');
+ for(let density=0;density<=3;density++){sheet.dataset.density=density;if(content.scrollHeight<=content.clientHeight+1)break;}
+ const title=sheet.querySelector('h3');if(title){title.tabIndex=-1;title.focus({preventScroll:true});}
 }
 function updateContinue(){const b=root.querySelector('[data-action="next"]');if(b)b.disabled=!done(current())}
-function next(){if(!done(current()))return;const qs=active();helpOpen=false;if(pos>=qs.length-1){result=true;render();return}pos++;render()}
+function next(){if(!done(current()))return;const qs=active();helpOpen=false;infoOpen=false;if(pos>=qs.length-1){result=true;render();return}pos++;render()}
 function choose(id){
  const q=current();
  if(q.type==="single"){answers[q.id]=id;save();next();return}
@@ -115,6 +127,6 @@ function renderResult(){
  +'</section><div class="cx-result-actions"><button type="button" class="tool-button cx-button" data-action="edit">← Modifier les réponses</button><button type="button" class="tool-button quiet cx-button" data-action="reset">Reprendre à zéro</button></div>'
  +'<p class="cx-note">Il s’agit d’une aide à la présélection, non d’une validation de faisabilité ou d’une certification. Aucune réponse n’est envoyée à Orbivia.</p>';
 }
-root.addEventListener("click",event=>{const choice=event.target.closest("[data-option]");if(choice){choose(choice.dataset.option);return}const unit=event.target.closest("[data-unit]");if(unit){const u=unit.dataset.unit;const value=u==="heures"?24:u==="jours"?30:12;answers.autonomy={unit:u,value};save();render();return}if(event.target.closest("[data-no-limit]")){const q=current();answers[q.id]=answers[q.id]==="none"?(q.type==="duration"?{value:12,unit:"mois"}:q.defaultValue):"none";save();render();return}const a=event.target.closest("[data-action]")?.dataset.action;if(!a)return;if(a==="toggle-help"){helpOpen=!helpOpen;render();return}if(a==="back"){helpOpen=false;pos=Math.max(0,pos-1);render()}if(a==="next")next();if(a==="edit"){result=false;helpOpen=false;pos=0;render()}if(a==="reset"){answers={};pos=0;result=false;helpOpen=false;try{localStorage.removeItem(storeKey)}catch{}render()}});
+root.addEventListener("click",event=>{const choice=event.target.closest("[data-option]");if(choice){choose(choice.dataset.option);return}const unit=event.target.closest("[data-unit]");if(unit){const u=unit.dataset.unit;const value=u==="heures"?24:u==="jours"?30:12;answers.autonomy={unit:u,value};save();render();return}if(event.target.closest("[data-no-limit]")){const q=current();answers[q.id]=answers[q.id]==="none"?(q.type==="duration"?{value:12,unit:"mois"}:q.defaultValue):"none";save();render();return}const a=event.target.closest("[data-action]")?.dataset.action;if(!a)return;if(a==="toggle-help"){helpOpen=true;render();return}if(a==="close-help"){helpOpen=false;render();return}if(a==="toggle-info"){infoOpen=!infoOpen;render();return}if(a==="back"){helpOpen=false;infoOpen=false;pos=Math.max(0,pos-1);render()}if(a==="next")next();if(a==="edit"){result=false;helpOpen=false;infoOpen=false;pos=0;render()}if(a==="reset"){answers={};pos=0;result=false;helpOpen=false;infoOpen=false;try{localStorage.removeItem(storeKey)}catch{}render()}});
 render();
 })();

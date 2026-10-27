@@ -187,36 +187,6 @@ body[data-tool="classification"]{--tool-ink:#202a32;--tool-gold:#e7a116;backgrou
 
 html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
 
-/* Guidance remains an overlay on the current question. */
-.help-sheet{position:fixed;inset:auto 0 0;margin:0 auto;padding:0;width:min(620px,100%);max-width:100%;max-height:64dvh;border:1px solid #dfe4de;border-bottom:0;border-radius:20px 20px 0 0;background:white;color:#202a32;box-shadow:0 -10px 45px #17263a25;overflow:hidden}
-.help-sheet[open]{display:flex;flex-direction:column}
-.help-sheet::backdrop{background:#17263a55}
-.help-sheet-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 22px 14px;border-bottom:1px solid #e7eae5;flex:none}
-.help-sheet-header h2{font-size:19px;line-height:1.3;margin:10px 0 0}
-.sheet-handle{display:block;width:36px;height:4px;background:#c4cbc6;border-radius:3px}
-.sheet-close{align-self:center;display:grid;place-items:center;min-width:44px;min-height:44px;background:transparent;border:0;border-radius:8px;font:30px/1 Arial;color:#202a32;cursor:pointer}
-.sheet-close:hover{background:#f1f3ef}
-.help-sheet-content{overflow:auto;overscroll-behavior:contain;padding:18px 22px max(22px,env(safe-area-inset-bottom));min-height:0}
-.help-sheet-context{font-size:13px;line-height:1.45;background:#fff7e5;border-left:3px solid #e7a116;padding:10px 12px;margin:0 0 18px;color:#535c56}
-.help-sheet h3{font-size:21px;line-height:1.35;letter-spacing:-.3px;margin:0 0 18px}
-.help-sheet .guide-answers{display:grid;grid-template-columns:1fr;gap:8px}
-.help-sheet .guide-short{grid-template-columns:repeat(2,minmax(0,1fr))}
-[data-tool="classification"] .help-sheet .answer{min-height:52px;padding:12px 14px;font-size:14px;justify-content:center}
-.help-sheet .help-choice{display:block;width:100%;text-align:left;min-height:44px;margin:10px 0}
-.help-sheet .guide-context{font-size:13px;margin:16px 0;border-top:1px solid #e7eae5;padding-top:12px}
-.help-sheet .guide-context summary{min-height:36px;cursor:pointer}
-.help-sheet .guide-explanation{font-size:13px;line-height:1.5}
-.sheet-controls{margin-top:10px}
-.sheet-controls .tool-button{font-size:12px;padding:8px 0;min-height:40px}
-.help-sheet .guide-note{font-size:14px;line-height:1.5}
-.help-sheet .guide-rationale{font-size:13px;margin-bottom:14px}
-.help-sheet .primary{width:100%;min-height:48px;white-space:normal;text-align:center}
-body:has(.help-sheet[open]){overflow:hidden}
-.help-sheet :focus-visible{outline:2px solid #b87900;outline-offset:3px}
-@media(max-width:700px){.help-sheet-header{padding-inline:18px}.help-sheet-content{padding-inline:18px}.help-sheet h3{font-size:19px}.help-sheet-header h2{font-size:18px}}
-
-.help-sheet [hidden]{display:none!important}
-
 [data-tool="classification"] .pending-result .class-value{font-size:28px;letter-spacing:-.5px;padding-bottom:14px;margin-bottom:14px}
 [data-tool="classification"] .pending-box{flex-wrap:wrap;gap:12px}
 [data-tool="classification"] .export-actions .tool-button:not(.primary){background:transparent;color:#53615a;text-decoration:underline;min-height:44px}
@@ -231,41 +201,13 @@ body:has(.help-sheet[open]){overflow:hidden}
  [data-tool="classification"] .question-intro{font-size:12px;line-height:1.4}
  [data-tool="classification"] .tool-breadcrumb{margin-bottom:8px}
  [data-tool="classification"] .tool-shell,[data-tool="classification"] .tool-shell:has(.explained-choices){margin-top:8px}
- .help-sheet:has(.guide-answers .answer:nth-child(4)){max-height:85dvh}
- .help-sheet .guide-answers:has(.answer:nth-child(4)){grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
- [data-tool="classification"] .help-sheet .guide-answers:has(.answer:nth-child(4)) .answer{min-height:44px;font-size:12px;padding:8px;line-height:1.35}
- .help-sheet:has(.guide-answers .answer:nth-child(4)) h3{font-size:17px;margin-bottom:12px}
- .help-sheet:has(.guide-answers .answer:nth-child(4)) .help-sheet-context{font-size:12px;margin-bottom:12px;padding:8px}
 }
-
-.help-sheet .help-choice::before{display:none}
-.help-sheet .guide-note:empty{display:none}
-
-/* Choice sheet: no expandable prose mixed with the answers. */
-.help-sheet{max-height:calc(100dvh - 16px)}
-.help-sheet .guide-answers:has(.answer:nth-child(4)){grid-template-columns:repeat(2,minmax(0,1fr))}
-.help-sheet .sheet-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.help-sheet[data-density="1"] .help-sheet-context,.help-sheet[data-density="2"] .help-sheet-context,.help-sheet[data-density="3"] .help-sheet-context{padding:7px 9px;font-size:12px;margin-bottom:10px}
-.help-sheet[data-density="1"] h3,.help-sheet[data-density="2"] h3,.help-sheet[data-density="3"] h3{font-size:17px;margin-bottom:10px}
-.help-sheet[data-density="2"] .answer,.help-sheet[data-density="3"] .answer{font-size:12px!important;padding:8px!important;min-height:44px!important}
-.help-sheet[data-density="2"] .help-sheet-content,.help-sheet[data-density="3"] .help-sheet-content{padding:10px 14px}
-.help-sheet[data-density="3"] .help-sheet-header{padding:6px 14px}
-.help-sheet[data-density="3"] h3{font-size:15px}
-.help-sheet[data-density="3"] .guide-answers{gap:5px}
-@media(max-width:700px){.help-sheet:has(.guide-answers .answer:nth-child(4)){max-height:calc(100dvh - 16px)}}
-
 
 [data-tool="classification"] .tool-breadcrumb>span{border:0;background:transparent;border-radius:0;padding:0;font-size:12px;font-weight:500;letter-spacing:0;cursor:default}
 /* Information expands in the page rather than a nested scrolling box. */
 [data-tool="classification"] .question-heading:has(.info-bubble[open]){flex-wrap:wrap}
 [data-tool="classification"] .question-heading .info-bubble[open]{flex:0 0 100%;position:static}
 [data-tool="classification"] .info-bubble[open]>div{position:static;width:100%;max-width:none;max-height:none;overflow:visible;margin-top:10px;font-size:13px;line-height:1.5}
-.sheet-inline-explanation{margin-top:14px;padding-top:10px;border-top:1px solid #e3e7df;font-size:13px;line-height:1.4;color:#53615a}
-.sheet-inline-explanation p{margin:0 0 8px}
-.sheet-inline-explanation ul{margin:0;padding-left:18px}
-.sheet-inline-explanation li{margin:5px 0}
-.help-sheet[data-density="2"] .sheet-inline-explanation,.help-sheet[data-density="3"] .sheet-inline-explanation{font-size:11px;line-height:1.3;margin-top:8px;padding-top:8px}
-
 /* Desktop: question and answers share a row, without a vacant prompt area. */
 @media(min-width:900px){
  [data-tool="classification"] .tool-shell{width:min(1120px,calc(100% - 80px));margin:34px auto 28px}
