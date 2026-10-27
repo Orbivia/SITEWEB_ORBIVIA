@@ -269,6 +269,15 @@ function conclusions(){
  const unique=items=>items.filter((x,i)=>items.findIndex(y=>y.code===x.code&&y.title===x.title)===i);
  return {required:unique(required),conditional:unique(conditional),review:unique(review)};
 }
+/* Les 52 PNG source sont extraits du document ISO 15223-1:2021 fourni.
+ * Correspondance stricte par numéro de symbole : aucun remplacement inventé.
+ * Les mentions CE, UDI, 5.7.x et le texte n'ont pas de PNG dans cette bibliothèque.
+ */
+const isoSymbolCodes=new Set("5.1.1 5.1.2 5.1.3 5.1.4 5.1.5 5.1.6 5.1.7 5.1.8 5.1.9 5.1.10 5.1.11 5.2.1 5.2.2 5.2.3 5.2.4 5.2.5 5.2.6 5.2.7 5.2.8 5.2.9 5.2.10 5.2.11 5.2.12 5.2.13 5.2.14 5.3.1 5.3.2 5.3.3 5.3.4 5.3.5 5.3.6 5.3.7 5.3.8 5.3.9 5.4.1 5.4.2 5.4.3 5.4.4 5.4.5 5.4.6 5.4.7 5.4.8 5.4.9 5.4.10 5.4.11 5.4.12 5.5.1 5.5.2 5.5.3 5.5.4 5.5.5 5.5.6".split(" "));
+function symbolImage(code,reference=false){
+ if(!isoSymbolCodes.has(code))return "";
+ return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="symboles-iso/'+code+'.png?v=1" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
+}
 function symbolRef(code) {
  if(/^\d+\.\d+\.\d+$/.test(code))return "ISO " + code;
  return code==="Texte"?"Texte":code==="MDR"?"MDR":code==="Notice"?"Notice":code;
@@ -276,7 +285,7 @@ function symbolRef(code) {
 function renderShortList(items) {
  if(!items.length)return '<p class="label-empty">Aucun élément supplémentaire.</p>';
  return '<ul class="label-short-list">'+items.map(it=>
- '<li><span class="label-short-name">'+escapeHTML(it.title)+'</span><span class="label-short-code">'+escapeHTML(symbolRef(it.code))+'</span></li>'
+ '<li>'+symbolImage(it.code)+'<span class="label-short-name">'+escapeHTML(it.title)+'</span><span class="label-short-code">'+escapeHTML(symbolRef(it.code))+'</span></li>'
  ).join("")+'</ul>';
 }
 function renderChecks(items){
@@ -287,7 +296,7 @@ function renderReferences(result){
  const groups=[["À prévoir",result.required],["Selon votre dispositif",result.conditional],["Points de vigilance",result.review]];
  return '<details class="label-details"><summary>Afficher les explications et références réglementaires</summary><div>'+
  groups.map(group=>'<h3>'+escapeHTML(group[0])+'</h3>'+
- group[1].map(it=>'<div class="label-reference"><strong>'+escapeHTML(it.title)+'</strong><p>'+escapeHTML(it.detail)+'</p>'+(it.source?'<small>'+escapeHTML(it.source)+'</small>':'')+'</div>').join("")
+ group[1].map(it=>'<div class="label-reference"><div class="label-reference-heading">'+symbolImage(it.code,true)+'<strong>'+escapeHTML(it.title)+'</strong></div><p>'+escapeHTML(it.detail)+'</p>'+(it.source?'<small>'+escapeHTML(it.source)+'</small>':'')+'</div>').join("")
  ).join("")+'</div></details>';
 }
 function summary(){
