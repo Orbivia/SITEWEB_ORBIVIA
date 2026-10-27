@@ -1,18 +1,28 @@
-# Illustrations raster MDR / IVDR
+# Icônes raster du questionnaire MDR/IVDR
 
-Ce répertoire doit contenir les **96 PNG transparents** de l'archive `orbivia_mdr_ivdr_96_png.zip`, sous les noms `<question_id>.png`. Dimensions : 96 × 96 pixels.
+## Intégration (27 octobre 2026)
 
-## État au 27 octobre 2026
+Les 96 PNG ont été déposés sur GitHub dans `icones/` :
 
-Les vues HTML/CSS et le repli sur les SVG sont présents dans le dépôt. **Les fichiers PNG eux-mêmes ne sont pas encore publiés ici.** Le connecteur GitHub utilisé pour l'édition ne transmet pas directement les fichiers binaires depuis le dossier de travail.
+```
+outils/classification/icones-raster/icones/icon-01.png
+...
+outils/classification/icones-raster/icones/icon-96.png
+```
 
-## Installation
+Les illustrations sont des PNG transparents (96 × 96 px), issus de la planche graphique approuvée. **Ne pas convertir en SVG : cela détruit le rendu avec relief et dégradés.**
 
-1. Télécharger l'archive fournie dans la conversation.
-2. Dans une copie du dépôt, exécuter `python scripts/install-mdr-png-icons.py /chemin/vers/orbivia_mdr_ivdr_96_png.zip`.
-3. Vérifier les 96 images et leur correspondance avec le sens médical des questions.
-4. Ajouter `outils/classification/icones-raster/*.png` à Git, puis publier sur GitHub Pages.
+Le code `../presentation.js` associe chacun des 96 identifiants de question à une image numérotée. Cette correspondance reprend le fichier `mapping.json` inclus dans l'archive `orbivia_mdr_ivdr_96_png.zip` du projet. Le site conserve le pictogramme SVG initial comme solution de secours si un PNG échoue à charger.
 
-Le questionnaire emploie automatiquement les PNG disponibles et conserve l'ancien SVG en cas d'absence d'un fichier.
+Sur le site :
+- Ordinateur : conteneur de 64 × 64 px ;
+- Téléphone : conteneur de 36 × 36 px ;
+- Images conservées au ratio et sans texte dans les pictogrammes.
 
-**Limite de la planche** : les 96 images ont été générées comme thèmes génériques de santé et conformité ; 57 dessins distincts seulement trouvent une correspondance exploitable avec les 96 questions. Des améliorations spécifiques seront nécessaires pour obtenir une illustration unique et parfaitement pertinente pour chaque question.
+**Limite de pertinence :** il existe 96 associations, mais 57 dessins sources distincts réutilisés pour différents critères. Les 96 PNG déposés restent toutefois des fichiers différents. Plusieurs associations nécessitent une révision graphique spécifique dans une phase ultérieure, sans impact sur les réponses ni la classification réglementaire.
+
+## Contrôles
+
+Lancer `node --test tests/questionnaire-ui.test.cjs` pour contrôler les chemins de fichiers, leur présence et le repli SVG. Tester ensuite la navigation réelle sur ordinateur et téléphone. La publication GitHub Pages et la disponibilité des images en production doivent être contrôlées séparément.
+
+Si la correspondance est modifiée, reprendre le tableau de l'archive, en gardant les identifiants de question comme référence. Ne pas simplement supposer qu'icon-01 correspond à la première question et que tous les numéros suivent l'ordre des questions.
