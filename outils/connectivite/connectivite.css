@@ -226,3 +226,22 @@ html{scrollbar-gutter:stable}
  }
  [data-tool="connectivite"] .question-heading h1{gap:18px}
 }
+
+/* Ordinateur : pictogramme centré sous le titre, sans toucher au mobile. */
+@media(min-width:900px){
+ [data-tool="connectivite"] .question-heading h1{
+  position:relative;
+  display:block;
+  padding-bottom:142px;
+ }
+ [data-tool="connectivite"] .question-heading h1 .cx-question-icon{
+  position:absolute;
+  top:auto;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  width:112px;
+  height:112px;
+  max-width:none;
+ }
+}
