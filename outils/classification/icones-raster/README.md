@@ -2,15 +2,15 @@
 
 ## Intégration (27 octobre 2026)
 
-Les 96 PNG ont été déposés sur GitHub dans `icones/` :
+Les PNG nécessaires ont été déposés sur GitHub dans `icones/` :
 
 ```
 outils/classification/icones-raster/icones/icon-01.png
 ...
-outils/classification/icones-raster/icones/icon-96.png
+outils/classification/icones-raster/icones/icon-95.png
 ```
 
-Les illustrations sont des PNG transparents (96 × 96 px), issus de la planche graphique approuvée. **Ne pas convertir en SVG : cela détruit le rendu avec relief et dégradés.**
+**57 fichiers PNG transparents de 96 × 96 px sont conservés**, issus de la planche graphique approuvée. Les 39 dessins jamais utilisés dans le questionnaire ont été supprimés du dépôt. **Ne pas convertir en SVG : cela détruit le rendu avec relief et dégradés.**
 
 Le code `../presentation.js` contient une **correspondance explicite par identifiant de question** vers les PNG numérotés. L'ordre de déclaration des questions n'influence donc plus l'illustration affichée. Si le chargement d'un PNG échoue, le pictogramme SVG initial reste disponible en secours.
 
@@ -19,7 +19,7 @@ Sur le site :
 - Téléphone : conteneur de 36 × 36 px ;
 - Images conservées au ratio et sans texte dans les pictogrammes.
 
-**Limite de pertinence :** il existe 96 associations, mais 57 dessins sources distincts réutilisés pour différents critères. Les 96 PNG d'origine restent conservés dans la bibliothèque pour d'éventuelles corrections graphiques ultérieures. Plusieurs associations nécessitent une révision graphique spécifique dans une phase ultérieure, sans impact sur les réponses ni la classification réglementaire.
+**Limite de pertinence :** il existe 96 associations, mais 57 dessins sources distincts réutilisés pour différents critères. Seuls les 57 PNG actuellement référencés sont conservés. Toute nouvelle illustration devra être ajoutée explicitement et associée à un identifiant. Plusieurs associations nécessitent une révision graphique spécifique dans une phase ultérieure, sans impact sur les réponses ni la classification réglementaire.
 
 ## Contrôles
 
@@ -33,3 +33,7 @@ Si la correspondance est modifiée, reprendre le tableau de l'archive, en gardan
 - L'installateur d'images séparé a été supprimé : les PNG sont maintenant directement versionnés dans le dépôt.
 - Les 96 associations et les fichiers de secours sont vérifiés dans `tests/presentation.test.cjs` et `tests/questionnaire-ui.test.cjs`.
 - Pour changer une illustration, modifier la correspondance nominative dans `presentation.js`, puis augmenter la version des ressources dans `index.html`.
+
+## Affichage sur un seul écran
+
+La feuille `../viewport.css` et le script `../viewport.js` utilisent la hauteur de la fenêtre pour présenter l'intitulé, les réponses, l'aide et les commandes sur un écran, avec adaptation de densité selon l'espace disponible. Sur les très petits écrans ou en zoom important, le défilement reste autorisé si le texte ne tient pas sans masquer de choix.
