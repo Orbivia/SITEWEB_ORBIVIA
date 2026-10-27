@@ -171,4 +171,15 @@ html{scrollbar-gutter:stable}
 [data-tool="connectivite"] .info-bubble summary{width:44px;height:44px;font:600 15px Georgia,serif;background:#f6f8f4;border:1px solid #d6ded4;color:#52644f}
 @media(max-width:700px){.cx-question-icon{width:28px;height:28px;margin:0;flex-basis:28px}}
 
-[data-tool="connectivite"] .question-heading h1{display:flex;align-items:flex-start;gap:12px}
+[data-tool="connectivite"] .question-heading h1{display:flex;align-items:center;gap:12px}
+
+/* Larger answer targets; the pictogram is centered against the complete title. */
+@media(min-width:900px){
+ [data-tool="connectivite"] .cx-options-wrapper>.cx-options .answer.cx-option{min-height:64px;padding:16px}
+ [data-tool="connectivite"] .cx-options-wrapper>.cx-options .cx-option-copy{font-size:15px;line-height:1.4}
+ [data-tool="connectivite"] .cx-options-wrapper>.cx-options{gap:8px}
+}
+@media(max-width:899px){
+ [data-tool="connectivite"] .cx-options-wrapper>.cx-options .answer.cx-option{min-height:54px;padding:12px}
+ [data-tool="connectivite"] .cx-options-wrapper>.cx-options .cx-option-copy{font-size:14px;line-height:1.4}
+}
