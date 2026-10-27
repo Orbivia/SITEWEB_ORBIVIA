@@ -108,5 +108,21 @@ test("Lot 2.1 : chaque nouvelle icône de question est distincte de son ancien d
   assert.doesNotMatch(revised, /<text[\s>]/);
  }
  const source = load("outils/connectivite/connectivite.js");
- assert.match(source, /\.svg\?v=3/);
+ assert.match(source, /\.svg\?v=4/);
+});
+
+
+test("Lot 2.3 : les quatre icônes validées restent distinctes, lisibles et sans texte", () => {
+ const ids = ["peer", "range", "payload", "frequency"];
+ const svg = ids.map(id => load("outils/connectivite/icones/question-" + id + ".svg"));
+ assert.equal(new Set(svg).size, 4);
+ for (const item of svg) {
+  assert.match(item, /viewBox="0 0 32 32"/);
+  assert.match(item, /#17263a/);
+  assert.match(item, /#e7a116/);
+  assert.doesNotMatch(item, /<text[\s>]/);
+  assert.doesNotMatch(item, /<image[\s>]/);
+ }
+ const index = load("outils/connectivite/index.html");
+ assert.match(index, /connectivite\.js\?v=11/);
 });
