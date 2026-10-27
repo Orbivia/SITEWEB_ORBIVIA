@@ -1,3 +1,5 @@
-# Icônes ORBIVIA
+# Icônes d'illustration — Connectivité
 
-Pictogrammes SVG originaux, formes pleines bleu nuit (#17263a), détails or (#e7a116), sur une grille 32 × 32. Même style que les choix du questionnaire MDR/IVDR.
+Ce répertoire conserve les pictogrammes SVG génériques utilisés dans la synthèse de connectivité.
+
+Les **20 icônes `question-*.svg` ont été supprimées** : les titres du questionnaire sont désormais uniquement textuels. Ne pas réintroduire de pictogrammes dans les questions ou dans les réponses.
