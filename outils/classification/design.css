@@ -233,8 +233,6 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
 
 /* Questions MDR/IVDR : une icône dans chaque titre, jamais dans les choix. */
 [data-tool="classification"] .question-heading h1{display:flex;align-items:center;gap:12px}
-[data-tool="classification"] .mdr-question-icon{display:block;object-fit:contain;color:#17263a}
-[data-tool="classification"] .mdr-question-icon svg{display:block;width:100%;height:100%}
 [data-tool="classification"] .question-card:not(.assistance-card) .answer{
  display:flex;align-items:center;justify-content:flex-start;gap:16px;
  background:#fafbf9;border:1px solid #dce2dc;border-radius:12px;
@@ -291,33 +289,5 @@ html:has(body[data-tool="classification"]){scrollbar-gutter:stable}
  }
  [data-tool="classification"] .question-card:not(.assistance-card) .choices-many:not(.scope-choices):has(.answer:nth-child(7)) .answer{
   min-height:48px;padding:9px 11px
- }
-}
-
-/* PNG MDR/IVDR et SVG de secours : dimensions propres, sans tailles contradictoires. */
-body[data-questionnaire-ui][data-tool="classification"] .mdr-question-art{
- display:block;
- position:relative;
- flex:0 0 64px;
- width:64px;
- height:64px;
-}
-body[data-questionnaire-ui][data-tool="classification"] .question-heading h1 .mdr-question-art .mdr-question-icon{
- display:block;
- width:100%;
- height:100%;
- min-width:0;
- min-height:0;
- max-width:none;
- max-height:none;
- flex:none;
- object-fit:contain;
-}
-body[data-questionnaire-ui][data-tool="classification"] .mdr-question-art [hidden]{display:none!important}
-@media(max-width:700px){
- body[data-questionnaire-ui][data-tool="classification"] .mdr-question-art{
-  flex-basis:36px;
-  width:36px;
-  height:36px;
  }
 }
