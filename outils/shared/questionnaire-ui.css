@@ -193,3 +193,9 @@ body[data-questionnaire-ui] .question-heading .info-bubble summary:focus-visible
   min-height:0;
  }
 }
+
+/* Même position pour les commandes de synthèse des trois outils. */
+body[data-questionnaire-ui] .result-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;position:static;inset:auto;flex-wrap:nowrap;background:transparent;padding:0}
+body[data-questionnaire-ui] .result-bottom .tool-button{min-height:44px;font-size:12px;padding:10px 12px;white-space:normal}
+body[data-questionnaire-ui] .export-actions{margin:16px 0 0}
+@media print{body[data-questionnaire-ui] .result-bottom,body[data-questionnaire-ui] .export-actions{display:none!important}}

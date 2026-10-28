@@ -37,13 +37,15 @@ test("20 questions, syntaxe valide, présentation sans pictogrammes",()=>{
 });
 test("navigation complète sans blocage et synthèse",()=>{
  const t=harness();
- for(let i=0;i<25&&!t.html.includes("Premières pistes de connectivité");i++){
+ for(let i=0;i<25&&!t.html.includes("Votre synthèse");i++){
   const option=t.html.match(/data-option="([^"]+)"/);
   if(option)t.option(option[1]);else t.slide(6);
   t.action("next");
  }
- assert.match(t.html,/Premières pistes de connectivité/);
- assert.match(t.html,/À vérifier avant conception/);
+ assert.match(t.html,/Votre synthèse/);
+ assert.match(t.html,/Détails et points à vérifier/);
+ assert.match(t.html,/Relire mes réponses/);
+ assert.doesNotMatch(t.html,/100 % parcouru|cx-result-warning|PISTE À EXAMINER/);
  assert.ok(t.saved?.includes("priorities"));
  t.action("reset");
  assert.match(t.html,/data-option="phone"/);

@@ -131,16 +131,18 @@ function renderResult(){
   ["Quantité",selectedOption(byId("quantity"))],
   ["Priorités",selectedOption(byId("priorities"))]
  ];
- const options=pick.map((p,i)=>'<article class="cx-pick"><div><em>'+(i===0?"Piste à examiner en premier":"Autre piste à comparer")+'</em><strong>'+esc(p.label)+'</strong><p>'+esc(p.why)+'</p></div></article>').join("");
- const rows=summary.map(([label,value])=>'<div class="cx-summary-row"><span>'+esc(label)+'</span><strong>'+esc(value)+'</strong></div>').join("");
- root.innerHTML='<div class="question-progress cx-progress"><span>Synthèse · Connectivité<b>100 % parcouru</b></span><progress max="100" value="100" aria-label="Avancement du questionnaire"></progress></div>'
- +'<section class="question-card result-card cx-card">'
- +'<h1>Premières pistes de connectivité</h1><p class="cx-header-note">Présélection indicative selon les réponses. Les caractéristiques et la sécurité de la solution doivent être confirmées lors de la conception.</p>'
+ const shortReasons={nfc:'Pour identifier un objet à très courte distance.',bluetooth:'Pour des échanges locaux avec un téléphone.',cable:'Pour une liaison fixe et stable.',wifi:'Pour un réseau local ou des échanges rapides.',lora:'Pour de petits messages à longue portée.',cellular:'Pour les objets distants ou mobiles.'};
+ const options=pick.map((p,i)=>'<article class="cx-pick"><div>'+(i===0?'<span class="cx-pick-label">Première piste</span>':'')+'<h2>'+esc(p.label)+'</h2><p>'+esc(shortReasons[p.id]||p.why)+'</p></div></article>').join('');
+ const rows=summary.map(([label,value])=>'<div class="cx-summary-row"><span>'+esc(label)+'</span><strong>'+esc(value)+'</strong></div>').join('');
+ const explanations=pick.map(p=>'<li><strong>'+esc(p.label)+'</strong> — '+esc(p.why)+'</li>').join('');
+ root.innerHTML='<section class="question-card result-card cx-card">'
+ +'<h1>Votre synthèse</h1><p class="cx-header-note">Pistes indicatives selon vos réponses.</p>'
  +'<div class="cx-picks">'+options+'</div>'
- +'<div class="cx-result-warning"><strong>À vérifier avant conception.</strong> Portée sur site, consommation globale, intégration de l’antenne, authentification, chiffrement et mises à jour sécurisées. La technologie radio seule ne garantit pas la cybersécurité.</div>'
+ +'<details class="cx-profile cx-result-details"><summary>Détails et points à vérifier</summary><ul>'+explanations+'</ul><p>Avant de choisir : vérifier la couverture, l’autonomie, l’antenne, les coûts et la sécurité des échanges et des mises à jour.</p><p>La technologie seule ne garantit ni la faisabilité ni la cybersécurité du produit.</p></details>'
  +'<details class="cx-profile"><summary>Relire mes réponses</summary><div class="cx-summary-list">'+rows+'</div></details>'
- +'</section><div class="cx-result-actions"><button type="button" class="tool-button cx-button" data-action="edit">← Modifier les réponses</button><button type="button" class="tool-button quiet cx-button" data-action="reset">Reprendre à zéro</button></div>'
- +'<p class="cx-note">Il s’agit d’une aide à la présélection, non d’une validation de faisabilité ou d’une certification. Aucune réponse n’est envoyée à Orbivia.</p>';
+ +'</section><div class="result-bottom"><button type="button" class="tool-button cx-button" data-action="edit">← Modifier mes réponses</button><button type="button" class="tool-button quiet cx-button" data-action="reset">Reprendre à zéro</button></div>'
+ +'<p class="cx-note">Vos réponses restent sur cet appareil.</p>';
+
 }
 root.addEventListener("click",event=>{const choice=event.target.closest("[data-option]");if(choice){choose(choice.dataset.option);return}const unit=event.target.closest("[data-unit]");if(unit){const u=unit.dataset.unit;const value=u==="heures"?24:u==="jours"?30:12;answers.autonomy={unit:u,value};save();render();return}if(event.target.closest("[data-no-limit]")){const q=current();answers[q.id]=answers[q.id]==="none"?(q.type==="duration"?{value:12,unit:"mois"}:q.defaultValue):"none";save();render();return}const a=event.target.closest("[data-action]")?.dataset.action;if(!a)return;if(a==="toggle-help"){helpOpen=true;render();return}if(a==="close-help"){helpOpen=false;render();return}if(a==="toggle-info"){infoOpen=!infoOpen;render();return}if(a==="back"){helpOpen=false;infoOpen=false;pos=Math.max(0,pos-1);render()}if(a==="next")next();if(a==="edit"){result=false;helpOpen=false;infoOpen=false;pos=0;render()}if(a==="reset"){answers={};pos=0;result=false;helpOpen=false;infoOpen=false;try{localStorage.removeItem(storeKey)}catch{}render()}});
 render();

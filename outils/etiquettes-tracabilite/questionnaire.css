@@ -201,3 +201,38 @@ body[data-tool="etiquettes"] .label-short-list li .label-short-name{
  }
  body[data-tool="etiquettes"] .label-short-list li{break-inside:avoid}
 }
+
+/* Proposition de synthèse : PNG lisibles et précisions repliées. */
+body[data-tool="etiquettes"] .label-short-name small{display:block;margin-top:4px;font-size:11px;font-weight:400;color:#68766d}
+body[data-tool="etiquettes"] .label-fold{padding:0 18px}
+.label-fold>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:16px 0;font-size:15px;font-weight:600;list-style:none}
+.label-fold>summary::-webkit-details-marker{display:none}
+.label-fold>summary span{font-size:12px;font-weight:500;color:#80621c}
+.label-fold>summary::after{content:"+";font-size:19px;font-weight:400;color:#80621c}
+.label-fold[open]>summary::after{content:"−"}
+.label-fold[open]>summary{border-bottom:1px solid #edf0ec}
+.label-fold>.label-short-list,.label-fold>.label-checks{padding-bottom:14px}
+body[data-tool="etiquettes"] .label-disclaimer{font-size:11px;line-height:1.5;margin:14px 0;color:#68766d}
+@media print{.label-fold>ul{display:block!important}}
+
+/* Les symboles précèdent toutes les mentions textuelles. */
+.label-symbol-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;list-style:none;margin:14px 0 0;padding:0}
+.label-symbol-grid li{display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;border:1px solid #e5e9e3;border-radius:10px;padding:14px 8px;background:#fff}
+body[data-tool="etiquettes"] .label-symbol-grid .label-symbol-img{display:block;width:58px;height:58px;object-fit:contain;flex:none;padding:0;border:0;border-radius:0;background:transparent}
+.label-symbol-grid li>span{font-size:12px;font-weight:550;line-height:1.35;color:#26332f}
+.label-symbol-grid small{font-size:10px;color:#68766d}
+.label-mentions h3{font-size:13px;margin:20px 0 2px;font-weight:600}
+@media(max-width:600px){.label-symbol-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.label-symbol-grid li{padding:13px 8px}}
+
+/* Synthèse compacte : un seul titre et une grille pour tous les éléments. */
+body[data-tool="etiquettes"] .label-summary-heading{margin:0 0 10px}
+body[data-tool="etiquettes"] .label-summary-heading h1{font-size:25px;line-height:1.2;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+.label-summary-heading h1>span{font-size:12px;color:#80621c;background:#faf5e8;border-radius:12px;padding:3px 7px;font-weight:500;letter-spacing:0}
+body[data-tool="etiquettes"] .label-summary-heading .label-result-support{font-size:12px;margin:0;color:#68766d;font-weight:400}
+body[data-tool="etiquettes"] .label-main-grid{padding:10px}
+.label-main-grid .label-symbol-grid{margin:0;gap:8px}
+.label-text-mark{display:flex;align-items:center;justify-content:center;height:48px;min-height:48px;font-size:21px!important;font-weight:700!important;line-height:1!important;color:#202a32!important;white-space:nowrap}
+body[data-tool="etiquettes"] .label-symbol-grid .label-symbol-img{width:48px;height:48px}
+.label-symbol-grid li{padding:12px 8px;gap:6px}
+.label-symbol-grid li>span:not(.label-text-mark){font-size:11px}
+.label-symbol-grid small{font-size:9px}

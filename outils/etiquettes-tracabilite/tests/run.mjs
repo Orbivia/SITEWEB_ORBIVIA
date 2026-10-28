@@ -69,17 +69,22 @@ assert(titleHas(scenario({tracking:"lot",implant:"active"}).review,"numéro de s
 assert(titleHas(scenario({support:"sterile",sterile:"nonsterile"}).review,"Support incohérent"));
 
 // Le pictogramme n'est affiché qu'avec une référence ISO exactement indexée.
-// Ne jamais substituer un symbole à une mention CE, UDI ou à une autre référence ISO.
+// CE et MD utilisent les fichiers fournis ; aucun remplacement pour une référence absente.
 const visual=create();
 assert.match(visual.symbolImage("5.1.1"),/symboles-iso\/5\.1\.1\.png/);
 assert.match(visual.symbolImage("5.2.3"),/symboles-iso\/5\.2\.3\.png/);
 assert.match(visual.symbolImage("5.4.11"),/symboles-iso\/5\.4\.11\.png/);
-for(const code of ["5.7.7","5.7.10","CE","CE + ON","UDI (AIDC + HRI)","Texte","Notice"])
+for(const code of ["Texte","Notice"])
  assert.equal(visual.symbolImage(code),"","Symbole graphique inexistant pour "+code);
+assert.match(visual.symbolImage("5.7.7"),/symboles-iso\/5\.7\.7\.png/);
+assert.match(visual.symbolImage("CE"),/symboles-iso\/CE\.png/);
+assert.match(visual.symbolImage("CE + ON"),/symboles-iso\/CE\.png/);
+assert.match(visual.symbolImage("5.7.10"),/symboles-iso\/5\.7\.10\.png/);
+assert.match(visual.symbolImage("UDI (AIDC + HRI)"),/symboles-iso\/5\.7\.10\.png/);
 const visualItems=[{code:"5.1.1",title:"Fabricant"},{code:"UDI (AIDC + HRI)",title:"Support UDI"}];
 const rendered=visual.renderShortList(visualItems);
 assert.match(rendered,/symboles-iso\/5\.1\.1\.png/);
-assert.equal((rendered.match(/class="label-symbol-img/g)||[]).length,1);
+assert.equal((rendered.match(/class="label-symbol-img/g)||[]).length,2);
 
 const app=create();
 assert(app.Q.length>=27);

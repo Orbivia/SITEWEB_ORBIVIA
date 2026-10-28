@@ -269,14 +269,15 @@ function conclusions(){
  const unique=items=>items.filter((x,i)=>items.findIndex(y=>y.code===x.code&&y.title===x.title)===i);
  return {required:unique(required),conditional:unique(conditional),review:unique(review)};
 }
-/* Les 52 PNG source sont extraits du document ISO 15223-1:2021 fourni.
+/* Les PNG ISO source proviennent du document fourni ; CE et MD sont fournis séparément.
  * Correspondance stricte par numéro de symbole : aucun remplacement inventé.
- * Les mentions CE, UDI, 5.7.x et le texte n'ont pas de PNG dans cette bibliothèque.
+ * Les mentions UDI et textuelles sans fichier restent textuelles.
  */
-const isoSymbolCodes=new Set("5.1.1 5.1.2 5.1.3 5.1.4 5.1.5 5.1.6 5.1.7 5.1.8 5.1.9 5.1.10 5.1.11 5.2.1 5.2.2 5.2.3 5.2.4 5.2.5 5.2.6 5.2.7 5.2.8 5.2.9 5.2.10 5.2.11 5.2.12 5.2.13 5.2.14 5.3.1 5.3.2 5.3.3 5.3.4 5.3.5 5.3.6 5.3.7 5.3.8 5.3.9 5.4.1 5.4.2 5.4.3 5.4.4 5.4.5 5.4.6 5.4.7 5.4.8 5.4.9 5.4.10 5.4.11 5.4.12 5.5.1 5.5.2 5.5.3 5.5.4 5.5.5 5.5.6".split(" "));
+const isoSymbolCodes=new Set("5.1.1 5.1.2 5.1.3 5.1.4 5.1.5 5.1.6 5.1.7 5.1.8 5.1.9 5.1.10 5.1.11 5.2.1 5.2.2 5.2.3 5.2.4 5.2.5 5.2.6 5.2.7 5.2.8 5.2.9 5.2.10 5.2.11 5.2.12 5.2.13 5.2.14 5.3.1 5.3.2 5.3.3 5.3.4 5.3.5 5.3.6 5.3.7 5.3.8 5.3.9 5.4.1 5.4.2 5.4.3 5.4.4 5.4.5 5.4.6 5.4.7 5.4.8 5.4.9 5.4.10 5.4.11 5.4.12 5.5.1 5.5.2 5.5.3 5.5.4 5.5.5 5.5.6 5.7.7 5.7.10".split(" "));
 function symbolImage(code,reference=false){
- if(!isoSymbolCodes.has(code))return "";
- return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="symboles-iso/'+code+'.png?v=1" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
+ const asset=(code==="CE"||code==="CE + ON")?"CE":code==="UDI (AIDC + HRI)"?"5.7.10":isoSymbolCodes.has(code)?code:null;
+ if(!asset)return "";
+ return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="symboles-iso/'+asset+'.png?v=2" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
 }
 function symbolRef(code) {
  if(/^\d+\.\d+\.\d+$/.test(code))return "ISO " + code;
@@ -284,9 +285,11 @@ function symbolRef(code) {
 }
 function renderShortList(items) {
  if(!items.length)return '<p class="label-empty">Aucun élément supplémentaire.</p>';
- return '<ul class="label-short-list">'+items.map(it=>
- '<li>'+symbolImage(it.code)+'<span class="label-short-name">'+escapeHTML(it.title)+'</span><span class="label-short-code">'+escapeHTML(symbolRef(it.code))+'</span></li>'
- ).join("")+'</ul>';
+ return '<ul class="label-symbol-grid">'+items.map(it=>{
+  const image=symbolImage(it.code);
+  const textMark=it.code==='Texte'&&/^Nom /.test(it.title)?'Nom':it.code==='UDI (AIDC + HRI)'?'Code UDI':it.code==='UDI direct'?'UDI direct':it.code==='Notice'?'Notice':'Texte';
+  return '<li>'+ (image||'<span class="label-text-mark" aria-hidden="true">'+escapeHTML(textMark)+'</span>')+'<span>'+escapeHTML(it.title)+'</span><small>'+escapeHTML(symbolRef(it.code))+'</small></li>';
+ }).join('')+'</ul>';
 }
 function renderChecks(items){
  if(!items.length)return '<p class="label-empty">Aucun point particulier détecté.</p>';
@@ -308,20 +311,22 @@ function summary(){
  return '<div><dt>'+escapeHTML(q.title)+'</dt><dd>'+escapeHTML(labels)+'</dd></div>';
  }).join("");
  root.innerHTML=
- '<div class="label-result-heading"><span class="label-result-eyebrow">Étiquetage médical · MDR 2017/745</span>'+
- '<h1>Éléments à prévoir</h1><p class="label-result-support">'+escapeHTML(supportName)+'</p>'+
- '<p>Cette liste précise les informations à intégrer sur le support choisi. Les codes ISO indiquent des symboles possibles : leur emploi n’est pas automatiquement obligatoire.</p></div>'+
- '<section class="label-result-card"><header><h2>À prévoir</h2><span>'+result.required.length+' éléments</span></header>'+
+ '<div class="label-result-heading label-summary-heading"><h1>À prévoir <span>'+result.required.length+'</span></h1><p class="label-result-support">'+escapeHTML(supportName)+'</p></div>'+
+ '<section class="label-result-card label-main-grid">'+
  renderShortList(result.required)+'</section>'+
- (result.conditional.length?'<section class="label-result-card"><header><h2>Selon votre dispositif</h2><span>'+result.conditional.length+' éléments</span></header>'+renderShortList(result.conditional)+'</section>':'')+
- (result.review.length?'<section class="label-result-card"><header><h2>À vérifier avant impression</h2><span>'+result.review.length+' points</span></header>'+renderChecks(result.review)+'</section>':'')+
+ (result.conditional.length?'<details class="label-result-card label-fold"><summary>Selon votre dispositif <span>'+result.conditional.length+'</span></summary>'+renderShortList(result.conditional)+'</details>':'')+
+ (result.review.length?'<details class="label-result-card label-fold label-review"><summary>À vérifier avant impression <span>'+result.review.length+'</span></summary>'+renderChecks(result.review)+'</details>':'')+
  '<section class="label-result-card label-additional">'+renderReferences(result)+
  '<details class="label-answers"><summary>Voir mes réponses au questionnaire</summary><dl>'+answersHTML+'</dl></details></section>'+
  '<p class="label-disclaimer">Synthèse d’aide à la conception, non une validation réglementaire. Vérifiez les exigences du MDR, les symboles ISO 15223-1 applicables et la lisibilité réelle avant impression.</p>'+
- '<div class="question-controls label-controls"><button class="tool-button" type="button" data-action="back">← Modifier mes réponses</button>'+
- '<div class="label-controls-right"><button class="tool-button" type="button" data-action="print">Imprimer la synthèse</button>'+
- '<button class="tool-button quiet" type="button" data-action="reset">Reprendre à zéro</button></div></div>';
+ '<div class="export-actions"><button class="tool-button" type="button" data-action="print">Imprimer la synthèse</button></div>'+
+ '<div class="result-bottom"><button class="tool-button" type="button" data-action="back">← Modifier mes réponses</button>'+
+ '<button class="tool-button quiet" type="button" data-action="reset">Reprendre à zéro</button></div>';
 }
+// L'impression conserve les sections repliées sans changer l'état de lecture.
+let printSections=[];
+window.addEventListener?.('beforeprint',()=>{printSections=[...root.querySelectorAll('details.label-fold')].map(el=>[el,el.open]);for(const [el] of printSections)el.open=true;});
+window.addEventListener?.('afterprint',()=>{for(const [el,open] of printSections)el.open=open;printSections=[];});
 function render(){if(finished)summary();else showQuestion();}
 function reset(){const d=document.getElementById("restart-label-dialog");if(d&&typeof d.showModal==="function")d.showModal();else if(confirm("Effacer toutes les réponses de ce questionnaire ?"))doReset();}
 function doReset(){answers={};position=0;finished=false;store();render();}
