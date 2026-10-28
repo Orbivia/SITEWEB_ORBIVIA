@@ -16,7 +16,7 @@ for(const route of ['md','accessory','ivd','norms'])test('route audit: 300 deter
     assert.ok(progress.percent>=last,route+'/'+seed+': forward progress retreated');last=progress.percent;
     if(!q){state.result=true;break;}
     const answer=rnd()<0.08?'unresolved':q.options[Math.floor(rnd()*q.options.length)][0];
-    state.answers[q.id]=answer;state.cursor=q.id;state.comments[q.id]='Note <test> '+seed;
+    state.answers[q.id]=answer;model.prune(kind,state);state.cursor=q.id;state.comments[q.id]='Note <test> '+seed;
     const restored=model.restore(kind,JSON.parse(JSON.stringify(state)));
     assert.deepEqual(restored.answers,state.answers,'reload preserves valid answers');state=restored;
    }
@@ -29,6 +29,6 @@ for(const route of ['md','accessory','ivd','norms'])test('route audit: 300 deter
   finish();
   // Edit an earlier answer, then complete only the newly active fields.
   const candidates=model.visible(kind,state.answers).filter(q=>q.id!=='scope');const parent=candidates[Math.floor(rnd()*candidates.length)];
-  if(parent){state.answers[parent.id]=parent.options[Math.floor(rnd()*parent.options.length)][0];state.result=false;iterations=0;finish();}
+  if(parent){state.answers[parent.id]=parent.options[Math.floor(rnd()*parent.options.length)][0];model.prune(kind,state);state.result=false;iterations=0;finish();}
  }
 });

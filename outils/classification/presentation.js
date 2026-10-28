@@ -27,7 +27,7 @@ const questions={
   "options": {
    "physical": "Un produit physique",
    "software": "Un logiciel seul",
-   "combined": "Un produit avec logiciel"
+   "combined": "Un produit physique avec une fonction logicielle médicale"
   },
   "descriptions": {
    "physical": "Un équipement, un instrument ou un consommable.",
@@ -54,7 +54,7 @@ const questions={
   }
  },
  "active": {
-  "title": "Le produit dépend-il d’une source d’énergie ?",
+  "title": "Le produit utilise-t-il une énergie autre que celle du corps ou de la gravité ?",
   "criterion": "Le produit utilise-t-il une énergie électrique ou une autre énergie externe pour sa fonction ?",
   "sourceLabel": "Le produit utilise-t-il une énergie électrique ou une autre énergie externe pour sa fonction ?",
   "options": {
@@ -72,7 +72,7 @@ const questions={
   }
  },
  "energyHazard": {
-  "title": "L'énergie thérapeutique peut-elle présenter un danger lors de son administration ?",
+  "title": "Cette énergie peut-elle être administrée d’une manière potentiellement dangereuse compte tenu de sa nature, densité et site ?",
   "criterion": "Cette énergie peut-elle être administrée d’une manière potentiellement dangereuse compte tenu de sa nature, densité et site ?",
   "sourceLabel": "Cette énergie peut-elle être administrée d’une manière potentiellement dangereuse compte tenu de sa nature, densité et site ?",
   "options": {
@@ -124,7 +124,7 @@ const questions={
   }
  },
  "woundDeep": {
-  "title": "Le produit vise-t-il des lésions profondes cicatrisant par seconde intention ?",
+  "title": "Le produit vise-t-il principalement des lésions ayant franchi le derme ou la muqueuse et cicatrisant uniquement par seconde intention ?",
   "criterion": "Est-il principalement destiné aux lésions ayant franchi le derme / la muqueuse et cicatrisant uniquement par seconde intention ?",
   "sourceLabel": "Est-il principalement destiné aux lésions ayant franchi le derme / la muqueuse et cicatrisant uniquement par seconde intention ?",
   "options": {
@@ -142,7 +142,7 @@ const questions={
   }
  },
  "orificeCavity": {
-  "title": "L’usage est-il limité à certaines cavités naturelles ?",
+  "title": "L’usage se limite-t-il à la bouche jusqu’au pharynx, au conduit auditif jusqu’au tympan ou au nez ?",
   "criterion": "Est-il utilisé uniquement dans la bouche jusqu’au pharynx, le conduit auditif jusqu’au tympan ou la cavité nasale ?",
   "sourceLabel": "Est-il utilisé uniquement dans la bouche jusqu’au pharynx, le conduit auditif jusqu’au tympan ou la cavité nasale ?",
   "options": {
@@ -178,7 +178,7 @@ const questions={
   }
  },
  "implantSpecial": {
-  "title": "L’implant appartient-il à l’une de ces catégories particulières ?",
+  "title": "Est-ce un implant mammaire, un treillis chirurgical, une prothèse articulaire ou un dispositif rachidien visé par la règle 8 ?",
   "criterion": "Est-ce un implant mammaire, un treillis chirurgical, une prothèse articulaire totale / partielle ou un dispositif rachidien visé par la règle ?",
   "sourceLabel": "Est-ce un implant mammaire, un treillis chirurgical, une prothèse articulaire totale / partielle ou un dispositif rachidien visé par la règle ?",
   "options": {
@@ -243,7 +243,7 @@ const questions={
   }
  },
  "inhalationRisk": {
-  "title": "L’inhalation présente-t-elle l’un de ces enjeux cliniques ?",
+  "title": "Le fonctionnement détermine-t-il l’efficacité ou la sécurité du médicament inhalé, ou vise-t-il une affection mettant la vie en danger ?",
   "criterion": "Son fonctionnement influence-t-il essentiellement l’efficacité / la sécurité du médicament, ou traite-t-il une affection mettant la vie en danger ?",
   "sourceLabel": "Son fonctionnement influence-t-il essentiellement l’efficacité / la sécurité du médicament, ou traite-t-il une affection mettant la vie en danger ?",
   "options": {
@@ -279,7 +279,7 @@ const questions={
   }
  },
  "ivdLevelsRisk": {
-  "title": "Une erreur de suivi peut-elle conduire à une décision menaçant la vie ?",
+  "title": "Une erreur de suivi d’un médicament, d’une substance ou d’un composant biologique pourrait-elle mener à une décision menaçant la vie ?",
   "criterion": "Une erreur de suivi d’un médicament, d’une substance ou d’un composant biologique pourrait-elle mener à une décision menaçant la vie ?",
   "sourceLabel": "Une erreur de suivi d’un médicament, d’une substance ou d’un composant biologique pourrait-elle mener à une décision menaçant la vie ?",
   "options": {
@@ -309,7 +309,7 @@ const questions={
   }
  },
  "xrecord": {
-  "title": "Le produit enregistre-t-il des images issues de rayons X ?",
+  "title": "Le produit capte-t-il les images diagnostiques de rayons X, au-delà de leur simple archivage ?",
   "criterion": "Le produit enregistre-t-il spécifiquement les images diagnostiques générées par rayons X ?",
   "sourceLabel": "Le produit enregistre-t-il spécifiquement les images diagnostiques générées par rayons X ?",
   "options": {
@@ -327,7 +327,7 @@ const questions={
   }
  },
  "therapyIonising": {
-  "title": "Le produit intervient-il dans une thérapie par rayonnements ionisants ?",
+  "title": "Le produit émet-il des rayonnements ionisants à visée thérapeutique, ou commande-t-il / surveille-t-il directement un tel dispositif ?",
   "criterion": "Le produit émet-il des rayonnements ionisants à visée thérapeutique, ou commande-t-il / surveille-t-il directement un tel dispositif ?",
   "sourceLabel": "Le produit émet-il des rayonnements ionisants à visée thérapeutique, ou commande-t-il / surveille-t-il directement un tel dispositif ?",
   "options": {
@@ -336,7 +336,7 @@ const questions={
   }
  },
  "diagnosticXray": {
-  "title": "Le produit intervient-il dans un diagnostic par rayonnements ionisants ?",
+  "title": "Émet-il des rayonnements ionisants pour le diagnostic / la radiologie interventionnelle, ou commande-t-il / surveille-t-il un tel dispositif ?",
   "criterion": "Émet-il des rayonnements ionisants pour le diagnostic / la radiologie interventionnelle, ou commande-t-il / surveille-t-il un tel dispositif ?",
   "sourceLabel": "Émet-il des rayonnements ionisants pour le diagnostic / la radiologie interventionnelle, ou commande-t-il / surveille-t-il un tel dispositif ?",
   "options": {
@@ -345,7 +345,7 @@ const questions={
   }
  },
  "tissue": {
-  "title": "Le produit contient-il des tissus ou cellules d’origine biologique ?",
+  "title": "Le produit contient-il des tissus, cellules ou dérivés d’origine humaine ou animale ?",
   "criterion": "Le produit est-il fabriqué avec des tissus, cellules ou dérivés d’origine humaine ou animale ?",
   "sourceLabel": "Le produit est-il fabriqué avec des tissus, cellules ou dérivés d’origine humaine ou animale ?",
   "options": {
@@ -379,7 +379,7 @@ const questions={
   }
  },
  "substance": {
-  "title": "Le produit est-il composé de substances absorbées ou dispersées dans le corps ?",
+  "title": "Le produit est-il composé de substances appliquées sur la peau ou introduites par un orifice, puis absorbées ou dispersées dans le corps ?",
   "criterion": "Le produit est-il composé de substances appliquées sur la peau ou introduites par un orifice, puis absorbées ou dispersées dans le corps ?",
   "sourceLabel": "Le produit est-il composé de substances appliquées sur la peau ou introduites par un orifice, puis absorbées ou dispersées dans le corps ?",
   "options": {
@@ -397,7 +397,7 @@ const questions={
   }
  },
  "substanceGI": {
-  "title": "La substance agit-elle dans le tube digestif avec absorption systémique ?",
+  "title": "La substance agit-elle dans l’estomac / le tube digestif inférieur et est-elle, ou ses métabolites, absorbée par voie systémique ?",
   "criterion": "La substance agit-elle dans l’estomac / le tube digestif inférieur et est-elle, ou ses métabolites, absorbée par voie systémique ?",
   "sourceLabel": "La substance agit-elle dans l’estomac / le tube digestif inférieur et est-elle, ou ses métabolites, absorbée par voie systémique ?",
   "options": {
@@ -406,7 +406,7 @@ const questions={
   }
  },
  "substanceLocal": {
-  "title": "La substance atteint-elle son effet dans une zone locale précise ?",
+  "title": "La substance atteint-elle son effet sur la peau, dans le nez ou dans la bouche jusqu’au pharynx ?",
   "criterion": "La substance est-elle appliquée sur la peau ou dans la cavité nasale / buccale jusqu’au pharynx, et y atteint-elle son effet ?",
   "sourceLabel": "La substance est-elle appliquée sur la peau ou dans la cavité nasale / buccale jusqu’au pharynx, et y atteint-elle son effet ?",
   "options": {
@@ -433,7 +433,7 @@ const questions={
   }
  },
  "invitroSubstance": {
-  "title": "La substance prépare-t-elle du matériel humain à une implantation ou administration ?",
+  "title": "Est-ce une substance utilisée in vitro au contact direct de cellules, tissus, organes humains ou d’embryons avant leur implantation / administration ?",
   "criterion": "Est-ce une substance utilisée in vitro au contact direct de cellules, tissus, organes humains ou d’embryons avant leur implantation / administration ?",
   "sourceLabel": "Est-ce une substance utilisée in vitro au contact direct de cellules, tissus, organes humains ou d’embryons avant leur implantation / administration ?",
   "options": {
@@ -442,7 +442,7 @@ const questions={
   }
  },
  "channel": {
-  "title": "Le produit conduit-il ou stocke-t-il des matières destinées au corps ?",
+  "title": "Le produit conduit-il ou stocke-t-il des matières destinées à être introduites dans le corps ?",
   "criterion": "Le produit conduit-il ou stocke-t-il des matières destinées à être introduites dans le corps ?",
   "sourceLabel": "Le produit conduit-il ou stocke-t-il des matières destinées à être introduites dans le corps ?",
   "options": {
@@ -460,7 +460,7 @@ const questions={
   }
  },
  "channelBody": {
-  "title": "Le produit conduit-il ou stocke-t-il des matières biologiques ?",
+  "title": "Le produit conduit-il / stocke-t-il du sang ou des liquides corporels, ou stocke-t-il des organes, cellules ou tissus ?",
   "criterion": "Le produit conduit-il / stocke-t-il du sang ou des liquides corporels, ou stocke-t-il des organes, cellules ou tissus ?",
   "sourceLabel": "Le produit conduit-il / stocke-t-il du sang ou des liquides corporels, ou stocke-t-il des organes, cellules ou tissus ?",
   "options": {
@@ -469,7 +469,7 @@ const questions={
   }
  },
  "modify": {
-  "title": "Le produit modifie-t-il des matières biologiques destinées au corps ?",
+  "title": "Le produit modifie-t-il la composition de tissus, cellules, sang ou liquides destinés à être implantés ou administrés ?",
   "criterion": "Le produit modifie-t-il la composition de tissus, cellules, sang ou liquides destinés à être implantés ou administrés ?",
   "sourceLabel": "Le produit modifie-t-il la composition de tissus, cellules, sang ou liquides destinés à être implantés ou administrés ?",
   "options": {
@@ -514,7 +514,7 @@ const questions={
   }
  },
  "ivdBloodAgent": {
-  "title": "Le test détecte-t-il directement un agent dans le sang ou le LCR ?",
+  "title": "Détecte-t-il directement un agent infectieux dans le sang ou le liquide céphalo-rachidien, sans fort risque de propagation ?",
   "criterion": "Détecte-t-il directement un agent infectieux dans le sang ou le liquide céphalo-rachidien, sans fort risque de propagation ?",
   "sourceLabel": "Détecte-t-il directement un agent infectieux dans le sang ou le liquide céphalo-rachidien, sans fort risque de propagation ?",
   "options": {
@@ -543,7 +543,7 @@ const questions={
   }
  },
  "controlTherapy": {
-  "title": "Le produit agit-il sur un autre dispositif thérapeutique actif ?",
+  "title": "Le produit commande-t-il, surveille-t-il ou influence-t-il directement un autre dispositif thérapeutique actif ?",
   "criterion": "Le produit commande-t-il, surveille-t-il ou influence-t-il directement un autre dispositif thérapeutique actif ?",
   "sourceLabel": "Le produit commande-t-il, surveille-t-il ou influence-t-il directement un autre dispositif thérapeutique actif ?",
   "options": {
@@ -572,7 +572,7 @@ const questions={
   }
  },
  "centralContact": {
-  "title": "Le produit touche-t-il directement le cœur ou le système nerveux central ?",
+  "title": "Le produit est-il destiné au contact direct avec le cœur, la circulation centrale ou le système nerveux central ?",
   "criterion": "Est-il spécifiquement utilisé en contact direct avec le cœur, la circulation centrale ou le système nerveux central ?",
   "sourceLabel": "Est-il spécifiquement utilisé en contact direct avec le cœur, la circulation centrale ou le système nerveux central ?",
   "options": {
@@ -581,7 +581,7 @@ const questions={
   }
  },
  "softwareVital": {
-  "title": "Les paramètres surveillés peuvent-ils signaler un danger vital immédiat ?",
+  "title": "Les variations des paramètres vitaux surveillés peuvent-elles mettre immédiatement la vie en danger ?",
   "criterion": "Surveille-t-il des paramètres vitaux dont les variations peuvent présenter un danger immédiat pour la vie ?",
   "sourceLabel": "Surveille-t-il des paramètres vitaux dont les variations peuvent présenter un danger immédiat pour la vie ?",
   "options": {
@@ -617,13 +617,13 @@ const questions={
   }
  },
  "diagnosticUse": {
-  "title": "Le diagnostic ou la surveillance présente-t-il un danger vital immédiat ?",
+  "title": "Quel est l’usage clinique du diagnostic ou de la surveillance ?",
   "criterion": "Dans quel contexte le diagnostic ou la surveillance est-il utilisé ?",
   "sourceLabel": "Dans quel contexte le diagnostic ou la surveillance est-il utilisé ?",
   "options": {
-   "routine": "Diagnostic ou surveillance sans danger vital immédiat identifié",
+   "routine": "Diagnostic direct ou mesure d’un processus vital, sans danger vital immédiat identifié",
    "critical": "Surveillance ou diagnostic avec danger immédiat pour le patient",
-   "other": "Autre fonction, hors diagnostic ou surveillance physiologique",
+   "other": "Autre fonction, hors diagnostic direct et mesure d’un processus vital",
    "unclear": "Usage clinique ou niveau de risque encore indéterminé"
   },
   "descriptions": {
@@ -713,7 +713,7 @@ const questions={
   }
  },
  "ivdQualification": {
-  "title": "Le fabricant prévoit-il une destination de diagnostic in vitro humain ?",
+  "title": "Le fabricant prévoit-il un diagnostic in vitro humain, un récipient de prélèvement ou un accessoire dédié ?",
   "criterion": "Le fabricant destine-t-il ce produit au diagnostic in vitro humain, ou comme accessoire dédié ?",
   "sourceLabel": "Le fabricant destine-t-il ce produit au diagnostic in vitro humain, ou comme accessoire dédié ?",
   "options": {
@@ -768,7 +768,7 @@ const questions={
   }
  },
  "ivdLoad": {
-  "title": "Le suivi de la charge infectieuse est-il critique ?",
+  "title": "Le test mesure-t-il une charge infectieuse dont le suivi est critique pour une maladie mortelle ?",
   "criterion": "Le test mesure-t-il une charge infectieuse dont le suivi est critique pour une maladie mortelle ?",
   "sourceLabel": "Le test mesure-t-il une charge infectieuse dont le suivi est critique pour une maladie mortelle ?",
   "options": {
@@ -777,7 +777,7 @@ const questions={
   }
  },
  "ivdStaging": {
-  "title": "Une erreur de stadification peut-elle menacer la vie ?",
+  "title": "Une erreur de détermination du stade d’une maladie pourrait-elle mener à une décision menaçant la vie ?",
   "criterion": "Une erreur de détermination du stade d’une maladie pourrait-elle mener à une décision menaçant la vie ?",
   "sourceLabel": "Une erreur de détermination du stade d’une maladie pourrait-elle mener à une décision menaçant la vie ?",
   "options": {
@@ -786,7 +786,7 @@ const questions={
   }
  },
  "ivdPropagation": {
-  "title": "L’agent détecté présente-t-il un risque élevé de propagation ?",
+  "title": "Le test détecte-t-il un agent causant une maladie mortelle à fort risque de propagation ?",
   "criterion": "Le test détecte-t-il un agent causant une maladie mortelle à fort risque de propagation ?",
   "sourceLabel": "Le test détecte-t-il un agent causant une maladie mortelle à fort risque de propagation ?",
   "options": {
@@ -822,7 +822,7 @@ const questions={
   }
  },
  "ivdPrenatalImmune": {
-  "title": "Le test dépiste-t-il un statut immunitaire pendant la grossesse ?",
+  "title": "Le test dépiste-t-il le statut immunitaire infectieux d’une femme enceinte ?",
   "criterion": "Le test dépiste-t-il le statut immunitaire d’une femme enceinte envers un agent transmissible ?",
   "sourceLabel": "Le test dépiste-t-il le statut immunitaire d’une femme enceinte envers un agent transmissible ?",
   "options": {
@@ -831,7 +831,7 @@ const questions={
   }
  },
  "ivdImmuneRisk": {
-  "title": "Une erreur de statut peut-elle conduire à une décision menaçant la vie ?",
+  "title": "Une erreur de statut infectieux ou immunitaire pourrait-elle mener à une décision menaçant la vie ?",
   "criterion": "Une erreur de statut infectieux ou immunitaire pourrait-elle mener à une décision menaçant la vie ?",
   "sourceLabel": "Une erreur de statut infectieux ou immunitaire pourrait-elle mener à une décision menaçant la vie ?",
   "options": {
@@ -840,7 +840,7 @@ const questions={
   }
  },
  "ivdCompatibility": {
-  "title": "Le test détermine-t-il une compatibilité immunologique ?",
+  "title": "Le test détermine-t-il une compatibilité immunologique ou une incompatibilité fœto-maternelle ?",
   "criterion": "Le test détermine-t-il une compatibilité immunologique ou une incompatibilité fœto-maternelle ?",
   "sourceLabel": "Le test détermine-t-il une compatibilité immunologique ou une incompatibilité fœto-maternelle ?",
   "options": {
@@ -899,7 +899,7 @@ const questions={
   }
  },
  "ivdNewborn": {
-  "title": "Le dépistage du nouveau-né prévient-il une conséquence grave ?",
+  "title": "Le test dépiste-t-il une anomalie congénitale du nouveau-né dont l’absence de traitement risque décès ou handicap grave ?",
   "criterion": "Le test dépiste-t-il chez le nouveau-né une anomalie dont l’absence de traitement risque décès ou handicap grave ?",
   "sourceLabel": "Le test dépiste-t-il chez le nouveau-né une anomalie dont l’absence de traitement risque décès ou handicap grave ?",
   "options": {
@@ -932,7 +932,7 @@ const questions={
   }
  },
  "ivdNear": {
-  "title": "Le test est-il effectué près du patient par un professionnel ?",
+  "title": "Le test est-il effectué hors laboratoire, près du patient, par un professionnel ?",
   "criterion": "",
   "sourceLabel": "Le test est-il réalisé par un professionnel près du patient, hors laboratoire ?",
   "options": {
