@@ -17,7 +17,7 @@ Un casque de recherche ou de bien-être sans destination médicale n’est pas q
 
 ## Corrections
 
-- Remplacement de deux questions ambiguës sur les « processus vitaux » et le « danger immédiat » par une question de contexte clinique distinguant mesure courante, contexte critique et autre fonction. L’EEG, l’ECG et la température figurent explicitement dans le premier choix.
+- Remplacement de deux questions ambiguës sur les « processus vitaux » et le « danger immédiat » par une question de contexte clinique distinguant mesure courante, contexte critique et autre fonction. Les exemples EEG, ECG et température sont conservés dans les aides ; les choix et le résultat décrivent les critères sans présumer la technologie. Voir la [revue de cohérence du 28 octobre](CLASSIFICATION_COHERENCE_2026-10.md).
 - Confirmation de la fonction diagnostique pour la règle 22 : une simple régulation technique n’entraîne pas automatiquement la classe III.
 - Extension des questions et du calcul de la règle 4 aux muqueuses lésées, y compris en cas d’invasivité. Le classement le plus élevé entre les règles applicables reste retenu.
 - Règles 1 et 13 utilisées uniquement en l’absence de règle plus spécifique, afin de ne plus afficher une justification de classe I à côté d’un EEG de classe IIa.

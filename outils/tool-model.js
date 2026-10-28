@@ -1,7 +1,7 @@
 /* Modèle des questionnaires publics. Aucun projet, aucune écriture hors de l'interface. */
 (function(){
 'use strict';
-function create({classification,norms,questions,catalogue,explanations}){
+function create({classification,norms,questions,catalogue,explanations,presentation}){
  const E=value=>String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
  const yesNo=[['yes','Oui'],['no','Non']];
  function ordered(q,kind,answers){
@@ -21,7 +21,7 @@ function create({classification,norms,questions,catalogue,explanations}){
    annex16:{label:'Sans but médical (annexe XVI)',description:'Ex. : lentilles colorées non correctrices, laser d’épilation.'},
    other:{label:'Autre produit / statut incertain',description:'Clarifier le statut du produit avant de le classer.'}
   };
-  return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quel type de produit ?',example:'Choisissez selon l’usage prévu par le fabricant. Un dispositif médical a une fonction médicale propre (diagnostic, prévention, surveillance, traitement…). Un accessoire contribue spécifiquement à l’usage ou à la fonction d’un DM, sans être lui-même un DM. Le diagnostic in vitro analyse un prélèvement humain : il relève de l’IVDR. L’annexe XVI vise seulement certains groupes sans but médical (dont lentilles non correctrices et certains équipements esthétiques). Si le statut est incertain, il doit être clarifié avant de proposer une classe.',options:q.options.map(([value,label])=>[value,scopeHelp[value]?.label||label]),optionHelp:Object.fromEntries(Object.entries(scopeHelp).map(([id,item])=>[id,item.description]))}:q).map(q=>ordered(q,kind,answers));
+  return classification.questions(answers).map(q=>q.id==='scope'?{...q,label:'Quel type de produit ?',example:'Choisissez selon l’usage prévu par le fabricant. Un dispositif médical a une fonction médicale propre (diagnostic, prévention, surveillance, traitement…). Un accessoire contribue spécifiquement à l’usage ou à la fonction d’un DM, sans être lui-même un DM. Le diagnostic in vitro analyse un prélèvement humain : il relève de l’IVDR. L’annexe XVI vise seulement certains groupes sans but médical (dont lentilles non correctrices et certains équipements esthétiques). Si le statut est incertain, il doit être clarifié avant de proposer une classe.',options:q.options.map(([value,label])=>[value,scopeHelp[value]?.label||label]),optionHelp:Object.fromEntries(Object.entries(scopeHelp).map(([id,item])=>[id,item.description]))}:q).map(q=>ordered(q,kind,answers)).map(q=>{const view=presentation?.view(q);return view?{...q,label:view.title,options:view.options}:q;});
  }
  function orientation(kind,answers){
   if(kind!=='classification')return null;
@@ -38,6 +38,12 @@ function create({classification,norms,questions,catalogue,explanations}){
   const index=all.findIndex(q=>q.id===target);if(index<0)return;
   for(const q of all.slice(index)){delete state.answers[q.id];delete state.clarifications?.[q.id];}
   state.cursor=target;state.result=false;state.assistance=null;state.editing=false;state.reviewMode=false;state.reviewSeen=[];
+ }
+ function prune(kind,state){
+  if(kind!=='classification')return;
+  state.answers=classification.context(state.answers);
+  const ids=new Set(Object.keys(state.answers));
+  for(const id of Object.keys(state.clarifications||{}))if(!ids.has(id))delete state.clarifications[id];
  }
  function known(q,answers){return q.options.some(([value])=>value===answers[q.id]);}
  function visited(q,answers){return known(q,answers)||answers[q.id]==='unresolved';}
@@ -66,6 +72,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   state.editing=value.editing===true;state.reviewMode=value.reviewMode===true;
   state.reviewSeen=Array.isArray(value.reviewSeen)?[...new Set(value.reviewSeen.filter(id=>all.some(q=>q.id===id)))].slice(0,all.length):[];
   for(const q of all){const answer=value.answers?.[q.id];if(answer==='unresolved'||q.options.some(([v])=>v===answer))state.answers[q.id]=answer;if(typeof value.comments?.[q.id]==='string')state.comments[q.id]=value.comments[q.id].slice(0,10000);}
+  prune(kind,state);
   state.cursor=visible(kind,state.answers).some(q=>q.id===value.cursor)?value.cursor:'';state.result=value.result===true;
   const unanswered=visible(kind,state.answers).find(q=>!visited(q,state.answers));
   if(unanswered&&(state.result||Object.values(value.answers||{}).includes('checking')||Object.hasOwn(value.answers||{},'diagnosticVital')||Object.hasOwn(value.answers||{},'diagnosticImmediate'))){state.cursor=unanswered.id;state.result=false;}
@@ -124,7 +131,7 @@ function create({classification,norms,questions,catalogue,explanations}){
   }
   return document;
  }
- return {rewind,orientation,visible,known,visited,resolved,progress,restore,analysis,answerRows,summary,escape:E};
+ return {prune,rewind,orientation,visible,known,visited,resolved,progress,restore,analysis,answerRows,summary,escape:E};
 }
 if(typeof module==='object'&&module.exports)module.exports={create};else window.ORBIVIA_PUBLIC_TOOLS={create};
 })();

@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const kind=document.body.dataset.tool;
-const model=window.ORBIVIA_PUBLIC_TOOLS.create({classification:window.ORBIVIA_CLASSIFICATION,norms:window.ORBIVIA_NORMES_MODEL,questions:window.ORBIVIA_NORMES_QUESTIONS,catalogue:window.ORBIVIA_NORMES_CATALOGUE,explanations:window.ORBIVIA_NORMES_EXPLICATIONS});
+const model=window.ORBIVIA_PUBLIC_TOOLS.create({classification:window.ORBIVIA_CLASSIFICATION,presentation:window.ORBIVIA_QUESTION_PRESENTATION,norms:window.ORBIVIA_NORMES_MODEL,questions:window.ORBIVIA_NORMES_QUESTIONS,catalogue:window.ORBIVIA_NORMES_CATALOGUE,explanations:window.ORBIVIA_NORMES_EXPLICATIONS});
 const guide=window.ORBIVIA_CLARIFICATION;
 const E=model.escape,key='orbivia-public-'+kind+'-v1',app=document.getElementById('tool-app');
 let state=model.restore(kind,null),storageOK=true,locked=false,reviewMode=false,reviewSeen=[],reportURL=null,roleGroup=null;
@@ -80,7 +80,7 @@ function renderAssistance(q){
  app.querySelector('[data-action="assist-back"]').disabled=!draft.path.length;
 }
 function answerQuestion(q,value,clarification){
- state.answers[q.id]=value;state.assistance=null;
+ state.answers[q.id]=value;model.prune(kind,state);state.assistance=null;
  if(kind==='classification'&&q.id==='scope'&&value==='other'&&!clarification){state.result=false;state.cursor='scope';state.assistance={question:'scope',version:guide.version,path:[]};save();render();focus();return;}
  if(clarification)state.clarifications[q.id]={value,steps:clarification.trace};else delete state.clarifications[q.id];
  const nextQuestions=model.visible(kind,state.answers);let next;

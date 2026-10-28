@@ -55,20 +55,38 @@ qs.find(q=>q.id==='ivdSelf').clarification=ask('Une personne non professionnelle
 function known(q,a){return q.options.some(([v])=>v===a[q.id]);}
 function context(answers){const a={...answers};for(let i=0;i<qs.length;i++){const ids=new Set(qs.filter(q=>q.when(a)).map(q=>q.id));const stale=Object.keys(a).filter(k=>k.startsWith('ivd')&&!ids.has(k));if(!stale.length)break;stale.forEach(k=>delete a[k]);}return a;}
 function questions(a){a=context(a);return qs.filter(q=>q.when(a));}
+const reasons={
+ "ivdDonor": "Recherche d’un agent transmissible pour apprécier l’acceptabilité d’un don.",
+ "ivdPropagation": "Détection d’un agent causant une maladie mortelle à fort risque de propagation.",
+ "ivdLoad": "Mesure d’une charge infectieuse dont le suivi est critique pour une maladie mortelle.",
+ "ivdSexual": "Recherche d’un agent principalement sexuellement transmissible ou de l’exposition à cet agent.",
+ "ivdBloodAgent": "Détection directe d’un agent infectieux dans le sang ou le liquide céphalo-rachidien, sans fort risque de propagation.",
+ "ivdInfectionHarm": "Une erreur de détection d’agent présente un risque de décès ou de handicap grave.",
+ "ivdPrenatalImmune": "Dépistage prénatal du statut immunitaire envers un agent transmissible.",
+ "ivdImmuneRisk": "Une erreur de statut infectieux ou immunitaire peut mener à une décision menaçant la vie.",
+ "ivdCompanion": "Diagnostic compagnon indispensable à l’utilisation sûre et efficace d’un médicament.",
+ "ivdStaging": "Une erreur de stadification peut mener à une décision menaçant la vie.",
+ "ivdCancer": "Dépistage, diagnostic ou stadification d’un cancer.",
+ "ivdGenetic": "Examen génétique humain.",
+ "ivdLevelsRisk": "Une erreur de suivi d’un médicament, d’une substance ou d’un composant biologique peut mener à une décision menaçant la vie.",
+ "ivdLifeManagement": "Prise en charge d’une maladie ou d’un état menaçant la vie.",
+ "ivdCongenital": "Dépistage d’une anomalie congénitale de l’embryon ou du fœtus.",
+ "ivdNewborn": "Dépistage d’une anomalie congénitale du nouveau-né dont l’absence de traitement risque décès ou handicap grave."
+};
 function evaluate(answers){
  const a=context(answers),active=questions(a),missing=active.filter(q=>!known(q,a)).map(q=>q.label),rules=Array.from({length:7},(_,i)=>({n:i+1,applies:'no',class:'',reason:'Aucune destination déclenchante déclarée.'})),order=['A','B','C','D'];
  function hit(n,cl,reason){let r=rules.find(r=>r.n===n);if(!r){r={n,applies:'no',class:'',reason:''};rules.push(r);}if(order.indexOf(cl)>order.indexOf(r.class))r.class=cl;r.applies='yes';r.reason=r.reason&&r.reason!=='Aucune destination déclenchante déclarée.'?r.reason+' ; '+reason:reason;}
  const yes=k=>a[k]==='yes';
  if(!eligible(a))missing.push('Confirmer la qualification IVDR ou revenir au type de produit.');
  if(eligible(a)){
-  if(linked(a)){if(order.includes(a.ivdLinkedClass))hit('1.4–1.6',a.ivdLinkedClass,'Classe documentée du DIV associé : logiciel pilotant / influençant, calibrateur ou contrôle à valeur assignée.');else missing.push('Établir la classe documentée de tous les DIV associés.');}
+  if(linked(a)){if(order.includes(a.ivdLinkedClass))hit('1.4–1.6',a.ivdLinkedClass,({software:'Logiciel pilotant ou influençant un DIV : classe documentée du dispositif associé.',calibrator:'Calibrateur : classe documentée du DIV associé.',assignedControl:'Contrôle à valeur assignée : classe documentée du DIV associé.'}[a.ivdRole]));else missing.push('Établir la classe documentée de tous les DIV associés.');}
   if(a.ivdRole==='unassignedControl')hit(7,'B','Contrôle sans valeur quantitative ni qualitative assignée.');
-  if(basic(a))hit(5,'A','Fonction générale IVD, instrument support de réactifs ou récipient sans test intégré.');
+  if(basic(a))hit(5,'A',({receptacle:'Récipient de prélèvement sans test intégré.',instrument:'Instrument support de réactifs, sans mesure analytique indépendante.',lab:'Produit général IVD de la règle 5a.',accessory:'Accessoire de DIV sans caractéristique critique pour l’examen.'}[a.ivdRole]));
   if(clinical(a)){
-   for(const k of ['ivdDonor','ivdPropagation','ivdLoad'])if(yes(k))hit(1,'D',qs.find(q=>q.id===k).label);
+   for(const k of ['ivdDonor','ivdPropagation','ivdLoad'])if(yes(k))hit(1,'D',reasons[k]);
    if(yes('ivdCompatibility')){if(a.ivdMarkers==='listed')hit(2,'D','Compatibilité : marqueur explicitement listé par la règle 2.');else if(a.ivdMarkers==='other')hit(2,'C','Compatibilité immunologique : uniquement d’autres marqueurs.');else missing.push('Préciser les marqueurs de compatibilité.');}
    const cKeys=['ivdSexual','ivdBloodAgent','ivdInfectionHarm','ivdPrenatalImmune','ivdImmuneRisk','ivdCompanion','ivdStaging','ivdCancer','ivdGenetic','ivdLevelsRisk','ivdLifeManagement','ivdCongenital','ivdNewborn'];
-   for(const k of cKeys)if(yes(k)&&active.some(q=>q.id===k))hit(3,'C',qs.find(q=>q.id===k).label);
+   for(const k of cKeys)if(yes(k)&&active.some(q=>q.id===k))hit(3,'C',reasons[k]);
    if(yes('ivdSelf')&&known(qs.find(q=>q.id==='ivdSelfException'),a))hit(4,a.ivdSelfException==='other'?'C':'B','Autotest : '+qs.find(q=>q.id==='ivdSelfException').options.find(([v])=>v===a.ivdSelfException)[1]+'. Les règles de classe supérieure restent applicables.');
    // Never turn missing or deferred answers into the default class B.
    if(!missing.length&&!rules.some(r=>[1,2,3,4].includes(r.n)&&r.applies==='yes'))hit(6,'B','Aucune des règles 1 à 5 ne couvre les destinations renseignées.');
