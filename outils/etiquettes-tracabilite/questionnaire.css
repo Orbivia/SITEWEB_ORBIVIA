@@ -236,3 +236,11 @@ body[data-tool="etiquettes"] .label-symbol-grid .label-symbol-img{width:48px;hei
 .label-symbol-grid li{padding:12px 8px;gap:6px}
 .label-symbol-grid li>span:not(.label-text-mark){font-size:11px}
 .label-symbol-grid small{font-size:9px}
+
+/* Relecture ciblée et contradictions visibles avant impression. */
+.label-choice-hint{font-size:12px;color:#68766d;margin:0 0 12px}
+.label-inconsistency{margin:0 0 12px;border-left:3px solid #b95d1d;padding:9px 12px;background:#fff5e8;font-size:13px;color:#75401f}
+.label-answers dl>div{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:start}
+.label-answers .text-button{border:0;background:transparent;color:#80621c;text-decoration:underline;cursor:pointer;font:inherit;padding:0 2px;min-height:28px}
+@media(max-width:600px){.label-answers dl>div{grid-template-columns:minmax(0,1fr) auto}.label-answers dt{grid-column:1/-1}}
+@media print{.label-answers button{display:none!important}.label-inconsistency{border-color:#555;color:#222}.label-answers dl>div{grid-template-columns:1fr 1fr}}

@@ -1,35 +1,6 @@
-/* Tests métier du questionnaire d'étiquetage MDR Orbivia.
- * Exécution : node outils/etiquettes-tracabilite/tests/run.mjs
- * Aucun module externe ; compare les références aux PNG fournis dans le dépôt.
- */
+/* Scénarios métier historiques, complétés par tests/etiquetage.test.mjs. */
 import assert from "node:assert/strict";
-import {readFileSync} from "node:fs";
-import path from "node:path";
-import {fileURLToPath} from "node:url";
-import vm from "node:vm";
-
-const file=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../questionnaire.js");
-const source=readFileSync(file,"utf8").replace(
- /render\(\);\s*\}\)\(\);\s*$/,
- 'window.__probe={Q,answers,applicable,current,selectChoice,next,conclusions,symbolImage,renderShortList,get finished(){return finished}};\nrender();})();'
-);
-assert(source.includes("window.__probe="),"Test hook injection failed");
-
-function create(){
- const root={innerHTML:"",handlers:{},addEventListener(type,handler){this.handlers[type]=handler;},querySelector(){return null;},contains(){return true;}};
- const window={scrollTo(){},print(){}};
- const document={getElementById(id){return id==="label-app"?root:null}};
- const sessionStorage={getItem(){return null;},setItem(){}};
- vm.runInNewContext(source,{document,window,sessionStorage});
- return Object.assign(window.__probe,{root});
-}
-const base={
- status:"market",territory:"eu",support:"unit",pack:"one",carrier:"one",
- class:"iia",ce:"ce-nb",manufacturer:"eu",import:"no",implant:"no",
- reuse:"single",sterile:"nonsterile",nonsterilevariants:"no",fluidpath:"no",
- expiry:"yes",tracking:"lot",storage:["none"],substances:["none"],
- instructions:["ifu"],electronic:"no",space:"large",language:"fr"
-};
+import {create,base} from "./harness.mjs";
 function scenario(overrides={}){
  const test=create();
  Object.assign(test.answers,base,overrides);
@@ -61,7 +32,7 @@ for(const code of ["5.4.5","5.4.6","5.4.7","5.4.8","5.4.9","5.4.10","5.4.11","5.
 const custom=scenario({status:"custom"});
 const investigation=scenario({status:"investigation"});
 assert(titleHas(custom.required,"sur mesure")&&!has(custom.required,"CE + ON")&&!has(custom.required,"UDI (AIDC + HRI)"));
-assert(titleHas(investigation.required,"investigation clinique")&&!has(investigation.required,"CE + ON"));
+assert(titleHas(investigation.required,"investigations cliniques")&&!has(investigation.required,"CE + ON"));
 assert(has(scenario({reuse:"reusable",patient:"multiple",reprocess:"clean",support:"device",class:"iia"}).required,"UDI direct"));
 assert(!has(scenario({reuse:"reusable",patient:"multiple",reprocess:"clean",support:"device",class:"i"}).required,"UDI direct"));
 assert(has(scenario({reuse:"reusable",patient:"multiple",reprocess:"clean",support:"device",class:"i"}).conditional,"UDI direct"));
