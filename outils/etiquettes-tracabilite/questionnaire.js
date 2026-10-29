@@ -399,6 +399,8 @@ function reset(){const d=document.getElementById("restart-label-dialog");if(d&&t
 function doReset(){answers={};position=0;finished=false;editing=false;store();render();}
 root.addEventListener("click",event=>{
  const edit=event.target.closest("[data-edit]");if(edit&&root.contains(edit)){const at=applicable().findIndex(q=>q.id===edit.dataset.edit);if(at>=0){position=at;finished=false;editing=true;store();render();focusView();window.scrollTo?.({top:0,behavior:"instant"});}return;}
+ const pdfRetry=event.target.closest("#label-pdf-download");
+ if(pdfRetry&&!pdfRetry.hasAttribute("href")){event.preventDefault();preparePDF(pdfRetry);return;}
  const choice=event.target.closest("[data-choice]");if(choice&&root.contains(choice)){selectChoice(choice.dataset.choice);return}
  const button=event.target.closest("[data-action]");if(!button)return;
  switch(button.dataset.action){
