@@ -328,6 +328,41 @@ function renderReferences(result){
  group[1].map(it=>'<div class="label-reference"><div class="label-reference-heading">'+symbolImage(it.code,true)+'<strong>'+escapeHTML(it.title)+'</strong></div><p>'+escapeHTML(it.detail)+'</p>'+(it.source?'<small>'+escapeHTML(it.source)+'</small>':'')+'</div>').join("")
  ).join("")+'</div></details>';
 }
+let pdfURL=null;
+function pdfSummary(){
+ const result=conclusions(),support=Q.find(q=>q.id==="support")?.options.find(o=>o[0]===answers.support)?.[1]||"Étiquette médicale";
+ const sections=[
+  {title:"À prévoir",items:result.required.map(item=>({text:item.title+" — "+symbolRef(item.code)}))}
+ ];
+ if(result.conditional.length)sections.push({title:"Selon votre dispositif",items:result.conditional.map(item=>({text:item.title+" — "+symbolRef(item.code)}))});
+ if(result.review.length)sections.push({title:"À vérifier",items:result.review.map(item=>({text:item.title+(item.blocking?" (à corriger)":"")}))});
+ sections.push({title:"Sources",items:[{text:"MDR 2017/745 · Annexe I et Annexe VI",url:"https://eur-lex.europa.eu/eli/reg/2017/745/oj"},{text:"ISO 15223-1:2021 · Symboles normalisés"}]});
+ return {
+  compact:true,title:"Étiquetage médical",date:new Date().toLocaleDateString("fr-FR"),
+  outcome:answers.territory==="outside"?"Marché hors périmètre":support,
+  note:"Présélection indicative. Les symboles ISO sont des références et non des fichiers imprimables. Vérifier le MDR, les restrictions des symboles et la lisibilité.",
+  sections
+ };
+}
+async function preparePDF(button){
+ if(!button||!window.ORBIVIA_TOOL_PDF?.create)return;
+ button.textContent="Préparation du PDF…";
+ button.removeAttribute("href");
+ try{
+  const bytes=await window.ORBIVIA_TOOL_PDF.create(pdfSummary());
+  if(!button.isConnected)return;
+  if(pdfURL)URL.revokeObjectURL(pdfURL);
+  pdfURL=URL.createObjectURL(new Blob([bytes],{type:"application/pdf"}));
+  button.href=pdfURL;
+  button.download="ORBIVIA_etiquetage_medical_"+new Date().toISOString().slice(0,10)+".pdf";
+  button.textContent="Télécharger la synthèse PDF";
+  button.removeAttribute("aria-disabled");
+ }catch(error){
+  button.textContent="Réessayer l’export PDF";
+  button.setAttribute("aria-disabled","true");
+  console.error("Export PDF étiquetage indisponible",error);
+ }
+}
 function summary(){
  const result=conclusions(),blockers=result.review.filter(it=>it.blocking);
  const supportName=Q.find(q=>q.id==="support")?.options.find(o=>o[0]===answers.support)?.[1]||"Support d'étiquette";
@@ -346,9 +381,10 @@ function summary(){
  '<section class="label-result-card label-additional">'+renderReferences(result)+
  '<details class="label-answers"><summary>Voir mes réponses au questionnaire</summary><dl>'+answersHTML+'</dl></details></section>'+
  '<p class="label-disclaimer">Synthèse d’aide à la conception, non une validation réglementaire. Vérifiez les exigences du MDR, les symboles ISO 15223-1 applicables et la lisibilité réelle avant impression.</p>'+
- '<div class="export-actions"><button class="tool-button" type="button" data-action="print">Imprimer la synthèse</button></div>'+
+ '<div class="export-actions"><a class="tool-button primary" id="label-pdf-download" aria-disabled="true">Préparation du PDF…</a></div>'+
  '<div class="result-bottom"><button class="tool-button" type="button" data-action="back">← Modifier mes réponses</button>'+
  '<button class="tool-button quiet" type="button" data-action="reset">Reprendre à zéro</button></div>';
+ preparePDF(root.querySelector("#label-pdf-download"));
 }
 // L'impression conserve les sections repliées sans changer l'état de lecture.
 let printSections=[];
