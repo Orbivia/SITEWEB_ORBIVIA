@@ -184,7 +184,7 @@ function conclusions(at=new Date()){
  }
 
  if(custom&&label)r("Texte","Mention « dispositif sur mesure »","Mention spécifique requise ; les conditions de l'annexe XIII doivent être vérifiées.",mdr+" annexe I, 23.2(p), annexe XIII","Mention");
- if(investigation&&label)r("Texte","Mention « exclusivement pour des investigations cliniques »","Ne pas assimiler à une étiquette commerciale marquée CE.",mdr+" annexe I, 23.2(q)","Mention");
+ if(investigation)r("Texte","Exclusivement pour des investigations cliniques","Mention à apposer selon le libellé réglementaire du MDR, annexe I, 23.2(q). En langage courant : « exclusivement pour des études cliniques ». Pas de CE commercial présumé.",mdr+" annexe I, 23.2(q)","Mention");
  if(draft)v("Produit en développement","Ne pas faire apparaître de marquage CE ou d'UDI commercial non attribué sur une étiquette de prototype.");
  if(custom||investigation)v("Procédure particulière","Vérifier l'étiquetage et la documentation spécifiques aux dispositifs sur mesure ou aux investigations cliniques ; le régime commercial standard ne s'applique pas automatiquement.");
 
@@ -330,7 +330,7 @@ function conclusions(at=new Date()){
  */
 const isoSymbolCodes=new Set("5.1.1 5.1.2 5.1.3 5.1.4 5.1.5 5.1.6 5.1.7 5.1.8 5.1.9 5.1.10 5.1.11 5.2.1 5.2.2 5.2.3 5.2.4 5.2.5 5.2.6 5.2.7 5.2.8 5.2.9 5.2.10 5.2.11 5.2.12 5.2.13 5.2.14 5.3.1 5.3.2 5.3.3 5.3.4 5.3.5 5.3.6 5.3.7 5.3.8 5.3.9 5.4.1 5.4.2 5.4.3 5.4.4 5.4.5 5.4.6 5.4.7 5.4.8 5.4.9 5.4.10 5.4.11 5.4.12 5.5.1 5.5.2 5.5.3 5.5.4 5.5.5 5.5.6 5.7.7 5.7.10".split(" "));
 function symbolImage(code,reference=false){
- const asset=(code==="CE"||code==="CE + ON")?"CE":code==="UDI (AIDC + HRI)"?"5.7.10":isoSymbolCodes.has(code)?code:null;
+ const asset=(code==="CE"||code==="CE + ON")?"CE":isoSymbolCodes.has(code)?code:null;
  if(!asset)return "";
  return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="symboles-iso/'+asset+'.png?v=2" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
 }
@@ -363,6 +363,7 @@ function pdfSummary(){
  const sections=[
   {title:"À prévoir",items:result.required.map(item=>({text:item.title+" — "+symbolRef(item.code)}))}
  ];
+ if(answers.status==="investigation")sections.push({title:"Études cliniques",items:[{text:"Libellé MDR : exclusivement pour des investigations cliniques. Expression usuelle : exclusivement pour des études cliniques."}]});
  if(result.conditional.length)sections.push({title:"Selon votre dispositif",items:result.conditional.map(item=>({text:item.title+" — "+symbolRef(item.code)}))});
  if(result.review.length)sections.push({title:"À vérifier",items:result.review.map(item=>({text:item.title+(item.blocking?" (à corriger)":"")}))});
  sections.push({title:"Sources",items:[{text:"MDR 2017/745 · Annexe I et Annexe VI",url:"https://eur-lex.europa.eu/eli/reg/2017/745/oj"},{text:"ISO 15223-1:2021 · Symboles normalisés"}]});
@@ -401,11 +402,11 @@ function summary(){
  return '<div><dt>'+escapeHTML(q.title)+'</dt><dd>'+escapeHTML(labels)+'</dd><button class="text-button" type="button" aria-label="Modifier la réponse : '+escapeHTML(q.title)+'" data-edit="'+escapeHTML(q.id)+'">Modifier</button></div>';
  }).join("");
  root.innerHTML=
- '<div class="label-result-heading label-summary-heading"><h1>'+(answers.territory==='outside'?'Marché hors périmètre':'À prévoir <span>'+result.required.length+'</span>')+'</h1><p class="label-result-support">'+escapeHTML(answers.territory==='outside'?'Exigences du pays de destination à établir':supportName)+'</p></div>'+
+ '<div class="label-result-heading label-summary-heading"><h1>'+(answers.territory==='outside'?'Marché hors périmètre':'À prévoir <span>'+result.required.length+'</span>')+'</h1><p class="label-result-support">'+escapeHTML(answers.territory==='outside'?'Exigences du pays de destination à établir':supportName)+'</p></div>'+(answers.status==='investigation'?'<p class="label-clinical-note"><strong>Études cliniques :</strong> « exclusivement pour des études cliniques »<small>Pour l’étiquette réglementaire MDR, utiliser la mention exacte : « exclusivement pour des investigations cliniques » (annexe I, 23.2(q)).</small></p>':'')+
  (blockers.length?'<p class="label-inconsistency" role="status">'+blockers.length+' point'+(blockers.length>1?'s':'')+' à corriger avant impression</p>':'')+
  '<section class="label-result-card label-main-grid">'+
  renderShortList(result.required)+'</section>'+
- (result.conditional.length?'<details class="label-result-card label-fold"><summary>Selon votre dispositif <span>'+result.conditional.length+'</span></summary>'+renderShortList(result.conditional)+'</details>':'')+
+ (result.conditional.length?'<section class="label-result-card label-optional-symbols"><header><h2>Autres symboles à examiner</h2><span>'+result.conditional.length+' éléments</span></header>'+renderShortList(result.conditional)+'</section>':'')+
  (result.review.length?'<details class="label-result-card label-fold label-review"'+(blockers.length||answers.territory==='outside'?' open':'')+'><summary>À vérifier avant impression <span>'+result.review.length+'</span></summary>'+renderChecks(result.review)+'</details>':'')+
  '<section class="label-result-card label-additional">'+renderReferences(result)+
  '<details class="label-answers"><summary>Voir mes réponses au questionnaire</summary><dl>'+answersHTML+'</dl></details></section>'+
