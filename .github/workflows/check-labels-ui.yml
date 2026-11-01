@@ -1,0 +1,34 @@
+name: Revue navigateur - etiquetage medical
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'outils/etiquettes-tracabilite/**'
+      - 'outils/shared/questionnaire-layout.*'
+      - 'outils/shared/questionnaire-ui.*'
+      - 'scripts/review-labels-browser.mjs'
+      - '.github/workflows/check-labels-ui.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Review desktop and mobile with Chromium
+        run: node scripts/review-labels-browser.mjs
+      - name: Store screenshots for audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: etiquetage-responsive-review
+          path: artifacts/etiquetage-review/*.jpg
+          if-no-files-found: warn
