@@ -51,14 +51,21 @@ assert.match(visual.symbolImage("5.7.7"),/symboles-iso\/5\.7\.7\.png/);
 assert.match(visual.symbolImage("CE"),/symboles-iso\/CE\.png/);
 assert.match(visual.symbolImage("CE + ON"),/symboles-iso\/CE\.png/);
 assert.match(visual.symbolImage("5.7.10"),/symboles-iso\/5\.7\.10\.png/);
-assert.match(visual.symbolImage("UDI (AIDC + HRI)"),/symboles-iso\/5\.7\.10\.png/);
+assert.equal(visual.symbolImage("UDI (AIDC + HRI)"),"","An obligatory UDI carrier is not the optional ISO 5.7.10 pictogram");
 const visualItems=[{code:"5.1.1",title:"Fabricant"},{code:"UDI (AIDC + HRI)",title:"Support UDI"}];
 const rendered=visual.renderShortList(visualItems);
 assert.match(rendered,/symboles-iso\/5\.1\.1\.png/);
-assert.equal((rendered.match(/class="label-symbol-img/g)||[]).length,2);
+assert.equal((rendered.match(/class="label-symbol-img/g)||[]).length,1);
 
 const app=create();
-assert(app.Q.length>=27);
+assert(app.Q.length>=40);
+assert(app.Q.every(q=>q.type==="single"),"Each choice must now be answered on a separate step");
+for(const group of ["storage","substances","instructions"])assert(app.Q.filter(q=>q.id.startsWith(group+"_")).length>=4,"Multiple-choice group not split: "+group);
+assert.equal(app.Q.find(q=>q.id==="implant").options[0][0],"no","Likeliest answer first");
+assert.equal(app.Q.find(q=>q.id==="sterile").options[0][0],"nonsterile","Likeliest answer first");
+assert.equal(app.Q.find(q=>q.id==="import").options[0][0],"no","Likeliest answer first");
+assert.match(visual.renderShortList(investigation.required),/Exclusivement pour des investigations cliniques/,"MDR clinical label must be visible");
+assert.match(visual.renderShortList(investigation.required),/label-symbol-grid/,"Full symbol grid rendered");
 assert(app.Q.every(q=>q.options.every(option=>option[0]!=="unknown")),"No undefined answers");
 let steps=0;
 while(!app.finished&&steps++<60){
@@ -67,4 +74,18 @@ while(!app.finished&&steps++<60){
  else app.selectChoice(chosen);
 }
 assert(app.finished,"Questionnaire must finish");
-console.log("PASS: normative scenario assertions + end-to-end questionnaire ("+steps+" steps)");
+// A full positive branch must preserve multiple simultaneously applicable ISO families.
+const extensive=create();
+const positive={
+ ...base,storage:"yes",substances:"yes",instructions:"yes",
+ ...Object.fromEntries(["temperature","humidity","dry","sunlight","fragile","pressure"].map(key=>["storage_"+key,"yes"])),
+ ...Object.fromEntries(["latex","cmr","med","blood","human","animal","nano"].map(key=>["substances_"+key,"yes"])),
+ instructions_ifu:"yes",instructions_electronic:"yes",instructions_warning:"yes",instructions_damaged:"yes"
+};
+Object.assign(extensive.answers,positive);
+const rich=extensive.conclusions();
+assert(has(rich.required,"5.3.7")&&has(rich.required,"5.3.9"),"Storage flags apply independently");
+assert(has(rich.required,"5.4.6")&&has(rich.conditional,"5.4.11"),"Material flags apply independently");
+assert(has(rich.required,"5.4.4"),"Warnings flag applies independently");
+assert(has(rich.conditional,"5.4.3"),"IFU flag applies independently");
+console.log("PASS: regulatory scenarios, binary questions, desktop logo grid + questionnaire ("+steps+" steps)");
