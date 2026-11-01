@@ -12,8 +12,8 @@ export const base={
  status:'market',territory:'eu',support:'unit',pack:'one',carrier:'one',
  class:'iia',ce:'ce-nb',manufacturer:'eu',import:'no',implant:'no',
  reuse:'single',sterile:'nonsterile',nonsterilevariants:'no',fluidpath:'no',
- expiry:'yes',tracking:'lot',storage:['none'],substances:['none'],
- instructions:['ifu'],electronic:'no',space:'large',language:'fr'
+ expiry:'yes',tracking:'lot',storage:'none',substances:'none',
+ instructions:'yes',instructions_ifu:'yes',instructions_electronic:'no',instructions_warning:'no',instructions_damaged:'no',electronic:'no',space:'large',language:'fr'
 };
 
 export function create(saved=null){
