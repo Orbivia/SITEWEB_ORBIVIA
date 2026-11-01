@@ -64,8 +64,16 @@ try{
  for(const [name,width,height,mobile] of sizes){
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
   await call('Emulation.setTouchEmulationEnabled',{enabled:mobile});
+  if(reports.length)await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v3")');
   await call('Page.navigate',{url:origin+'/outils/etiquettes-tracabilite/'});
   await until('document.readyState==="complete" && !!document.querySelector(".question-card")').catch(async error=>{throw Error(error.message+' | '+JSON.stringify(await evaluate('({url:location.href,state:document.readyState,body:document.body?.innerText.slice(0,360),root:!!document.querySelector("#label-app")})')));});
+  // Capture initial question as well as the final card grid.
+  const firstShot=await call('Page.captureScreenshot',{format:'jpeg',quality:60,captureBeyondViewport:false});
+  await writeFile(join(shots,name+'-question.jpg'),Buffer.from(firstShot.data,'base64'));
+  if(name==='desktop-wide'||name==='mobile-standard'){
+   const firstPreview=await call('Page.captureScreenshot',{format:'jpeg',quality:36,captureBeyondViewport:false});
+   console.log('REVIEW_QUESTION_'+name+'='+firstPreview.data);
+  }
   const problems=[];let step=0,maxWidth=0;
   const stateExpr='(()=>{const d=document.documentElement,c=document.querySelector(".question-card"),a=[...document.querySelectorAll(".label-options .answer")],rect=e=>{if(!e)return null;const x=e.getBoundingClientRect();return {x:x.x,y:x.y,w:x.width,h:x.height,bottom:x.bottom};};return {done:!!document.querySelector(".label-summary-heading"),heading:c?.querySelector("h1")?.textContent||"",choices:a.length,scroll:d.scrollWidth,first:rect(a[0]),last:rect(a.at(-1)),controls:rect(document.querySelector(".question-controls")),card:rect(c),scrollAllowed:document.body.classList.contains("quiz-scroll")}})()';
   while(step++<80){
@@ -90,7 +98,8 @@ try{
    const thumb=await call('Page.captureScreenshot',{format:'jpeg',quality:36,captureBeyondViewport:false});
    console.log('REVIEW_SCREENSHOT_'+name+'='+thumb.data);
   }
-  reports.push({name,width,height,questions:step,maximumWidth:maxWidth,symbols:quality.images,conditionalVisible:quality.optional,columns:quality.grid,pdfSize:quality.pdf?.bytes,problems});
+  const report={name,width,height,questions:step,maximumWidth:maxWidth,symbols:quality.images,conditionalVisible:quality.optional,columns:quality.grid,pdfSize:quality.pdf?.bytes,problems};
+  reports.push(report);console.log('REVIEW_VIEWPORT='+JSON.stringify(report));
  }
  console.log('REVIEW_METRICS='+JSON.stringify(reports));
  if(reports.some(r=>r.problems.length))throw Error('Browser review failures: '+JSON.stringify(reports.filter(r=>r.problems.length)));
