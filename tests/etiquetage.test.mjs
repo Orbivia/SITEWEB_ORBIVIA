@@ -134,3 +134,19 @@ test('labelling: 300 deterministic paths terminate, survive reload and support e
   walk();
  }
 });
+
+
+test('labelling: progress remains monotonic when yes answers reveal extra questions',()=>{
+ const app=create();let previous=-1,steps=0,expanded=0;
+ const read=()=>Number(app.root.innerHTML.match(/<progress max="100" value="(\d+)"/)?.[1]||0);
+ while(!app.finished&&steps++<90){
+  const q=app.current(),before=read();
+  assert.ok(before>=previous,'Progress must not decrease at '+q.id+': '+before+' < '+previous);
+  previous=before;
+  const choice=['storage','substances'].includes(q.id)?'yes':(base[q.id]??q.options[0][0]);
+  app.selectChoice(choice);
+  if(['storage','substances'].includes(q.id))expanded++;
+ }
+ assert.equal(expanded,2);assert.equal(app.finished,true);
+ assert.ok(steps>26,'Conditional yes answers should expand the route');
+});
