@@ -7,7 +7,7 @@ const has=(items,code)=>items.some(it=>it.code===code);
 function scenario(overrides={},date){const app=create();Object.assign(app.answers,base,overrides);return app.conclusions(date);}
 
 test('labelling: complete route, review edits and a coherent summary share the same answers',()=>{
- const app=create();assert.equal(finish(app),22);
+ const app=create();assert.equal(finish(app),26);
  assert.match(app.root.innerHTML,/Code UDI — AIDC \+ HRI/);
  assert.match(app.root.innerHTML,/data-edit="sterile"/);
  app.action('back');assert.equal(app.finished,true);assert.equal(app.answersPanel.open,true);
