@@ -244,3 +244,34 @@ body[data-tool="etiquettes"] .label-symbol-grid .label-symbol-img{width:48px;hei
 .label-answers .text-button{border:0;background:transparent;color:#80621c;text-decoration:underline;cursor:pointer;font:inherit;padding:0 2px;min-height:28px}
 @media(max-width:600px){.label-answers dl>div{grid-template-columns:minmax(0,1fr) auto}.label-answers dt{grid-column:1/-1}}
 @media print{.label-answers button{display:none!important}.label-inconsistency{border-color:#555;color:#222}.label-answers dl>div{grid-template-columns:1fr 1fr}}
+
+
+/* Synthèse : afficher tous les symboles retenus ET conditionnels sur PC,
+ * avec les mêmes PNG et le même ordre de lecture que sur téléphone. */
+body[data-tool="etiquettes"].is-result .label-main-grid,
+body[data-tool="etiquettes"].is-result .label-optional-symbols{overflow:visible;}
+body[data-tool="etiquettes"].is-result .label-optional-symbols{padding:12px 18px 18px}
+body[data-tool="etiquettes"].is-result .label-optional-symbols header{margin:0 0 12px}
+body[data-tool="etiquettes"].is-result .label-optional-symbols .label-symbol-grid{margin:0}
+body[data-tool="etiquettes"] .label-symbol-grid li{min-width:0}
+body[data-tool="etiquettes"] .label-symbol-grid li>span{overflow-wrap:anywhere}
+body[data-tool="etiquettes"] .label-clinical-note{
+ margin:12px 0 16px;padding:12px 16px;border-left:3px solid #e7a116;
+ border-radius:7px;background:#fff9ec;color:#29342d;font-size:14px;line-height:1.5;
+}
+body[data-tool="etiquettes"] .label-clinical-note small{display:block;margin-top:5px;color:#56635c;font-size:12px}
+@media(min-width:900px){
+ body[data-tool="etiquettes"].is-result .label-symbol-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+ body[data-tool="etiquettes"].is-result .label-symbol-grid li{padding:16px 12px;gap:9px;min-height:125px}
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-img{width:64px;height:64px}
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-text-mark{height:64px;min-height:64px}
+ body[data-tool="etiquettes"].is-result .label-symbol-grid li>span:not(.label-text-mark){font-size:13px;line-height:1.45}
+ body[data-tool="etiquettes"].is-result .label-symbol-grid small{font-size:10px}
+}
+@media(min-width:1250px){
+ body[data-tool="etiquettes"].is-result .label-symbol-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+@media(max-width:600px){
+ body[data-tool="etiquettes"].is-result .label-symbol-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ body[data-tool="etiquettes"] .label-clinical-note{font-size:13px;padding:11px 13px}
+}
