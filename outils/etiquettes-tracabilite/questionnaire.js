@@ -120,7 +120,7 @@ function optionMarkup(q,option) {
 }
 function choiceNotes(q){const seen=new Set([q.help]);const notes=q.options.filter(o=>o[2]&&!seen.has(o[2])&&seen.add(o[2])).map(o=>'<li><strong>'+escapeHTML(o[1])+'</strong><p>'+escapeHTML(o[2])+'</p></li>').join('');return notes?'<strong>Précisions sur les choix</strong><ul>'+notes+'</ul>':'';}
 function showQuestion(){
- const q=current(),qs=applicable(),pct=Math.round(position/Math.max(1,qs.length)*100);
+ const q=current(),qs=applicable(),pct=Math.round(Math.max(0,Q.findIndex(item=>item.id===q.id))/Q.length*100);
  root.innerHTML='<div class="question-progress"><span>'+escapeHTML(q.s)+' · Étiquette MDR <b>Question '+(position+1)+' / '+qs.length+'</b></span><progress max="100" value="'+pct+'" aria-label="Progression"></progress></div>'
  +'<section class="question-card"><div class="question-prompt"><div class="question-heading"><h1 id="question-title" tabindex="-1">'+escapeHTML(q.title)+'</h1>'
  +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pourquoi cette question ?</strong><p>'+escapeHTML(q.help)+'</p>'+choiceNotes(q)+'</div></details></div>'+'</div>'
