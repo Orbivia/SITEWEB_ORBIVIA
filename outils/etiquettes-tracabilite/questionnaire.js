@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v2";
+const STORE="orbivia-mdr-label-wizard-v3";
 const Q=[
 {id:"status",s:"Périmètre",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -40,14 +40,44 @@ const Q=[
 {id:"language",s:"Étiquette",title:"Pour quels pays les informations seront-elles préparées ?",help:"Les États membres fixent les exigences de langue des informations fournies avec les dispositifs. Des symboles normalisés peuvent aider mais ne remplacent pas tous les textes requis.",type:"single",options:[["fr","France"],["eu","Plusieurs pays de l'UE"],["other","UE et pays hors UE"]]}
 ];
 
+/* Les trois anciennes questions multisélection sont décomposées en étapes Oui/Non. */
+const flagTitles={
+ storage:{temperature:"Faut-il indiquer des limites de température ?",humidity:"Faut-il indiquer des limites d'humidité ?",dry:"Faut-il conserver le produit au sec ?",sunlight:"Faut-il protéger le produit du soleil ?",fragile:"Le produit est-il fragile ?",pressure:"Faut-il indiquer des limites de pression atmosphérique ?"},
+ substances:{latex:"Le produit contient-il du latex naturel ?",cmr:"Contient-il des substances CMR ou des perturbateurs endocriniens ?",med:"Contient-il une substance médicamenteuse ?",blood:"Contient-il des dérivés du sang ou du plasma humain ?",human:"Contient-il des matériaux biologiques d'origine humaine ?",animal:"Contient-il des matériaux biologiques d'origine animale ?",nano:"Contient-il des nanomatériaux ?"},
+ instructions:{ifu:"Une notice d'utilisation est-elle prévue ?",electronic:"La notice est-elle électronique ?",warning:"Un avertissement doit-il apparaître directement sur l'étiquette ?",damaged:"Faut-il signaler le risque d'utilisation si l'emballage est endommagé ?"}
+};
+const gateTitles={
+ storage:["Des précautions particulières de stockage ou de manutention sont-elles nécessaires ?","Non, aucune précaution particulière","Oui"],
+ substances:["Des substances ou matériaux nécessitent-ils une information particulière ?","Non, aucun de ces matériaux","Oui"],
+ instructions:["Des informations d'utilisation ou avertissements particuliers sont-ils prévus ?","Oui, une notice ou des précautions","Non, aucune information particulière"]
+};
+for(const group of ["storage","substances","instructions"]){
+ const index=Q.findIndex(q=>q.id===group),previous=Q[index],intro=gateTitles[group];
+ const gate={id:group,s:previous.s,title:intro[0],help:previous.help,type:"single",options:group==="instructions"?[["yes",intro[1]],["none",intro[2]]]:[["none",intro[1]],["yes",intro[2]]]};
+ const flags=previous.options.filter(o=>o[0]!=="none").map(option=>({id:group+"_"+option[0],s:previous.s,title:flagTitles[group][option[0]],help:option[2]||previous.help,type:"single",when:a=>a[group]==="yes",options:[["no","Non"],["yes","Oui"]]}));
+ Q.splice(index,1,gate,...flags);
+}
+const likely={status:"market",territory:"eu",support:"unit",pack:"one",carrier:"one",class:"iia",ce:"notready",manufacturer:"eu",import:"no",implant:"no",reuse:"single",patient:"multiple",reprocess:"clean",sterile:"nonsterile",nonsterilevariants:"no",fluidpath:"no",sterilmethod:"eo",barrier:"single",resterilize:"no",expiry:"no",tracking:"lot",electronic:"no",space:"medium",language:"fr"};
+for(const q of Q){const i=q.options.findIndex(o=>o[0]===likely[q.id]);if(i>0)q.options.unshift(q.options.splice(i,1)[0]);}
+
+
 const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 let answers={},position=0,finished=false,editing=false;
 function applicable(){
  return Q.filter(q=>(answers.territory!=="outside"||["status","territory"].includes(q.id))&&(!q.when||q.when(answers)));
 }
-function completed(q){const v=answers[q.id];return q.type==="multi"?Array.isArray(v)&&v.length>0&&v.every(a=>q.options.some(o=>o[0]===a))&&!(v.includes("none")&&v.length>1):typeof v==="string"&&q.options.some(o=>o[0]===v);}
+function completed(q){const val=answers[q.id];return typeof val==="string"&&q.options.some(o=>o[0]===val);}
+function migrateMultiple(){
+ for(const group of ["storage","substances","instructions"]){
+  if(!Array.isArray(answers[group]))continue;
+  const selected=answers[group].filter(x=>x!=="none");
+  answers[group]=selected.length?"yes":"none";
+  for(const flag of Object.keys(flagTitles[group]))answers[group+"_"+flag]=selected.includes(flag)?"yes":"no";
+ }
+}
 function sanitize(){
+ migrateMultiple();
  let changed=false;
  for(const id of Object.keys(answers)){
   const q=Q.find(q=>q.id===id),value=answers[id];
@@ -80,19 +110,18 @@ function store(){try{sessionStorage.setItem(STORE,JSON.stringify({answers,positi
 function current(){const qs=applicable();position=Math.max(0,Math.min(qs.length-1,position));return qs[position];}
 function focusView(){const heading=root.querySelector("h1");if(heading){heading.tabIndex=-1;heading.focus?.({preventScroll:true});}}
 function optionMarkup(q,option) {
- const value=option[0],label=option[1],sel=q.type==="single"?answers[q.id]===value:(answers[q.id]||[]).includes(value);
+ const value=option[0],label=option[1],sel=answers[q.id]===value;
  return '<button type="button" class="answer label-option" data-choice="'+escapeHTML(value)+'" aria-pressed="'+sel+'"><div class="answer-copy">'+escapeHTML(label)+'</div></button>';
 }
 function choiceNotes(q){const seen=new Set([q.help]);const notes=q.options.filter(o=>o[2]&&!seen.has(o[2])&&seen.add(o[2])).map(o=>'<li><strong>'+escapeHTML(o[1])+'</strong><p>'+escapeHTML(o[2])+'</p></li>').join('');return notes?'<strong>Précisions sur les choix</strong><ul>'+notes+'</ul>':'';}
 function showQuestion(){
- const q=current(),qs=applicable(),pct=Math.round(Q.findIndex(item=>item.id===q.id)/Q.length*100);
+ const q=current(),qs=applicable(),pct=Math.round(position/Math.max(1,qs.length)*100);
  root.innerHTML='<div class="question-progress"><span>'+escapeHTML(q.s)+' · Étiquette MDR <b>Question '+(position+1)+' / '+qs.length+'</b></span><progress max="100" value="'+pct+'" aria-label="Progression"></progress></div>'
  +'<section class="question-card"><div class="question-prompt"><div class="question-heading"><h1 id="question-title" tabindex="-1">'+escapeHTML(q.title)+'</h1>'
- +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pourquoi cette question ?</strong><p>'+escapeHTML(q.help)+'</p>'+choiceNotes(q)+'</div></details></div>'+(q.type==='multi'?'<p class="label-choice-hint">Plusieurs choix possibles</p>':'')+'</div>'
+ +'<details class="info-bubble"><summary aria-label="Comprendre cette question">i</summary><div><strong>Pourquoi cette question ?</strong><p>'+escapeHTML(q.help)+'</p>'+choiceNotes(q)+'</div></details></div>'+'</div>'
  +'<div class="label-options">'+q.options.map(o=>optionMarkup(q,o)).join("")+'</div></section>'
  +'<div class="question-controls label-controls"><button class="tool-button" data-action="back" type="button" '+(position===0?"disabled":"")+'>← Précédent</button>'
- +'<div class="label-controls-right">'+(q.type==="multi"?'<button class="tool-button primary" data-action="next" type="button" '+(!completed(q)?"disabled":"")+'>'+(position===qs.length-1?"Voir les résultats":"Continuer")+' →</button>':"")
- +'<button class="tool-button quiet" data-action="reset" type="button">Reprendre à zéro</button></div></div>';
+ +'<div class="label-controls-right">'+'<button class="tool-button quiet" data-action="reset" type="button">Reprendre à zéro</button></div></div>';
 }
 function advance(q){
  sanitize();const qs=applicable(),missing=qs.findIndex(item=>!completed(item)),at=qs.findIndex(item=>item.id===q.id);
@@ -104,14 +133,14 @@ function advance(q){
 function next(){const q=current();if(completed(q))advance(q);}
 function selectChoice(value){
  const q=current();if(!q.options.some(o=>o[0]===value))return;
- if(q.type==="single"){answers[q.id]=value;advance(q);return}
- let list=Array.isArray(answers[q.id])?answers[q.id].slice():[];
- const exclusive=["none","unknown"];
- if(exclusive.includes(value))list=[value];
- else{list=list.filter(s=>!exclusive.includes(s));list=list.includes(value)?list.filter(s=>s!==value):[...list,value];}
- answers[q.id]=list;sanitize();store();render();root.querySelector('[data-choice="'+value+'"]')?.focus?.({preventScroll:true});
+ answers[q.id]=value;advance(q);
 }
-function listContains(id,v){return Array.isArray(answers[id])&&answers[id].includes(v);}
+function listContains(group,flag){
+ if(!flagTitles[group])return false;
+ if(flag==="none")return answers[group]==="none";
+ return answers[group]==="yes"&&answers[group+"_"+flag]==="yes";
+}
+
 function conclusions(at=new Date()){
  sanitize();
  /* Deux niveaux distincts : exigences MDR pour l'information, symboles ISO utilisables pour la représenter.
