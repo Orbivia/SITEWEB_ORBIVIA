@@ -101,6 +101,49 @@ try{
   const report={name,width,height,questions:step,maximumWidth:maxWidth,symbols:quality.images,conditionalVisible:quality.optional,columns:quality.grid,pdfSize:quality.pdf?.bytes,problems};
   reports.push(report);console.log('REVIEW_VIEWPORT='+JSON.stringify(report));
  }
+
+ // High-density path exercises dozens of symbols and PDF one-page sizing.
+ // Clinical case verifies text placement on a phone.
+ function chooseSpecial(mode){
+  const q=document.querySelector(".question-heading h1")?.textContent||"";
+  const list=[...document.querySelectorAll(".label-options .answer")];
+  const find=value=>list.find(x=>x.dataset.choice===value);
+  let button=list[0];
+  if(mode==="clinical"&&q.includes("Dans quel cadre"))button=find("investigation")||button;
+  if(mode==="stress"){
+   if(q.includes("Sur quel support"))button=find("sterile")||button;
+   else if(q.includes("Quel est le statut du marquage CE"))button=find("ce-nb")||button;
+   else if(q.includes("Comment le dispositif est-il fourni"))button=find("sterile")||button;
+   else if(q.includes("Date limite")||q.includes("date limite"))button=find("yes")||button;
+   else if(q.includes("Comment les unités fabriquées"))button=find("both")||button;
+   else if(find("yes"))button=find("yes");
+  }
+  button?.click();return !!button;
+ }
+ for(const [kind,width,height,mobile] of [['stress',1440,900,false],['clinical',390,844,true]]){
+  await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
+  await call('Emulation.setTouchEmulationEnabled',{enabled:mobile});
+  await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v3")');
+  await call('Page.navigate',{url:origin+'/outils/etiquettes-tracabilite/'});
+  await until('document.readyState==="complete"&&!!document.querySelector(".question-card")');
+  let steps=0;while(steps++<90){
+   if(await evaluate('!!document.querySelector(".label-summary-heading")'))break;
+   await evaluate('('+chooseSpecial.toString()+')('+JSON.stringify(kind)+')');
+   await delay(30);
+  }
+  await until('!!document.querySelector(".label-summary-heading")');
+  const special=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid img")];await Promise.all(imgs.map(i=>i.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download");let doc=null;for(let i=0;i<80&&!a?.hasAttribute("href");i++)await new Promise(r=>setTimeout(r,100));if(a?.href){const b=await fetch(a.href).then(r=>r.arrayBuffer());doc={bytes:b.byteLength,valid:String.fromCharCode(...new Uint8Array(b.slice(0,5)))==="%PDF-"}}return {heading:document.querySelector(".label-summary-heading").textContent,clinical:document.querySelector(".label-clinical-note")?.textContent||"",required:document.querySelectorAll(".label-main-grid li").length,optional:document.querySelectorAll(".label-optional-symbols li").length,images:imgs.length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),pdf:doc,width:document.documentElement.scrollWidth}})()');
+  const issues=[];
+  if(!special.pdf?.valid)issues.push('PDF not valid on '+kind);
+  if(special.broken.length)issues.push('Broken symbols on '+kind);
+  if(special.width>width+3)issues.push('Overflow on '+kind);
+  if(kind==='stress'&&special.images<10)issues.push('Stress path did not display enough selected ISO symbols');
+  if(kind==='clinical'&&!special.clinical.includes("investigations cliniques"))issues.push('Regulatory clinical label missing');
+  const screenshot=await call('Page.captureScreenshot',{format:'jpeg',quality:65,captureBeyondViewport:false});
+  await writeFile(join(shots,kind+'-result.jpg'),Buffer.from(screenshot.data,'base64'));
+  reports.push({name:kind,width,height,steps,special,problems:issues});
+  console.log('REVIEW_SPECIAL='+JSON.stringify({name:kind,steps,special,problems:issues}));
+ }
  console.log('REVIEW_METRICS='+JSON.stringify(reports));
  if(reports.some(r=>r.problems.length))throw Error('Browser review failures: '+JSON.stringify(reports.filter(r=>r.problems.length)));
  console.log('PASS: Chromium labels on seven desktop/tablet/mobile viewport configurations');
