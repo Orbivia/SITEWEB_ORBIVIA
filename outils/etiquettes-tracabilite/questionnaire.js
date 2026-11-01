@@ -71,7 +71,12 @@ function completed(q){const val=answers[q.id];return typeof val==="string"&&q.op
 function migrateMultiple(){
  for(const group of ["storage","substances","instructions"]){
   if(!Array.isArray(answers[group]))continue;
-  const selected=answers[group].filter(x=>x!=="none");
+  const values=answers[group],selected=values.filter(x=>x!=="none");
+  if(!values.length||(values.includes("none")&&selected.length)){
+   delete answers[group];
+   for(const flag of Object.keys(flagTitles[group]))delete answers[group+"_"+flag];
+   continue;
+  }
   answers[group]=selected.length?"yes":"none";
   for(const flag of Object.keys(flagTitles[group]))answers[group+"_"+flag]=selected.includes(flag)?"yes":"no";
  }
