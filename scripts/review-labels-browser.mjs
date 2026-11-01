@@ -70,11 +70,16 @@ try{
   // Capture initial question as well as the final card grid.
   const firstShot=await call('Page.captureScreenshot',{format:'jpeg',quality:60,captureBeyondViewport:false});
   await writeFile(join(shots,name+'-question.jpg'),Buffer.from(firstShot.data,'base64'));
-  if(name==='desktop-wide'||name==='mobile-standard'){
-   const firstPreview=await call('Page.captureScreenshot',{format:'jpeg',quality:36,captureBeyondViewport:false});
-   console.log('REVIEW_QUESTION_'+name+'='+firstPreview.data);
-  }
+
   const problems=[];let step=0,maxWidth=0;
+  await delay(90);
+  const help=await evaluate('(()=>{const trigger=document.querySelector(".info-bubble summary"),details=trigger?.parentElement;if(!trigger)return {missing:true};trigger.click();const panel=details.querySelector(":scope > div"),r=panel.getBoundingClientRect();const out={open:details.open,left:r.left,right:r.right,top:r.top,bottom:r.bottom,screen:innerWidth};trigger.click();return out;})()');
+  if(help.missing||!help.open)problems.push('help popup failed to open');
+  if(help.left< -2||help.right>width+2)problems.push('help popup offscreen: '+JSON.stringify(help));
+  if(mobile){
+   const menu=await evaluate('(()=>{const b=document.querySelector("button.menu");if(!b)return {missing:true};b.click();const open=b.getAttribute("aria-expanded");b.click();return {open,closed:b.getAttribute("aria-expanded")}})()');
+   if(menu.missing||menu.open!=="true"||menu.closed!=="false")problems.push('mobile navigation toggle failed '+JSON.stringify(menu));
+  }
   const stateExpr='(()=>{const d=document.documentElement,c=document.querySelector(".question-card"),a=[...document.querySelectorAll(".label-options .answer")],rect=e=>{if(!e)return null;const x=e.getBoundingClientRect();return {x:x.x,y:x.y,w:x.width,h:x.height,bottom:x.bottom};};return {done:!!document.querySelector(".label-summary-heading"),heading:c?.querySelector("h1")?.textContent||"",choices:a.length,scroll:d.scrollWidth,first:rect(a[0]),last:rect(a.at(-1)),controls:rect(document.querySelector(".question-controls")),card:rect(c),scrollAllowed:document.body.classList.contains("quiz-scroll")}})()';
   while(step++<80){
    const st=await evaluate(stateExpr);maxWidth=Math.max(maxWidth,st.scroll);
@@ -82,6 +87,8 @@ try{
    if(st.done)break;
    if(st.choices===0)problems.push('no answers at question '+step);
    if(st.first?.w<150)problems.push('narrow answer at question '+step);
+   if(st.first?.h<43)problems.push('touch target under 44px at '+step+': '+st.first.h);
+   if(st.controls?.bottom>height+8&&!st.scrollAllowed)problems.push('bottom controls inaccessible at '+step);
    if(st.last&&st.card&&st.last.bottom>st.card.bottom+6&&!st.scrollAllowed)problems.push('clipped answer at '+step);
    await evaluate('(()=>{const options=[...document.querySelectorAll(".label-options .answer")];let btn=options[0];const h=document.querySelector(".question-heading h1")?.textContent||"";if(h.includes("précautions particulières de stockage")||h.includes("Des substances ou matériaux"))btn=options.find(x=>x.dataset.choice==="yes")||btn;btn?.click();})()');
    await delay(38);
@@ -94,10 +101,7 @@ try{
   if(quality.scroll>width+3)problems.push('summary horizontal overflow: '+quality.scroll);
   const shot=await call('Page.captureScreenshot',{format:'jpeg',quality:60,captureBeyondViewport:false});
   await writeFile(join(shots,name+'.jpg'),Buffer.from(shot.data,'base64'));
-  if(name==='desktop-wide'||name==='mobile-standard'){
-   const thumb=await call('Page.captureScreenshot',{format:'jpeg',quality:36,captureBeyondViewport:false});
-   console.log('REVIEW_SCREENSHOT_'+name+'='+thumb.data);
-  }
+
   const report={name,width,height,questions:step,maximumWidth:maxWidth,symbols:quality.images,conditionalVisible:quality.optional,columns:quality.grid,pdfSize:quality.pdf?.bytes,problems};
   reports.push(report);console.log('REVIEW_VIEWPORT='+JSON.stringify(report));
  }
