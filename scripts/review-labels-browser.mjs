@@ -13,7 +13,7 @@ const server=createServer(async(req,res)=>{
  try{
   let file=resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));
   if(!file.startsWith(root+sep)&&file!==root){res.writeHead(403).end();return;}
-  if(file.endsWith(sep))file=join(file,'index.html');
+  if(new URL(req.url,'http://localhost').pathname.endsWith('/'))file=join(file,'index.html');
   const data=await readFile(file);res.writeHead(200,{'Content-Type':types[extname(file)]||'application/octet-stream','Cache-Control':'no-store'}).end(data);
  }catch{res.writeHead(404).end('Not found');}
 });
@@ -65,7 +65,7 @@ try{
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
   await call('Emulation.setTouchEmulationEnabled',{enabled:mobile});
   await call('Page.navigate',{url:origin+'/outils/etiquettes-tracabilite/'});
-  await until('document.readyState==="complete" && !!document.querySelector(".question-card")');
+  await until('document.readyState==="complete" && !!document.querySelector(".question-card")').catch(async error=>{throw Error(error.message+' | '+JSON.stringify(await evaluate('({url:location.href,state:document.readyState,body:document.body?.innerText.slice(0,360),root:!!document.querySelector("#label-app")})')));});
   const problems=[];let step=0,maxWidth=0;
   const stateExpr='(()=>{const d=document.documentElement,c=document.querySelector(".question-card"),a=[...document.querySelectorAll(".label-options .answer")],rect=e=>{if(!e)return null;const x=e.getBoundingClientRect();return {x:x.x,y:x.y,w:x.width,h:x.height,bottom:x.bottom};};return {done:!!document.querySelector(".label-summary-heading"),heading:c?.querySelector("h1")?.textContent||"",choices:a.length,scroll:d.scrollWidth,first:rect(a[0]),last:rect(a.at(-1)),controls:rect(document.querySelector(".question-controls")),card:rect(c),scrollAllowed:document.body.classList.contains("quiz-scroll")}})()';
   while(step++<80){
