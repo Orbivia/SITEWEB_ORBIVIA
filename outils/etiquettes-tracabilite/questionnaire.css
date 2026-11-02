@@ -275,3 +275,15 @@ body[data-tool="etiquettes"] .label-clinical-note small{display:block;margin-top
  body[data-tool="etiquettes"].is-result .label-symbol-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
  body[data-tool="etiquettes"] .label-clinical-note{font-size:13px;padding:11px 13px}
 }
+
+/* Groupes de choix techniques : boutons compacts, sans icônes ni curseurs. */
+body[data-tool="etiquettes"] .label-multi-hint{font-size:12px;line-height:1.4;color:#65736b;margin:-3px 0 9px}
+body[data-tool="etiquettes"] .label-options-multi{gap:7px}
+body[data-tool="etiquettes"] .label-options-multi .answer.label-option{min-height:48px;padding:9px 12px}
+body[data-tool="etiquettes"] .label-options-multi .answer.label-option[aria-pressed="true"]{border-color:#bd8510;background:#fff1ce}
+@media(max-width:600px){
+ body[data-tool="etiquettes"] .label-options-multi{gap:5px}
+ body[data-tool="etiquettes"] .label-options-multi .answer.label-option{min-height:44px;padding:7px 10px}
+ body[data-tool="etiquettes"] .label-options-multi .answer.label-option .answer-copy{font-size:13px;line-height:1.25}
+ body[data-tool="etiquettes"] .label-multi-hint{font-size:11px;line-height:1.3}
+}
