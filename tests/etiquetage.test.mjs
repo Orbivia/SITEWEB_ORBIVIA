@@ -529,3 +529,56 @@ test('labelling: edit of MRI and package quantity clears obsolete responses',()=
  app.edit('support');app.selectChoice('device');
  assert.equal(app.answers.pack_quantity,undefined);
 });
+
+
+test('labelling: IEC 60878 equipment switch symbols are correctly conditional',()=>{
+ const basic={electronic:'yes',elec_60601:'yes',elec_mains_switch:'none'};
+ const none=scenario(basic);
+ assert.equal(has(none.conditional,'IEC 60417-5007'),false);
+ assert.equal(has(none.conditional,'IEC 60417-5008'),false);
+ const switchMode=scenario({...basic,elec_mains_switch:'switch'});
+ assert.ok(has(switchMode.conditional,'IEC 60417-5007'));
+ assert.ok(has(switchMode.conditional,'IEC 60417-5008'));
+ assert.equal(has(switchMode.conditional,'IEC 60417-5010'),false);
+ const buttonMode=scenario({...basic,elec_mains_switch:'push'});
+ assert.ok(has(buttonMode.conditional,'IEC 60417-5010'));
+ assert.equal(has(buttonMode.conditional,'IEC 60417-5007'),false);
+ const not60601=scenario({...basic,elec_60601:'no',elec_mains_switch:'switch'});
+ assert.equal(has(not60601.conditional,'IEC 60417-5007'),false);
+});
+
+test('labelling: IEC terminal, fuse and ESD pictograms do not appear by default',()=>{
+ const baseElec={electronic:'yes',elec_60601:'yes',elec_insulation:'class2'};
+ const no=scenario({...baseElec,elec_general_ground:'no',elec_functional_ground:'no',elec_equipotential:'no',elec_fuse:'no',elec_esd:'no'});
+ for(const code of ['IEC 60417-5017','IEC 60417-5018','IEC 60417-5021','IEC 60417-5016','IEC 60417-5134'])
+  assert.equal(has(no.conditional,code),false,'Unexpected marking '+code);
+ const yes=scenario({...baseElec,elec_general_ground:'yes',elec_functional_ground:'yes',elec_equipotential:'yes',elec_fuse:'yes',elec_esd:'yes'});
+ for(const code of ['IEC 60417-5017','IEC 60417-5018','IEC 60417-5021','IEC 60417-5016','IEC 60417-5134'])
+  assert.ok(has(yes.conditional,code),'Conditional marking not offered '+code);
+ assert.equal(has(yes.required,'IEC 60417-5134'),false,'ESD should not be automatically required on device label');
+ const without60601=scenario({...baseElec,elec_60601:'no',elec_equipotential:'yes',elec_functional_ground:'yes'});
+ assert.equal(has(without60601.conditional,'IEC 60417-5021'),false);
+ assert.equal(has(without60601.conditional,'IEC 60417-5018'),false);
+});
+
+test('labelling: all eight newly referenced IEC PNGs exist and use the correct file',()=>{
+ const app=create();
+ for(const code of ['5007','5008','5010','5016','5017','5018','5021','5134']){
+  const c='IEC 60417-'+code,file='IEC-60417-'+code+'.png';
+  assert.match(app.symbolImage(c),new RegExp(file.replace('.','\\.')+'(?:\\?|")'));
+  assert.equal(existsSync(new URL('../outils/etiquettes-tracabilite/symboles-iec/'+file,import.meta.url)),true,'Missing PNG '+file);
+ }
+});
+
+test('labelling: editing equipment classification removes hidden IEC answers',()=>{
+ const app=create();
+ finish(app,{electronic:'yes',elec_60601:'yes',elec_mains_switch:'push',elec_functional_ground:'yes',elec_equipotential:'yes',elec_fuse:'yes',elec_esd:'yes'});
+ assert.ok(has(app.conclusions().conditional,'IEC 60417-5010'));
+ assert.ok(has(app.conclusions().conditional,'IEC 60417-5021'));
+ app.edit('elec_60601');app.selectChoice('no');
+ assert.equal(app.answers.elec_mains_switch,undefined);
+ assert.equal(app.answers.elec_functional_ground,undefined);
+ assert.equal(app.answers.elec_equipotential,undefined);
+ assert.equal(has(app.conclusions().conditional,'IEC 60417-5010'),false);
+ assert.equal(has(app.conclusions().conditional,'IEC 60417-5021'),false);
+});
