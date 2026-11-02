@@ -87,5 +87,5 @@ const rich=extensive.conclusions();
 assert(has(rich.required,"5.3.7")&&has(rich.required,"5.3.9"),"Storage flags apply independently");
 assert(has(rich.required,"5.4.6")&&has(rich.conditional,"5.4.11"),"Material flags apply independently");
 assert(has(rich.required,"5.4.4"),"Warnings flag applies independently");
-assert(has(rich.conditional,"5.4.3"),"IFU flag applies independently");
+assert(has(rich.required,"5.4.3"),"IFU selection must appear in the primary summary");
 console.log("PASS: regulatory scenarios, binary questions, desktop logo grid + questionnaire ("+steps+" steps)");
