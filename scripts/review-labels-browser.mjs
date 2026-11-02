@@ -95,7 +95,7 @@ try{
   }
   const final=await evaluate(stateExpr);if(!final.done)problems.push('no summary after '+step+' steps');
   await until('document.querySelector("#label-pdf-download")?.hasAttribute("href")===true').catch(e=>problems.push('PDF preparation: '+e.message));
-  const quality=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid .label-symbol-img")];await Promise.all(imgs.map(x=>x.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download"),opt=document.querySelector(".label-optional-symbols");let pdf=null;if(a?.href){const bytes=await fetch(a.href).then(r=>r.arrayBuffer());pdf={bytes:bytes.byteLength,header:String.fromCharCode(...new Uint8Array(bytes.slice(0,5)))}}return {images:imgs.length,iecImages:imgs.filter(x=>x.src.startsWith("data:image/png;base64,")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),optional:!!opt,grid:opt?getComputedStyle(opt.querySelector(".label-symbol-grid")).gridTemplateColumns:null,pdf,scroll:document.documentElement.scrollWidth};})()');
+  const quality=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid .label-symbol-img")];await Promise.all(imgs.map(x=>x.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download"),opt=document.querySelector(".label-optional-symbols");let pdf=null;if(a?.href){const bytes=await fetch(a.href).then(r=>r.arrayBuffer());pdf={bytes:bytes.byteLength,header:String.fromCharCode(...new Uint8Array(bytes.slice(0,5)))}}return {images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),optional:!!opt,grid:opt?getComputedStyle(opt.querySelector(".label-symbol-grid")).gridTemplateColumns:null,pdf,scroll:document.documentElement.scrollWidth};})()');
   if(quality.broken.length)problems.push('broken symbols: '+quality.broken.join(','));
   if(quality.pdf?.header!=='%PDF-')problems.push('invalid PDF download '+JSON.stringify(quality.pdf));
   if(quality.scroll>width+3)problems.push('summary horizontal overflow: '+quality.scroll);
@@ -140,7 +140,7 @@ try{
    await delay(30);
   }
   await until('!!document.querySelector(".label-summary-heading")');
-  const special=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid img")];await Promise.all(imgs.map(i=>i.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download");let doc=null;for(let i=0;i<80&&!a?.hasAttribute("href");i++)await new Promise(r=>setTimeout(r,100));if(a?.href){const b=await fetch(a.href).then(r=>r.arrayBuffer());doc={bytes:b.byteLength,valid:String.fromCharCode(...new Uint8Array(b.slice(0,5)))==="%PDF-",pages:(await window.PDFLib.PDFDocument.load(b)).getPageCount()}}return {heading:document.querySelector(".label-summary-heading").textContent,clinical:document.querySelector(".label-clinical-note")?.textContent||"",required:document.querySelectorAll(".label-main-grid li").length,optional:document.querySelectorAll(".label-optional-symbols li").length,images:imgs.length,iecImages:imgs.filter(x=>x.src.startsWith("data:image/png;base64,")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),pdf:doc,width:document.documentElement.scrollWidth}})()');
+  const special=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid img")];await Promise.all(imgs.map(i=>i.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download");let doc=null;for(let i=0;i<80&&!a?.hasAttribute("href");i++)await new Promise(r=>setTimeout(r,100));if(a?.href){const b=await fetch(a.href).then(r=>r.arrayBuffer());doc={bytes:b.byteLength,valid:String.fromCharCode(...new Uint8Array(b.slice(0,5)))==="%PDF-",pages:(await window.PDFLib.PDFDocument.load(b)).getPageCount()}}return {heading:document.querySelector(".label-summary-heading").textContent,clinical:document.querySelector(".label-clinical-note")?.textContent||"",required:document.querySelectorAll(".label-main-grid li").length,optional:document.querySelectorAll(".label-optional-symbols li").length,images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),pdf:doc,width:document.documentElement.scrollWidth}})()');
   const issues=[];
   if(!special.pdf?.valid)issues.push('PDF not valid on '+kind);
   if(special.broken.length)issues.push('Broken symbols on '+kind);
@@ -148,7 +148,7 @@ try{
   if(kind==='stress'&&special.images<10)issues.push('Stress path did not display enough selected ISO symbols');
   if(kind==='clinical'&&!special.clinical.includes("investigations cliniques"))issues.push('Regulatory clinical label missing');
   if(kind==='stress'&&special.images<20)issues.push('Expected numerous official symbol images');
-  if(kind==='stress'&&special.iecImages<6)issues.push('IEC sprite extraction not loaded: '+special.iecImages);
+  if(kind==='stress'&&special.iecImages<6)issues.push('IEC exact PNG files not loaded: '+special.iecImages);
   if(special.pdf?.pages!==1)issues.push('Label summary PDF is not one page');
   const screenshot=await call('Page.captureScreenshot',{format:'jpeg',quality:65,captureBeyondViewport:false});
   await writeFile(join(shots,kind+'-result.jpg'),Buffer.from(screenshot.data,'base64'));
