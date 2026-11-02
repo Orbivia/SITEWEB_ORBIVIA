@@ -57,7 +57,7 @@ test('labelling: invalid saved shapes and missing responses cannot yield a finis
   assert.equal(app.finished,false);assert.equal(app.answers.unrecognised,undefined);
   assert.doesNotMatch(app.root.innerHTML,/label-summary-heading/);
  }
- const app=create({answers:{...base,reuse:'single',patient:'same',reprocess:'sterilize'},finished:true});
+ const app=create({answers:{...base,distributor:'no',modelnumber:'no',madein:'no',biologicalrisk:'no',reuse:'single',patient:'same',reprocess:'sterilize'},finished:true});
  assert.equal(app.finished,true);assert.equal(app.answers.patient,undefined);assert.equal(app.answers.reprocess,undefined);
  app.doReset();assert.equal(app.finished,false);assert.equal(Object.keys(app.answers).length,0);assert.equal(app.current().id,'status');
 });
