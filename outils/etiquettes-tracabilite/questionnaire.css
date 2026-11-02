@@ -276,14 +276,52 @@ body[data-tool="etiquettes"] .label-clinical-note small{display:block;margin-top
  body[data-tool="etiquettes"] .label-clinical-note{font-size:13px;padding:11px 13px}
 }
 
-/* Groupes de choix techniques : boutons compacts, sans icônes ni curseurs. */
-body[data-tool="etiquettes"] .label-multi-hint{font-size:12px;line-height:1.4;color:#65736b;margin:-3px 0 9px}
-body[data-tool="etiquettes"] .label-options-multi{gap:7px}
-body[data-tool="etiquettes"] .label-options-multi .answer.label-option{min-height:48px;padding:9px 12px}
-body[data-tool="etiquettes"] .label-options-multi .answer.label-option[aria-pressed="true"]{border-color:#bd8510;background:#fff1ce}
+/* Synthèse : cadre et surface identiques pour chaque symbole, quelle que soit
+ * l'origine ISO / IEC / pictogramme complémentaire. Les proportions d'origine
+ * des symboles officiels restent inchangées (object-fit: contain). */
+body[data-tool="etiquettes"].is-result .label-symbol-grid li{
+ display:grid;
+ grid-template-rows:64px auto auto;
+ justify-items:center;
+ align-content:start;
+ gap:7px;
+ min-height:150px;
+}
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-img,
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-text-mark{
+ box-sizing:border-box;
+ width:64px;
+ height:64px;
+ min-height:64px;
+ max-width:100%;
+ margin:0;
+ border:1px solid #e4e9e2;
+ border-radius:9px;
+ background:#fff;
+}
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-img{
+ display:block;
+ padding:4px;
+ object-fit:contain;
+ object-position:center;
+}
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-text-mark{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:4px;
+ font-size:17px!important;
+}
 @media(max-width:600px){
- body[data-tool="etiquettes"] .label-options-multi{gap:5px}
- body[data-tool="etiquettes"] .label-options-multi .answer.label-option{min-height:44px;padding:7px 10px}
- body[data-tool="etiquettes"] .label-options-multi .answer.label-option .answer-copy{font-size:13px;line-height:1.25}
- body[data-tool="etiquettes"] .label-multi-hint{font-size:11px;line-height:1.3}
+ body[data-tool="etiquettes"].is-result .label-symbol-grid li{
+  grid-template-rows:60px auto auto;
+  gap:6px;
+  min-height:138px;
+ }
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-img,
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-text-mark{
+  width:60px;
+  height:60px;
+  min-height:60px;
+ }
 }
