@@ -64,7 +64,7 @@ try{
  for(const [name,width,height,mobile] of sizes){
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
   await call('Emulation.setTouchEmulationEnabled',{enabled:mobile});
-  if(reports.length)await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v7")');
+  if(reports.length)await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v8")');
   await call('Page.navigate',{url:origin+'/outils/etiquettes-tracabilite/'});
   await until('document.readyState==="complete" && !!document.querySelector(".question-card")').catch(async error=>{throw Error(error.message+' | '+JSON.stringify(await evaluate('({url:location.href,state:document.readyState,body:document.body?.innerText.slice(0,360),root:!!document.querySelector("#label-app")})')));});
   // Capture initial question as well as the final card grid.
@@ -131,7 +131,7 @@ try{
  for(const [kind,width,height,mobile] of [['stress',1440,900,false],['clinical',390,844,true]]){
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
   await call('Emulation.setTouchEmulationEnabled',{enabled:mobile});
-  await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v7")');
+  await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v8")');
   await call('Page.navigate',{url:origin+'/outils/etiquettes-tracabilite/'});
   await until('document.readyState==="complete"&&!!document.querySelector(".question-card")');
   let steps=0;while(steps++<90){
