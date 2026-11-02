@@ -188,7 +188,7 @@ test('labelling: IEC 60417 symbols require the declared safety class and patient
  assert.ok(has(selected.required,'ISO 7010-M002'));
  assert.ok(has(selected.required,'IEC 60417-5957'));
  assert.ok(has(selected.required,'IP22'));
- assert.equal(create().symbolImage('ISO 7010-M002'),"","No unlicensed substitute for IEC graphics");
+ assert.match(create().symbolImage('ISO 7010-M002'),/symboles-iec\/ISO-7010-M002\.png/);
  const other=scenario({electronic:'yes',elec_60601:'no',elec_applied:'bf',elec_insulation:'class2'});
  assert.equal([...other.required,...other.conditional].some(x=>x.code.startsWith('IEC 60417-5333')),false);
 });
@@ -228,7 +228,7 @@ test('labelling: the uploaded EN 60601-1 Annex D references are distinguished',(
  assert.ok(has(alternating.required,"IEC 60417-5032"),"Alternating-current symbol");
  const mixed=scenario({electronic:"yes",support:"device",elec_supply:"yes",elec_supply_kind:"both"});
  assert.ok(has(mixed.required,"IEC 60417-5033"),"Both AC and DC");
- assert.equal(create().symbolImage("ISO 7010-M002"),"","No extracted copyrighted PDF artwork");
+ assert.match(create().symbolImage("ISO 7010-M002"),/symboles-iec\/ISO-7010-M002\.png/);
 });
 
 test('labelling: alarm controls use EN 60601-1-8 Annex C only when applicable',()=>{
@@ -242,4 +242,19 @@ test('labelling: alarm controls use EN 60601-1-8 Annex C only when applicable',(
  const onlyAlarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_reset:"no",elec_alarm_silence:"no"});
  assert.equal(has(onlyAlarm.conditional,"IEC 60417-5309"),false);
  assert.equal(has(onlyAlarm.conditional,"IEC 60417-5576"),false);
+});
+
+test('labelling: official IEC and ISO PNGs map to the correct symbol files',()=>{
+ const app=create();
+ for(const [code,file] of [
+ ['IEC 60417-5031','IEC-60417-5031.png'],
+ ['IEC 60417-5172','IEC-60417-5172.png'],
+ ['IEC 60417-5334','IEC-60417-5334.png'],
+ ['IEC 60417-5309','IEC-60417-5309.png'],
+ ['ISO 7000-1641','ISO-7000-1641.png'],
+ ['ISO 7010-M002','ISO-7010-M002.png'],
+ ['ISO 7010-W012','ISO-7010-W012.png']]){
+  assert.match(app.symbolImage(code),new RegExp(file.replace('.','\\.')));
+ }
+ assert.equal(app.symbolImage('IEC 60417-5957'),'');
 });
