@@ -90,7 +90,7 @@ try{
    if(st.first?.h<43)problems.push('touch target under 44px at '+step+': '+st.first.h);
    if(st.controls?.bottom>height+8&&!st.scrollAllowed)problems.push('bottom controls inaccessible at '+step);
    if(st.last&&st.card&&st.last.bottom>st.card.bottom+6&&!st.scrollAllowed)problems.push('clipped answer at '+step);
-   await evaluate('(()=>{const options=[...document.querySelectorAll(".label-options .answer")];let btn=options[0];const h=document.querySelector(".question-heading h1")?.textContent||"";if(h.includes("précautions particulières de stockage")||h.includes("Des substances ou matériaux"))btn=options.find(x=>x.dataset.choice==="yes")||btn;btn?.click();})()');
+   await evaluate('(()=>{const options=[...document.querySelectorAll(".label-options .answer")];let btn=options[0];const h=document.querySelector(".question-heading h1")?.textContent||"";if(h.includes("précautions particulières de stockage")||h.includes("Des substances ou matériaux"))btn=options.find(x=>x.dataset.choice==="yes")||btn;btn?.click();if(document.querySelector(".label-options-multi"))document.querySelector("[data-action=next]")?.click();})()');
    await delay(38);
   }
   const final=await evaluate(stateExpr);if(!final.done)problems.push('no summary after '+step+' steps');
@@ -111,6 +111,11 @@ try{
  function chooseSpecial(mode){
   const q=document.querySelector(".question-heading h1")?.textContent||"";
   const list=[...document.querySelectorAll(".label-options .answer")];
+  if(mode==="transport"&&q.includes("Quelles précautions de protection du colis")||mode==="transport"&&q.includes("Quelles restrictions de manutention")){
+   const all=[...document.querySelectorAll(".label-options-multi .answer")].filter(b=>b.dataset.choice!=="none");
+   for(const option of all){document.querySelector('[data-choice="'+option.dataset.choice+'"]')?.click();}
+   document.querySelector('[data-action="next"]')?.click();return true;
+  }
   const find=value=>list.find(x=>x.dataset.choice===value);
   let button=list[0];
   if(mode==="clinical"&&q.includes("Dans quel cadre"))button=find("investigation")||button;
@@ -139,7 +144,7 @@ try{
    else if(q.includes("mise sous tension et la coupure secteur"))button=find("switch")||button;
    else if(find("yes"))button=find("yes");
   }
-  button?.click();return !!button;
+  button?.click();if(document.querySelector(".label-options-multi"))document.querySelector("[data-action=next]")?.click();return !!button;
  }
  for(const [kind,width,height,mobile] of [['stress',1440,900,false],['clinical',390,844,true],['transport',390,844,true],['mri',390,844,true]]){
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
