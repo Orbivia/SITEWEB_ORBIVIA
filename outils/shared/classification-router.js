@@ -1,16 +1,1 @@
-/* One entry question, separate MDR and IVDR rules and progress scales. */
-(function(){
-'use strict';
-function create(mdr,ivdr){
- const scope=mdr.allQuestions.find(q=>q.id==='scope');
- const ivdAll=[scope,...ivdr.allQuestions];
- return {version:mdr.version+'+'+ivdr.version,allQuestions:[...mdr.allQuestions,...ivdr.allQuestions],
-  referenceQuestions:a=>a.scope==='ivd'?ivdAll:mdr.allQuestions,
-  known:mdr.known,supported:a=>a.scope==='ivd'||mdr.supported(a),
-  context:a=>a.scope==='ivd'?{scope:'ivd',...ivdr.context(a)}:mdr.context(a),
-  questions:a=>a.scope==='ivd'?[scope,...ivdr.questions(a)]:mdr.questions(a),
-  evaluate:(a,options)=>a.scope==='ivd'?ivdr.evaluate(a):{...mdr.evaluate(a,options),regulation:'MDR',source:'https://eur-lex.europa.eu/eli/reg/2017/745/oj',sourceLabel:'MDR — annexe VIII'}
- };
-}
-if(typeof module==='object'&&module.exports)module.exports={create};else window.ORBIVIA_CLASSIFICATION=create(window.ORBIVIA_CLASSIFICATION,window.ORBIVIA_IVDR);
-})();
+!function(){"use strict";function e(e,o){const s=e.allQuestions.find(e=>"scope"===e.id),t=[s,...o.allQuestions];return{version:e.version+"+"+o.version,allQuestions:[...e.allQuestions,...o.allQuestions],referenceQuestions:o=>"ivd"===o.scope?t:e.allQuestions,known:e.known,supported:o=>"ivd"===o.scope||e.supported(o),context:s=>"ivd"===s.scope?{scope:"ivd",...o.context(s)}:e.context(s),questions:t=>"ivd"===t.scope?[s,...o.questions(t)]:e.questions(t),evaluate:(s,t)=>"ivd"===s.scope?o.evaluate(s):{...e.evaluate(s,t),regulation:"MDR",source:"https://eur-lex.europa.eu/eli/reg/2017/745/oj",sourceLabel:"MDR — annexe VIII"}}}"object"==typeof module&&module.exports?module.exports={create:e}:window.ORBIVIA_CLASSIFICATION=e(window.ORBIVIA_CLASSIFICATION,window.ORBIVIA_IVDR)}();
