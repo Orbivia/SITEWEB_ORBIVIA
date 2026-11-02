@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v6";
+const STORE="orbivia-mdr-label-wizard-v7";
 const Q=[
 {id:"status",s:"Périmètre",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -36,7 +36,8 @@ const Q=[
 {id:"resterilize",s:"Stérilité",title:"Le dispositif peut-il être restérilisé après ouverture ?",help:"Ne pas confondre « ne pas restériliser » (ISO 15223-1, 5.2.6) et « ne pas réutiliser » (5.4.2). Les deux informations ne sont pas interchangeables.",type:"single",when:a=>a.sterile==="sterile",options:[["no","Non, ne pas restériliser"],["yes","Oui, un procédé validé existe"]]},
 {id:"expiry",s:"Durée de vie",title:"Existe-t-il une date limite d'utilisation ou d'implantation ?",help:"Une date limite peut être pertinente pour un dispositif stérile ou non stérile. En l'absence de date limite, la date de fabrication doit normalement être indiquée sur l'étiquette.",type:"single",options:[["yes","Oui, une date limite est définie"],["no","Non, pas de date limite pertinente"]]},
 {id:"tracking",s:"Traçabilité",title:"Comment les unités fabriquées sont-elles identifiées ?",help:"Le lot et/ou la série sont les données de production (UDI-PI) lorsqu'elles sont applicables. Pour un actif implantable, la série doit être présente. La date de péremption affichée doit aussi figurer dans l'UDI-PI.",type:"single",options:[["lot","Par numéro de lot"],["serial","Par numéro de série"],["both","Lot et numéro de série"]]},
-{id:"storage",s:"Conservation",title:"Quelles précautions de stockage doivent être indiquées ?",help:"Vous pouvez sélectionner plusieurs conditions réellement imposées par les spécifications et la gestion des risques. Un symbole sans limite chiffrée appropriée peut être insuffisant.",type:"multi",options:[["temperature","Limites de température"],["humidity","Limites d'humidité"],["dry","Garder au sec"],["sunlight","Protéger du soleil"],["fragile","Fragile / manutention spécifique"],["pressure","Plage de pression atmosphérique"],["none","Aucune condition particulière"]]},
+{id:"storage",s:"Conservation",title:"Quelles précautions de stockage doivent être indiquées ?",help:"Vous pouvez sélectionner plusieurs conditions réellement imposées par les spécifications et la gestion des risques. Un symbole sans limite chiffrée appropriée peut être insuffisant.",type:"multi",options:[["temperature","Limites de température"],["humidity","Limites d'humidité"],["dry","Garder au sec"],["sunlight","Protéger du soleil"],["heat","Protéger de la chaleur et des sources radioactives"],["fragile","Fragile / manutention spécifique"],["pressure","Plage de pression atmosphérique"],["none","Aucune condition particulière"]]},
+{id:"storage_temperature_mode",s:"Conservation",title:"Quelle limitation de température est documentée ?",help:"Les symboles ISO 15223-1 5.3.5 (limite basse), 5.3.6 (limite haute) et 5.3.7 (plage de température) ne sont pas interchangeables. Les valeurs validées doivent figurer à côté du symbole.",type:"single",when:a=>a.storage==="yes"&&a.storage_temperature==="yes",options:[["both","Une plage avec limite basse et haute"],["max","Uniquement une température maximale"],["min","Uniquement une température minimale"]]},
 {id:"substances",s:"Matières",title:"Le dispositif ou son emballage comporte-t-il des substances à signaler ?",help:"Certaines substances nécessitent une indication spécifique et parfois une justification dans la documentation. Les exigences CMR/perturbateurs endocriniens sont conditionnelles ; un simple pictogramme ne suffit pas.",type:"multi",options:[["latex","Latex naturel"],["cmr","Substances CMR ou perturbateurs endocriniens pertinentes"],["med","Substance médicamenteuse incorporée"],["blood","Dérivés du sang ou plasma humain"],["human","Tissus ou dérivés d'origine humaine"],["animal","Tissus ou dérivés d'origine animale"],["nano","Nanomatériaux"],["none","Aucun de ces cas"]]},
 {id:"instructions",s:"Information",title:"Quelles informations d'utilisation sont nécessaires ?",help:"Le renvoi à une notice peut être pertinent, mais la notice électronique seule est soumise à des conditions particulières. Les avertissements immédiats ne peuvent pas toujours être déportés dans la notice.",type:"multi",options:[["ifu","Consulter la notice avant utilisation"],["electronic","Notice électronique envisagée"],["warning","Avertissement critique à lire sur l'étiquette"],["damaged","Ne pas utiliser si l'emballage est endommagé"],["none","Aucune information particulière identifiée"]]},
 
@@ -74,7 +75,7 @@ const Q=[
 
 /* Les trois anciennes questions multisélection sont décomposées en étapes Oui/Non. */
 const flagTitles={
- storage:{temperature:"Faut-il indiquer des limites de température ?",humidity:"Faut-il indiquer des limites d'humidité ?",dry:"Faut-il conserver le produit au sec ?",sunlight:"Faut-il protéger le produit du soleil ?",fragile:"Le produit est-il fragile ?",pressure:"Faut-il indiquer des limites de pression atmosphérique ?"},
+ storage:{temperature:"Faut-il indiquer des limites de température ?",humidity:"Faut-il indiquer des limites d'humidité ?",dry:"Faut-il conserver le produit au sec ?",sunlight:"Faut-il protéger le produit du soleil ?",heat:"Faut-il protéger le produit de la chaleur et des sources radioactives ?",fragile:"Le produit est-il fragile ?",pressure:"Faut-il indiquer des limites de pression atmosphérique ?"},
  substances:{latex:"Le produit contient-il du latex naturel ?",cmr:"Contient-il des substances CMR ou des perturbateurs endocriniens ?",med:"Contient-il une substance médicamenteuse ?",blood:"Contient-il des dérivés du sang ou du plasma humain ?",human:"Contient-il des matériaux biologiques d'origine humaine ?",animal:"Contient-il des matériaux biologiques d'origine animale ?",nano:"Contient-il des nanomatériaux ?"},
  instructions:{ifu:"Une notice d'utilisation est-elle prévue ?",electronic:"La notice est-elle électronique ?",warning:"Un avertissement doit-il apparaître directement sur l'étiquette ?",damaged:"Faut-il signaler le risque d'utilisation si l'emballage est endommagé ?"}
 };
@@ -210,6 +211,9 @@ function conclusions(at=new Date()){
   if(!draft){
    r("5.7.7","Indication « dispositif médical »","Le MDR exige cette indication. Le symbole MD (5.7.7) est une manière possible de la présenter.",mdr+" annexe I, 23.2(q)","Mention");
   }
+  if(a.distributor==="yes")c("5.1.9","Distributeur et adresse","Identifier le distributeur avec sa dénomination et ses coordonnées. Le symbole ne rend pas systématiquement cette mention obligatoire sur toute étiquette MDR.",iso+" 5.1.9","Opérateur");
+  if(a.modelnumber==="yes")c("5.1.10","Numéro de modèle","Accompagner 5.1.10 du numéro de modèle validé, distinct de la référence catalogue REF.",iso+" 5.1.10","Identification");
+  if(a.madein==="yes")c("5.1.11","Pays de fabrication","Remplacer « CC » par le code pays ISO 3166-1 approprié dans le graphisme final. Le fichier PNG de référence avec « CC » n'est pas directement imprimable.",iso+" 5.1.11","Origine");
   if(a.manufacturer==="outside"&&isEU&&!draft){
    r("5.1.2","Mandataire dans l'Union et adresse","Utiliser les coordonnées du mandataire UE ; symbole 5.1.2 dans la version amendée A1:2025 (code de juridiction).",mdr+" annexe I, 23.2(d) ; "+iso+" / A1:2025","Mention");
   }
@@ -297,6 +301,10 @@ function conclusions(at=new Date()){
   if(sterilePack)v("Support incohérent avec l'état déclaré","Un conditionnement maintenant la stérilité ne peut pas correspondre à un dispositif déclaré fourni non stérile.",true);
  }
 
+ if(a.biologicalrisk==="yes"){
+  if(label)r("5.4.1","Risque biologique","Identifier le risque biologique résiduel et les mesures de maîtrise adaptées au support.",iso+" 5.4.1","Sécurité");
+  else c("5.4.1","Risque biologique — emplacement à vérifier","Apposer le symbole sur le support adapté à la protection de l'utilisateur.",iso+" 5.4.1","Sécurité");
+ }
  if(a.reuse==="single"&&label&&!draft)r("5.4.2","À usage unique — ne pas réutiliser","L'indication d'usage unique est requise si le dispositif est conçu pour une seule procédure sur un patient.",mdr+" annexe I, 23.2(n) ; "+iso+" 5.4.2","Utilisation");
  if(reused){
   if(a.patient==="same"&&label)c("5.4.12","Un seul patient, plusieurs utilisations","Adapté uniquement au matériel réutilisable sur un même patient, et non sur plusieurs patients.",iso+" 5.4.12","Utilisation");
@@ -317,7 +325,7 @@ function conclusions(at=new Date()){
  }
 
  const storage=[
-  ["temperature","5.3.7","Limites de température"],
+  ["heat","5.3.3","Protéger de la chaleur et des sources radioactives"],
   ["humidity","5.3.8","Limites d'humidité"],
   ["pressure","5.3.9","Limites de pression atmosphérique"],
   ["dry","5.3.4","Conserver au sec"],
@@ -325,7 +333,13 @@ function conclusions(at=new Date()){
   ["fragile","5.3.1","Fragile : manipuler avec soin"]
  ];
  if(label){
-  storage.forEach(item=>{if(listContains("storage",item[0]))r(item[1],item[2],"Ajouter les valeurs et limites validées si le symbole le requiert ; ne pas inventer des seuils.",mdr+" annexe I, 23.2(k) ; "+iso+" 5.3","Stockage");});
+  storage.forEach(item=>{if(listContains("storage",item[0]))r(item[1],item[2],"À sélectionner uniquement si ce risque de stockage est justifié. Ajouter les valeurs validées lorsqu'elles sont exigées.",mdr+" annexe I, 23.2(k) ; "+iso+" 5.3","Stockage");});
+  if(listContains("storage","temperature")){
+   const options={both:["5.3.7","Plage de température"],max:["5.3.6","Limite supérieure de température"],min:["5.3.5","Limite inférieure de température"]};
+   const chosen=options[a.storage_temperature_mode];
+   if(chosen)r(chosen[0],chosen[1],"Reporter la valeur ou les limites thermiques validées directement à côté du symbole.",iso+" "+chosen[0]+" ; MDR annexe I, 23.2(k)","Stockage");
+   else v("Limite thermique à préciser","Choisir le type de limite thermique validée avant l'impression.",true);
+  }
   const substances=[
    ["latex","5.4.5","Latex de caoutchouc naturel"],
    ["blood","5.4.6","Dérivés du sang ou du plasma humain"],
