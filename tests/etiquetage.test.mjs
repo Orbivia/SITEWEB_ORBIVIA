@@ -342,3 +342,55 @@ test('labelling: EEG and ECG particular standards are referenced without invente
  const general=scenario({electronic:'yes',elec_60601:'yes',elec_specialty:'general'});
  assert.equal(general.review.some(x=>x.title.startsWith('EEG :')||x.title.startsWith('ECG diagnostique')),false);
 });
+
+
+test('labelling: all 17 ISO 780 pictograms have a conditional path and an exact PNG',()=>{
+ const common={status:'market',territory:'eu',support:'outer',shipping:'yes',
+  shipping_cog:'yes',shipping_sling:'yes',shipping_fragile:'yes',shipping_hooks:'yes',
+  shipping_handtruck:'yes',shipping_forks:'yes',shipping_roll:'yes',shipping_rain:'yes',
+  shipping_sun:'yes',shipping_radio:'yes',shipping_up:'yes',shipping_temperature:'yes'};
+ const app=create();
+ const variants=[
+  scenario({...common,shipping_clamp:'allowed',shipping_stack:'mass'}),
+  scenario({...common,shipping_clamp:'forbidden',shipping_stack:'number'}),
+  scenario({...common,shipping_clamp:'none',shipping_stack:'forbidden'})
+ ];
+ const found=new Set(variants.flatMap(result=>result.transport.map(item=>item.code)));
+ for(let i=1;i<=17;i++){
+  const code='ISO 780 '+String(i).padStart(2,'0');
+  const filename='ISO-780-'+String(i).padStart(2,'0')+'.png';
+  assert.ok(found.has(code),'Missing question branch for '+code);
+  assert.match(app.symbolImage(code),new RegExp('symboles-transport/'+filename.replace('.','\\.')+'(?:\\?|")'));
+  assert.equal(existsSync(new URL('../outils/etiquettes-tracabilite/symboles-transport/'+filename,import.meta.url)),true,'Missing asset '+filename);
+ }
+ assert.ok(variants[0].review.some(x=>/Valeur d'empilage/.test(x.title)));
+ assert.ok(variants[1].review.some(x=>/Valeur d'empilage/.test(x.title)));
+ assert.ok(variants[0].review.some(x=>/température de transport/.test(x.title)));
+ assert.equal(variants[2].transport.some(x=>x.code==='ISO 780 15'),false);
+});
+
+test('labelling: ISO 780 transport symbols never become medical MDR markings',()=>{
+ for(const support of ['device','sterile']){
+  const result=scenario({support,shipping:'yes',shipping_fragile:'yes',shipping_stack:'forbidden'});
+  assert.equal(result.transport.length,0,'Medical marking has no transport section on '+support);
+  assert.equal([...result.required,...result.conditional].some(x=>/^ISO 780/.test(x.code)),false);
+ }
+ const normal=scenario({support:'outer',shipping:'no',shipping_fragile:'yes'});
+ assert.equal(normal.transport.length,0,'Transport symbols require explicit opt-in');
+ const ship=scenario({support:'outer',shipping:'yes',shipping_fragile:'yes',shipping_stack:'none'});
+ assert.ok(has(ship.transport,'ISO 780 03'));
+ assert.equal(has(ship.required,'ISO 780 03'),false);
+ assert.equal(has(ship.conditional,'ISO 780 03'),false);
+});
+
+test('labelling: transport route resets obsolete answers and keeps a coherent PDF source',()=>{
+ const app=create();finish(app,{support:'outer',shipping:'yes',shipping_fragile:'yes',shipping_up:'yes',shipping_stack:'forbidden'});
+ assert.ok(has(app.conclusions().transport,'ISO 780 03'));
+ assert.ok(has(app.conclusions().transport,'ISO 780 17'));
+ assert.match(app.root.innerHTML,/Transport et manutention/);
+ assert.match(app.root.innerHTML,/symboles-transport\/ISO-780-03.png/);
+ app.edit('shipping');app.selectChoice('no');
+ assert.equal(app.answers.shipping_fragile,undefined);
+ assert.equal(app.answers.shipping_stack,undefined);
+ assert.equal(app.conclusions().transport.length,0);
+});
