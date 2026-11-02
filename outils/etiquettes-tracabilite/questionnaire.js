@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v3";
+const STORE="orbivia-mdr-label-wizard-v4";
 const Q=[
 {id:"status",s:"Périmètre",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -36,6 +36,17 @@ const Q=[
 {id:"substances",s:"Matières",title:"Le dispositif ou son emballage comporte-t-il des substances à signaler ?",help:"Certaines substances nécessitent une indication spécifique et parfois une justification dans la documentation. Les exigences CMR/perturbateurs endocriniens sont conditionnelles ; un simple pictogramme ne suffit pas.",type:"multi",options:[["latex","Latex naturel"],["cmr","Substances CMR ou perturbateurs endocriniens pertinentes"],["med","Substance médicamenteuse incorporée"],["blood","Dérivés du sang ou plasma humain"],["human","Tissus ou dérivés d'origine humaine"],["animal","Tissus ou dérivés d'origine animale"],["nano","Nanomatériaux"],["none","Aucun de ces cas"]]},
 {id:"instructions",s:"Information",title:"Quelles informations d'utilisation sont nécessaires ?",help:"Le renvoi à une notice peut être pertinent, mais la notice électronique seule est soumise à des conditions particulières. Les avertissements immédiats ne peuvent pas toujours être déportés dans la notice.",type:"multi",options:[["ifu","Consulter la notice avant utilisation"],["electronic","Notice électronique envisagée"],["warning","Avertissement critique à lire sur l'étiquette"],["damaged","Ne pas utiliser si l'emballage est endommagé"],["none","Aucune information particulière identifiée"]]},
 {id:"electronic",s:"Produit",title:"Le dispositif comporte-t-il une partie électrique ou électronique ?",help:"Les dispositifs électriques peuvent nécessiter des marquages complémentaires hors ISO 15223-1 (par exemple sécurité électrique ou DEEE), selon leurs caractéristiques et les textes applicables.",type:"single",options:[["yes","Oui, équipement électrique ou électronique"],["no","Non, dispositif non électrique"]]},
+{id:"elec_weee",s:"Environnement",title:"L'équipement relève-t-il de la filière DEEE (déchets d'équipements électriques et électroniques) ?",help:"Pour la majorité des équipements électriques/électroniques mis sur le marché européen, la directive 2012/19/UE impose le symbole de la poubelle sur roues barrée. Des exclusions existent. Le marquage se place normalement sur l'équipement lui-même.",type:"single",when:a=>a.electronic==="yes"&&a.status==="market",options:[["yes","Oui, l'équipement est concerné"],["no","Non, exclusion justifiée dans le dossier réglementaire"]]},
+{id:"elec_battery",s:"Environnement",title:"Le dispositif comporte-t-il une pile ou une batterie ?",help:"Le marquage de collecte séparée des batteries relève du règlement (UE) 2023/1542 et concerne la batterie elle-même, distinctement du marquage DEEE de l'équipement.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non"],["yes","Oui, pile ou batterie intégrée ou fournie"]]},
+{id:"elec_ip",s:"Protection",title:"Un indice de protection IP a-t-il été vérifié pour l'enveloppe ?",help:"La codification IP selon l'IEC 60529 est une information technique, pas un pictogramme. Ne l'affichez que si le niveau a été justifié par les essais ou la documentation technique.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, aucun indice IP revendiqué"],["yes","Oui, un indice IP est établi"]]},
+{id:"elec_ip_value",s:"Protection",title:"Quel indice IP a été établi ?",help:"Ne sélectionnez que l'indice réellement vérifié selon la norme IEC 60529. Le code affiché dans la synthèse n'est pas une certification délivrée par l'outil.",type:"single",when:a=>a.elec_ip==="yes"&&a.electronic==="yes",options:[["ip22","IP22"],["ip20","IP20"],["ip21","IP21"],["ip44","IP44"],["ip54","IP54"],["ip55","IP55"],["ip65","IP65"],["ip67","IP67"],["ip68","IP68"],["ipx4","IPX4"],["ipx7","IPX7"],["other","Autre indice IP documenté"]]},
+{id:"elec_60601",s:"Sécurité électrique",title:"Le dispositif est-il un équipement électromédical évalué selon l'IEC 60601-1 ?",help:"Les classes de protection électrique et les types de parties appliquées (B, BF, CF) ne doivent pas être déduits du seul fait que le produit contient de l'électronique.",type:"single",when:a=>a.electronic==="yes",options:[["yes","Oui, IEC 60601-1 applicable"],["no","Non, autre référentiel électrique"]]},
+{id:"elec_insulation",s:"Sécurité électrique",title:"Quelle protection contre les chocs électriques est déclarée ?",help:"Pour la classe II, le double carré correspond au symbole IEC 60417-5172. Ne pas confondre cette classe de protection électrique avec la classe MDR du dispositif.",type:"single",when:a=>a.elec_60601==="yes",options:[["internal","Source d'énergie interne"],["class2","Classe II — double isolation"],["class1","Classe I — mise à la terre de protection"]]},
+{id:"elec_applied",s:"Sécurité électrique",title:"Le dispositif présente-t-il une partie appliquée au patient classifiée ?",help:"L'IEC 60601-1 définit les types B, BF et CF selon le degré de protection contre les chocs électriques ; ne sélectionner que la classification réellement justifiée.",type:"single",when:a=>a.elec_60601==="yes",options:[["none","Non, aucune partie appliquée de ce type"],["bf","Oui, type BF"],["b","Oui, type B"],["cf","Oui, type CF"]]},
+{id:"elec_defib",s:"Sécurité électrique",title:"La partie appliquée est-elle protégée contre les décharges d'un défibrillateur ?",help:"Si cette protection est vérifiée, un symbole IEC 60417 distinct identifie la version résistante aux décharges de défibrillateur. Ne pas le déduire du seul type B, BF ou CF.",type:"single",when:a=>["b","bf","cf"].includes(a.elec_applied),options:[["no","Non"],["yes","Oui, protection validée"]]},
+{id:"elec_manual",s:"Sécurité électrique",title:"Un avertissement impose-t-il la lecture du manuel avant utilisation ?",help:"Le symbole IEC 60417-1641 (« Operating manual ») diffère du symbole ISO 15223-1, 5.4.3 (« Consulter les instructions d'utilisation »). Le choix dépend des risques et des exigences de la norme applicable.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, renvoi standard à la notice suffisant"],["yes","Oui, lecture du manuel requise pour la sécurité"]]},
+{id:"elec_supply",s:"Sécurité électrique",title:"Les caractéristiques nominales de l'alimentation doivent-elles figurer sur le dispositif ?",help:"Examiner tension, nature du courant (AC/DC), fréquence et puissance ou courant nominal selon la norme de sécurité et la construction retenues. Ne pas inventer de valeurs.",type:"single",when:a=>a.electronic==="yes",options:[["yes","Oui, marquage électrique nominal prévu"],["no","Non, absence justifiée pour ce produit"]]},
+{id:"elec_indoor",s:"Sécurité électrique",title:"L'appareil est-il réservé à un usage en intérieur ?",help:"Le symbole IEC 60417-5957 peut être pertinent lorsque l'usage exclusivement intérieur doit être indiqué sur le produit.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, usage extérieur possible"],["yes","Oui, usage en intérieur uniquement"]]},
 {id:"space",s:"Étiquette",title:"Quelle surface est disponible pour l’étiquetage ?",help:"Cette question concerne l'espace sur le support choisi, pas la taille totale du dispositif. La place disponible ne dispense pas des mentions requises : il faudra parfois adapter les niveaux d'emballage.",type:"single",options:[["tiny","Très petite : moins de 20 × 20 mm"],["small","Petite : environ 40 × 20 mm"],["medium","Moyenne : environ 70 × 40 mm"],["large","Grande : 100 × 50 mm ou plus"]]},
 {id:"language",s:"Étiquette",title:"Pour quels pays les informations seront-elles préparées ?",help:"Les États membres fixent les exigences de langue des informations fournies avec les dispositifs. Des symboles normalisés peuvent aider mais ne remplacent pas tous les textes requis.",type:"single",options:[["fr","France"],["eu","Plusieurs pays de l'UE"],["other","UE et pays hors UE"]]}
 ];
@@ -310,12 +321,78 @@ function conclusions(at=new Date()){
     else r(item[1],item[2],"Évaluer la mention réglementaire exacte à partir de la composition, de l'analyse de risques et des seuils applicables.",mdr+" annexe I, 23.2(e–f) ; "+iso+" "+item[1],"Composition");
    }
   });
-  if(listContains("instructions","ifu")||listContains("instructions","electronic"))c("5.4.3","Consulter la notice","Le symbole peut renvoyer aux instructions d'utilisation, papier ou électronique dans les conditions réglementaires applicables.",iso+" 5.4.3","Notice");
+  if(listContains("instructions","ifu")||listContains("instructions","electronic"))r("5.4.3","Consulter les instructions d’utilisation","Une notice est prévue ; le symbole ISO 15223-1 5.4.3 peut être utilisé pour y renvoyer. Le pictogramme n’est pas imposé dans tous les cas.",iso+" 5.4.3","Notice");
   if(listContains("instructions","warning"))r("5.4.4","Attention et avertissements particuliers","La nature et le placement des avertissements doivent venir de l'analyse de risques, le pictogramme seul ne remplace pas le texte nécessaire.",mdr+" annexe I, 23.2(m) ; "+iso+" 5.4.4","Sécurité");
   if(listContains("instructions","damaged")&&!sterilePack)c("5.2.8","Emballage endommagé : consulter la notice","À envisager si l'intégrité de l'emballage conditionne l'utilisation sûre du produit.",iso+" 5.2.8","Emballage");
  }
  if(listContains("instructions","electronic"))v("Notice électronique","Vérifier l'éligibilité au régime de notice électronique avant de supprimer toute notice papier.");
- if(a.electronic==="yes")v("Marquages électriques complémentaires","Évaluer, si applicables, les exigences issues des normes électriques, des batteries et de la réglementation DEEE, hors ISO 15223-1.");
+ /* IEC 60601-1 / IEC 60417, IEC 60529, DEEE et piles :
+  * les graphismes de ces autres référentiels ne sont PAS redessinés.
+  * Le code seul signale l'information ou le symbole exact à rechercher.
+  * Chaque marquage est indépendant des symboles ISO 15223-1.
+  */
+ if(a.electronic==="yes"){
+  const onDevice=isDevice;
+  const placement=(code,title,detail,source,tag,requiredOnDevice=false)=>{
+   if(onDevice&&requiredOnDevice)r(code,title,detail,source,tag);
+   else c(code,title,detail,source,tag);
+  };
+  if(market&&a.elec_weee==="yes"){
+   placement("DEEE","Collecte séparée — poubelle sur roues barrée",
+    "Directive 2012/19/UE, annexe IX : marquage permanent normalement sur l'équipement. L'emballage ne peut le remplacer que lorsque les dimensions ou la fonction du produit l'imposent. Vérifier les exclusions et l'identification du producteur.",
+    "Directive 2012/19/UE, articles 14(4) et 15(2), annexe IX","Environnement",true);
+   if(!onDevice)v("Poubelle barrée à prévoir sur le dispositif","Le support choisi est un emballage : la poubelle DEEE doit normalement se trouver directement sur l'équipement, sauf exception réglementaire. Ne pas considérer l'étiquette de la boîte comme suffisante.");
+  }
+  if(a.elec_battery==="yes"){
+   c("BAT-DEEE","Collecte séparée de la pile / batterie",
+    "La poubelle barrée des batteries doit être portée sur la batterie selon les règles de taille et de présentation ; les exceptions permettent dans certains cas son report sur l'emballage. Vérifier les mentions Cd/Pb si seuils dépassés.",
+    "Règlement (UE) 2023/1542, article 13(4–5), annexe VI, partie B","Environnement");
+   v("Marquages et information de la batterie","Examiner séparément la batterie, son emballage et la documentation. Les obligations batteries ne se résument pas au pictogramme du produit complet.");
+  }
+  if(a.elec_ip==="yes"){
+   const ip={
+    ip20:"IP20",ip21:"IP21",ip22:"IP22",ip44:"IP44",ip54:"IP54",
+    ip55:"IP55",ip65:"IP65",ip67:"IP67",ip68:"IP68",ipx4:"IPX4",ipx7:"IPX7"
+   }[a.elec_ip_value];
+   placement(ip||"IP","Indice de protection "+(ip||"IP documenté"),
+    "Mention technique selon IEC 60529 : reporter uniquement la valeur justifiée dans le dossier d'essais, sur l'enveloppe ou la documentation au support pertinent.",
+    "IEC 60529, codification IP","Protection",true);
+   if(!ip)v("Indice IP à reporter","L'indice retenu est différent des valeurs proposées. Reporter la valeur exacte vérifiée : ne pas imprimer seulement « IP ».");
+  }
+  if(a.elec_60601==="yes"){
+   if(a.elec_insulation==="class2")placement("IEC 60417-5172","Classe II — double isolation",
+    "Symbole du double carré à employer seulement si les exigences de classe II de la sécurité électrique sont satisfaites.",
+    "IEC 60417-5172 ; IEC 60601-1","Sécurité électrique",true);
+   if(a.elec_insulation==="class1")placement("IEC 60417-5019","Terre de protection (si borne à identifier)",
+    "La classe I requiert une protection par terre. Le symbole IEC 60417-5019 identifie la borne de protection lorsqu'une telle borne est présente, pas la classe I en général.",
+    "IEC 60417-5019 ; IEC 60601-1","Sécurité électrique");
+   const applied={
+    b:["IEC 60417-5840","Partie appliquée type B"],
+    bf:["IEC 60417-5333","Partie appliquée type BF"],
+    cf:["IEC 60417-5335","Partie appliquée type CF"]
+   };
+   const defib={
+    b:["IEC 60417-5841","Partie appliquée B protégée défibrillation"],
+    bf:["IEC 60417-5334","Partie appliquée BF protégée défibrillation"],
+    cf:["IEC 60417-5336","Partie appliquée CF protégée défibrillation"]
+   };
+   const appliedSymbol=a.elec_defib==="yes"?defib[a.elec_applied]:applied[a.elec_applied];
+   if(appliedSymbol){
+    placement(appliedSymbol[0],appliedSymbol[1],
+      "Marquage selon le type de partie appliquée et sa résistance éventuelle aux décharges. À positionner au niveau du connecteur ou sur la partie appliquée conformément aux dispositions de l'IEC 60601-1.",
+      "IEC 60601-1, 7.2.10 ; "+appliedSymbol[0],"Sécurité électrique",true);
+   }
+  }
+  if(a.elec_manual==="yes")placement("IEC 60417-1641","Lire impérativement le manuel",
+   "Le symbole « Operating manual » exprime une obligation de lecture pour la sécurité ; distinct du symbole ISO 15223-1, 5.4.3, qui invite à consulter la notice.",
+   "IEC 60417-1641","Information",true);
+  if(a.elec_supply==="yes")placement("Alim.","Caractéristiques nominales d'alimentation",
+   "Reporter les valeurs réelles d'entrée ou d'alimentation selon la norme applicable (V, A/W, AC ou DC, Hz si pertinent). Aucun chiffre n'est fourni automatiquement.",
+   "IEC 60601-1, 7.2 / autre norme de sécurité applicable","Sécurité électrique",true);
+  if(a.elec_indoor==="yes")placement("IEC 60417-5957","Utilisation en intérieur uniquement",
+   "Symbole à retenir lorsque les conditions d'utilisation et la norme de sécurité demandent explicitement cette indication.",
+   "IEC 60417-5957","Sécurité électrique",true);
+ }
  if(a.pack==="multiple"&&market)v("Niveaux commerciaux de conditionnement","Examiner séparément l'UDI-DI et l'étiquette de chaque niveau de commercialisation, en excluant les conteneurs purement logistiques.");
  if(["tiny","small"].includes(a.space))v("Place réduite pour les marquages","Vérifier la lisibilité des symboles, des caractères et de l'UDI après impression. Une surface réduite ne dispense pas automatiquement des mentions obligatoires.");
  if(["eu","other"].includes(a.language))v("Langues applicables","Vérifier les exigences linguistiques des États membres ciblés et, le cas échéant, celles des pays hors UE.");
@@ -347,7 +424,7 @@ function renderShortList(items) {
  if(!items.length)return '<p class="label-empty">Aucun élément proposé pour ce périmètre.</p>';
  return '<ul class="label-symbol-grid">'+items.map(it=>{
   const image=symbolImage(it.code);
-  const textMark=it.code==='Texte'&&/^Nom /.test(it.title)?'Nom':it.code==='UDI (AIDC + HRI)'?'Code UDI':it.code==='UDI direct'?'UDI direct':it.code==='Notice'?'Notice':'Texte';
+  const textMark=it.code==='Texte'&&/^Nom /.test(it.title)?'Nom':it.code==='UDI (AIDC + HRI)'?'Code UDI':it.code==='UDI direct'?'UDI direct':it.code==='Notice'?'Notice':/^(IP(?:[0-9X]+)?|DEEE|BAT-DEEE|Alim\.|IEC 60417-\d+)$/.test(it.code)?(it.code.startsWith('IEC')?'IEC':it.code==='BAT-DEEE'?'BAT':it.code):'Texte';
   return '<li>'+ (image||'<span class="label-text-mark" aria-hidden="true">'+escapeHTML(textMark)+'</span>')+'<span>'+escapeHTML(it.title)+'</span><small>'+escapeHTML(symbolRef(it.code))+'</small></li>';
  }).join('')+'</ul>';
 }
