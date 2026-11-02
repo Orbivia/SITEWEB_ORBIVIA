@@ -51,3 +51,14 @@ Tests dans `tests/etiquetage.test.mjs` : routes de sélection des 17 fichiers, a
 ## Normes particulières EEG / ECG
 
 La question `elec_specialty`, visible uniquement pour un équipement IEC 60601-1, distingue les EEG (IEC 80601-2-26:2019 + A1:2024), les ECG diagnostiques (IEC 60601-2-25:2011, qui remplace IEC 60601-2-51) et les autres équipements. Elle produit un **contrôle documentaire** et n'ajoute aucun pictogramme sans justification propre au dispositif.
+
+
+## Références complémentaires — 2 novembre 2026
+- **ISO 15223-1 5.6.1 à 5.6.6** : six références de prélèvement / transfusion / perfusion, proposées seulement sur les fonctions déclarées. Le chemin de fluide 5.6.2 est distinct du chemin stérile 5.2.9. Valeur réelle exigée pour les gouttes/mL et la taille des pores.
+- **ISO 15223-1 5.7.1 à 5.7.6** : informations à étudier pour une **carte d'implant distincte**. Aucune donnée personnelle n'est automatiquement placée sur l'étiquette commerciale. Vérification MDR article 18.
+- **ISO 15223-1 5.7.8 et 5.7.9** : traduction et reconditionnement dans les conditions pertinentes de l'article 16 du MDR, sans sélectionner ces références pour une simple distribution.
+- **Mandataire 5.1.2** : choix explicite **EC REP 2021** (PNG historique) ou **EU REP, A1:2025** (référence textuelle). Selon l'annexe MDCG 2021-5 Rev.1 (juin 2026), coexistence possible jusqu'au **17 juin 2031**. Le PNG EC REP ne se substitue pas au graphisme EU REP.
+- **Sans graphisme normatif disponible** : références de ces compléments, IEC 60417-5957 et marquage batterie ; affichage textuel avec un contrôle explicite en synthèse et PDF. Ne pas assimiler pictogramme DEEE de l'équipement et symbole de la batterie.
+- **Périmètre** : les 106 fichiers PNG d'origine restent inchangés ; l'ajout concerne le questionnaire et la traçabilité des références. Les nouvelles images exactes sont à importer depuis une source autorisée avant tout usage comme graphisme d'impression.
+
+Sources : [ISO 15223-1/Amd.1:2025](https://www.iso.org/standard/86270.html) ; [MDCG 2021-5 Rev.1, annexe](https://health.ec.europa.eu/medical-devices-sector/new-regulations/guidance-mdcg-endorsed-documents-and-other-guidance_en) ; MDR 2017/745 art. 16, 18.
