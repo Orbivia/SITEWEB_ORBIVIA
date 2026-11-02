@@ -589,4 +589,5 @@ const d=document.getElementById("restart-label-dialog");if(d){
  d.querySelector('[data-cancel]')?.addEventListener("click",()=>d.close());
 }
 render();
+iecImagesReady.then(ready=>{if(ready&&finished)render();});
 })();
