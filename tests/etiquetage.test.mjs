@@ -331,3 +331,14 @@ test('labelling: changing upstream choices drops obsolete dependent answers',()=
  assert.equal(app.answers.elec_alarm_on,undefined);
  assert.equal(app.finished,true);
 });
+
+
+test('labelling: EEG and ECG particular standards are referenced without invented symbols',()=>{
+ const eeg=scenario({electronic:'yes',elec_60601:'yes',elec_specialty:'eeg'});
+ const ecg=scenario({electronic:'yes',elec_60601:'yes',elec_specialty:'ecg'});
+ assert.ok(eeg.review.some(x=>x.title.includes('EEG')));
+ assert.ok(ecg.review.some(x=>x.title.includes('ECG')));
+ assert.ok(ecg.review.some(x=>x.detail.includes('60601-2-25')));
+ const general=scenario({electronic:'yes',elec_60601:'yes',elec_specialty:'general'});
+ assert.equal(general.review.some(x=>x.title.startsWith('EEG :')||x.title.startsWith('ECG diagnostique')),false);
+});
