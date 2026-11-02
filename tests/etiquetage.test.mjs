@@ -161,7 +161,7 @@ test('labelling: electrical equipment suggests WEEE mark only when in scope',()=
  assert.ok(packaging.review.some(x=>x.title.includes('Poubelle barrée')),"Location warning is clear");
  const excluded=scenario({electronic:'yes',support:'device',status:'market',elec_weee:'no',elec_battery:'no',elec_ip:'no',elec_60601:'no',elec_manual:'no',elec_supply:'no',elec_indoor:'no'});
  assert.equal(has(excluded.required,'DEEE'),false);
- assert.match(create().symbolImage('DEEE'),/WEEE\.svg/,"Exact supplied external graphic is visible");
+ assert.match(create().symbolImage('DEEE'),/symboles-complementaires\/EN-50419-DEEE\.png/,"Original WEEE mark is bundled locally");
 });
 
 test('labelling: IP rating is text only and requires explicit established value',()=>{
