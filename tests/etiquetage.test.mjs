@@ -582,3 +582,38 @@ test('labelling: editing equipment classification removes hidden IEC answers',()
  assert.equal(has(app.conclusions().conditional,'IEC 60417-5010'),false);
  assert.equal(has(app.conclusions().conditional,'IEC 60417-5021'),false);
 });
+
+
+test('compléments ISO 15223 : mandataire EU REP et EC REP ne partagent pas leur pictogramme',()=>{
+ const modern=scenario({manufacturer:'outside',rep_symbol_version:'eu2025'});
+ assert.ok(has(modern.required,'5.1.2 (A1:2025)'));
+ assert.equal(has(modern.required,'5.1.2'),false);
+ assert.ok(modern.review.some(it=>it.title.includes('EU REP')));
+ const legacy=scenario({manufacturer:'outside',rep_symbol_version:'ec2021'});
+ assert.ok(has(legacy.required,'5.1.2'));
+ assert.equal(has(legacy.required,'5.1.2 (A1:2025)'),false);
+});
+
+test('compléments ISO 15223 : les symboles de perfusion sont strictement conditionnels',()=>{
+ const standard=scenario({infusion:'no'});
+ for(let n=1;n<=6;n++)assert.equal(has(standard.conditional,'5.6.'+n),false);
+ const fluid=scenario({infusion:'yes',infusion_sampling:'yes',infusion_fluidpath:'yes',
+  infusion_nonpyrogenic:'no',infusion_drops:'yes',infusion_filter:'no',infusion_valve:'yes'});
+ for(const n of [1,2,4,6])assert.ok(has(fluid.conditional,'5.6.'+n));
+ for(const n of [3,5])assert.equal(has(fluid.conditional,'5.6.'+n),false);
+ assert.ok(fluid.review.some(it=>it.title.includes('Paramètres de perfusion')));
+});
+
+test('compléments ISO 15223 : carte patient et réétiquetage ne polluent pas l’étiquette ordinaire',()=>{
+ const basic=scenario({implant:'no',relabeling:'no'});
+ for(const code of ['5.7.1','5.7.2','5.7.3','5.7.4','5.7.5','5.7.6','5.7.8','5.7.9'])
+  assert.equal(has(basic.conditional,code),false);
+ const specific=scenario({implant:'passive',implant_card:'yes',relabeling:'yes',
+   relabeling_translation:'yes',relabeling_repack:'no'});
+ for(let n=1;n<=6;n++)assert.ok(has(specific.conditional,'5.7.'+n));
+ assert.ok(has(specific.conditional,'5.7.8'));
+ assert.equal(has(specific.conditional,'5.7.9'),false);
+ assert.ok(specific.review.some(it=>it.title.includes('Carte d')));
+ const noCard=scenario({implant:'no',implant_card:'yes'});
+ assert.equal(has(noCard.conditional,'5.7.1'),false);
+});
