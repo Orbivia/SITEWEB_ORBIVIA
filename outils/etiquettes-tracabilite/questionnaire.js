@@ -611,7 +611,7 @@ function conclusions(at=new Date()){
    if(a.relabeling_repack==="yes")c("5.7.9","Reconditionnement de l'emballage d'origine","Référence à examiner pour la modification de la configuration de conditionnement d'origine, après vérification des exigences de l'article 16 du MDR.",iso+" 5.7.9 ; MDR article 16","Réétiquetage");
    if(a.relabeling_translation==="yes"||a.relabeling_repack==="yes")v("Réétiquetage par un opérateur économique","Vérifier les informations d'identification, le système qualité et les notifications éventuelles de l'article 16 du MDR. Les pictogrammes 5.7.8 et 5.7.9 sont actuellement des références textuelles.");
   }
-  const missingGraphic=[...required,...conditional].filter(it=>/^(?:5\.6\.[1-6]|5\.7\.(?:[1-6]|8|9)|5\.1\.2 \(A1:2025\)|BAT-DEEE|IEC 60417-5957)$/.test(it.code));
+  const missingGraphic=[...required,...conditional].filter(it=>!window.ORBIVIA_ISO_15223_EXTRA?.[it.code]&&/^(?:5\.6\.[1-6]|5\.7\.(?:[1-6]|8|9)|5\.1\.2 \(A1:2025\)|BAT-DEEE|IEC 60417-5957)$/.test(it.code));
   if(missingGraphic.length)v("Symboles à obtenir en version graphique","Les références suivantes n'ont pas de fichier PNG normatif validé : "+[...new Set(missingGraphic.map(it=>it.code))].join(", ")+". Les résultats web et PDF affichent leur référence sans inventer de pictogramme.");
 
  const unique=items=>items.filter((x,i)=>items.findIndex(y=>y.code===x.code&&y.title===x.title)===i);
@@ -648,6 +648,7 @@ const EXTRA_SYMBOL_FILES={
 };
 const extraSymbolPath=code=>EXTRA_SYMBOL_FILES[code]?"symboles-complementaires/"+EXTRA_SYMBOL_FILES[code]:null;
 function symbolPDFSource(code){
+ if(window.ORBIVIA_ISO_15223_EXTRA?.[code])return window.ORBIVIA_ISO_15223_EXTRA[code];
  if(extraSymbolPath(code))return extraSymbolPath(code);
  if(iso780ImagePath(code))return iso780ImagePath(code);
  if(iecImagePath(code))return iecImagePath(code);
@@ -655,6 +656,7 @@ function symbolPDFSource(code){
  return filename?"symboles-iso/"+filename+".png?v=2":null;
 }
 function symbolImage(code,reference=false){
+ if(window.ORBIVIA_ISO_15223_EXTRA?.[code])return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+window.ORBIVIA_ISO_15223_EXTRA[code]+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  if(extraSymbolPath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+extraSymbolPath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  if(iso780ImagePath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+iso780ImagePath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  if(iecImagePath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+iecImagePath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
@@ -670,7 +672,7 @@ function renderShortList(items) {
  if(!items.length)return '<p class="label-empty">Aucun élément proposé pour ce périmètre.</p>';
  return '<ul class="label-symbol-grid">'+items.map(it=>{
   const image=symbolImage(it.code);
-   const missingGraphic=/^(?:5\.6\.[1-6]|5\.7\.(?:[1-6]|8|9)|5\.1\.2 \(A1:2025\)|BAT-DEEE|IEC 60417-5957)$/.test(it.code);
+   const missingGraphic=!window.ORBIVIA_ISO_15223_EXTRA?.[it.code]&&/^(?:5\.6\.[1-6]|5\.7\.(?:[1-6]|8|9)|5\.1\.2 \(A1:2025\)|BAT-DEEE|IEC 60417-5957)$/.test(it.code);
    const textMark=missingGraphic?"Réf.":it.code==='Texte'&&/^Nom /.test(it.title)?'Nom':it.code==='UDI (AIDC + HRI)'?'Code UDI':it.code==='UDI direct'?'UDI direct':it.code==='Notice'?'Notice':/^(IP(?:[0-9X]+)?|DEEE|BAT-DEEE|Alim\.|IEC 60417-\d+|ISO 7000-\d+|ISO 7010-[A-Z]\d+)$/.test(it.code)?(it.code.startsWith('IEC')?'IEC':it.code==='BAT-DEEE'?'BAT':it.code):'Texte';
    return '<li>'+ (image||'<span class="label-text-mark" aria-hidden="true">'+escapeHTML(textMark)+'</span>')+'<span>'+escapeHTML(it.title)+'</span><small>'+escapeHTML(symbolRef(it.code))+(missingGraphic&&!image?' · visuel à obtenir':'')+'</small></li>';
  }).join('')+'</ul>';
