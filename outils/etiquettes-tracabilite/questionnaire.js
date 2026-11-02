@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v9";
+const STORE="orbivia-mdr-label-wizard-v10";
 const Q=[
 {id:"status",s:"Périmètre",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -42,6 +42,10 @@ const Q=[
 {id:"instructions",s:"Information",title:"Quelles informations d'utilisation sont nécessaires ?",help:"Le renvoi à une notice peut être pertinent, mais la notice électronique seule est soumise à des conditions particulières. Les avertissements immédiats ne peuvent pas toujours être déportés dans la notice.",type:"multi",options:[["ifu","Consulter la notice avant utilisation"],["electronic","Notice électronique envisagée"],["warning","Avertissement critique à lire sur l'étiquette"],["damaged","Ne pas utiliser si l'emballage est endommagé"],["none","Aucune information particulière identifiée"]]},
 
 {id:"biologicalrisk",s:"Sécurité",title:"Un risque biologique résiduel nécessite-t-il un avertissement spécifique ?",help:"ISO 15223-1, 5.4.1 indique un risque biologique. Il doit correspondre à l'analyse des risques ; la seule présence d'un matériau d'origine biologique ne suffit pas à l'imposer.",type:"single",options:[["no","Non, pas d'avertissement biologique identifié"],["yes","Oui, risque biologique identifié"]]},
+{id:"mr_use",s:"Sécurité IRM",title:"Une classification de sécurité en environnement IRM a-t-elle été établie pour ce dispositif ?",help:"ASTM F2503 : les catégories MR Safe, MR Conditional et MR Unsafe résultent d'une évaluation de sécurité. Une absence d'évaluation n'autorise aucune de ces trois mentions. Cela concerne aussi certains accessoires non électriques.",type:"single",options:[["no","Non, aucun marquage IRM établi"],["yes","Oui, classification IRM documentée"]]},
+{id:"mr_status",s:"Sécurité IRM",title:"Quelle classification IRM est justifiée pour ce dispositif ?",help:"La catégorie doit provenir de l'évaluation du dispositif et de sa configuration complète. MR Conditional nécessite des conditions précises d'emploi documentées. Les images sont reprises du glossaire fourni (ASTM F2503-20, figures 2, 5 et 8).",type:"single",when:a=>a.mr_use==="yes",options:[["conditional","MR Conditional — utilisation possible sous conditions"],["unsafe","MR Unsafe — non sûr en environnement IRM"],["safe","MR Safe — sûr dans tous les environnements IRM"]]},
+{id:"pack_quantity",s:"Identification",title:"Le nombre de pièces contenues dans le conditionnement doit-il être identifié ?",help:"ISO 7000-2794 : pictogramme d'unité d'emballage. L'étiquette finale doit comporter le nombre réel de pièces ; l'outil ne l'invente pas.",type:"single",when:a=>["unit","outer"].includes(a.support),options:[["no","Non, pas de nombre de pièces à indiquer"],["yes","Oui, indiquer la quantité contenue"]]},
+{id:"phthalate_specific",s:"Matières",title:"Des phtalates nécessitent-ils une identification spécifique sur le dispositif ou l'emballage ?",help:"Le glossaire fourni présente ISO 7000-2725 et EN 15986 avec un emplacement « XXX » à remplacer par les abréviations des phtalates concernés. Ne pas afficher ce marquage sur la seule supposition qu'une substance est CMR.",type:"single",when:a=>a.substances_cmr==="yes",options:[["no","Non, aucun phtalate particulier à identifier"],["yes","Oui, phtalates identifiés dans la composition"]]},
 {id:"electronic",s:"Produit",title:"Le dispositif comporte-t-il une partie électrique ou électronique ?",help:"Les dispositifs électriques peuvent nécessiter des marquages complémentaires hors ISO 15223-1 (par exemple sécurité électrique ou DEEE), selon leurs caractéristiques et les textes applicables.",type:"single",options:[["yes","Oui, équipement électrique ou électronique"],["no","Non, dispositif non électrique"]]},
 {id:"elec_weee",s:"Environnement",title:"L'équipement relève-t-il de la filière DEEE (déchets d'équipements électriques et électroniques) ?",help:"Pour la majorité des équipements électriques/électroniques mis sur le marché européen, la directive 2012/19/UE impose le symbole de la poubelle sur roues barrée. Des exclusions existent. Le marquage se place normalement sur l'équipement lui-même.",type:"single",when:a=>a.electronic==="yes"&&a.status==="market",options:[["yes","Oui, l'équipement est concerné"],["no","Non, exclusion justifiée dans le dossier réglementaire"]]},
 {id:"elec_battery",s:"Environnement",title:"Le dispositif comporte-t-il une pile ou une batterie ?",help:"Le marquage de collecte séparée des batteries relève du règlement (UE) 2023/1542 et concerne la batterie elle-même, distinctement du marquage DEEE de l'équipement.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non"],["yes","Oui, pile ou batterie intégrée ou fournie"]]},
@@ -70,6 +74,8 @@ const Q=[
 {id:"elec_ifu_reference",s:"Information",title:"Quel symbole de consultation des instructions retenez-vous pour l'équipement ?",help:"La norme ISO 15223-1 prévoit le 5.4.3 pour consulter les instructions. L'annexe D de l'EN 60601-1 référence aussi ISO 7000-1641. Ces deux représentations ne sont pas automatiquement à cumuler. Ce choix ne remplace pas ISO 7010-M002 lorsqu'une lecture obligatoire est requise.",type:"single",when:a=>a.elec_60601==="yes"&&a.instructions==="yes"&&a.instructions_ifu==="yes",options:[["medical","ISO 15223-1 — consulter la notice (5.4.3)"],["operating","ISO 7000-1641 — instructions d'utilisation"]] },
 {id:"elec_warning_electric",s:"Sécurité électrique",title:"Un avertissement contre un danger électrique doit-il figurer sur l’appareil ?",help:"EN 60601-1, tableau D.2 : ISO 7010-W012 pour le danger électrique. N’afficher ce signal de sécurité que pour un danger identifié et un emplacement pertinent.",type:"single",when:a=>a.elec_60601==="yes",options:[["no","Non, aucun avertissement spécifique"],["yes","Oui, danger électrique identifié"]]},
 {id:"elec_alarm_pause",s:"Alarmes",title:"L’équipement possède-t-il une commande de pause temporaire des alarmes ?",help:"Ne pas confondre la pause de l’alarme avec la désactivation du signal sonore. Vérifier le symbole applicable selon EN 60601-1-8, annexe C.",type:"single",when:a=>a.elec_alarm==="yes",options:[["no","Non"],["yes","Oui, pause temporaire des alarmes"]]},
+{id:"elec_standby",s:"Commandes",title:"L'équipement comporte-t-il une commande ou un état de veille à identifier ?",help:"IEC 60417-5009 : état de veille (stand-by). Ne pas utiliser ce symbole pour représenter indistinctement une coupure complète de l'alimentation.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non"],["yes","Oui, commande ou état de veille"]]},
+{id:"elec_pedal",s:"Commandes",title:"Une pédale de commande ou son connecteur doit-il être identifié ?",help:"IEC 60417-5114 : symbole de commande au pied. À placer près de la commande ou du connecteur concerné, uniquement s'il existe.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non"],["yes","Oui, pédale ou connexion dédiée"]]},
 {id:"elec_indoor",s:"Sécurité électrique",title:"L'appareil est-il réservé à un usage en intérieur ?",help:"Le symbole IEC 60417-5957 peut être pertinent lorsque l'usage exclusivement intérieur doit être indiqué sur le produit.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, usage extérieur possible"],["yes","Oui, usage en intérieur uniquement"]]},
 
 {id:"shipping",s:"Transport",title:"Préparez-vous aussi des pictogrammes pour l'emballage de transport ?",help:"ISO 780 concerne la manutention et le stockage des colis. Ne pas confondre ces pictogrammes logistiques avec les mentions médicales MDR du dispositif ou de sa barrière stérile.",type:"single",when:a=>["unit","outer"].includes(a.support),options:[["no","Non, uniquement l'étiquetage du produit"],["yes","Oui, l'emballage utilisé pour le transport"]]},
@@ -476,6 +482,30 @@ function conclusions(at=new Date()){
    "Symbole à retenir lorsque les conditions d'utilisation et la norme de sécurité demandent explicitement cette indication.",
    "IEC 60417-5957","Sécurité électrique",true);
  }
+ if(a.mr_use==="yes"){
+  const marking={
+   safe:["ASTM F2503 MR Safe","Sécurité IRM : MR Safe","L'évaluation démontre l'absence de dangers connus dans tous les environnements IRM. Ne pas utiliser cette qualification en l'absence d'une justification couvrant le dispositif complet."],
+   conditional:["ASTM F2503 MR Conditional","Sécurité IRM : MR Conditional","Les conditions précises d'exposition (par exemple champ statique, gradients, SAR et configuration selon l'évaluation) doivent accompagner cette catégorie dans les informations fournies."],
+   unsafe:["ASTM F2503 MR Unsafe","Sécurité IRM : MR Unsafe","Le dispositif comporte des risques inacceptables en environnement IRM. Fournir les restrictions pertinentes et éviter toute ambiguïté de sécurité."]
+  }[a.mr_status];
+  if(marking){
+   c(marking[0],marking[1],marking[2],"ASTM F2503 ; graphisme du glossaire fourni, figures 2/5/8","Sécurité IRM");
+   if(a.mr_status==="conditional")v("Conditions d'utilisation IRM indispensables","Le symbole MR Conditional seul n'est pas suffisant : reporter les conditions mesurées et validées dans l'étiquetage et la notice avant diffusion.");
+  }
+ }
+ if(a.pack_quantity==="yes"&&label){
+  c("ISO 7000-2794","Nombre d'unités dans le conditionnement","Ajouter le nombre réel de pièces à proximité du pictogramme. Ce symbole de quantité n'est pas une identification UDI de niveau de conditionnement.","ISO 7000-2794 ; glossaire fourni, page 9","Conditionnement");
+  v("Quantité de pièces à renseigner","Le générateur propose le symbole de conditionnement, mais n'a pas recueilli le nombre de pièces ; l'indiquer explicitement avant impression.");
+ }
+ if(a.phthalate_specific==="yes"&&label){
+  c("ISO 7000-2725","Présence de phtalates à identifier","Modèle de symbole de phtalates, avec « XXX » générique. La composition et les abréviations exactes doivent être validées, dans le respect de l'EN 15986 et des règles MDR applicables.","ISO 7000-2725 ; EN 15986 ; glossaire fourni, page 9","Composition");
+  v("Phtalates — remplacer les abréviations génériques","Le pictogramme source porte « XXX » : renseigner les désignations exactes des phtalates et vérifier l'exigence de mention avant impression.");
+ }
+ if(listContains("instructions","warning")&&label)c("ISO 7010-W001","Avertissement général (signal de sécurité à examiner)","Signal ISO 7010-W001 à envisager si l'analyse de risques exige une signalisation générale. Il ne remplace pas les avertissements détaillés et ne doit pas être ajouté automatiquement en plus d'un symbole équivalent.","ISO 7010-W001 ; glossaire fourni, page 10","Avertissement");
+ if(a.electronic==="yes"){
+  if(a.elec_standby==="yes")c("IEC 60417-5009","Veille — commande ou état de fonctionnement","Identifier la commande ou la position de veille sur l'équipement, et non une coupure complète d'alimentation.","IEC 60417-5009 ; glossaire fourni, page 12","Interface");
+  if(a.elec_pedal==="yes")c("IEC 60417-5114","Commande au pied / connecteur de pédale","À placer près de la pédale ou du connecteur approprié ; ne pas reporter systématiquement sur l'emballage commercial.","IEC 60417-5114 ; glossaire fourni, page 12","Interface");
+ }
  if(a.elec_specialty==="eeg")v("EEG : vérifier la norme particulière","L'IEC 80601-2-26:2019 et son amendement 1:2024 peuvent modifier les exigences de marquage et de notice. Vérifier le périmètre du produit (EEG complet, accessoires, traitement) sans présumer de logos supplémentaires.");
  if(a.elec_specialty==="ecg")v("ECG diagnostique : vérifier la norme particulière","L'IEC 60601-2-25:2011 remplace l'IEC 60601-2-51:2003 fournie. Examiner les clauses de marquage applicables au produit avant impression ; ECG de surveillance ou ambulatoire peut relever d'un autre texte.");
  if(a.elec_specialty==="other")v("Norme particulière de l'équipement à déterminer","L'IEC 60601-1 seule ne suffit pas à couvrir toutes les exigences particulières ; vérifier les normes applicables au produit.");
@@ -545,15 +575,27 @@ const IEC_SYMBOL_CODES=new Set([
 ]);
 const iecImagePath=code=>IEC_SYMBOL_CODES.has(code)?"symboles-iec/"+code.replace(" ","-")+".png":null;
 const iecImagesReady=Promise.resolve(true);
+const EXTRA_SYMBOL_FILES={
+ "ASTM F2503 MR Safe":"ASTM-F2503-MR-Safe.png",
+ "ASTM F2503 MR Conditional":"ASTM-F2503-MR-Conditional.png",
+ "ASTM F2503 MR Unsafe":"ASTM-F2503-MR-Unsafe.png",
+ "ISO 7010-W001":"ISO-7010-W001.png",
+ "DEEE":"EN-50419-DEEE.png",
+ "IEC 60417-5009":"IEC-60417-5009.png",
+ "IEC 60417-5114":"IEC-60417-5114.png",
+ "ISO 7000-2725":"ISO-7000-2725.png",
+ "ISO 7000-2794":"ISO-7000-2794.png"
+};
+const extraSymbolPath=code=>EXTRA_SYMBOL_FILES[code]?"symboles-complementaires/"+EXTRA_SYMBOL_FILES[code]:null;
 function symbolPDFSource(code){
+ if(extraSymbolPath(code))return extraSymbolPath(code);
  if(iso780ImagePath(code))return iso780ImagePath(code);
  if(iecImagePath(code))return iecImagePath(code);
  const filename=(code==="CE"||code==="CE + ON")?"CE":isoSymbolCodes.has(code)?code:null;
  return filename?"symboles-iso/"+filename+".png?v=2":null;
 }
 function symbolImage(code,reference=false){
- // Poubelle DEEE : fichier graphique européen existant, non redessiné (Wikimedia Commons, PD-ineligible).
- if(code==="DEEE")return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="https://upload.wikimedia.org/wikipedia/commons/a/a9/WEEE.svg" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" loading="lazy" decoding="async">';
+ if(extraSymbolPath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+extraSymbolPath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  if(iso780ImagePath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+iso780ImagePath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  if(iecImagePath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+iecImagePath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  const asset=(code==="CE"||code==="CE + ON")?"CE":isoSymbolCodes.has(code)?code:null;
