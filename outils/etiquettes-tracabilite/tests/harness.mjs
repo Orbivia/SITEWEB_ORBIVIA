@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 
+const symbolsSource=readFileSync(new URL('../symboles-iso/iso-15223-complements-2021.js',import.meta.url),'utf8');
 const source=readFileSync(new URL('../questionnaire.js',import.meta.url),'utf8').replace(
  /render\(\);\s*(?:iecImagesReady\.then\(ready=>\{if\(ready&&finished\)render\(\);\}\);\s*)?\}\)\(\);\s*$/,
  'window.__probe={Q,applicable,current,selectChoice,next,conclusions,symbolImage,renderShortList,sanitize,render,doReset,get answers(){return answers},get position(){return position},get editing(){return editing},get finished(){return finished}};\nrender();})();'
@@ -26,6 +27,7 @@ export function create(saved=null){
  const window={scrollTo(){},print(){},addEventListener(type,handler){events[type]=handler;}};
  const document={getElementById(id){return id==='label-app'?root:null;}};
  const sessionStorage={getItem(){return stored;},setItem(_key,value){stored=value;}};
+ vm.runInNewContext(symbolsSource,{window});
  vm.runInNewContext(source,{document,window,sessionStorage});
  const app=window.__probe;
  return Object.assign(app,{root,events,sections,answersPanel,
