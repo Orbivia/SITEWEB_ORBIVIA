@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v4";
+const STORE="orbivia-mdr-label-wizard-v5";
 const Q=[
 {id:"status",s:"Périmètre",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -44,8 +44,13 @@ const Q=[
 {id:"elec_insulation",s:"Sécurité électrique",title:"Quelle protection contre les chocs électriques est déclarée ?",help:"Pour la classe II, le double carré correspond au symbole IEC 60417-5172. Ne pas confondre cette classe de protection électrique avec la classe MDR du dispositif.",type:"single",when:a=>a.elec_60601==="yes",options:[["internal","Source d'énergie interne"],["class2","Classe II — double isolation"],["class1","Classe I — mise à la terre de protection"]]},
 {id:"elec_applied",s:"Sécurité électrique",title:"Le dispositif présente-t-il une partie appliquée au patient classifiée ?",help:"L'IEC 60601-1 définit les types B, BF et CF selon le degré de protection contre les chocs électriques ; ne sélectionner que la classification réellement justifiée.",type:"single",when:a=>a.elec_60601==="yes",options:[["none","Non, aucune partie appliquée de ce type"],["bf","Oui, type BF"],["b","Oui, type B"],["cf","Oui, type CF"]]},
 {id:"elec_defib",s:"Sécurité électrique",title:"La partie appliquée est-elle protégée contre les décharges d'un défibrillateur ?",help:"Si cette protection est vérifiée, un symbole IEC 60417 distinct identifie la version résistante aux décharges de défibrillateur. Ne pas le déduire du seul type B, BF ou CF.",type:"single",when:a=>["b","bf","cf"].includes(a.elec_applied),options:[["no","Non"],["yes","Oui, protection validée"]]},
-{id:"elec_manual",s:"Sécurité électrique",title:"Un avertissement impose-t-il la lecture du manuel avant utilisation ?",help:"Le symbole IEC 60417-1641 (« Operating manual ») diffère du symbole ISO 15223-1, 5.4.3 (« Consulter les instructions d'utilisation »). Le choix dépend des risques et des exigences de la norme applicable.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, renvoi standard à la notice suffisant"],["yes","Oui, lecture du manuel requise pour la sécurité"]]},
+{id:"elec_manual",s:"Sécurité électrique",title:"Un avertissement impose-t-il la lecture du manuel avant utilisation ?",help:"La norme EN 60601-1:2021, tableau D.2, identifie ISO 7010-M002 pour l’obligation de suivre les instructions. Le tableau D.1 donne ISO 7000-1641 pour les instructions d’utilisation ordinaires. Ne pas les confondre avec ISO 15223-1, 5.4.3.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, renvoi standard à la notice suffisant"],["yes","Oui, lecture du manuel requise pour la sécurité"]]},
 {id:"elec_supply",s:"Sécurité électrique",title:"Les caractéristiques nominales de l'alimentation doivent-elles figurer sur le dispositif ?",help:"Examiner tension, nature du courant (AC/DC), fréquence et puissance ou courant nominal selon la norme de sécurité et la construction retenues. Ne pas inventer de valeurs.",type:"single",when:a=>a.electronic==="yes",options:[["yes","Oui, marquage électrique nominal prévu"],["no","Non, absence justifiée pour ce produit"]]},
+{id:"elec_supply_kind",s:"Sécurité électrique",title:"Quel type de courant est indiqué pour l’alimentation nominale ?",help:"EN 60601-1, annexe D, tableau D.1 : IEC 60417-5031 (continu), 5032 (alternatif), 5033 (continu et alternatif). Utiliser le marquage correspondant aux caractéristiques du produit.",type:"single",when:a=>a.electronic==="yes"&&a.elec_supply==="yes",options:[["dc","Courant continu (DC)"],["ac","Courant alternatif (AC)"],["both","Courant continu et alternatif"],["unknown","Nature de courant à préciser dans la documentation"]]},
+{id:"elec_alarm",s:"Alarmes",title:"L’équipement comporte-t-il un système d’alarme médicale ?",help:"La norme EN 60601-1-8:2021, annexe C, définit des symboles pour les alarmes et leurs commandes. Ce sont principalement des marquages de l’équipement ou de son interface, pas des logos à placer systématiquement sur la boîte.",type:"single",when:a=>a.elec_60601==="yes",options:[["no","Non"],["yes","Oui, système d’alarme médicale"]]},
+{id:"elec_alarm_reset",s:"Alarmes",title:"Une commande permet-elle de réinitialiser une alarme ?",help:"EN 60601-1-8, annexe C, tableau C.1 : IEC 60417-5309, réinitialisation du système d’alarme. Ce symbole ne doit pas être proposé si la commande n’existe pas.",type:"single",when:a=>a.elec_alarm==="yes",options:[["no","Non"],["yes","Oui, commande de réinitialisation"]]},
+{id:"elec_alarm_silence",s:"Alarmes",title:"Une commande permet-elle de couper temporairement le signal sonore d’alarme ?",help:"EN 60601-1-8, annexe C, tableau C.1 : IEC 60417-5576 et ses variantes identifient l’inactivation de signaux sonores. Préciser le comportement de la commande selon l’interface réelle.",type:"single",when:a=>a.elec_alarm==="yes",options:[["no","Non"],["yes","Oui, commande de silence d’alarme"]]},
+{id:"elec_warning_electric",s:"Sécurité électrique",title:"Un avertissement contre un danger électrique doit-il figurer sur l’appareil ?",help:"EN 60601-1, tableau D.2 : ISO 7010-W012 pour le danger électrique. N’afficher ce signal de sécurité que pour un danger identifié et un emplacement pertinent.",type:"single",when:a=>a.elec_60601==="yes",options:[["no","Non, aucun avertissement spécifique"],["yes","Oui, danger électrique identifié"]]},
 {id:"elec_indoor",s:"Sécurité électrique",title:"L'appareil est-il réservé à un usage en intérieur ?",help:"Le symbole IEC 60417-5957 peut être pertinent lorsque l'usage exclusivement intérieur doit être indiqué sur le produit.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, usage extérieur possible"],["yes","Oui, usage en intérieur uniquement"]]},
 {id:"space",s:"Étiquette",title:"Quelle surface est disponible pour l’étiquetage ?",help:"Cette question concerne l'espace sur le support choisi, pas la taille totale du dispositif. La place disponible ne dispense pas des mentions requises : il faudra parfois adapter les niveaux d'emballage.",type:"single",options:[["tiny","Très petite : moins de 20 × 20 mm"],["small","Petite : environ 40 × 20 mm"],["medium","Moyenne : environ 70 × 40 mm"],["large","Grande : 100 × 50 mm ou plus"]]},
 {id:"language",s:"Étiquette",title:"Pour quels pays les informations seront-elles préparées ?",help:"Les États membres fixent les exigences de langue des informations fournies avec les dispositifs. Des symboles normalisés peuvent aider mais ne remplacent pas tous les textes requis.",type:"single",options:[["fr","France"],["eu","Plusieurs pays de l'UE"],["other","UE et pays hors UE"]]}
@@ -383,9 +388,28 @@ function conclusions(at=new Date()){
       "IEC 60601-1, 7.2.10 ; "+appliedSymbol[0],"Sécurité électrique",true);
    }
   }
-  if(a.elec_manual==="yes")placement("IEC 60417-1641","Lire impérativement le manuel",
-   "Le symbole « Operating manual » exprime une obligation de lecture pour la sécurité ; distinct du symbole ISO 15223-1, 5.4.3, qui invite à consulter la notice.",
-   "IEC 60417-1641","Information",true);
+  if(a.elec_supply==="yes"){
+   const currents={
+    dc:["IEC 60417-5031","Courant continu"],
+    ac:["IEC 60417-5032","Courant alternatif"],
+    both:["IEC 60417-5033","Courant continu et alternatif"]
+   };
+   const current=currents[a.elec_supply_kind];
+   if(current)placement(current[0],current[1],"Symbole de la nature du courant, indépendamment de la tension nominale indiquée. Ne pas substituer l'un de ces marquages au code IP.", "EN 60601-1:2021, annexe D, tableau D.1","Alimentation",true);
+   else if(a.elec_supply_kind==="unknown")v("Nature du courant non précisée","Compléter les caractéristiques de l’alimentation avant de finaliser le marquage électrique.");
+  }
+  if(a.elec_alarm==="yes"){
+   c("IEC 60417-5307","Alarme générale — commande ou indicateur","À examiner pour signaler un état d’alarme sur le panneau de commande ou l'interface. Ne pas ajouter systématiquement à l’emballage.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
+   if(a.elec_alarm_reset==="yes")c("IEC 60417-5309","Réinitialisation de l’alarme","Symbole de la commande de réinitialisation, uniquement si cette fonction existe.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
+   if(a.elec_alarm_silence==="yes")c("IEC 60417-5576","Silence du signal d’alarme","Pour la commande coupant un signal d’alarme sonore ; vérifier la variante adaptée à la fonction exacte et à la durée d’inactivation.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
+  }
+  if(a.elec_warning_electric==="yes")placement("ISO 7010-W012","Avertissement de danger électrique","Signal de sécurité utilisé à l’endroit du risque identifié ; dépend de l'analyse des risques et des exigences de marquage.","EN 60601-1:2021, annexe D, tableau D.2","Sécurité électrique",true);
+  if(a.elec_60601==="yes"&&listContains("instructions","ifu")){
+   c("ISO 7000-1641","Instructions d’utilisation — symbole alternatif","La norme générale EN 60601-1 cite ISO 7000-1641 (livret avec « i »). Choisir le symbole correspondant à la fonction et au référentiel ; éviter de cumuler des pictogrammes redondants avec l’ISO 15223-1 5.4.3.","EN 60601-1:2021, annexe D, tableau D.1","Notice");
+  }
+  if(a.elec_manual==="yes")placement("ISO 7010-M002","Suivre impérativement les instructions d’utilisation",
+   "Pictogramme d’action obligatoire selon EN 60601-1, tableau D.2. À employer uniquement si l’analyse des risques impose expressément de suivre les instructions ; distinct de la simple consultation de la notice.",
+   "ISO 7010-M002 ; EN 60601-1:2021, tableau D.2, symbole 10","Information",true);
   if(a.elec_supply==="yes")placement("Alim.","Caractéristiques nominales d'alimentation",
    "Reporter les valeurs réelles d'entrée ou d'alimentation selon la norme applicable (V, A/W, AC ou DC, Hz si pertinent). Aucun chiffre n'est fourni automatiquement.",
    "IEC 60601-1, 7.2 / autre norme de sécurité applicable","Sécurité électrique",true);
@@ -426,7 +450,7 @@ function renderShortList(items) {
  if(!items.length)return '<p class="label-empty">Aucun élément proposé pour ce périmètre.</p>';
  return '<ul class="label-symbol-grid">'+items.map(it=>{
   const image=symbolImage(it.code);
-  const textMark=it.code==='Texte'&&/^Nom /.test(it.title)?'Nom':it.code==='UDI (AIDC + HRI)'?'Code UDI':it.code==='UDI direct'?'UDI direct':it.code==='Notice'?'Notice':/^(IP(?:[0-9X]+)?|DEEE|BAT-DEEE|Alim\.|IEC 60417-\d+)$/.test(it.code)?(it.code.startsWith('IEC')?'IEC':it.code==='BAT-DEEE'?'BAT':it.code):'Texte';
+  const textMark=it.code==='Texte'&&/^Nom /.test(it.title)?'Nom':it.code==='UDI (AIDC + HRI)'?'Code UDI':it.code==='UDI direct'?'UDI direct':it.code==='Notice'?'Notice':/^(IP(?:[0-9X]+)?|DEEE|BAT-DEEE|Alim\.|IEC 60417-\d+|ISO 7000-\d+|ISO 7010-[A-Z]\d+)$/.test(it.code)?(it.code.startsWith('IEC')?'IEC':it.code==='BAT-DEEE'?'BAT':it.code):'Texte';
   return '<li>'+ (image||'<span class="label-text-mark" aria-hidden="true">'+escapeHTML(textMark)+'</span>')+'<span>'+escapeHTML(it.title)+'</span><small>'+escapeHTML(symbolRef(it.code))+'</small></li>';
  }).join('')+'</ul>';
 }
