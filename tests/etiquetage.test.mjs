@@ -450,3 +450,82 @@ test('labelling: changing the shipment gate removes obsolete answers',()=>{
  assert.equal(app.answers.shipping_stack,undefined);
  assert.equal(app.conclusions().transport.length,0);
 });
+
+
+test('labelling: MRI safety marks require a positive documented MR classification',()=>{
+ const noMR=scenario({mr_use:'no',mr_status:'safe'});
+ assert.equal([...noMR.required,...noMR.conditional].some(x=>x.code.startsWith('ASTM F2503 MR')),false);
+ const cases=[
+  ['safe','ASTM F2503 MR Safe'],
+  ['conditional','ASTM F2503 MR Conditional'],
+  ['unsafe','ASTM F2503 MR Unsafe']
+ ];
+ for(const [status,code] of cases){
+  const result=scenario({mr_use:'yes',mr_status:status});
+  assert.ok(has(result.conditional,code),'Expected '+code);
+  assert.equal(result.conditional.filter(x=>x.code.startsWith('ASTM F2503 MR')).length,1);
+  assert.equal(has(result.required,code),false,'MR marking not automatically MDR-mandatory');
+ }
+ assert.ok(scenario({mr_use:'yes',mr_status:'conditional'}).review.some(x=>x.title.includes("Conditions d'utilisation IRM")));
+ assert.match(create().symbolImage('ASTM F2503 MR Safe'),/symboles-complementaires\/ASTM-F2503-MR-Safe\.png/);
+ assert.match(create().symbolImage('ASTM F2503 MR Conditional'),/symboles-complementaires\/ASTM-F2503-MR-Conditional\.png/);
+ assert.match(create().symbolImage('ASTM F2503 MR Unsafe'),/symboles-complementaires\/ASTM-F2503-MR-Unsafe\.png/);
+});
+
+test('labelling: packaging quantity, phthalates and warning symbols are independent and conditional',()=>{
+ const none=scenario({pack_quantity:'no',phthalate_specific:'no',mr_use:'no'});
+ assert.equal(has(none.conditional,'ISO 7000-2794'),false);
+ assert.equal(has(none.conditional,'ISO 7000-2725'),false);
+ const pkg=scenario({support:'outer',pack_quantity:'yes'});
+ assert.ok(has(pkg.conditional,'ISO 7000-2794'));
+ assert.ok(pkg.review.some(x=>x.title.includes('Quantité de pièces')));
+ const medicalNoPkg=scenario({support:'device',pack_quantity:'yes'});
+ assert.equal(has(medicalNoPkg.conditional,'ISO 7000-2794'),false);
+ const pht=scenario({substances:'yes',substances_cmr:'yes',phthalate_specific:'yes'});
+ assert.ok(has(pht.conditional,'ISO 7000-2725'));
+ assert.ok(pht.review.some(x=>x.title.includes('Phtalates')));
+ const genericCMR=scenario({substances:'yes',substances_cmr:'yes',phthalate_specific:'no'});
+ assert.equal(has(genericCMR.conditional,'ISO 7000-2725'),false);
+ const warn=scenario({instructions:'yes',instructions_warning:'yes'});
+ assert.ok(has(warn.conditional,'ISO 7010-W001'));
+ assert.ok(has(warn.required,'5.4.4'));
+});
+
+test('labelling: footswitch and standby symbols apply to electrical equipment interface only',()=>{
+ const electric=scenario({electronic:'yes',elec_standby:'yes',elec_pedal:'yes'});
+ assert.ok(has(electric.conditional,'IEC 60417-5009'));
+ assert.ok(has(electric.conditional,'IEC 60417-5114'));
+ assert.equal(has(electric.required,'IEC 60417-5009'),false);
+ const passive=scenario({electronic:'no',elec_standby:'yes',elec_pedal:'yes'});
+ assert.equal(has(passive.conditional,'IEC 60417-5009'),false);
+ assert.equal(has(passive.conditional,'IEC 60417-5114'),false);
+});
+
+test('labelling: all supplementary exact PNGs exist including a local WEEE symbol',()=>{
+ const app=create();
+ for(const [code,file] of [
+  ['ASTM F2503 MR Safe','ASTM-F2503-MR-Safe.png'],
+  ['ASTM F2503 MR Conditional','ASTM-F2503-MR-Conditional.png'],
+  ['ASTM F2503 MR Unsafe','ASTM-F2503-MR-Unsafe.png'],
+  ['ISO 7010-W001','ISO-7010-W001.png'],
+  ['DEEE','EN-50419-DEEE.png'],
+  ['IEC 60417-5009','IEC-60417-5009.png'],
+  ['IEC 60417-5114','IEC-60417-5114.png'],
+  ['ISO 7000-2725','ISO-7000-2725.png'],
+  ['ISO 7000-2794','ISO-7000-2794.png']
+ ]){
+  assert.equal(existsSync(new URL('../outils/etiquettes-tracabilite/symboles-complementaires/'+file,import.meta.url)),true,'Missing '+file);
+  assert.match(app.symbolImage(code),new RegExp(file.replaceAll('.','\\.')+'(?:\\?|")'),'Missing image binding '+code);
+ }
+ assert.doesNotMatch(app.symbolImage('DEEE'),/wikimedia\.org/,'WEEE must be local, for PDF/offline');
+});
+
+test('labelling: edit of MRI and package quantity clears obsolete responses',()=>{
+ const app=create();finish(app,{mr_use:'yes',mr_status:'conditional',pack_quantity:'yes'});
+ assert.ok(has(app.conclusions().conditional,'ASTM F2503 MR Conditional'));
+ app.edit('mr_use');app.selectChoice('no');
+ assert.equal(app.answers.mr_status,undefined);
+ assert.equal(app.conclusions().conditional.some(x=>x.code.startsWith('ASTM F2503 MR')),false);
+ app.edit('support');app.selectChoice('device');
+ assert.equal(app.answers.pack_quantity,undefined);
+});
