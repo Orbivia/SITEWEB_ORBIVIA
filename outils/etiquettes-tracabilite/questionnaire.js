@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v8";
+const STORE="orbivia-mdr-label-wizard-v9";
 const Q=[
 {id:"status",s:"Périmètre",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -71,6 +71,22 @@ const Q=[
 {id:"elec_warning_electric",s:"Sécurité électrique",title:"Un avertissement contre un danger électrique doit-il figurer sur l’appareil ?",help:"EN 60601-1, tableau D.2 : ISO 7010-W012 pour le danger électrique. N’afficher ce signal de sécurité que pour un danger identifié et un emplacement pertinent.",type:"single",when:a=>a.elec_60601==="yes",options:[["no","Non, aucun avertissement spécifique"],["yes","Oui, danger électrique identifié"]]},
 {id:"elec_alarm_pause",s:"Alarmes",title:"L’équipement possède-t-il une commande de pause temporaire des alarmes ?",help:"Ne pas confondre la pause de l’alarme avec la désactivation du signal sonore. Vérifier le symbole applicable selon EN 60601-1-8, annexe C.",type:"single",when:a=>a.elec_alarm==="yes",options:[["no","Non"],["yes","Oui, pause temporaire des alarmes"]]},
 {id:"elec_indoor",s:"Sécurité électrique",title:"L'appareil est-il réservé à un usage en intérieur ?",help:"Le symbole IEC 60417-5957 peut être pertinent lorsque l'usage exclusivement intérieur doit être indiqué sur le produit.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, usage extérieur possible"],["yes","Oui, usage en intérieur uniquement"]]},
+
+{id:"shipping",s:"Transport",title:"Préparez-vous aussi des pictogrammes pour l'emballage de transport ?",help:"ISO 780 concerne la manutention et le stockage des colis. Ne pas confondre ces pictogrammes logistiques avec les mentions médicales MDR du dispositif ou de sa barrière stérile.",type:"single",when:a=>["unit","outer"].includes(a.support),options:[["no","Non, uniquement l'étiquetage du produit"],["yes","Oui, l'emballage utilisé pour le transport"]]},
+{id:"shipping_fragile",s:"Transport",title:"Le colis est-il fragile et doit-il être manipulé avec précaution ?",help:"ISO 780 03 : fragile, manipuler avec précaution. À prévoir seulement si pertinent pour le colis.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_up",s:"Transport",title:"Le colis doit-il rester dans un sens vertical déterminé ?",help:"ISO 780 13 « This way up » : les deux flèches désignent le haut du colis. Ne pas ajouter si toutes les orientations sont autorisées.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui, cette face vers le haut"]]},
+{id:"shipping_rain",s:"Transport",title:"L'emballage doit-il être protégé de la pluie ?",help:"ISO 780 10 : keep away from rain. Cette protection logistique est distincte du symbole médical « tenir au sec ».",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_sun",s:"Transport",title:"Le colis doit-il être protégé du rayonnement solaire ?",help:"ISO 780 11 : keep away from sunlight. Ne pas confondre avec le symbole de protection contre les sources radioactives.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_radio",s:"Transport",title:"Le colis doit-il être tenu à l'écart des sources radioactives ?",help:"ISO 780 12 : protect from radioactive sources. N'est pas une indication de produit radioactif, mais une précaution de conservation.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_temperature",s:"Transport",title:"Des limites de température spécifiques sont-elles imposées pendant le transport ?",help:"ISO 780 14 : temperature limits. Les limites chiffrées validées sont nécessaires sur le marquage réel.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui, plage de transport définie"]]},
+{id:"shipping_cog",s:"Transport",title:"Le centre de gravité doit-il être identifié pour la manutention ?",help:"ISO 780 01 : centre of gravity. Pertinent pour un colis lourd, encombrant ou présentant un risque de basculement.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_sling",s:"Transport",title:"Des emplacements précis de levage par élingue doivent-ils être signalés ?",help:"ISO 780 02 : sling here. Le pictogramme doit être placé au bon endroit sur le colis, pas seulement dans une liste.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_hooks",s:"Transport",title:"L'utilisation de crochets de manutention est-elle interdite ?",help:"ISO 780 04 : use no hand hooks.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_handtruck",s:"Transport",title:"Le diable de manutention est-il interdit à l'emplacement indiqué ?",help:"ISO 780 05 : do not use hand truck here. Marquage localisé, à positionner sur la zone concernée.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_forks",s:"Transport",title:"L'utilisation d'un chariot à fourches est-elle interdite ?",help:"ISO 780 06 : use no forks. Ce pictogramme ne concerne pas l'interdiction du diable manuel.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui"]]},
+{id:"shipping_clamp",s:"Transport",title:"Faut-il préciser les zones de préhension avec des pinces de manutention ?",help:"La planche fournie distingue ISO 780 07 (« ne pas pincer à cet emplacement ») et 08 (« pince autorisée ici »).",type:"single",when:a=>a.shipping==="yes",options:[["none","Non, aucune consigne de pince"],["allowed","Oui, zone autorisée identifiée"],["forbidden","Oui, zone interdite identifiée"]]},
+{id:"shipping_roll",s:"Transport",title:"Le colis doit-il être interdit de roulage ou de retournement ?",help:"ISO 780 09 : do not roll. À utiliser uniquement si le colis ne doit pas être roulé.",type:"single",when:a=>a.shipping==="yes",options:[["no","Non"],["yes","Oui, ne pas faire rouler"]]},
+{id:"shipping_stack",s:"Transport",title:"Quelle consigne d'empilage est nécessaire pendant le transport ?",help:"ISO 780 15 (limite en masse), 16 (limite en nombre) et 17 (ne pas empiler) sont distincts. Une limite choisie doit être renseignée avec la valeur réelle sur l'emballage.",type:"single",when:a=>a.shipping==="yes",options:[["none","Aucune consigne particulière"],["forbidden","Ne pas empiler"],["number","Nombre maximal de colis empilés"],["mass","Masse maximale supportée en empilage"]]},
 {id:"space",s:"Étiquette",title:"Quelle surface est disponible pour l’étiquetage ?",help:"Cette question concerne l'espace sur le support choisi, pas la taille totale du dispositif. La place disponible ne dispense pas des mentions requises : il faudra parfois adapter les niveaux d'emballage.",type:"single",options:[["tiny","Très petite : moins de 20 × 20 mm"],["small","Petite : environ 40 × 20 mm"],["medium","Moyenne : environ 70 × 40 mm"],["large","Grande : 100 × 50 mm ou plus"]]},
 {id:"language",s:"Étiquette",title:"Pour quels pays les informations seront-elles préparées ?",help:"Les États membres fixent les exigences de langue des informations fournies avec les dispositifs. Des symboles normalisés peuvent aider mais ne remplacent pas tous les textes requis.",type:"single",options:[["fr","France"],["eu","Plusieurs pays de l'UE"],["other","UE et pays hors UE"]]}
 ];
@@ -186,10 +202,11 @@ function conclusions(at=new Date()){
  /* Deux niveaux distincts : exigences MDR pour l'information, symboles ISO utilisables pour la représenter.
   * Les PNG illustrent les mentions et ne constituent pas une étiquette prête à imprimer.
   */
- const required=[],conditional=[],review=[];
+ const required=[],conditional=[],transport=[],review=[];
  const add=(target,code,title,detail,source,tag)=>target.push({code,title,detail,source:source||"",tag:tag||""});
  const r=(code,title,detail,source,tag)=>add(required,code,title,detail,source,tag);
  const c=(code,title,detail,source,tag)=>add(conditional,code,title,detail,source,tag);
+ const t=(code,title,detail,source)=>add(transport,code,title,detail,source,"Transport ISO 780");
  const v=(title,detail,blocking=false)=>{add(review,"!",title,detail,"Contrôle");review[review.length-1].blocking=blocking;};
  const a=answers;
  const market=a.status==="market",draft=a.status==="draft",custom=a.status==="custom",investigation=a.status==="investigation";
@@ -204,7 +221,7 @@ function conclusions(at=new Date()){
  const mdr="MDR (UE) 2017/745";
  if(!isEU){
   v("Marché non couvert par cette analyse","Ce questionnaire concerne le MDR européen. Les obligations de marquage pour une commercialisation exclusivement hors UE doivent être établies selon le pays de destination.");
-  return {required,conditional,review};
+  return {required,conditional,transport,review};
  }
 
  r("Texte","Nom et identification du produit","Préciser la dénomination, le modèle et le contenu de l'emballage si nécessaire.",mdr+" annexe I, 23.2(a–b)","Mention");
@@ -462,6 +479,41 @@ function conclusions(at=new Date()){
  if(a.elec_specialty==="eeg")v("EEG : vérifier la norme particulière","L'IEC 80601-2-26:2019 et son amendement 1:2024 peuvent modifier les exigences de marquage et de notice. Vérifier le périmètre du produit (EEG complet, accessoires, traitement) sans présumer de logos supplémentaires.");
  if(a.elec_specialty==="ecg")v("ECG diagnostique : vérifier la norme particulière","L'IEC 60601-2-25:2011 remplace l'IEC 60601-2-51:2003 fournie. Examiner les clauses de marquage applicables au produit avant impression ; ECG de surveillance ou ambulatoire peut relever d'un autre texte.");
  if(a.elec_specialty==="other")v("Norme particulière de l'équipement à déterminer","L'IEC 60601-1 seule ne suffit pas à couvrir toutes les exigences particulières ; vérifier les normes applicables au produit.");
+
+ if(a.shipping==="yes"&&["unit","outer"].includes(a.support)){
+  /* ISO 780 concerne la logistique et le colis, pas la conformité MDR de l'étiquette produit. */
+  const src="Planche de référence ISO 780 (17 symboles, fichier fourni)";
+  const symbols=[
+   ["shipping_cog","01","Centre de gravité","Positionner le symbole au centre de gravité effectif pour guider les opérations de levage."],
+   ["shipping_sling","02","Élinguer ici","Placer le symbole aux emplacements réellement prévus pour les élingues."],
+   ["shipping_fragile","03","Fragile — manipuler avec précaution","Transport et manutention avec précaution."],
+   ["shipping_hooks","04","Ne pas utiliser de crochets","Interdiction des crochets de manutention."],
+   ["shipping_handtruck","05","Ne pas utiliser de diable ici","Pictogramme de localisation, à placer sur les surfaces concernées."],
+   ["shipping_forks","06","Ne pas utiliser de fourches","Interdiction de levage par fourches."],
+   ["shipping_roll","09","Ne pas faire rouler","Le colis ne doit pas être roulé pendant sa manutention."],
+   ["shipping_rain","10","Tenir à l'abri de la pluie","Conservation du colis à l'abri des précipitations."],
+   ["shipping_sun","11","Protéger du rayonnement solaire","Éviter l'exposition directe du colis au soleil."],
+   ["shipping_radio","12","Protéger des sources radioactives","Tenir le colis à l'écart des sources de rayonnement radioactif."],
+   ["shipping_up","13","Haut du colis — orientation verticale","Placer le symbole sur les faces appropriées, flèches orientées vers le haut."],
+   ["shipping_temperature","14","Limites de température pendant le transport","Compléter le marquage avec les limites chiffrées documentées."]
+  ];
+  for(const [flag,id,title,detail] of symbols)if(a[flag]==="yes")t("ISO 780 "+id,title,detail,src);
+  const clamps={
+   allowed:["08","Pincer à l'emplacement indiqué","Définir précisément les surfaces d'application des pinces."],
+   forbidden:["07","Ne pas pincer à l'emplacement indiqué","Définir précisément les surfaces où la préhension par pince est interdite."]
+  };
+  if(clamps[a.shipping_clamp]){const [id,title,detail]=clamps[a.shipping_clamp];t("ISO 780 "+id,title,detail,src);}
+  const stack={
+   mass:["15","Limite d'empilage en masse","Indiquer la charge limite réelle en kg, et ne pas imprimer une valeur fictive."],
+   number:["16","Limite d'empilage en nombre","Indiquer le nombre maximal réel autorisé pour l'empilage."],
+   forbidden:["17","Ne pas empiler","Aucune charge ne doit être empilée sur le colis."]
+  };
+  if(stack[a.shipping_stack]){const [id,title,detail]=stack[a.shipping_stack];t("ISO 780 "+id,title,detail,src);}
+  if(a.shipping_stack==="mass"||a.shipping_stack==="number")
+   v("Valeur d'empilage à renseigner","Le pictogramme extrait contient une valeur générique ; remplacer la valeur par la limite justifiée lors de la réalisation de l'étiquette de transport.");
+  if(a.shipping_temperature==="yes")v("Valeurs de température de transport","Les limites en degrés Celsius doivent être précisées et validées avant impression.");
+  if(a.support==="unit")v("Distinguer conditionnement unitaire et colis logistique","Les symboles ISO 780 concernent l'emballage de transport. Vérifier s'ils doivent être reproduits sur cet emballage unitaire ou seulement sur le carton d'expédition.");
+ }
  if(a.pack==="multiple"&&market)v("Niveaux commerciaux de conditionnement","Examiner séparément l'UDI-DI et l'étiquette de chaque niveau de commercialisation, en excluant les conteneurs purement logistiques.");
  if(["tiny","small"].includes(a.space))v("Place réduite pour les marquages","Vérifier la lisibilité des symboles, des caractères et de l'UDI après impression. Une surface réduite ne dispense pas automatiquement des mentions obligatoires.");
  if(["eu","other"].includes(a.language))v("Langues applicables","Vérifier les exigences linguistiques des États membres ciblés et, le cas échéant, celles des pays hors UE.");
@@ -473,7 +525,7 @@ function conclusions(at=new Date()){
  if(a.import==="yes"&&isEU&&label)c("5.1.8","Importateur","Coordonnées requises par l'article 13(3), qui peuvent figurer sur le dispositif, son emballage ou un document d'accompagnement ; pas nécessairement sur cette étiquette.",mdr+" article 13(3) ; "+iso+" 5.1.8","Opérateur");
 
  const unique=items=>items.filter((x,i)=>items.findIndex(y=>y.code===x.code&&y.title===x.title)===i);
- return {required:unique(required),conditional:unique(conditional),review:unique(review)};
+ return {required:unique(required),conditional:unique(conditional),transport:unique(transport),review:unique(review)};
 }
 /* Les PNG ISO source proviennent du document fourni ; CE, MD et UDI sont fournis séparément.
  * Correspondance stricte par numéro de symbole : aucun remplacement inventé.
@@ -482,6 +534,8 @@ function conclusions(at=new Date()){
 const isoSymbolCodes=new Set("5.1.1 5.1.2 5.1.3 5.1.4 5.1.5 5.1.6 5.1.7 5.1.8 5.1.9 5.1.10 5.1.11 5.2.1 5.2.2 5.2.3 5.2.4 5.2.5 5.2.6 5.2.7 5.2.8 5.2.9 5.2.10 5.2.11 5.2.12 5.2.13 5.2.14 5.3.1 5.3.2 5.3.3 5.3.4 5.3.5 5.3.6 5.3.7 5.3.8 5.3.9 5.4.1 5.4.2 5.4.3 5.4.4 5.4.5 5.4.6 5.4.7 5.4.8 5.4.9 5.4.10 5.4.11 5.4.12 5.5.1 5.5.2 5.5.3 5.5.4 5.5.5 5.5.6 5.7.7 5.7.10".split(" "));
 // Pictogrammes reproduits depuis les tableaux EN 60601-1 (annexe D) et EN 60601-1-8 (annexe C).
 // La planche est un assemblage de recadrages, sans modification des formes normatives.
+const ISO780_CODES=new Set(Array.from({length:17},(_,i)=>"ISO 780 "+String(i+1).padStart(2,"0")));
+const iso780ImagePath=code=>ISO780_CODES.has(code)?"symboles-transport/ISO-780-"+code.slice(-2)+".png":null;
 const IEC_SYMBOL_CODES=new Set([
  "IEC 60417-5019","IEC 60417-5031","IEC 60417-5032","IEC 60417-5033",
  "IEC 60417-5172","IEC 60417-5307","IEC 60417-5309",
@@ -492,6 +546,7 @@ const IEC_SYMBOL_CODES=new Set([
 const iecImagePath=code=>IEC_SYMBOL_CODES.has(code)?"symboles-iec/"+code.replace(" ","-")+".png":null;
 const iecImagesReady=Promise.resolve(true);
 function symbolPDFSource(code){
+ if(iso780ImagePath(code))return iso780ImagePath(code);
  if(iecImagePath(code))return iecImagePath(code);
  const filename=(code==="CE"||code==="CE + ON")?"CE":isoSymbolCodes.has(code)?code:null;
  return filename?"symboles-iso/"+filename+".png?v=2":null;
@@ -499,6 +554,7 @@ function symbolPDFSource(code){
 function symbolImage(code,reference=false){
  // Poubelle DEEE : fichier graphique européen existant, non redessiné (Wikimedia Commons, PD-ineligible).
  if(code==="DEEE")return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="https://upload.wikimedia.org/wikipedia/commons/a/a9/WEEE.svg" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" loading="lazy" decoding="async">';
+ if(iso780ImagePath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+iso780ImagePath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  if(iecImagePath(code))return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+iecImagePath(code)+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  const asset=(code==="CE"||code==="CE + ON")?"CE":isoSymbolCodes.has(code)?code:null;
  if(!asset)return "";
@@ -521,7 +577,7 @@ function renderChecks(items){
  return '<ul class="label-checks">'+items.map(it=>'<li><strong>'+escapeHTML(it.title)+'</strong><span>'+escapeHTML(it.detail)+'</span></li>').join("")+'</ul>';
 }
 function renderReferences(result){
- const groups=[["À prévoir",result.required],["Selon votre dispositif",result.conditional],["Points de vigilance",result.review]];
+ const groups=[["À prévoir",result.required],["Selon votre dispositif",result.conditional],["Transport ISO 780",result.transport],["Points de vigilance",result.review]];
  return '<details class="label-details"><summary>Afficher les explications et références réglementaires</summary><div>'+
  groups.map(group=>'<h3>'+escapeHTML(group[0])+'</h3>'+
  group[1].map(it=>'<div class="label-reference"><div class="label-reference-heading">'+symbolImage(it.code,true)+'<strong>'+escapeHTML(it.title)+'</strong></div><p>'+escapeHTML(it.detail)+'</p>'+(it.source?'<small>'+escapeHTML(it.source)+'</small>':'')+'</div>').join("")
@@ -535,6 +591,7 @@ function pdfSummary(){
  ];
  if(answers.status==="investigation")sections.push({title:"Études cliniques",items:[{text:"Libellé MDR : exclusivement pour des investigations cliniques. Expression usuelle : exclusivement pour des études cliniques."}]});
  if(result.conditional.length)sections.push({title:"Selon votre dispositif",items:result.conditional.map(item=>({text:item.title+" — "+symbolRef(item.code),icon:symbolPDFSource(item.code)}))});
+ if(result.transport.length)sections.push({title:"Transport ISO 780",items:result.transport.map(item=>({text:item.title+" — "+symbolRef(item.code),icon:symbolPDFSource(item.code)}))});
  if(result.review.length)sections.push({title:"À vérifier",items:result.review.map(item=>({text:item.title+(item.blocking?" (à corriger)":"")}))});
  sections.push({title:"Sources",items:[{text:"MDR 2017/745 · Annexe I et Annexe VI",url:"https://eur-lex.europa.eu/eli/reg/2017/745/oj"},{text:"ISO 15223-1:2021 · Symboles normalisés"}]});
  return {
@@ -578,6 +635,7 @@ function summary(){
  '<section class="label-result-card label-main-grid">'+
  renderShortList(result.required)+'</section>'+
  (result.conditional.length?'<section class="label-result-card label-optional-symbols"><header><h2>Autres symboles à examiner</h2><span>'+result.conditional.length+' éléments</span></header>'+renderShortList(result.conditional)+'</section>':'')+
+ (result.transport.length?'<section class="label-result-card label-optional-symbols label-transport-symbols"><header><h2>Transport et manutention — ISO 780</h2><span>'+result.transport.length+' symboles</span></header><p class="label-disclaimer">À appliquer sur le colis de transport lorsque nécessaire, et non automatiquement sur l’étiquette réglementaire médicale.</p>'+renderShortList(result.transport)+'</section>':'')+
  (result.review.length?'<details class="label-result-card label-fold label-review"'+(blockers.length||answers.territory==='outside'?' open':'')+'><summary>À vérifier avant impression <span>'+result.review.length+'</span></summary>'+renderChecks(result.review)+'</details>':'')+
  '<section class="label-result-card label-additional">'+renderReferences(result)+
  '<details class="label-answers"><summary>Voir mes réponses au questionnaire</summary><dl>'+answersHTML+'</dl></details></section>'+
