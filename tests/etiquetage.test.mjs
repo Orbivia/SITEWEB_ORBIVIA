@@ -150,3 +150,67 @@ test('labelling: progress remains monotonic when yes answers reveal extra questi
  assert.equal(expanded,2);assert.equal(app.finished,true);
  assert.ok(steps>26,'Conditional yes answers should expand the route');
 });
+
+
+test('labelling: electrical equipment suggests WEEE mark only when in scope',()=>{
+ const device=scenario({electronic:'yes',support:'device',status:'market',elec_weee:'yes',elec_battery:'no',elec_ip:'no',elec_60601:'no',elec_manual:'no',elec_supply:'yes',elec_indoor:'no'});
+ assert.ok(has(device.required,'DEEE'),"WEEE required on device");
+ assert.ok(has(device.required,'Alim.'),"Electrical ratings suggested for device");
+ const packaging=scenario({electronic:'yes',support:'unit',status:'market',elec_weee:'yes',elec_battery:'no',elec_ip:'no',elec_60601:'no',elec_manual:'no',elec_supply:'yes',elec_indoor:'no'});
+ assert.ok(has(packaging.conditional,'DEEE'),"WEEE not presumed on packaging");
+ assert.ok(packaging.review.some(x=>x.title.includes('Poubelle barrée')),"Location warning is clear");
+ const excluded=scenario({electronic:'yes',support:'device',status:'market',elec_weee:'no',elec_battery:'no',elec_ip:'no',elec_60601:'no',elec_manual:'no',elec_supply:'no',elec_indoor:'no'});
+ assert.equal(has(excluded.required,'DEEE'),false);
+ assert.match(create().symbolImage('DEEE'),/WEEE\.svg/,"Exact supplied external graphic is visible");
+});
+
+test('labelling: IP rating is text only and requires explicit established value',()=>{
+ const noIp=scenario({electronic:'yes',elec_ip:'no'});
+ assert.equal([...noIp.required,...noIp.conditional].some(x=>/^IP\d|^IPX/i.test(x.code)),false);
+ const ip=scenario({electronic:'yes',support:'device',elec_ip:'yes',elec_ip_value:'ip67'});
+ assert.ok(has(ip.required,'IP67'),"Actual specified IP rating must appear");
+ assert.equal(create().symbolImage('IP67'),"","IP67 is a code, not an invented ISO logo");
+ const other=scenario({electronic:'yes',elec_ip:'yes',elec_ip_value:'other'});
+ assert.ok(other.review.some(x=>x.title==='Indice IP à reporter'));
+});
+
+test('labelling: IEC 60417 symbols require the declared safety class and patient protection',()=>{
+ const baseline=scenario({electronic:'no'});
+ assert.equal([...baseline.required,...baseline.conditional].some(x=>x.code.startsWith('IEC 60417-')),false);
+ const selected=scenario({
+  electronic:'yes',support:'device',elec_60601:'yes',elec_insulation:'class2',
+  elec_applied:'bf',elec_defib:'yes',elec_manual:'yes',elec_indoor:'yes',
+  elec_ip:'yes',elec_ip_value:'ip22'
+ });
+ assert.ok(has(selected.required,'IEC 60417-5172'));
+ assert.ok(has(selected.required,'IEC 60417-5334'));
+ assert.ok(!has(selected.required,'IEC 60417-5333'),"Use defibrillation-proof symbol instead of incompatible base");
+ assert.ok(has(selected.required,'IEC 60417-1641'));
+ assert.ok(has(selected.required,'IEC 60417-5957'));
+ assert.ok(has(selected.required,'IP22'));
+ assert.equal(create().symbolImage('IEC 60417-1641'),"","No unlicensed substitute for IEC graphics");
+ const other=scenario({electronic:'yes',elec_60601:'no',elec_applied:'bf',elec_insulation:'class2'});
+ assert.equal([...other.required,...other.conditional].some(x=>x.code.startsWith('IEC 60417-5333')),false);
+});
+
+test('labelling: batteries and medical instructions are not conflated with WEEE',()=>{
+ const battery=scenario({electronic:'yes',elec_battery:'yes',elec_weee:'no',support:'device'});
+ assert.ok(has(battery.conditional,'BAT-DEEE'));
+ assert.equal(has(battery.required,'DEEE'),false);
+ const ifu=scenario({electronic:'no',instructions:'yes',instructions_ifu:'yes'});
+ assert.ok(has(ifu.required,'5.4.3'),"Show the existing genuine ISO consult-IFU pictogram");
+ assert.equal(has(ifu.required,'IEC 60417-1641'),false);
+ const none=scenario({electronic:'no',instructions:'none'});
+ assert.equal(has(none.required,'5.4.3'),false);
+});
+
+test('labelling: electrical subquestions are conditional and old answers are discarded',()=>{
+ const app=create();finish(app,{electronic:'yes',elec_weee:'yes',elec_battery:'yes',elec_ip:'yes',elec_ip_value:'ip67',elec_60601:'yes',elec_insulation:'class2',elec_applied:'bf',elec_defib:'yes',elec_manual:'yes',elec_supply:'yes',elec_indoor:'yes'});
+ assert.ok(app.answers.elec_applied);
+ app.edit('electronic');app.selectChoice('no');
+ assert.equal(app.answers.elec_weee,undefined);
+ assert.equal(app.answers.elec_ip_value,undefined);
+ assert.equal(app.answers.elec_applied,undefined);
+ assert.equal(app.answers.elec_manual,undefined);
+ assert.equal(app.finished,true);
+});
