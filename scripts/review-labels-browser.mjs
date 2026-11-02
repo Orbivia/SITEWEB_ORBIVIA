@@ -95,7 +95,7 @@ try{
   }
   const final=await evaluate(stateExpr);if(!final.done)problems.push('no summary after '+step+' steps');
   await until('document.querySelector("#label-pdf-download")?.hasAttribute("href")===true').catch(e=>problems.push('PDF preparation: '+e.message));
-  const quality=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid .label-symbol-img")];await Promise.all(imgs.map(x=>x.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download"),opt=document.querySelector(".label-optional-symbols");let pdf=null;if(a?.href){const bytes=await fetch(a.href).then(r=>r.arrayBuffer());pdf={bytes:bytes.byteLength,header:String.fromCharCode(...new Uint8Array(bytes.slice(0,5)))}}return {images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),optional:!!opt,grid:opt?getComputedStyle(opt.querySelector(".label-symbol-grid")).gridTemplateColumns:null,pdf,scroll:document.documentElement.scrollWidth};})()');
+  const quality=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid .label-symbol-img")];await Promise.all(imgs.map(x=>x.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download"),opt=document.querySelector(".label-optional-symbols");let pdf=null;if(a?.href){const bytes=await fetch(a.href).then(r=>r.arrayBuffer());pdf={bytes:bytes.byteLength,header:String.fromCharCode(...new Uint8Array(bytes.slice(0,5)))}}return {images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,transportImages:imgs.filter(x=>x.src.includes("/symboles-transport/")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),optional:!!opt,grid:opt?getComputedStyle(opt.querySelector(".label-symbol-grid")).gridTemplateColumns:null,pdf,scroll:document.documentElement.scrollWidth};})()');
   if(quality.broken.length)problems.push('broken symbols: '+quality.broken.join(','));
   if(quality.pdf?.header!=='%PDF-')problems.push('invalid PDF download '+JSON.stringify(quality.pdf));
   if(quality.scroll>width+3)problems.push('summary horizontal overflow: '+quality.scroll);
@@ -114,6 +114,13 @@ try{
   const find=value=>list.find(x=>x.dataset.choice===value);
   let button=list[0];
   if(mode==="clinical"&&q.includes("Dans quel cadre"))button=find("investigation")||button;
+  if(mode==="transport"){
+   if(q.includes("Sur quel support"))button=find("outer")||button;
+   else if(q.includes("partie électrique ou électronique"))button=find("no")||button;
+   else if(q.includes("zones de préhension"))button=find("allowed")||button;
+   else if(q.includes("consigne d\u0027empilage"))button=find("mass")||button;
+   else if(find("yes"))button=find("yes");
+  }
   if(mode==="stress"){
    if(q.includes("Sur quel support"))button=find("sterile")||button;
    else if(q.includes("Quel est le statut du marquage CE"))button=find("ce-nb")||button;
@@ -128,7 +135,7 @@ try{
   }
   button?.click();return !!button;
  }
- for(const [kind,width,height,mobile] of [['stress',1440,900,false],['clinical',390,844,true]]){
+ for(const [kind,width,height,mobile] of [['stress',1440,900,false],['clinical',390,844,true],['transport',390,844,true]]){
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
   await call('Emulation.setTouchEmulationEnabled',{enabled:mobile});
   await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v9")');
@@ -149,6 +156,7 @@ try{
   if(kind==='clinical'&&!special.clinical.includes("investigations cliniques"))issues.push('Regulatory clinical label missing');
   if(kind==='stress'&&special.images<20)issues.push('Expected numerous official symbol images');
   if(kind==='stress'&&special.iecImages<6)issues.push('IEC exact PNG files not loaded: '+special.iecImages);
+  if(kind==='transport'&&special.transportImages<10)issues.push('Missing ISO 780 transport symbols: '+special.transportImages);
   if(special.pdf?.pages!==1)issues.push('Label summary PDF is not one page');
   const screenshot=await call('Page.captureScreenshot',{format:'jpeg',quality:65,captureBeyondViewport:false});
   await writeFile(join(shots,kind+'-result.jpg'),Buffer.from(screenshot.data,'base64'));
