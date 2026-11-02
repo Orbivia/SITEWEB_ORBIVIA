@@ -20,6 +20,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: node --test
-      - run: node outils/etiquettes-tracabilite/tests/run.mjs
-      - run: python scripts/check-site.py
+      # En production, les fichiers JavaScript sont minifiés. Les tests qui
+      # instrumentent les noms de fonctions/variables sont exécutés sur les
+      # sources lisibles par la CI du dépôt privé SITEWEB_ORBIVIA_PRIVATE.
+      - name: Syntaxe des scripts publics
+        run: |
+          find outils -type f -name '*.js' -print0 | xargs -0 -n 1 node --check
+      - name: Tests compatibles avec les fichiers de production minifiés
+        run: |
+          tests=$(find tests -maxdepth 1 -type f \( -name '*.cjs' -o -name '*.mjs' \) \
+            ! -name 'etiquetage.test.mjs' ! -name 'questionnaire-ui.test.cjs' | sort)
+          node --test $tests
+      - name: Vérifier les liens et fichiers du site
+        run: python scripts/check-site.py
