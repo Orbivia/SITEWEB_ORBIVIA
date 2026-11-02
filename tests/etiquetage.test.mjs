@@ -394,3 +394,59 @@ test('labelling: transport route resets obsolete answers and keeps a coherent PD
  assert.equal(app.answers.shipping_stack,undefined);
  assert.equal(app.conclusions().transport.length,0);
 });
+
+
+test('labelling: ISO 780 transport section only applies to relevant shipment packages',()=>{
+ const none=scenario({support:"outer",shipping:"no",shipping_fragile:"yes"});
+ assert.equal(none.transport.length,0);
+ for(const support of ["device","sterile"])
+  assert.equal(scenario({support,shipping:"yes",shipping_fragile:"yes"}).transport.length,0);
+ const shipment=scenario({support:"outer",shipping:"yes",
+  shipping_fragile:"yes",shipping_up:"yes",shipping_rain:"yes",shipping_sun:"yes",
+  shipping_stack:"forbidden",shipping_clamp:"allowed"});
+ for(const code of ["ISO 780 03","ISO 780 08","ISO 780 10","ISO 780 11","ISO 780 13","ISO 780 17"]){
+  assert.ok(has(shipment.transport,code),"Missing shipping pictogram "+code);
+  assert.equal(has(shipment.required,code),false,"Transport is not regulatory MDR labeling");
+  assert.match(create().symbolImage(code),/symboles-transport\/ISO-780-\d\d\.png/);
+ }
+ assert.ok(!has(shipment.transport,"ISO 780 07"),"Mutually exclusive clamp symbols");
+ const value=scenario({support:"outer",shipping:"yes",shipping_stack:"mass",shipping_temperature:"yes"});
+ assert.ok(has(value.transport,"ISO 780 15"));
+ assert.ok(has(value.transport,"ISO 780 14"));
+ assert.ok(value.review.some(x=>x.title.includes("Valeur d'empilage")));
+ assert.ok(value.review.some(x=>x.title.includes("température de transport")));
+});
+
+test('labelling: all 17 ISO 780 image files have an applicable question path',()=>{
+ const flags={
+  shipping_cog:"01",shipping_sling:"02",shipping_fragile:"03",
+  shipping_hooks:"04",shipping_handtruck:"05",shipping_forks:"06",
+  shipping_roll:"09",shipping_rain:"10",shipping_sun:"11",shipping_radio:"12",
+  shipping_up:"13",shipping_temperature:"14"
+ };
+ for(const [flag,code] of Object.entries(flags)){
+  const result=scenario({support:"outer",shipping:"yes",[flag]:"yes"});
+  assert.ok(has(result.transport,"ISO 780 "+code),flag+" should imply transport marking");
+ }
+ for(const [state,code] of [["forbidden","07"],["allowed","08"]])
+  assert.ok(has(scenario({support:"outer",shipping:"yes",shipping_clamp:state}).transport,"ISO 780 "+code));
+ for(const [state,code] of [["mass","15"],["number","16"],["forbidden","17"]])
+  assert.ok(has(scenario({support:"outer",shipping:"yes",shipping_stack:state}).transport,"ISO 780 "+code));
+ for(let no=1;no<=17;no++){
+  const filename="ISO-780-"+String(no).padStart(2,"0")+".png";
+  assert.ok(existsSync("outils/etiquettes-tracabilite/symboles-transport/"+filename),filename+" must exist");
+ }
+});
+
+test('labelling: changing the shipment gate removes obsolete answers',()=>{
+ const app=create();
+ finish(app,{support:"outer",shipping:"yes",shipping_fragile:"yes",shipping_clamp:"allowed",shipping_stack:"number"});
+ assert.ok(app.root.innerHTML.includes("Transport et manutention"));
+ assert.ok(has(app.conclusions().transport,"ISO 780 16"));
+ app.edit("shipping");app.selectChoice("no");
+ assert.equal(app.finished,true);
+ assert.equal(app.answers.shipping_fragile,undefined);
+ assert.equal(app.answers.shipping_clamp,undefined);
+ assert.equal(app.answers.shipping_stack,undefined);
+ assert.equal(app.conclusions().transport.length,0);
+});
