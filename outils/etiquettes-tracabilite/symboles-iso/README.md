@@ -35,3 +35,14 @@ Les tableaux D.1, D.2, D.3 (EN 60601-1:2021) et C.1 (EN 60601-1-8:2021) permette
 - Alarme / réinitialisation / silence sonore : **IEC 60417-5307 / -5309 / -5576**
 
 Aucun logo n'est redessiné. Les symboles sans fichier à droits compatibles restent identifiés par leur code et leur titre dans la synthèse et dans son PDF.
+
+## Pictogrammes IEC/ISO intégrés — novembre 2026
+
+La bibliothèque `../symboles-iec/iec-iso-sprite.png` contient 17 pictogrammes extraits sans redessin des tableaux suivants :
+
+- **EN 60601-1:2006+A1+A12+A2:2021**, annexe D, tableaux D.1 et D.2 (pages PDF 363 à 369) : IEC 60417-5032, 5031, 5033, 5019, 5172, 5840, 5333, 5335, 5841, 5334, 5336 ; ISO 7000-1641, ISO 7010-W012 et ISO 7010-M002.
+- **EN 60601-1-8:2007+A1+A11+A2:2021**, annexe C, tableau C.1 (pages PDF 104 et 106) : IEC 60417-5307, 5309 et 5576.
+
+Les images sont recadrées et regroupées dans un atlas PNG de 5 colonnes par 4 lignes, 92 × 92 pixels par case. L'ordre de correspondance est donné par `IEC_SYMBOL_CODES` dans `questionnaire.js`. Le navigateur découpe l'atlas en mémoire sans redessiner les formes. Les mêmes recadrages sont intégrés dans le PDF exporté.
+
+**Limite documentée :** IEC 60417-5957 (« utilisation en intérieur ») n'apparaît pas dans les tableaux fournis pour l'atlas et reste indiqué avec sa référence sans pictogramme de substitution. Les indices IP sont des textes, non des logos. Les fichiers proviennent des normes fournies avec autorisation de reproduction et ne doivent pas être confondus avec une validation de conformité du dispositif.
