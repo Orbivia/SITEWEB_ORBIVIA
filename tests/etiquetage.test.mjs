@@ -617,3 +617,12 @@ test('compléments ISO 15223 : carte patient et réétiquetage ne polluent pas l
  const noCard=scenario({implant:'no',implant_card:'yes'});
  assert.equal(has(noCard.conditional,'5.7.1'),false);
 });
+
+
+test('ISO 15223: 14 extracted PNGs load as original PNG data in browser and PDF source',()=>{
+ const app=create();
+ for(const code of [...Array.from({length:6},(_,i)=>'5.6.'+(i+1)),...Array.from({length:6},(_,i)=>'5.7.'+(i+1)),'5.7.8','5.7.9']){
+  assert.match(app.symbolImage(code),/data:image\/png;base64,iVBORw0KGgo/,'Source image missing: '+code);
+ }
+ assert.equal(app.symbolImage('IEC 60417-5957'),'','Do not substitute non-provided IEC graphic');
+});
