@@ -5,7 +5,7 @@
 "use strict";
 const root=document.getElementById("label-app");
 if(!root)return;
-const STORE="orbivia-mdr-label-wizard-v7";
+const STORE="orbivia-mdr-label-wizard-v8";
 const Q=[
 {id:"status",s:"Périmètre",title:"Dans quel cadre ce dispositif sera-t-il utilisé ?",help:"Un dispositif en investigation clinique ou fabriqué sur mesure relève de règles particulières d'étiquetage. Ne jamais apposer le CE avant l'achèvement de la procédure de conformité.",type:"single",options:[
 ["market","Dispositif destiné à être mis sur le marché","Étiquetage commercial MDR."],
@@ -48,6 +48,7 @@ const Q=[
 {id:"elec_ip",s:"Protection",title:"Un indice de protection IP a-t-il été vérifié pour l'enveloppe ?",help:"La codification IP selon l'IEC 60529 est une information technique, pas un pictogramme. Ne l'affichez que si le niveau a été justifié par les essais ou la documentation technique.",type:"single",when:a=>a.electronic==="yes",options:[["no","Non, aucun indice IP revendiqué"],["yes","Oui, un indice IP est établi"]]},
 {id:"elec_ip_value",s:"Protection",title:"Quel indice IP a été établi ?",help:"Ne sélectionnez que l'indice réellement vérifié selon la norme IEC 60529. Le code affiché dans la synthèse n'est pas une certification délivrée par l'outil.",type:"single",when:a=>a.elec_ip==="yes"&&a.electronic==="yes",options:[["ip22","IP22"],["ip20","IP20"],["ip21","IP21"],["ip44","IP44"],["ip54","IP54"],["ip55","IP55"],["ip65","IP65"],["ip67","IP67"],["ip68","IP68"],["ipx4","IPX4"],["ipx7","IPX7"],["other","Autre indice IP documenté"]]},
 {id:"elec_60601",s:"Sécurité électrique",title:"Le dispositif est-il un équipement électromédical évalué selon l'IEC 60601-1 ?",help:"Les classes de protection électrique et les types de parties appliquées (B, BF, CF) ne doivent pas être déduits du seul fait que le produit contient de l'électronique.",type:"single",when:a=>a.electronic==="yes",options:[["yes","Oui, IEC 60601-1 applicable"],["no","Non, autre référentiel électrique"]]},
+{id:"elec_specialty",s:"Normes particulières",title:"Quel type d'équipement électromédical est concerné ?",help:"Certaines normes particulières complètent l'IEC 60601-1. Pour un EEG, examiner l'IEC 80601-2-26:2019 amendée en 2024. Pour un ECG diagnostique, l'IEC 60601-2-25:2011 a remplacé l'ancienne IEC 60601-2-51. Ces normes ne conduisent pas automatiquement à ajouter un pictogramme de plus.",type:"single",when:a=>a.elec_60601==="yes",options:[["general","Équipement électromédical général"],["eeg","Électroencéphalographe (EEG)"],["ecg","Électrocardiographe diagnostique (ECG)"],["other","Autre équipement couvert par une norme particulière"]]},
 {id:"elec_insulation",s:"Sécurité électrique",title:"Quelle protection contre les chocs électriques est déclarée ?",help:"Pour la classe II, le double carré correspond au symbole IEC 60417-5172. Ne pas confondre cette classe de protection électrique avec la classe MDR du dispositif.",type:"single",when:a=>a.elec_60601==="yes",options:[["internal","Source d'énergie interne"],["class2","Classe II — double isolation"],["class1","Classe I — mise à la terre de protection"]]},
 
 {id:"elec_earth_terminal",s:"Sécurité électrique",title:"Une borne de terre de protection doit-elle être identifiée sur l'équipement ?",help:"IEC 60417-5019 identifie la borne de terre de protection lorsqu'elle existe. Un appareil de classe I n'implique pas automatiquement la présence d'une borne externe à identifier.",type:"single",when:a=>a.elec_60601==="yes"&&a.elec_insulation==="class1",options:[["no","Non, pas de borne accessible à identifier"],["yes","Oui, borne de protection à identifier"]]},
@@ -456,6 +457,9 @@ function conclusions(at=new Date()){
    "Symbole à retenir lorsque les conditions d'utilisation et la norme de sécurité demandent explicitement cette indication.",
    "IEC 60417-5957","Sécurité électrique",true);
  }
+ if(a.elec_specialty==="eeg")v("EEG : vérifier la norme particulière","L'IEC 80601-2-26:2019 et son amendement 1:2024 peuvent modifier les exigences de marquage et de notice. Vérifier le périmètre du produit (EEG complet, accessoires, traitement) sans présumer de logos supplémentaires.");
+ if(a.elec_specialty==="ecg")v("ECG diagnostique : vérifier la norme particulière","L'IEC 60601-2-25:2011 remplace l'IEC 60601-2-51:2003 fournie. Examiner les clauses de marquage applicables au produit avant impression ; ECG de surveillance ou ambulatoire peut relever d'un autre texte.");
+ if(a.elec_specialty==="other")v("Norme particulière de l'équipement à déterminer","L'IEC 60601-1 seule ne suffit pas à couvrir toutes les exigences particulières ; vérifier les normes applicables au produit.");
  if(a.pack==="multiple"&&market)v("Niveaux commerciaux de conditionnement","Examiner séparément l'UDI-DI et l'étiquette de chaque niveau de commercialisation, en excluant les conteneurs purement logistiques.");
  if(["tiny","small"].includes(a.space))v("Place réduite pour les marquages","Vérifier la lisibilité des symboles, des caractères et de l'UDI après impression. Une surface réduite ne dispense pas automatiquement des mentions obligatoires.");
  if(["eu","other"].includes(a.language))v("Langues applicables","Vérifier les exigences linguistiques des États membres ciblés et, le cas échéant, celles des pays hors UE.");
