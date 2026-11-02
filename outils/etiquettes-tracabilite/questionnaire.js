@@ -361,6 +361,9 @@ function conclusions(at=new Date()){
   if(listContains("instructions","warning"))r("5.4.4","Attention et avertissements particuliers","La nature et le placement des avertissements doivent venir de l'analyse de risques, le pictogramme seul ne remplace pas le texte nécessaire.",mdr+" annexe I, 23.2(m) ; "+iso+" 5.4.4","Sécurité");
   if(listContains("instructions","damaged")&&!sterilePack)c("5.2.8","Emballage endommagé : consulter la notice","À envisager si l'intégrité de l'emballage conditionne l'utilisation sûre du produit.",iso+" 5.2.8","Emballage");
  }
+ if(isDevice&&listContains("instructions","ifu")&&a.elec_60601==="yes"&&a.elec_ifu_reference==="operating"){
+  r("ISO 7000-1641","Consulter les instructions — symbole électromédical","Choix explicite pour le marquage du dispositif, distinct de l'action obligatoire ISO 7010-M002.", "EN 60601-1:2021, annexe D, tableau D.1","Notice");
+ }
  if(listContains("instructions","electronic"))v("Notice électronique","Vérifier l'éligibilité au régime de notice électronique avant de supprimer toute notice papier.");
  /* IEC 60601-1 / IEC 60417, IEC 60529, DEEE et piles :
   * les graphismes de ces autres référentiels ne sont PAS redessinés.
