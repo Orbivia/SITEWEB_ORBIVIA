@@ -8,6 +8,24 @@ async function create(summary,lib){
  const font=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold);
  const width=595.28,height=841.89,margin=38,gap=20;
  const page=pdf.addPage([width,height]),ink=rgb(.09,.15,.23),muted=rgb(.36,.42,.49),blue=rgb(.16,.32,.5);
+ // Pour la synthèse de marquage, embarquer seulement les images applicables dans le PDF.
+ const iconCache=new Map();
+ const iconSources=[...new Set((summary.sections||[]).flatMap(section=>(section.items||[]).map(item=>item.icon).filter(Boolean)))];
+ await Promise.all(iconSources.map(async source=>{
+  try{
+   let bytes;
+   if(source.startsWith("data:image/png;base64,")){
+    const encoded=source.slice("data:image/png;base64,".length),raw=atob(encoded);
+    bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+   }else{
+    const response=await fetch(source);
+    if(!response.ok)throw Error("HTTP "+response.status);
+    bytes=new Uint8Array(await response.arrayBuffer());
+   }
+   iconCache.set(source,await pdf.embedPng(bytes));
+  }catch(error){console.warn("Image normative indisponible pour le PDF :",error);}
+ }));
+
  function safe(text){return Array.from(String(text??'').replace(/\s+/g,' ').replaceAll('≥','>=').replaceAll('≤','<=').replaceAll('μ','µ')).map(c=>{try{font.encodeText(c);return c;}catch(_){return '-';}}).join('');}
  function wrap(text,face,size,maxWidth){
   const lines=[];let line='';
@@ -45,7 +63,7 @@ async function create(summary,lib){
     if(runs.length)lines.push({runs});
    }else{
     for(const item of section.items){
-     for(const text of wrap(item.text,font,size,columnWidth))lines.push({runs:[{text,url:item.url}]});
+     for(const [index,text] of wrap(item.text,font,size,columnWidth-(item.icon?17:0)).entries())lines.push({runs:[{text,url:item.url}],icon:index===0?item.icon:null});
      lines.push({space:true,units:.35});
     }
    }
@@ -88,6 +106,10 @@ async function create(summary,lib){
  for(const line of content.lines){
   if(line.space)continue;
   let x=line.x;const face=line.heading?bold:font,size=content.size+(line.heading ? 0.6 : 0);
+  if(line.icon&&iconCache.has(line.icon)){
+   page.drawImage(iconCache.get(line.icon),{x:line.x,y:line.y-2,width:12,height:12});
+   x+=16;
+  }
   if(line.heading){page.drawRectangle({x:line.x,y:line.y-4,width:content.columnWidth,height:size+9,color:rgb(.95,.96,.95)});x+=6;}
   for(const run of line.runs){link(run.text,run.url,x,line.y,size,face);x+=face.widthOfTextAtSize(run.text,size);}
  }
