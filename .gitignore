@@ -2,3 +2,18 @@
 /_preview/
 /__pycache__/
 *.pyc
+
+# Ne jamais versionner les secrets, certificats ou sauvegardes privees
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+*.key
+secrets/
+private/
+*.sqlite
+*.sqlite3
+*.db
+*.bak
