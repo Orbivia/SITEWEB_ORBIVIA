@@ -356,7 +356,8 @@ function conclusions(at=new Date()){
     else r(item[1],item[2],"Évaluer la mention réglementaire exacte à partir de la composition, de l'analyse de risques et des seuils applicables.",mdr+" annexe I, 23.2(e–f) ; "+iso+" "+item[1],"Composition");
    }
   });
-  if(listContains("instructions","ifu")||listContains("instructions","electronic"))r("5.4.3","Consulter les instructions d’utilisation","Une notice est prévue ; le symbole ISO 15223-1 5.4.3 peut être utilisé pour y renvoyer. Le pictogramme n’est pas imposé dans tous les cas.",iso+" 5.4.3","Notice");
+  if((listContains("instructions","ifu")||listContains("instructions","electronic"))&&a.elec_ifu_reference!=="operating")r("5.4.3","Consulter les instructions d’utilisation","Une notice est prévue ; le symbole ISO 15223-1 5.4.3 peut être utilisé pour y renvoyer. Le pictogramme n’est pas imposé dans tous les cas.",iso+" 5.4.3","Notice");
+  if(listContains("instructions","ifu")&&a.elec_60601==="yes"&&a.elec_ifu_reference==="operating")r("ISO 7000-1641","Consulter les instructions — symbole électromédical","Choix explicite de la représentation prévue par l'EN 60601-1. Ne pas cumuler automatiquement avec ISO 15223-1 5.4.3.", "EN 60601-1:2021, annexe D, tableau D.1","Notice");
   if(listContains("instructions","warning"))r("5.4.4","Attention et avertissements particuliers","La nature et le placement des avertissements doivent venir de l'analyse de risques, le pictogramme seul ne remplace pas le texte nécessaire.",mdr+" annexe I, 23.2(m) ; "+iso+" 5.4.4","Sécurité");
   if(listContains("instructions","damaged")&&!sterilePack)c("5.2.8","Emballage endommagé : consulter la notice","À envisager si l'intégrité de l'emballage conditionne l'utilisation sûre du produit.",iso+" 5.2.8","Emballage");
  }
@@ -398,9 +399,9 @@ function conclusions(at=new Date()){
    if(a.elec_insulation==="class2")placement("IEC 60417-5172","Classe II — double isolation",
     "Symbole du double carré à employer seulement si les exigences de classe II de la sécurité électrique sont satisfaites.",
     "IEC 60417-5172 ; IEC 60601-1","Sécurité électrique",true);
-   if(a.elec_insulation==="class1")placement("IEC 60417-5019","Terre de protection (si borne à identifier)",
-    "La classe I requiert une protection par terre. Le symbole IEC 60417-5019 identifie la borne de protection lorsqu'une telle borne est présente, pas la classe I en général.",
-    "IEC 60417-5019 ; IEC 60601-1","Sécurité électrique");
+   if(a.elec_insulation==="class1"&&a.elec_earth_terminal==="yes")placement("IEC 60417-5019","Borne de terre de protection",
+    "Identifie la borne de terre lorsqu'une telle borne existe. Ne pas considérer ce symbole comme celui de la classe I en général.",
+    "IEC 60417-5019 ; IEC 60601-1, tableau D.1","Sécurité électrique",true);
    const applied={
     b:["IEC 60417-5840","Partie appliquée type B"],
     bf:["IEC 60417-5333","Partie appliquée type BF"],
@@ -417,6 +418,13 @@ function conclusions(at=new Date()){
       "Marquage selon le type de partie appliquée et sa résistance éventuelle aux décharges. À positionner au niveau du connecteur ou sur la partie appliquée conformément aux dispositions de l'IEC 60601-1.",
       "IEC 60601-1, 7.2.10 ; "+appliedSymbol[0],"Sécurité électrique",true);
    }
+   if(a.elec_applied_more==="yes"){
+    if(a.elec_applied_second===a.elec_applied)v("Deuxième partie appliquée déclarée identique","La deuxième partie appliquée a le même type que la première ; corriger la sélection ou supprimer ce doublon.",true);
+    else{
+     const other=(a.elec_defib_second==="yes"?defib:applied)[a.elec_applied_second];
+     if(other)placement(other[0],other[1]+" — deuxième partie appliquée","Symbole distinct à apposer près du connecteur ou de la deuxième partie appliquée ; la résistance à la défibrillation doit être validée pour celle-ci.","IEC 60601-1, 7.2.10 ; "+other[0],"Sécurité électrique",true);
+    }
+   }
   }
   if(a.elec_supply==="yes"){
    const currents={
@@ -429,14 +437,12 @@ function conclusions(at=new Date()){
    else if(a.elec_supply_kind==="other")v("Nature du courant non précisée","Compléter les caractéristiques de l’alimentation avant de finaliser le marquage électrique.");
   }
   if(a.elec_alarm==="yes"){
-   c("IEC 60417-5307","Alarme générale — commande ou indicateur","À examiner pour signaler un état d’alarme sur le panneau de commande ou l'interface. Ne pas ajouter systématiquement à l’emballage.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
+   if(a.elec_alarm_on==="yes")c("IEC 60417-5307","Alarme activée — commande / indicateur","Symbole « Alarm on » à sélectionner uniquement si cette commande ou cet indicateur existe sur l'équipement.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
    if(a.elec_alarm_reset==="yes")c("IEC 60417-5309","Réinitialisation de l’alarme","Symbole de la commande de réinitialisation, uniquement si cette fonction existe.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
-   if(a.elec_alarm_silence==="yes")c("IEC 60417-5576","Silence du signal d’alarme","Pour la commande coupant un signal d’alarme sonore ; vérifier la variante adaptée à la fonction exacte et à la durée d’inactivation.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
+   if(a.elec_alarm_silence==="off")c("IEC 60417-5576","Désactivation sonore de l'alarme (Audio off)","Commande ou état « Audio off ». La pause temporaire utilise une autre variante du symbole.","EN 60601-1-8:2021, annexe C, tableau C.1","Interface");
+   if(a.elec_alarm_silence==="pause")c("IEC 60417-5576-2","Pause sonore temporaire (Audio paused)","Variante distincte du symbole Audio off. Son graphisme exact n'est pas encore disponible dans la bibliothèque : vérifier avant impression.","EN 60601-1-8, annexe C (variante à vérifier)","Interface");
   }
   if(a.elec_warning_electric==="yes")placement("ISO 7010-W012","Avertissement de danger électrique","Signal de sécurité utilisé à l’endroit du risque identifié ; dépend de l'analyse des risques et des exigences de marquage.","EN 60601-1:2021, annexe D, tableau D.2","Sécurité électrique",true);
-  if(a.elec_60601==="yes"&&listContains("instructions","ifu")){
-   c("ISO 7000-1641","Instructions d’utilisation — symbole alternatif","La norme générale EN 60601-1 cite ISO 7000-1641 (livret avec « i »). Choisir le symbole correspondant à la fonction et au référentiel ; éviter de cumuler des pictogrammes redondants avec l’ISO 15223-1 5.4.3.","EN 60601-1:2021, annexe D, tableau D.1","Notice");
-  }
   if(a.elec_manual==="yes")placement("ISO 7010-M002","Suivre impérativement les instructions d’utilisation",
    "Pictogramme d’action obligatoire selon EN 60601-1, tableau D.2. À employer uniquement si l’analyse des risques impose expressément de suivre les instructions ; distinct de la simple consultation de la notice.",
    "ISO 7010-M002 ; EN 60601-1:2021, tableau D.2, symbole 10","Information",true);
