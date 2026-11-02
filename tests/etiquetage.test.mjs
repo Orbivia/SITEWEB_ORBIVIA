@@ -120,7 +120,7 @@ test('labelling: 300 deterministic paths terminate, survive reload and support e
  for(let route=0;route<300;route++){
   let app=create(),last=0;
   function walk(){
-   for(let step=0;step<80&&!app.finished;step++){
+   for(let step=0;step<app.Q.length+10&&!app.finished;step++){
     const q=app.current(),idx=app.Q.findIndex(it=>it.id===q.id);assert.ok(idx>=last);last=idx;
     const value=q.options[Math.floor(random()*q.options.length)][0];app.selectChoice(value);if(q.type==='multi')app.next();
     const before=JSON.stringify(app.answers),wasFinished=app.finished;
@@ -139,7 +139,7 @@ test('labelling: 300 deterministic paths terminate, survive reload and support e
 test('labelling: progress remains monotonic when yes answers reveal extra questions',()=>{
  const app=create();let previous=-1,steps=0,expanded=0;
  const read=()=>Number(app.root.innerHTML.match(/<progress max="100" value="(\d+)"/)?.[1]||0);
- while(!app.finished&&steps++<90){
+ while(!app.finished&&steps++<app.Q.length+10){
   const q=app.current(),before=read();
   assert.ok(before>=previous,'Progress must not decrease at '+q.id+': '+before+' < '+previous);
   previous=before;
