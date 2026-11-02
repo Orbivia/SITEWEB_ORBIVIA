@@ -19,3 +19,7 @@ La fonction `symbolImage(code)` de `../questionnaire.js` affiche un PNG **unique
 **Important :** les symboles visualisés sont des options d'étiquetage à vérifier selon le dispositif. Leur représentation sur la synthèse ne constitue pas une validation de conformité ni une autorisation d'apposer le marquage CE. Ne pas réutiliser ces extraits comme images d'étiquettes commerciales sans avoir contrôlé les droits d'utilisation et la norme applicable.
 
 Ne pas convertir ces PNG en SVG ou redessiner leurs graphismes.
+
+## Autres marquages (hors ISO 15223-1)
+
+Les marquages DEEE, de batteries, IP et IEC 60417 ont été ajoutés au questionnaire. Le visuel de la poubelle DEEE est le fichier **WEEE.svg** diffusé par Wikimedia Commons (représentation préexistante, domaine public), chargé depuis son URL d'origine ; les variantes de ce symbole (barre sous la poubelle, date) restent à vérifier. Le marquage de collecte séparée de la batterie est une exigence **distincte**. Le code IP est un **texte** et non un logo. Les symboles IEC 60417 (dont 1641 « manuel à lire », 5172 classe II et 5333 BF) ne sont **pas représentés graphiquement** tant que leurs fichiers autorisés n'ont pas été fournis ; aucune icône de remplacement n'est dessinée.
