@@ -51,4 +51,4 @@ Les images sont recadrées et regroupées dans un atlas PNG de 5 colonnes par 4 
 
 Le fichier 5.1.2.png illustre la version historique EC REP. L'amendement ISO 15223-1/A1:2025 introduit EU REP. Jusqu'à obtention du graphisme original autorisé, l'outil affiche EU REP comme référence textuelle uniquement. Une période de transition a été annoncée jusqu'au 17 juin 2031.
 
-Les références ISO 15223-1 5.6.1 à 5.6.6, 5.7.1 à 5.7.6, 5.7.8 et 5.7.9 sont proposées conditionnellement, sans image en bibliothèque. Il faut fournir les PNG originaux avant de les utiliser sur une étiquette imprimée.
+Les 14 PNG originaux ISO 15223-1 5.6.1 à 5.6.6, 5.7.1 à 5.7.6, 5.7.8 et 5.7.9 sont inclus dans `iso-15223-complements-2021.js` sous forme d'URL `data:image/png;base64`. Ils sont chargés uniquement sur la page du questionnaire et utilisés aussi pour l'export PDF. Cette forme évite de recréer les images et permet une distribution exacte en conservant les octets PNG. Les valeurs présentes dans 5.6.4 (20/ml), 5.6.5 (15 µm), 5.7.6 (31) sont des exemples à remplacer par les valeurs réelles.
