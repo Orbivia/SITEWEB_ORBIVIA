@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 
 const source=readFileSync(new URL('../questionnaire.js',import.meta.url),'utf8').replace(
- /render\(\);\s*\}\)\(\);\s*$/,
+ /render\(\);\s*(?:iecImagesReady\.then\(ready=>\{if\(ready&&finished\)render\(\);\}\);\s*)?\}\)\(\);\s*$/,
  'window.__probe={Q,applicable,current,selectChoice,next,conclusions,symbolImage,renderShortList,sanitize,render,doReset,get answers(){return answers},get position(){return position},get editing(){return editing},get finished(){return finished}};\nrender();})();'
 );
 assert(source.includes('window.__probe='),'Test hook injection failed');
