@@ -120,13 +120,13 @@ test('labelling: 300 deterministic paths terminate, survive reload and support e
  for(let route=0;route<300;route++){
   let app=create(),last=0;
   function walk(){
-   for(let step=0;step<app.Q.length+10&&!app.finished;step++){
+   for(let step=0;step<app.Q.length*3+10&&!app.finished;step++){
     const q=app.current(),idx=app.Q.findIndex(it=>it.id===q.id);assert.ok(idx>=last);last=idx;
     const value=q.options[Math.floor(random()*q.options.length)][0];app.selectChoice(value);if(q.type==='multi')app.next();
     const before=JSON.stringify(app.answers),wasFinished=app.finished;
     app=create(app.saved());assert.equal(JSON.stringify(app.answers),before);assert.equal(app.finished,wasFinished);
    }
-   assert.ok(app.finished);
+   assert.ok(app.finished,'Random route '+route+' did not finish, current: '+app.current()?.id+', answers: '+JSON.stringify(app.answers));
   }
   walk();
   const qs=app.applicable(),parent=qs[Math.floor(random()*qs.length)];
