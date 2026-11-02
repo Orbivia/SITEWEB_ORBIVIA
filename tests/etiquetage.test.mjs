@@ -286,7 +286,7 @@ test('labelling: every supplied IEC/ISO graphic has an explicit selection route'
   ["ISO 7010-W012",{elec_warning_electric:"yes"}]
  ];
  for(const [code,overrides] of routes){
-  const result=scenario({electronic:"yes",elec_60601:"yes",support:"device",...overrides});
+  const result=scenario({electronic:"yes",elec_60601:"yes",support:code==="ISO 7000-1641"?"unit":"device",...overrides});
   assert.ok(has([...result.required,...result.conditional],code),"Unreachable symbol "+code);
   assert.match(create().symbolImage(code),/symboles-iec\/.+\.png/);
  }
