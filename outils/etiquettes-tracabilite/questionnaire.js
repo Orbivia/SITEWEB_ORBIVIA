@@ -435,9 +435,44 @@ function conclusions(at=new Date()){
  * Les mentions UDI et textuelles sans fichier restent textuelles.
  */
 const isoSymbolCodes=new Set("5.1.1 5.1.2 5.1.3 5.1.4 5.1.5 5.1.6 5.1.7 5.1.8 5.1.9 5.1.10 5.1.11 5.2.1 5.2.2 5.2.3 5.2.4 5.2.5 5.2.6 5.2.7 5.2.8 5.2.9 5.2.10 5.2.11 5.2.12 5.2.13 5.2.14 5.3.1 5.3.2 5.3.3 5.3.4 5.3.5 5.3.6 5.3.7 5.3.8 5.3.9 5.4.1 5.4.2 5.4.3 5.4.4 5.4.5 5.4.6 5.4.7 5.4.8 5.4.9 5.4.10 5.4.11 5.4.12 5.5.1 5.5.2 5.5.3 5.5.4 5.5.5 5.5.6 5.7.7 5.7.10".split(" "));
+// Pictogrammes reproduits depuis les tableaux EN 60601-1 (annexe D) et EN 60601-1-8 (annexe C).
+// La planche est un assemblage de recadrages, sans modification des formes normatives.
+const IEC_SPRITE_SIZE=92;
+const IEC_SYMBOL_CODES=[
+ "IEC 60417-5032","IEC 60417-5031","IEC 60417-5033","IEC 60417-5019","IEC 60417-5172",
+ "ISO 7000-1641","IEC 60417-5840","IEC 60417-5333","IEC 60417-5335","IEC 60417-5841",
+ "IEC 60417-5334","IEC 60417-5336","ISO 7010-W012","ISO 7010-M002",
+ "IEC 60417-5307","IEC 60417-5309","IEC 60417-5576"
+];
+const iecImageData=Object.create(null);
+const iecImagesReady=(typeof Image==="function"&&typeof document.createElement==="function")?new Promise(resolve=>{
+ const sprite=new Image();
+ sprite.onload=()=>{
+  try{
+   if(sprite.naturalWidth!==460||sprite.naturalHeight!==368)throw new Error("Dimensions inattendues de la planche IEC");
+   const canvas=document.createElement("canvas");
+   canvas.width=IEC_SPRITE_SIZE;canvas.height=IEC_SPRITE_SIZE;
+   const ctx=canvas.getContext("2d");
+   IEC_SYMBOL_CODES.forEach((code,index)=>{
+    ctx.clearRect(0,0,IEC_SPRITE_SIZE,IEC_SPRITE_SIZE);
+    ctx.drawImage(sprite,(index%5)*IEC_SPRITE_SIZE,Math.floor(index/5)*IEC_SPRITE_SIZE,IEC_SPRITE_SIZE,IEC_SPRITE_SIZE,0,0,IEC_SPRITE_SIZE,IEC_SPRITE_SIZE);
+    iecImageData[code]=canvas.toDataURL("image/png");
+   });
+   resolve(true);
+  }catch(e){console.warn("Symboles IEC non chargés",e);resolve(false);}
+ };
+ sprite.onerror=()=>resolve(false);
+ sprite.src="symboles-iec/iec-iso-sprite.png?v=1";
+}):Promise.resolve(false);
+function symbolPDFSource(code){
+ if(iecImageData[code])return iecImageData[code];
+ const filename=(code==="CE"||code==="CE + ON")?"CE":isoSymbolCodes.has(code)?code:null;
+ return filename?"symboles-iso/"+filename+".png?v=2":null;
+}
 function symbolImage(code,reference=false){
  // Poubelle DEEE : fichier graphique européen existant, non redessiné (Wikimedia Commons, PD-ineligible).
  if(code==="DEEE")return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="https://upload.wikimedia.org/wikipedia/commons/a/a9/WEEE.svg" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" loading="lazy" decoding="async">';
+ if(iecImageData[code])return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="'+iecImageData[code]+'" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
  const asset=(code==="CE"||code==="CE + ON")?"CE":isoSymbolCodes.has(code)?code:null;
  if(!asset)return "";
  return '<img class="label-symbol-img'+(reference?' label-symbol-small':'')+'" src="symboles-iso/'+asset+'.png?v=2" alt="" aria-hidden="true" width="'+(reference?36:44)+'" height="'+(reference?36:44)+'" decoding="async">';
@@ -469,16 +504,16 @@ let pdfURL=null;
 function pdfSummary(){
  const result=conclusions(),support=Q.find(q=>q.id==="support")?.options.find(o=>o[0]===answers.support)?.[1]||"Étiquette médicale";
  const sections=[
-  {title:"À prévoir",items:result.required.map(item=>({text:item.title+" — "+symbolRef(item.code)}))}
+  {title:"À prévoir",items:result.required.map(item=>({text:item.title+" — "+symbolRef(item.code),icon:symbolPDFSource(item.code)}))}
  ];
  if(answers.status==="investigation")sections.push({title:"Études cliniques",items:[{text:"Libellé MDR : exclusivement pour des investigations cliniques. Expression usuelle : exclusivement pour des études cliniques."}]});
- if(result.conditional.length)sections.push({title:"Selon votre dispositif",items:result.conditional.map(item=>({text:item.title+" — "+symbolRef(item.code)}))});
+ if(result.conditional.length)sections.push({title:"Selon votre dispositif",items:result.conditional.map(item=>({text:item.title+" — "+symbolRef(item.code),icon:symbolPDFSource(item.code)}))});
  if(result.review.length)sections.push({title:"À vérifier",items:result.review.map(item=>({text:item.title+(item.blocking?" (à corriger)":"")}))});
  sections.push({title:"Sources",items:[{text:"MDR 2017/745 · Annexe I et Annexe VI",url:"https://eur-lex.europa.eu/eli/reg/2017/745/oj"},{text:"ISO 15223-1:2021 · Symboles normalisés"}]});
  return {
   compact:true,title:"Étiquetage médical",date:new Date().toLocaleDateString("fr-FR"),
   outcome:answers.territory==="outside"?"Marché hors périmètre":support,
-  note:"Présélection indicative. Les symboles ISO sont des références et non des fichiers imprimables. Vérifier le MDR, les restrictions des symboles et la lisibilité.",
+  note:"Présélection indicative. Pictogrammes de référence affichés sans validation de l’étiquette finale ; contrôler les règles MDR, les normes applicables et la lisibilité.",
   sections
  };
 }
@@ -487,6 +522,7 @@ async function preparePDF(button){
  button.textContent="Préparation du PDF…";
  button.removeAttribute("href");
  try{
+  await iecImagesReady;
   const bytes=await window.ORBIVIA_TOOL_PDF.create(pdfSummary());
   if(!button.isConnected)return;
   if(pdfURL)URL.revokeObjectURL(pdfURL);
