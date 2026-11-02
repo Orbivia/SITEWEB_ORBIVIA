@@ -23,3 +23,15 @@ Ne pas convertir ces PNG en SVG ou redessiner leurs graphismes.
 ## Autres marquages (hors ISO 15223-1)
 
 Les marquages DEEE, de batteries, IP et IEC 60417 ont été ajoutés au questionnaire. Le visuel de la poubelle DEEE est le fichier **WEEE.svg** diffusé par Wikimedia Commons (représentation préexistante, domaine public), chargé depuis son URL d'origine ; les variantes de ce symbole (barre sous la poubelle, date) restent à vérifier. Le marquage de collecte séparée de la batterie est une exigence **distincte**. Le code IP est un **texte** et non un logo. Les symboles IEC 60417 (dont 1641 « manuel à lire », 5172 classe II et 5333 BF) ne sont **pas représentés graphiquement** tant que leurs fichiers autorisés n'ont pas été fournis ; aucune icône de remplacement n'est dessinée.
+
+## Références croisées fournies (IEC 60601-1 et -1-8)
+
+Les tableaux D.1, D.2, D.3 (EN 60601-1:2021) et C.1 (EN 60601-1-8:2021) permettent de vérifier les **références exactes** des symboles, mais les PDF sous licence ne fournissent pas le droit de publier leurs images extraites sur orbivia.fr.
+
+- Lecture du manuel obligatoire : **ISO 7010-M002** (sécurité ; cercle bleu)
+- Consultation ordinaire des instructions : **ISO 7000-1641** (livret avec « i »), à distinguer de l'ISO 15223-1 5.4.3
+- Risque électrique : **ISO 7010-W012**
+- Courant continu / alternatif / mixte : **IEC 60417-5031 / -5032 / -5033**
+- Alarme / réinitialisation / silence sonore : **IEC 60417-5307 / -5309 / -5576**
+
+Aucun logo n'est redessiné. Les symboles sans fichier à droits compatibles restent identifiés par leur code et leur titre dans la synthèse et dans son PDF.
