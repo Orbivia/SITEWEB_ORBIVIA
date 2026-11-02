@@ -77,7 +77,7 @@ assert(app.finished,"Questionnaire must finish");
 // A full positive branch must preserve multiple simultaneously applicable ISO families.
 const extensive=create();
 const positive={
- ...base,storage:"yes",substances:"yes",instructions:"yes",
+ ...base,storage:"yes",storage_temperature_mode:"both",substances:"yes",instructions:"yes",
  ...Object.fromEntries(["temperature","humidity","dry","sunlight","fragile","pressure"].map(key=>["storage_"+key,"yes"])),
  ...Object.fromEntries(["latex","cmr","med","blood","human","animal","nano"].map(key=>["substances_"+key,"yes"])),
  instructions_ifu:"yes",instructions_electronic:"yes",instructions_warning:"yes",instructions_damaged:"yes"
