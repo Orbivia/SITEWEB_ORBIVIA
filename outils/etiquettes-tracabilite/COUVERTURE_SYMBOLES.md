@@ -47,3 +47,7 @@ Le deuxième type de partie appliquée est traité indépendamment via `elec_app
 - **IEC 80601-2-26 / IEC 60601-2-51** : normes spécifiques EEG/ECG ; leur applicabilité à un produit ne se déduit pas d'un pictogramme générique. Une vérification produit dédiée demeure nécessaire.
 
 Tests dans `tests/etiquetage.test.mjs` : routes de sélection des 17 fichiers, absence de faux positifs, gestion des combinaisons et effacement des anciennes réponses. Revue réelle dans Chromium : `scripts/review-labels-browser.mjs`.
+
+## Normes particulières EEG / ECG
+
+La question `elec_specialty`, visible uniquement pour un équipement IEC 60601-1, distingue les EEG (IEC 80601-2-26:2019 + A1:2024), les ECG diagnostiques (IEC 60601-2-25:2011, qui remplace IEC 60601-2-51) et les autres équipements. Elle produit un **contrôle documentaire** et n'ajoute aucun pictogramme sans justification propre au dispositif.
