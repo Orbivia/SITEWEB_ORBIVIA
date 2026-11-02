@@ -7,7 +7,7 @@ const has=(items,code)=>items.some(it=>it.code===code);
 function scenario(overrides={},date){const app=create();Object.assign(app.answers,base,overrides);return app.conclusions(date);}
 
 test('labelling: complete route, review edits and a coherent summary share the same answers',()=>{
- const app=create();assert.equal(finish(app),26);
+ const app=create();assert.equal(finish(app),30);
  assert.match(app.root.innerHTML,/Code UDI — AIDC \+ HRI/);
  assert.match(app.root.innerHTML,/data-edit="sterile"/);
  app.action('back');assert.equal(app.finished,true);assert.equal(app.answersPanel.open,true);
@@ -218,9 +218,10 @@ test('labelling: electrical subquestions are conditional and old answers are dis
 
 test('labelling: the uploaded EN 60601-1 Annex D references are distinguished',()=>{
  const values=scenario({electronic:"yes",support:"device",elec_60601:"yes",elec_manual:"yes",
-  elec_supply:"yes",elec_supply_kind:"dc",instructions:"yes",instructions_ifu:"yes",elec_warning_electric:"yes"});
+  elec_supply:"yes",elec_supply_kind:"dc",instructions:"yes",instructions_ifu:"yes",elec_ifu_reference:"operating",elec_warning_electric:"yes"});
  assert.ok(has(values.required,"ISO 7010-M002"),"Obligatory instruction manual sign");
- assert.ok(has(values.conditional,"ISO 7000-1641"),"Ordinary instructions symbol is different");
+ assert.ok(has(values.required,"ISO 7000-1641"),"Alternative instructions symbol requires explicit selection");
+ assert.equal(has(values.required,"5.4.3"),false,"Do not automatically duplicate the consultation symbol");
  assert.ok(has(values.required,"IEC 60417-5031"),"Direct current");
  assert.ok(has(values.required,"ISO 7010-W012"),"Electricity warning");
  assert.equal(has(values.required,"IEC 60417-1641"),false,"Previously incorrect IEC code must not return");
@@ -234,12 +235,12 @@ test('labelling: the uploaded EN 60601-1 Annex D references are distinguished',(
 test('labelling: alarm controls use EN 60601-1-8 Annex C only when applicable',()=>{
  const noAlarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"no"});
  assert.equal(has(noAlarm.conditional,"IEC 60417-5307"),false);
- const alarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_reset:"yes",elec_alarm_silence:"yes"});
+ const alarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_on:"yes",elec_alarm_reset:"yes",elec_alarm_silence:"off"});
  assert.ok(has(alarm.conditional,"IEC 60417-5307"));
  assert.ok(has(alarm.conditional,"IEC 60417-5309"));
  assert.ok(has(alarm.conditional,"IEC 60417-5576"));
  assert.equal(has(alarm.required,"IEC 60417-5307"),false,"Interface mark is not mandatory packaging label");
- const onlyAlarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_reset:"no",elec_alarm_silence:"no"});
+ const onlyAlarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_on:"no",elec_alarm_reset:"no",elec_alarm_silence:"none"});
  assert.equal(has(onlyAlarm.conditional,"IEC 60417-5309"),false);
  assert.equal(has(onlyAlarm.conditional,"IEC 60417-5576"),false);
 });
@@ -257,4 +258,76 @@ test('labelling: official IEC and ISO PNGs map to the correct symbol files',()=>
   assert.match(app.symbolImage(code),new RegExp(file.replace('.','\\.')));
  }
  assert.equal(app.symbolImage('IEC 60417-5957'),'');
+});
+
+
+test('labelling: every supplied IEC/ISO graphic has an explicit selection route',()=>{
+ const noIcon=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"no",elec_insulation:"class1",elec_earth_terminal:"no",elec_applied:"none",elec_manual:"no",elec_warning_electric:"no",elec_supply:"no"});
+ assert.equal(has([...noIcon.required,...noIcon.conditional],"IEC 60417-5019"),false);
+ assert.equal(has([...noIcon.required,...noIcon.conditional],"IEC 60417-5307"),false);
+ assert.equal(has([...noIcon.required,...noIcon.conditional],"ISO 7010-M002"),false);
+ const routes=[
+  ["IEC 60417-5019",{elec_insulation:"class1",elec_earth_terminal:"yes"}],
+  ["IEC 60417-5172",{elec_insulation:"class2"}],
+  ["IEC 60417-5031",{elec_supply:"yes",elec_supply_kind:"dc"}],
+  ["IEC 60417-5032",{elec_supply:"yes",elec_supply_kind:"ac"}],
+  ["IEC 60417-5033",{elec_supply:"yes",elec_supply_kind:"both"}],
+  ["IEC 60417-5840",{elec_applied:"b",elec_defib:"no"}],
+  ["IEC 60417-5841",{elec_applied:"b",elec_defib:"yes"}],
+  ["IEC 60417-5333",{elec_applied:"bf",elec_defib:"no"}],
+  ["IEC 60417-5334",{elec_applied:"bf",elec_defib:"yes"}],
+  ["IEC 60417-5335",{elec_applied:"cf",elec_defib:"no"}],
+  ["IEC 60417-5336",{elec_applied:"cf",elec_defib:"yes"}],
+  ["IEC 60417-5307",{elec_alarm:"yes",elec_alarm_on:"yes"}],
+  ["IEC 60417-5309",{elec_alarm:"yes",elec_alarm_reset:"yes"}],
+  ["IEC 60417-5576",{elec_alarm:"yes",elec_alarm_silence:"off"}],
+  ["ISO 7000-1641",{elec_ifu_reference:"operating",instructions:"yes",instructions_ifu:"yes"}],
+  ["ISO 7010-M002",{elec_manual:"yes"}],
+  ["ISO 7010-W012",{elec_warning_electric:"yes"}]
+ ];
+ for(const [code,overrides] of routes){
+  const result=scenario({electronic:"yes",elec_60601:"yes",support:"device",...overrides});
+  assert.ok(has([...result.required,...result.conditional],code),"Unreachable symbol "+code);
+  assert.match(create().symbolImage(code),/symboles-iec\/.+\.png/);
+ }
+});
+
+test('labelling: distributor, model, manufacture and biohazard have distinct answers',()=>{
+ const baseResult=scenario();
+ for(const code of ["5.1.9","5.1.10","5.1.11","5.4.1"])assert.equal(has([...baseResult.required,...baseResult.conditional],code),false);
+ const selected=scenario({distributor:"yes",modelnumber:"yes",madein:"yes",biologicalrisk:"yes"});
+ for(const code of ["5.1.9","5.1.10","5.1.11","5.4.1"])assert.ok(has([...selected.required,...selected.conditional],code),"Missing new symbol "+code);
+ assert.ok(selected.conditional.find(x=>x.code==="5.1.11").detail.includes("CC"),"Country placeholder must be explained");
+});
+
+test('labelling: thermal limits select one and only one temperature symbol',()=>{
+ for(const [mode,expected] of [["both","5.3.7"],["max","5.3.6"],["min","5.3.5"]]){
+  const result=scenario({storage:"yes",storage_temperature:"yes",storage_temperature_mode:mode,storage_heat:"yes"});
+  assert.ok(has(result.required,expected));
+  assert.ok(has(result.required,"5.3.3"));
+  for(const code of ["5.3.5","5.3.6","5.3.7"].filter(code=>code!==expected))assert.equal(has(result.required,code),false);
+ }
+});
+
+test('labelling: second applied part and alarm sound variants are independent',()=>{
+ const parts=scenario({electronic:"yes",elec_60601:"yes",support:"device",elec_applied:"bf",elec_defib:"no",
+   elec_applied_more:"yes",elec_applied_second:"cf",elec_defib_second:"yes"});
+ assert.ok(has(parts.required,"IEC 60417-5333"));assert.ok(has(parts.required,"IEC 60417-5336"));
+ const duplicate=scenario({electronic:"yes",elec_60601:"yes",elec_applied:"bf",elec_applied_more:"yes",elec_applied_second:"bf"});
+ assert.ok(duplicate.review.some(x=>x.blocking&&x.title.includes("identique")));
+ const paused=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_silence:"pause"});
+ assert.ok(has(paused.conditional,"IEC 60417-5576-2"));
+ assert.equal(has(paused.conditional,"IEC 60417-5576"),false);
+});
+
+test('labelling: changing upstream choices drops obsolete dependent answers',()=>{
+ const app=create();
+ finish(app,{electronic:"yes",elec_60601:"yes",elec_insulation:"class1",elec_earth_terminal:"yes",
+  elec_applied:"bf",elec_applied_more:"yes",elec_applied_second:"cf",elec_defib_second:"yes",
+  elec_alarm:"yes",elec_alarm_on:"yes",elec_alarm_silence:"off"});
+ app.edit("elec_60601");app.selectChoice("no");
+ assert.equal(app.answers.elec_earth_terminal,undefined);
+ assert.equal(app.answers.elec_applied_second,undefined);
+ assert.equal(app.answers.elec_alarm_on,undefined);
+ assert.equal(app.finished,true);
 });
