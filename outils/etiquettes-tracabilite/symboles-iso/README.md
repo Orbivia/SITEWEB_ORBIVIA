@@ -46,3 +46,9 @@ La bibliothèque `../symboles-iec/iec-iso-sprite.png` contient 17 pictogrammes e
 Les images sont recadrées et regroupées dans un atlas PNG de 5 colonnes par 4 lignes, 92 × 92 pixels par case. L'ordre de correspondance est donné par `IEC_SYMBOL_CODES` dans `questionnaire.js`. Le navigateur découpe l'atlas en mémoire sans redessiner les formes. Les mêmes recadrages sont intégrés dans le PDF exporté.
 
 **Limite documentée :** IEC 60417-5957 (« utilisation en intérieur ») n'apparaît pas dans les tableaux fournis pour l'atlas et reste indiqué avec sa référence sans pictogramme de substitution. Les indices IP sont des textes, non des logos. Les fichiers proviennent des normes fournies avec autorisation de reproduction et ne doivent pas être confondus avec une validation de conformité du dispositif.
+
+## Révision 2026 : EC REP et EU REP
+
+Le fichier 5.1.2.png illustre la version historique EC REP. L'amendement ISO 15223-1/A1:2025 introduit EU REP. Jusqu'à obtention du graphisme original autorisé, l'outil affiche EU REP comme référence textuelle uniquement. Une période de transition a été annoncée jusqu'au 17 juin 2031.
+
+Les références ISO 15223-1 5.6.1 à 5.6.6, 5.7.1 à 5.7.6, 5.7.8 et 5.7.9 sont proposées conditionnellement, sans image en bibliothèque. Il faut fournir les PNG originaux avant de les utiliser sur une étiquette imprimée.
