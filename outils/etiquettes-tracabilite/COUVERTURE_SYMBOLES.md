@@ -63,3 +63,9 @@ La question `elec_specialty`, visible uniquement pour un équipement IEC 60601-1
 - **Périmètre** : les 106 PNG d'origine restent inchangés ; 14 autres PNG originaux sont embarqués dans un fichier `.js` versionné, soit 120 visuels disponibles. Les valeurs imprimables des symboles 5.6.4 (gouttes/mL) et 5.6.5 (taille de filtre) doivent être adaptées au produit.
 
 Sources : [ISO 15223-1/Amd.1:2025](https://www.iso.org/standard/86270.html) ; [MDCG 2021-5 Rev.1, annexe](https://health.ec.europa.eu/medical-devices-sector/new-regulations/guidance-mdcg-endorsed-documents-and-other-guidance_en) ; MDR 2017/745 art. 16, 18.
+
+## Prévention des valeurs fictives — 2 novembre 2026
+
+Les pictogrammes ISO 15223-1 **5.6.4** (20 gouttes/mL) et **5.6.5** (15 µm) ainsi que **5.1.11** (« CC » pour pays) sont des modèles normatifs avec valeurs d’exemple. Leurs fichiers sources demeurent dans la bibliothèque, mais l’application **ne les affiche plus ni dans la synthèse ni dans le PDF**, tant que la valeur produit n'est pas personnalisée. Leur référence et un contrôle restent visibles. Toute réutilisation doit remplacer les valeurs par celles du produit vérifiées.
+
+**Graphismes originaux toujours absents** : 5.1.2 EU REP (version amendée 2025), IEC 60417-5957 (intérieur) et symbole de collecte séparée des batteries du règlement UE 2023/1542. L’outil ne fabrique pas de faux pictogrammes. Les mentions batterie ont été actualisées selon l’article 13 du règlement consolidé d’août 2026.
