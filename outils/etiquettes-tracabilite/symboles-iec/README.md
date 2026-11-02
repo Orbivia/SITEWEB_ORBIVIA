@@ -2,7 +2,7 @@
 
 ## Source des images
 
-Les **17 pictogrammes** proviennent de recadrages des tableaux normatifs fournis pour ce projet, sans redessin des formes. Les **17 fichiers PNG distincts** (300 × 300 px) sont maintenant conservés dans ce dossier sous leurs références normatives exactes. Le site utilise directement chaque fichier sans découpe ou reconstitution dynamique. L'ancien fichier `iec-iso-sprite.png` reste conservé à titre historique et n'est plus utilisé.
+Les **17 premiers pictogrammes** proviennent de recadrages des tableaux normatifs fournis pour ce projet, sans redessin des formes. Les **17 premiers fichiers PNG distincts** (300 × 300 px) sont maintenant conservés dans ce dossier sous leurs références normatives exactes. Le site utilise directement chaque fichier sans découpe ou reconstitution dynamique. L'ancien fichier `iec-iso-sprite.png` reste conservé à titre historique et n'est plus utilisé.
 
 **Sources et pages PDF :**
 
@@ -27,3 +27,22 @@ Les références affichées sur le site sont mappées dans le jeu `IEC_SYMBOL_CO
 - Le symbole **IEC 60417-5957** (intérieur seulement) n'apparaît pas dans les tables fournies ; l'outil conserve sa référence textuelle sans approximation graphique.
 - Les symboles **DEEE** et **batterie** sont régis par d'autres textes ; la poubelle DEEE préexistante est affichée depuis la source autorisée existante, et non extraite de ces normes.
 - La synthèse PDF utilise la même découpe de la planche. L'affichage d'un symbole n'atteste ni de sa nécessité sur le support retenu ni de la conformité du produit.
+
+## Complément IEC TR 60878:2022 — planches du PDF transmis
+
+Huit pictogrammes de plus ont été recadrés, sans redessin, depuis les planches du **PDF de prévisualisation de 15 pages** :
+
+| Référence | Fonction | Planche dans le PDF |
+|---|---|---|
+| IEC 60417-5007 | Marche (alimentation) | page 12, § 5.1 |
+| IEC 60417-5008 | Arrêt (alimentation) | page 12, § 5.1 |
+| IEC 60417-5010 | Marche/arrêt, bouton à deux positions | page 12, § 5.1 |
+| IEC 60417-5016 | Fusible / emplacement | page 15, § 5.3 |
+| IEC 60417-5017 | Terre générale | page 15, § 5.3 |
+| IEC 60417-5018 | Terre fonctionnelle | page 15, § 5.3 |
+| IEC 60417-5021 | Liaison équipotentielle | page 15, § 5.3 |
+| IEC 60417-5134 | Sensibilité ESD | page 15, § 5.3 |
+
+La signification des références a été recoupée avec la base de symboles IEC 60417. La transparence et la normalisation de taille des PNG ne modifient pas les formes. Le PDF source est **un extrait** de la publication complète, comportant des filigranes de prévisualisation : les autres symboles figurant dans le sommaire ne sont pas considérés comme disponibles.
+
+Ces symboles portent sur l'appareil ou ses commandes / connecteurs. Ils **ne constituent pas des marquages réglementaires obligatoires sur chaque étiquette MDR**. Le questionnaire ne les présente que lorsque la caractéristique concernée est déclarée.
