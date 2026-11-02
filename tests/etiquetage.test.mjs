@@ -185,10 +185,10 @@ test('labelling: IEC 60417 symbols require the declared safety class and patient
  assert.ok(has(selected.required,'IEC 60417-5172'));
  assert.ok(has(selected.required,'IEC 60417-5334'));
  assert.ok(!has(selected.required,'IEC 60417-5333'),"Use defibrillation-proof symbol instead of incompatible base");
- assert.ok(has(selected.required,'IEC 60417-1641'));
+ assert.ok(has(selected.required,'ISO 7010-M002'));
  assert.ok(has(selected.required,'IEC 60417-5957'));
  assert.ok(has(selected.required,'IP22'));
- assert.equal(create().symbolImage('IEC 60417-1641'),"","No unlicensed substitute for IEC graphics");
+ assert.equal(create().symbolImage('ISO 7010-M002'),"","No unlicensed substitute for IEC graphics");
  const other=scenario({electronic:'yes',elec_60601:'no',elec_applied:'bf',elec_insulation:'class2'});
  assert.equal([...other.required,...other.conditional].some(x=>x.code.startsWith('IEC 60417-5333')),false);
 });
@@ -199,7 +199,7 @@ test('labelling: batteries and medical instructions are not conflated with WEEE'
  assert.equal(has(battery.required,'DEEE'),false);
  const ifu=scenario({electronic:'no',instructions:'yes',instructions_ifu:'yes'});
  assert.ok(has(ifu.required,'5.4.3'),"Show the existing genuine ISO consult-IFU pictogram");
- assert.equal(has(ifu.required,'IEC 60417-1641'),false);
+ assert.equal(has(ifu.required,'ISO 7010-M002'),false);
  const none=scenario({electronic:'no',instructions:'none'});
  assert.equal(has(none.required,'5.4.3'),false);
 });
@@ -213,4 +213,33 @@ test('labelling: electrical subquestions are conditional and old answers are dis
  assert.equal(app.answers.elec_applied,undefined);
  assert.equal(app.answers.elec_manual,undefined);
  assert.equal(app.finished,true);
+});
+
+
+test('labelling: the uploaded EN 60601-1 Annex D references are distinguished',()=>{
+ const values=scenario({electronic:"yes",support:"device",elec_60601:"yes",elec_manual:"yes",
+  elec_supply:"yes",elec_supply_kind:"dc",instructions:"yes",instructions_ifu:"yes",elec_warning_electric:"yes"});
+ assert.ok(has(values.required,"ISO 7010-M002"),"Obligatory instruction manual sign");
+ assert.ok(has(values.conditional,"ISO 7000-1641"),"Ordinary instructions symbol is different");
+ assert.ok(has(values.required,"IEC 60417-5031"),"Direct current");
+ assert.ok(has(values.required,"ISO 7010-W012"),"Electricity warning");
+ assert.equal(has(values.required,"IEC 60417-1641"),false,"Previously incorrect IEC code must not return");
+ const alternating=scenario({electronic:"yes",support:"device",elec_supply:"yes",elec_supply_kind:"ac"});
+ assert.ok(has(alternating.required,"IEC 60417-5032"),"Alternating-current symbol");
+ const mixed=scenario({electronic:"yes",support:"device",elec_supply:"yes",elec_supply_kind:"both"});
+ assert.ok(has(mixed.required,"IEC 60417-5033"),"Both AC and DC");
+ assert.equal(create().symbolImage("ISO 7010-M002"),"","No extracted copyrighted PDF artwork");
+});
+
+test('labelling: alarm controls use EN 60601-1-8 Annex C only when applicable',()=>{
+ const noAlarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"no"});
+ assert.equal(has(noAlarm.conditional,"IEC 60417-5307"),false);
+ const alarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_reset:"yes",elec_alarm_silence:"yes"});
+ assert.ok(has(alarm.conditional,"IEC 60417-5307"));
+ assert.ok(has(alarm.conditional,"IEC 60417-5309"));
+ assert.ok(has(alarm.conditional,"IEC 60417-5576"));
+ assert.equal(has(alarm.required,"IEC 60417-5307"),false,"Interface mark is not mandatory packaging label");
+ const onlyAlarm=scenario({electronic:"yes",elec_60601:"yes",elec_alarm:"yes",elec_alarm_reset:"no",elec_alarm_silence:"no"});
+ assert.equal(has(onlyAlarm.conditional,"IEC 60417-5309"),false);
+ assert.equal(has(onlyAlarm.conditional,"IEC 60417-5576"),false);
 });
