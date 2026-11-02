@@ -9,7 +9,7 @@ const source=readFileSync(new URL('../questionnaire.js',import.meta.url),'utf8')
 assert(source.includes('window.__probe='),'Test hook injection failed');
 
 export const base={
- status:'market',territory:'eu',support:'unit',pack:'one',carrier:'one',
+ status:'market',territory:'eu',support:'unit',pack:'one',carrier:'one',shipping:'no',
  class:'iia',ce:'ce-nb',manufacturer:'eu',import:'no',implant:'no',
  reuse:'single',sterile:'nonsterile',nonsterilevariants:'no',fluidpath:'no',
  expiry:'yes',tracking:'lot',storage:'none',substances:'none',
