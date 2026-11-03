@@ -276,119 +276,135 @@ body[data-tool="etiquettes"] .label-clinical-note small{display:block;margin-top
  body[data-tool="etiquettes"] .label-clinical-note{font-size:13px;padding:11px 13px}
 }
 
-/* Synthèse : cadre et surface identiques pour chaque symbole, quelle que soit
- * l'origine ISO / IEC / pictogramme complémentaire. Les proportions d'origine
- * des symboles officiels restent inchangées (object-fit: contain). */
-body[data-tool="etiquettes"].is-result .label-symbol-grid li{
+/* Synthèse PC / mobile. Les symboles conditionnels sont distingués
+   par le cadre complet, et non par le cadre interne du pictogramme. */
+body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card{
+ position:relative;
  display:grid;
- grid-template-rows:64px auto auto;
+ grid-template-rows:92px auto auto;
  justify-items:center;
  align-content:start;
- gap:7px;
- min-height:150px;
-}
-body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-img,
-body[data-tool="etiquettes"].is-result .label-symbol-grid .label-text-mark{
- box-sizing:border-box;
- width:64px;
- height:64px;
- min-height:64px;
- max-width:100%;
- margin:0;
- border:1px solid #e4e9e2;
- border-radius:9px;
+ row-gap:8px;
+ min-height:184px;
+ padding:30px 10px 14px;
+ border:1px solid #e5e9e3;
+ border-radius:12px;
  background:#fff;
 }
-body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-img{
- display:block;
- padding:4px;
- object-fit:contain;
- object-position:center;
-}
-body[data-tool="etiquettes"].is-result .label-symbol-grid .label-text-mark{
- display:flex;
- justify-content:center;
- align-items:center;
- padding:4px;
- font-size:17px!important;
-}
-@media(max-width:600px){
- body[data-tool="etiquettes"].is-result .label-symbol-grid li{
-  grid-template-rows:60px auto auto;
-  gap:6px;
-  min-height:138px;
- }
- body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-img,
- body[data-tool="etiquettes"].is-result .label-symbol-grid .label-text-mark{
-  width:60px;
-  height:60px;
-  min-height:60px;
- }
-}
-
-/* Une seule grille : le cadre doré distingue les logos à vérifier.
- * Les PNG restent à proportions constantes grâce à object-fit:contain. */
-body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card{
- grid-template-rows:92px auto auto;
- align-content:start;
- min-height:165px;
- padding-top:12px;
+body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card--verify{
+ border:2px solid #c69a42;
+ background:#fffdf7;
+ padding:29px 9px 13px;
 }
 body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art{
- box-sizing:border-box;
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:flex-start;
- width:94px;
- height:92px;
- gap:3px;
- padding:4px 3px;
- border:1px solid transparent;
- border-radius:10px;
-}
-body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-card--verify .label-symbol-art{
- border-color:#c79737;
- background:#fff9eb;
+ display:grid;
+ place-items:center;
+ width:90px;
+ height:90px;
+ max-width:100%;
+ overflow:hidden;
+ border:0;
+ border-radius:0;
+ background:transparent;
 }
 body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art .label-symbol-img,
 body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art .label-text-mark{
  box-sizing:border-box;
- display:flex;
- align-items:center;
- justify-content:center;
- width:60px;
- height:60px;
- min-height:60px;
- max-width:100%;
+ display:block;
+ width:86px;
+ height:86px;
+ min-height:86px;
+ max-width:none;
  margin:0;
+ padding:2px;
  border:0;
  border-radius:0;
  background:transparent;
  object-fit:contain;
- padding:2px;
+ object-position:center;
+}
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art .label-text-mark{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:18px!important;
+ line-height:1.1!important;
+ white-space:normal;
+ text-align:center;
+}
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art .label-text-mark--missing{
+ color:#6d736e!important;
+ font-size:12px!important;
+ font-weight:600!important;
+}
+/* PNG normatifs dont la forme est minuscule au milieu de marges blanches :
+   zoom optique dans une fenêtre masquée, sans modification du graphisme. */
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-card--compact-icon .label-symbol-art .label-symbol-img{
+ transform:scale(2.15);
+ transform-origin:center center;
 }
 body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-flag{
- display:inline-block;
- box-sizing:border-box;
- padding:0 5px;
- border-radius:4px;
- background:#f7e8c7;
+ position:absolute;
+ top:7px;
+ right:8px;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ min-height:19px;
+ padding:0 7px;
+ border-radius:6px;
+ background:#f4e4bf;
  color:#745010;
  font-size:10px;
  font-weight:700;
- line-height:16px;
- height:16px;
+ line-height:1.2;
  white-space:nowrap;
+}
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-name{
+ font-size:13px;
+ line-height:1.35;
+ font-weight:600;
 }
 body[data-tool="etiquettes"].is-result .label-symbol-legend{
  margin:6px 0 12px;
+ color:#5d665f;
  font-size:12px;
  line-height:1.5;
- color:#5d665f;
 }
 body[data-tool="etiquettes"].is-result .label-symbol-legend strong{color:#775211}
+@media(min-width:900px){
+ body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card{
+  min-height:198px;
+  grid-template-rows:102px auto auto;
+  padding-top:30px;
+ }
+ body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card--verify{
+  padding-top:29px;
+ }
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art{
+  width:102px;
+  height:102px;
+ }
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art .label-symbol-img,
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-art .label-text-mark{
+  width:98px;
+  height:98px;
+  min-height:98px;
+ }
+}
 @media(max-width:600px){
- body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card{min-height:155px;grid-template-rows:92px auto auto;}
- body[data-tool="etiquettes"].is-result .label-symbol-legend{font-size:11px}
+ body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card{
+  min-height:174px;
+  padding:30px 7px 12px;
+  row-gap:7px;
+ }
+ body[data-tool="etiquettes"].is-result .label-symbol-grid li.label-symbol-card--verify{
+  padding:29px 6px 11px;
+ }
+ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-name{
+  font-size:12px;
+ }
+ body[data-tool="etiquettes"].is-result .label-symbol-legend{
+  font-size:11px;
+ }
 }
