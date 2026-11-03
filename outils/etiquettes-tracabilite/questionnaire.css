@@ -453,3 +453,13 @@ body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-card--fi
 @media print{
  body[data-tool="etiquettes"] .label-question-alert-action{display:none}
 }
+
+/* Limiter la copie directe des pictogrammes sur ordinateur et mobile.
+   Protection d'interface uniquement, sans prétention anti-extraction. */
+body[data-tool="etiquettes"] #label-app .label-symbol-img,
+body[data-tool="etiquettes"] #label-app .label-symbol-art{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-user-drag:none;
+}
