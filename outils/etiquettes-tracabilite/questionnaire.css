@@ -408,3 +408,48 @@ body[data-tool="etiquettes"].is-result .label-symbol-legend strong{color:#775211
   font-size:11px;
  }
 }
+
+/* Corrections de validation : gravité lisible, sans alourdir le parcours. */
+body[data-tool="etiquettes"] .label-question-alert{
+  margin:0 0 10px;padding:11px 13px;border-left:3px solid #ad5e25;
+  border-radius:7px;background:#fff6ea;color:#593e2b;font-size:12px;line-height:1.45;
+}
+body[data-tool="etiquettes"] .label-question-alert strong{display:block;font-size:12px;font-weight:700}
+body[data-tool="etiquettes"] .label-question-alert p{margin:4px 0 0;font-size:12px;color:#624635}
+body[data-tool="etiquettes"] .label-question-alert-action{
+  display:inline-block;border:0;background:none;color:#7a511d;padding:6px 0 0;
+  text-decoration:underline;text-underline-offset:2px;font:inherit;font-weight:650;cursor:pointer;
+}
+body[data-tool="etiquettes"] .label-question-alert-hint{display:block;padding-top:5px;font-size:11px}
+body[data-tool="etiquettes"] .label-review-group + .label-review-group{margin-top:14px;padding-top:13px;border-top:1px solid #e5e9e3}
+body[data-tool="etiquettes"] .label-review-group h3{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 9px;font-size:13px;font-weight:700;color:#65501d;
+}
+body[data-tool="etiquettes"] .label-review-group--blocking h3{color:#994b28}
+body[data-tool="etiquettes"] .label-review-group h3 span{font-size:12px;font-weight:650}
+body[data-tool="etiquettes"] .label-review-group .label-checks{margin-top:0}
+body[data-tool="etiquettes"] .label-review-group--blocking .label-checks strong{color:#87472a}
+body[data-tool="etiquettes"] .label-inconsistency{line-height:1.5}
+body[data-tool="etiquettes"] .label-inconsistency strong{font-weight:650}
+/* Les champs textuels ne sont pas des pictogrammes : fond discret, sans bordure intérieure. */
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-card--field .label-symbol-art--field{
+  width:86px;height:80px;margin-top:5px;border:0;
+  border-radius:10px;background:#f8faf8;
+}
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-card--field .label-symbol-art--field .label-text-mark{
+  width:100%;height:100%;min-height:0;padding:5px;
+  font-size:17px!important;font-weight:650!important;color:#39483e!important;
+}
+/* Zoom modéré des barres stériles très aérées, sans modifier les PNG officiels. */
+body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-card--fine-icon .label-symbol-art .label-symbol-img{
+  transform:scale(1.16);transform-origin:center center;
+}
+@media (min-width:900px){
+  body[data-tool="etiquettes"].is-result .label-symbol-grid .label-symbol-card--field .label-symbol-art--field{
+    width:96px;height:90px;margin-top:6px;
+  }
+}
+@media print{
+ body[data-tool="etiquettes"] .label-question-alert-action{display:none}
+}
