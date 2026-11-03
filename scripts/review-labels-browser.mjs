@@ -80,23 +80,27 @@ try{
    const menu=await evaluate('(()=>{const b=document.querySelector("button.menu");if(!b)return {missing:true};b.click();const open=b.getAttribute("aria-expanded");b.click();return {open,closed:b.getAttribute("aria-expanded")}})()');
    if(menu.missing||menu.open!=="true"||menu.closed!=="false")problems.push('mobile navigation toggle failed '+JSON.stringify(menu));
   }
-  const stateExpr='(()=>{const d=document.documentElement,c=document.querySelector(".question-card"),a=[...document.querySelectorAll(".label-options .answer")],rect=e=>{if(!e)return null;const x=e.getBoundingClientRect();return {x:x.x,y:x.y,w:x.width,h:x.height,bottom:x.bottom};};return {done:!!document.querySelector(".label-summary-heading"),heading:c?.querySelector("h1")?.textContent||"",choices:a.length,scroll:d.scrollWidth,first:rect(a[0]),last:rect(a.at(-1)),controls:rect(document.querySelector(".question-controls")),card:rect(c),scrollAllowed:document.body.classList.contains("quiz-scroll")}})()';
+  const stateExpr='(()=>{const d=document.documentElement,c=document.querySelector(".question-card"),a=[...document.querySelectorAll(".label-options .answer")],rect=e=>{if(!e)return null;const x=e.getBoundingClientRect();return {x:x.x,y:x.y,w:x.width,h:x.height,bottom:x.bottom};};return {done:!!document.querySelector(".label-summary-heading"),heading:c?.querySelector("h1")?.textContent||"",choices:a.length,multi:!!document.querySelector(".label-options-multi"),scroll:d.scrollWidth,first:rect(a[0]),last:rect(a.at(-1)),controls:rect(document.querySelector(".question-controls")),card:rect(c),scrollAllowed:document.body.classList.contains("quiz-scroll")}})()';
   while(step++<80){
    const st=await evaluate(stateExpr);maxWidth=Math.max(maxWidth,st.scroll);
    if(st.scroll>width+3)problems.push('horizontal overflow at question '+step+' ('+st.scroll+'px): '+st.heading);
    if(st.done)break;
+   if(st.multi)problems.push('Question à choix multiples interdite : '+st.heading);
    if(st.choices===0)problems.push('no answers at question '+step);
    if(st.first?.w<150)problems.push('narrow answer at question '+step);
    if(st.first?.h<43)problems.push('touch target under 44px at '+step+': '+st.first.h);
    if(st.controls?.bottom>height+8&&!st.scrollAllowed)problems.push('bottom controls inaccessible at '+step);
    if(st.last&&st.card&&st.last.bottom>st.card.bottom+6&&!st.scrollAllowed)problems.push('clipped answer at '+step);
-   await evaluate('(()=>{const options=[...document.querySelectorAll(".label-options .answer")];let btn=options[0];const h=document.querySelector(".question-heading h1")?.textContent||"";if(h.includes("précautions particulières de stockage")||h.includes("Des substances ou matériaux"))btn=options.find(x=>x.dataset.choice==="yes")||btn;btn?.click();if(document.querySelector(".label-options-multi"))document.querySelector("[data-action=next]")?.click();})()');
+   const toggle=await evaluate('(()=>{const options=[...document.querySelectorAll(".label-options .answer")];let btn=options[0];const h=document.querySelector(".question-heading h1")?.textContent||"";if(h.includes("précautions particulières de stockage")||h.includes("Des substances ou matériaux"))btn=options.find(x=>x.dataset.choice==="yes")||btn;const multi=!!document.querySelector(".label-options-multi");if(multi)btn?.focus();const before=btn;btn?.click();const interaction=multi?{multi:true,stable:before===document.querySelector("[data-choice="+JSON.stringify(before.dataset.choice)+"]"),focused:document.activeElement===before,pressed:before.getAttribute("aria-pressed")==="true",nextEnabled:!document.querySelector("[data-action=next]")?.disabled}:{multi:false};if(multi)document.querySelector("[data-action=next]")?.click();return interaction;})()');
+   if(toggle.multi&&(!toggle.stable||!toggle.focused||!toggle.pressed||!toggle.nextEnabled))problems.push('Sélection multiple : focus ou état non conservé '+JSON.stringify(toggle));
    await delay(38);
   }
   const final=await evaluate(stateExpr);if(!final.done)problems.push('no summary after '+step+' steps');
   await until('document.querySelector("#label-pdf-download")?.hasAttribute("href")===true').catch(e=>problems.push('PDF preparation: '+e.message));
-  const quality=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid .label-symbol-img")];await Promise.all(imgs.map(x=>x.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download"),opt=document.querySelector(".label-optional-symbols");let pdf=null;if(a?.href){const bytes=await fetch(a.href).then(r=>r.arrayBuffer());pdf={bytes:bytes.byteLength,header:String.fromCharCode(...new Uint8Array(bytes.slice(0,5)))}}return {images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,transportImages:imgs.filter(x=>x.src.includes("/symboles-transport/")).length,mrImages:imgs.filter(x=>x.src.includes("/ASTM-F2503-MR-")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),optional:!!opt,grid:opt?getComputedStyle(opt.querySelector(".label-symbol-grid")).gridTemplateColumns:null,pdf,scroll:document.documentElement.scrollWidth};})()');
+  const quality=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid .label-symbol-img")];await Promise.all(imgs.map(x=>x.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download"),opt=document.querySelector(".label-optional-symbols");let pdf=null;if(a?.href){const bytes=await fetch(a.href).then(r=>r.arrayBuffer());pdf={bytes:bytes.byteLength,header:String.fromCharCode(...new Uint8Array(bytes.slice(0,5)))}}return {images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,transportImages:imgs.filter(x=>x.src.includes("/symboles-transport/")).length,mrImages:imgs.filter(x=>x.src.includes("/ASTM-F2503-MR-")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),iconBoxes:imgs.map(x=>({width:Math.round(x.getBoundingClientRect().width),height:Math.round(x.getBoundingClientRect().height)})),optional:!!opt,grid:opt?getComputedStyle(opt.querySelector(".label-symbol-grid")).gridTemplateColumns:null,pdf,scroll:document.documentElement.scrollWidth};})()');
   if(quality.broken.length)problems.push('broken symbols: '+quality.broken.join(','));
+   if(quality.iconBoxes.some(x=>Math.abs(x.width-x.height)>1))problems.push('Pictogramme déformé dans la synthèse');
+   if(new Set(quality.iconBoxes.map(x=>x.width+'x'+x.height)).size>1)problems.push('Tailles des pictogrammes hétérogènes dans la synthèse : '+JSON.stringify(quality.iconBoxes));
   if(quality.pdf?.header!=='%PDF-')problems.push('invalid PDF download '+JSON.stringify(quality.pdf));
   if(quality.scroll>width+3)problems.push('summary horizontal overflow: '+quality.scroll);
   const shot=await call('Page.captureScreenshot',{format:'jpeg',quality:60,captureBeyondViewport:false});
@@ -119,6 +123,12 @@ try{
   const find=value=>list.find(x=>x.dataset.choice===value);
   let button=list[0];
   if(mode==="clinical"&&q.includes("Dans quel cadre"))button=find("investigation")||button;
+  if(mode==="direct"){
+   if(q.includes("Sur quel support"))button=find("device")||button;
+   else if(q.includes("Comment les unités fabriquées"))button=find("serial")||button;
+   else if(q.includes("Dans quel cadre"))button=find("market")||button;
+   else if(q.includes("Sur quel marché"))button=find("eu")||button;
+  }
   if(mode==="mri"){
    if(q.includes("classification de sécurité en environnement IRM"))button=find("yes")||button;
    else if(q.includes("Quelle classification IRM"))button=find("conditional")||button;
@@ -146,7 +156,7 @@ try{
   }
   button?.click();if(document.querySelector(".label-options-multi"))document.querySelector("[data-action=next]")?.click();return !!button;
  }
- for(const [kind,width,height,mobile] of [['stress',1440,900,false],['clinical',390,844,true],['transport',390,844,true],['mri',390,844,true]]){
+ for(const [kind,width,height,mobile] of [['stress',1440,900,false],['clinical',390,844,true],['transport',390,844,true],['mri',390,844,true],['direct',390,844,true]]){
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
   await call('Emulation.setTouchEmulationEnabled',{enabled:mobile});
   await evaluate('sessionStorage.removeItem("orbivia-mdr-label-wizard-v11")');
@@ -158,10 +168,12 @@ try{
    await delay(30);
   }
   await until('!!document.querySelector(".label-summary-heading")');
-  const special=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid img")];await Promise.all(imgs.map(i=>i.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download");let doc=null;for(let i=0;i<80&&!a?.hasAttribute("href");i++)await new Promise(r=>setTimeout(r,100));if(a?.href){const b=await fetch(a.href).then(r=>r.arrayBuffer());doc={bytes:b.byteLength,valid:String.fromCharCode(...new Uint8Array(b.slice(0,5)))==="%PDF-",pages:(await window.PDFLib.PDFDocument.load(b)).getPageCount()}}return {heading:document.querySelector(".label-summary-heading").textContent,clinical:document.querySelector(".label-clinical-note")?.textContent||"",required:document.querySelectorAll(".label-main-grid li").length,optional:document.querySelectorAll(".label-optional-symbols li").length,images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,transportImages:imgs.filter(x=>x.src.includes("/symboles-transport/")).length,mrImages:imgs.filter(x=>x.src.includes("/ASTM-F2503-MR-")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),pdf:doc,width:document.documentElement.scrollWidth}})()');
+  const special=await evaluate('(async()=>{const imgs=[...document.querySelectorAll(".label-symbol-grid img")];await Promise.all(imgs.map(i=>i.decode().catch(()=>{})));const a=document.querySelector("#label-pdf-download");let doc=null;for(let i=0;i<80&&!a?.hasAttribute("href");i++)await new Promise(r=>setTimeout(r,100));if(a?.href){const b=await fetch(a.href).then(r=>r.arrayBuffer());doc={bytes:b.byteLength,valid:String.fromCharCode(...new Uint8Array(b.slice(0,5)))==="%PDF-",pages:(await window.PDFLib.PDFDocument.load(b)).getPageCount()}}return {identityImages:[...document.querySelectorAll(".label-identity-symbols img")].map(x=>x.getAttribute("src")),heading:document.querySelector(".label-summary-heading").textContent,clinical:document.querySelector(".label-clinical-note")?.textContent||"",required:document.querySelectorAll(".label-main-grid li").length,optional:document.querySelectorAll(".label-optional-symbols li").length,images:imgs.length,iecImages:imgs.filter(x=>x.src.includes("/symboles-iec/")).length,transportImages:imgs.filter(x=>x.src.includes("/symboles-transport/")).length,mrImages:imgs.filter(x=>x.src.includes("/ASTM-F2503-MR-")).length,broken:imgs.filter(x=>!x.naturalWidth).map(x=>x.src),iconBoxes:imgs.map(x=>({width:Math.round(x.getBoundingClientRect().width),height:Math.round(x.getBoundingClientRect().height)})),pdf:doc,width:document.documentElement.scrollWidth}})()');
   const issues=[];
   if(!special.pdf?.valid)issues.push('PDF not valid on '+kind);
   if(special.broken.length)issues.push('Broken symbols on '+kind);
+   if(new Set(special.iconBoxes.map(x=>x.width+'x'+x.height)).size>1)issues.push('Tailles hétérogènes des symboles sur '+kind);
+   if(special.iconBoxes.some(x=>Math.abs(x.width-x.height)>1))issues.push('Symbole déformé sur '+kind);
   if(special.width>width+3)issues.push('Overflow on '+kind);
   if(kind==='stress'&&special.images<10)issues.push('Stress path did not display enough selected ISO symbols');
   if(kind==='clinical'&&!special.clinical.includes("investigations cliniques"))issues.push('Regulatory clinical label missing');
@@ -169,6 +181,10 @@ try{
   if(kind==='stress'&&special.iecImages<6)issues.push('IEC exact PNG files not loaded: '+special.iecImages);
   if(kind==='transport'&&special.transportImages<10)issues.push('Missing ISO 780 transport symbols: '+special.transportImages);
   if(kind==='mri'&&special.mrImages!==1)issues.push('Conditional MR mark not rendered exactly once: '+special.mrImages);
+   if(kind==='direct'){
+    for(const symbol of ['5.1.7','5.1.6','5.7.7'])if(!special.identityImages.some(src=>src?.includes('/'+symbol+'.png')))issues.push('Marquage direct absent : '+symbol);
+    if(special.identityImages.some(src=>src?.includes('/5.1.5.png')))issues.push('LOT inattendu alors que SN seul est choisi');
+   }
   if(special.pdf?.pages!==1)issues.push('Label summary PDF is not one page');
   const screenshot=await call('Page.captureScreenshot',{format:'jpeg',quality:65,captureBeyondViewport:false});
   await writeFile(join(shots,kind+'-result.jpg'),Buffer.from(screenshot.data,'base64'));
