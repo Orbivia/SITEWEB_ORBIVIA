@@ -8,74 +8,81 @@
 <meta name="description" content="Le radar des tatamis : veille des compétitions et des dates limites d'inscription du Wattignies Karaté Club.">
 <title>Le radar des tatamis | WKC × Orbivia</title>
 <link rel="icon" href="../../img/logo.webp" type="image/webp">
+<link rel="stylesheet" href="../../css/style.css?v=20261025-footer">
+<script defer src="../../js/site.js?v=20261102-min1"></script>
 <style>
-:root{--navy:#17263a;--ink:#1b2a3f;--muted:#67778b;--gold:#e7a116;--gold-deep:#d58c00;--line:#e8e9ee;--cream:#fff9f0;--paper:#fff}
-*{box-sizing:border-box}
-html{background:#f7f8fb}
-body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
-button,input{font:inherit}a{color:inherit}
-.wrap{width:min(1080px,calc(100% - 38px));margin-inline:auto}
-header{height:62px;background:var(--navy);color:#fff}
-.nav{height:100%;display:flex;align-items:center;justify-content:space-between}
-.brand{position:relative;display:inline-block;font-size:24px;font-weight:850;letter-spacing:-.055em;text-decoration:none;line-height:1.1}
-.brand:before{content:"";position:absolute;top:-9px;left:15px;width:24px;height:12px;border-top:3px solid var(--gold);transform:rotate(-15deg);border-radius:50%}
-.back{font-size:12px;color:#e8edf3;font-weight:650;text-decoration:none}
-.back:hover{text-decoration:underline}
-.hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(95deg,#fdfaf6 2%,#fbf6ee 60%,#e6d7c8 100%);padding:36px 0 64px}
-.hero:before{content:"";position:absolute;z-index:-2;right:0;top:-26%;height:152%;width:48%;background-image:url("https://images.unsplash.com/photo-1656653121475-e33829581294?auto=format&fit=crop&w=1100&q=82");background-size:cover;background-position:52% 55%;opacity:.48;filter:brightness(1.35) contrast(.83) sepia(.10);mask-image:linear-gradient(90deg,transparent,rgba(0,0,0,.52) 34%,#000 65%)}
-.hero:after{content:"";position:absolute;z-index:-1;right:20%;top:-170px;width:480px;height:480px;border-radius:50%;border:26px solid rgba(231,161,22,.26);transform:translateX(70%);pointer-events:none}
-.eyebrow{display:flex;align-items:center;gap:11px;font-size:12px;font-weight:750;color:#344255;margin:0 0 14px}
-.eyebrow:before{content:"";width:4px;height:17px;border-radius:2px;background:var(--gold)}
-h1{margin:0;color:var(--navy);font-size:clamp(29px,4vw,46px);line-height:1.12;letter-spacing:-.054em;font-weight:850}
-h1 span{color:#dd8f00}
-.intro{font-size:13px;line-height:1.55;max-width:520px;margin:12px 0 0;color:#536176}
-.tool{position:relative;margin-top:-35px;margin-bottom:17px}
-.card{background:rgba(255,255,255,.98);border:1px solid #e6e9ec;border-radius:22px;box-shadow:0 15px 45px rgba(29,40,52,.11);padding:24px 34px 18px}
-.section{display:grid;grid-template-columns:42px 1fr;gap:17px;padding:17px 0 19px;border-bottom:1px solid var(--line)}
-.section:first-child{padding-top:0}
-.iconbox{width:41px;height:41px;display:grid;place-items:center;background:#fff4e3;color:#dd8e06;border-radius:12px;align-self:start}
-.iconbox svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;fill:none}
-h2{font-size:17px;letter-spacing:-.025em;line-height:1.1;margin:1px 0 4px;font-weight:800}
-.sub{color:#7b8692;font-size:11px;margin:0 0 12px;line-height:1.4}
-.pills{display:flex;gap:8px;flex-wrap:wrap}
-.pill{cursor:pointer;user-select:none;position:relative;display:inline-flex}
-.pill input{position:absolute;width:1px;height:1px;opacity:0}
-.pill span{min-height:32px;display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1px solid #d7dce3;background:#fff;color:#394659;font-size:12px;font-weight:650;white-space:nowrap;transition:background .14s,color .14s,border-color .14s}
-.pill:hover span{border-color:#d9a43b}
-.pill input:checked+span{background:linear-gradient(135deg,#f3ac1c,#d98d00);border-color:#e69d09;color:white;box-shadow:0 1px 2px #be7b0a30}
-.pill input:checked+span:after{content:"✓";font-size:11px;font-weight:850}
-.pill input:focus-visible+span{outline:3px solid #7fa8e5;outline-offset:2px}
-.advanced{border-bottom:1px solid var(--line)}
-summary{list-style:none;display:flex;align-items:center;gap:16px;cursor:pointer;padding:13px 0;font-weight:800;font-size:13px}
-summary::-webkit-details-marker{display:none}
-summary .iconbox{width:34px;height:34px;border-radius:10px}
-summary .iconbox svg{width:19px;height:19px}
-summary .chevron{margin-left:auto;width:17px;height:17px;color:#33455b;transition:transform .2s}
-details[open] summary .chevron{transform:rotate(180deg)}
-.advanced-inner{padding:4px 0 20px 50px;display:grid;gap:17px}
-.advanced-inner h3{font-size:12px;margin:0 0 9px}
-.advanced-inner p{margin:7px 0 0;color:#778493;font-size:11px}
-.summary{background:linear-gradient(100deg,#fff6e9,#fff9f3);display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;margin:17px 0 13px;font-weight:720;font-size:12px}
-.summary svg{color:#dc9008;flex-shrink:0;width:19px;height:19px;stroke-width:2;fill:none;stroke:currentColor}
-.primary{width:100%;border:0;background:linear-gradient(110deg,#f5a70c,#d88700);border-radius:12px;min-height:46px;padding:10px 18px;font-size:14px;font-weight:800;color:white;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:0 5px 12px #eaa02028}
-.primary:hover{filter:brightness(.98)}
-.primary:focus-visible{outline:3px solid #5c98da;outline-offset:3px}
-.primary svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
-.footnotes{display:grid;gap:6px;margin:13px 2px 0}
-.footnote{display:flex;align-items:center;gap:9px;color:#6d7988;font-size:11px}
-.footnote svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round}
-.footnote a{color:#bb7800;text-decoration:none;font-weight:650}
-.status{font-size:11px;color:#61748a;line-height:1.4;min-height:0;margin:8px 0 0}
-footer{padding:0 0 15px;text-align:center;color:#8a96a4;font-size:10px}
-@media(min-width:900px) and (min-height:740px){.hero{padding-top:46px;padding-bottom:74px}.section{padding-top:19px;padding-bottom:21px}}
-@media(max-width:660px){.wrap{width:calc(100% - 26px)}header{height:56px}.brand{font-size:21px}.hero{padding:26px 0 57px}.hero:before{width:80%;opacity:.25}.hero:after{opacity:.5}.eyebrow{font-size:10px}h1{font-size:31px}.intro{font-size:12px;max-width:320px}.tool{margin-top:-28px}.card{padding:16px 16px 18px;border-radius:18px}.section{grid-template-columns:32px 1fr;gap:10px;padding:15px 0}.iconbox{width:31px;height:31px;border-radius:9px}.iconbox svg{width:18px;height:18px}h2{font-size:15px}.sub{font-size:10px;margin-bottom:10px}.pill span{padding:8px 12px;font-size:11px;min-height:30px}.pills{gap:7px}.advanced-inner{padding-left:8px}.summary{font-size:11px}.footnote{align-items:start;font-size:10px}}
+:root{--radar-ink:#17263a;--radar-gold:#e7a116;--radar-line:#e8eaf0}
+.radar-page{background:#f7f8fb;color:#17263a}
+.radar-page .wrap{width:min(1080px,calc(100% - 48px));margin-inline:auto}
+.radar-page .radar-hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(95deg,#fffdfa 2%,#fbf6ef 63%,#e3d5c6 100%);padding:26px 0 64px}
+.radar-page .radar-hero:before{content:"";position:absolute;z-index:-2;right:0;top:-33%;height:175%;width:45%;background-image:url("https://images.unsplash.com/photo-1656653121475-e33829581294?auto=format&fit=crop&w=1100&q=82");background-size:cover;background-position:52% 55%;opacity:.43;filter:brightness(1.35) contrast(.83) sepia(.1);mask-image:linear-gradient(90deg,transparent,rgba(0,0,0,.55) 40%,#000 72%)}
+.radar-page .radar-hero:after{content:"";position:absolute;z-index:-1;right:18%;top:-180px;width:390px;height:390px;border-radius:50%;border:21px solid #e7a11635;transform:translateX(70%);pointer-events:none}
+.radar-page .radar-eyebrow{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:720;color:#3b4654;margin:0 0 11px}
+.radar-page .radar-eyebrow:before{content:"";display:block;width:3px;height:18px;border-radius:3px;background:var(--radar-gold)}
+.radar-page .radar-hero h1{color:#17263a;font-size:clamp(28px,3.9vw,44px);letter-spacing:-.048em;font-weight:780;margin:0;line-height:1.16}
+.radar-page .radar-hero h1 span{color:#dd9100}
+.radar-page .radar-intro{max-width:570px;font-size:13px;line-height:1.5;color:#59687a;margin:10px 0 0}
+.radar-page .radar-tool{position:relative;margin-top:-38px;margin-bottom:16px}
+.radar-page .radar-card{background:#fff;border:1px solid #e9e9ef;border-radius:20px;box-shadow:0 12px 38px #26364a17;padding:17px 28px 16px}
+.radar-page .radar-card .section{display:grid;grid-template-columns:36px 1fr;gap:13px;padding:13px 0 15px;border-bottom:1px solid var(--radar-line)}
+.radar-page .radar-card .section:first-child{padding-top:0}
+.radar-page .radar-card .iconbox{width:34px;height:34px;display:grid;place-items:center;background:#fff3e0;color:#df910a;border-radius:10px}
+.radar-page .radar-card .iconbox svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.radar-page .radar-card h2{font-size:15px;letter-spacing:-.015em;font-weight:750;line-height:1.2;margin:1px 0 4px}
+.radar-page .radar-card .sub{font-size:11px;color:#85909c;line-height:1.4;margin:0 0 10px}
+.radar-page .radar-card .pills{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+.radar-page .radar-card .pill{cursor:pointer;position:relative;display:inline-flex;user-select:none}
+.radar-page .radar-card .pill input{position:absolute;opacity:0;width:1px;height:1px}
+.radar-page .radar-card .pill span{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:6px 12px;border:1px solid #dde2e8;border-radius:999px;font-size:11px;line-height:1.2;color:#3f4e5d;background:#fff;font-weight:650;transition:background .15s,border-color .15s}
+.radar-page .radar-card .pill input:checked+span{background:linear-gradient(115deg,#f0af27,#da8f09);border-color:#e5a21b;color:white}
+.radar-page .radar-card .pill input:checked+span:after{content:"✓";font-weight:900}
+.radar-page .radar-card .pill input:focus-visible+span{outline:3px solid #79a9dc;outline-offset:2px}
+.radar-page .radar-card .pill:hover span{border-color:#dfaa40}
+.radar-page .extra-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px 24px;padding:15px 0 8px;border-bottom:1px solid var(--radar-line)}
+.radar-page .extra-head{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:760;margin:0 0 9px}
+.radar-page .extra-head svg{width:16px;height:16px;color:#cf8505;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round}
+.radar-page .extra-note{font-size:10px;color:#7d8997;line-height:1.4;margin:5px 0 0}
+.radar-page .summary{border-radius:10px;background:#fff8e9;color:#27374c;padding:9px 13px;margin:13px 0 10px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:11px;line-height:1.4}
+.radar-page .summary svg{height:17px;width:17px;color:#d88d00;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.radar-page .primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:10px 12px;min-height:43px;border-radius:10px;border:0;background:linear-gradient(90deg,#f1ae25,#d78b00);color:#fff;font-size:13px;font-weight:780;cursor:pointer}
+.radar-page .primary svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.radar-page .primary:hover{filter:brightness(.97)}
+.radar-page .primary:focus-visible{outline:3px solid #79a9dc;outline-offset:3px}
+.radar-page .footnotes{display:grid;gap:4px;margin:11px 0 0}
+.radar-page .footnote{display:flex;align-items:center;gap:8px;color:#647383;font-size:10px;line-height:1.4}
+.radar-page .footnote svg{width:14px;height:14px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8}
+.radar-page .footnote a{color:#b97600;text-decoration:underline;text-decoration-color:#f0cc80}
+.radar-page .status{min-height:0;margin:8px 0 0;font-size:11px;line-height:1.5;color:#59738b}
+.radar-page .radar-footer{display:block;background:transparent;color:#8a98a5;text-align:center;font-size:10px;padding:0 12px 18px}
+@media(max-width:769px){
+.radar-page .wrap{width:calc(100% - 24px)}
+.radar-page .radar-hero{padding:24px 0 60px}
+.radar-page .radar-hero:before{width:70%;opacity:.25}
+.radar-page .radar-intro{max-width:370px}
+.radar-page .radar-card{padding:16px;border-radius:16px}
+.radar-page .radar-card .section{grid-template-columns:30px 1fr;gap:9px;padding:12px 0}
+.radar-page .radar-card .iconbox{width:29px;height:29px}
+.radar-page .radar-card .iconbox svg{width:17px;height:17px}
+.radar-page .extra-grid{grid-template-columns:1fr;gap:15px}
+}
+@media(max-width:430px){.radar-page .radar-hero h1{font-size:29px}.radar-page .radar-eyebrow{font-size:10px}.radar-page .radar-card .pill span{font-size:11px;padding:7px 10px}.radar-page .radar-card .sub{font-size:10px}}
 </style>
 </head>
-<body>
-<header><nav class="nav wrap"><a class="brand" href="../../index.html" aria-label="Orbivia, accueil">Orbivia</a><a class="back" href="../">← Retour à Orbivia</a></nav></header>
-<section class="hero"><div class="wrap"><p class="eyebrow">Wattignies Karaté Club · Veille automatique</p><h1>Le radar des <span>tatamis.</span></h1><p class="intro">Cet outil surveille les calendriers officiels des compétitions et vous envoie des alertes avant les dates limites d'inscription.</p></div></section>
-<main class="tool wrap">
-<div class="card">
+<body class="radar-page">
+<header class="header">
+<a class="brand" href="../../index.html" aria-label="Orbivia — Accueil">Orbivia</a>
+<button type="button" class="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+<nav id="navigation" aria-label="Navigation principale">
+<a href="../../index.html#expertises">Expertises</a>
+<a href="../../realisations.html">Réalisations</a>
+<a href="../" aria-current="page">Outils</a>
+<a href="../../estimer-mon-projet.html">Estimer mon projet</a>
+<a href="../../contact.html" class="nav-cta">Demander un devis ↗</a>
+</nav>
+</header>
+<section class="radar-hero"><div class="wrap"><p class="radar-eyebrow">Wattignies Karaté Club · Veille automatique</p><h1>Le radar des <span>tatamis.</span></h1><p class="radar-intro">Cet outil surveille les calendriers officiels des compétitions et vous envoie des alertes avant les dates limites d'inscription.</p></div></section>
+<main class="radar-tool wrap">
+<div class="radar-card">
 <section class="section" aria-labelledby="zones-title">
 <div class="iconbox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
 <div><h2 id="zones-title">Zone</h2><p class="sub">Périmètres des compétitions à surveiller.</p><div id="zones" class="pills"></div></div>
@@ -88,15 +95,12 @@ footer{padding:0 0 15px;text-align:center;color:#8a96a4;font-size:10px}
 <div class="iconbox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 3 4 3 4-3 4 4-3 3 2 11H5l2-11-3-3 4-4Z"/><path d="m8 3 4 8 4-8M7 15h10m-8-2 6 2"/></svg></div>
 <div><h2 id="disciplines-title">Disciplines</h2><p class="sub">Disciplines à suivre.</p><div id="disciplines" class="pills"></div></div>
 </section>
-<div class="advanced"><details id="advanced">
-<summary><span class="iconbox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h8m4 0h4M4 12h3m4 0h9M4 18h11m4 0h1"/><circle cx="14" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></span><span>Paramètres avancés</span><svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 9 7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></summary>
-<div class="advanced-inner">
-<div><h3>Types de compétitions</h3><div id="types" class="pills"></div></div>
-<div><h3>Types d'alertes</h3><div id="alerts" class="pills"></div></div>
-<div><h3>Rappels avant la date limite</h3><div id="reminders" class="pills"></div></div>
-<div><h3>Récapitulatif</h3><div id="digest" class="pills"></div><p>Un e-mail récapitulatif chaque lundi pour les compétitions à venir.</p></div>
+<div class="extra-grid" aria-label="Options de veille et fréquence">
+<div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M7 12h10M11 17h2"/></svg> Types de compétitions</p><div id="types" class="pills"></div></div>
+<div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h12l-2-3V9a4 4 0 0 0-8 0v5l-2 3Zm4 3h4"/></svg> Alertes à recevoir</p><div id="alerts" class="pills"></div></div>
+<div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Rappels avant clôture</p><div id="reminders" class="pills"></div></div>
+<div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></svg> Récapitulatif</p><div id="recap" class="pills" role="radiogroup" aria-label="Fréquence du récapitulatif"></div><p class="extra-note">Récapitulatif des compétitions sur les 90 prochains jours.</p></div>
 </div>
-</details></div>
 <div class="summary"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m7.5 12 3 3 6-6"/></svg><span id="summaryText">2 zones · 6 catégories · 2 disciplines sélectionnées</span></div>
 <button id="apply" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Appliquer mes choix</button>
 <div class="footnotes">
@@ -106,7 +110,7 @@ footer{padding:0 0 15px;text-align:center;color:#8a96a4;font-size:10px}
 </div>
 <p class="status" id="status" role="status" aria-live="polite"></p>
 </div></main>
-<footer>Wattignies Karaté Club · Bot de Pierre Charlier – Orbivia</footer>
+<footer class="radar-footer">Wattignies Karaté Club · Bot de Pierre Charlier – Orbivia</footer>
 <script>
 (function(){
 "use strict";
@@ -116,20 +120,14 @@ const options={
  disciplines:["Kumité","Kata"],
  types:["Coupe","Championnat","Open"],
  alerts:["Nouvelle compétition","Date ou lieu modifié","Date limite d'inscription","Date limite non publiée"],
- reminders:["J-14","J-7","J-3","J-1","J0"],
- digest:["Résumé du lundi"]
+ reminders:["J-14","J-7","J-3","J-1","J0"]
 };
 const labels={
- "Département du Nord":"Nord",
- "Département du Pas-de-Calais":"Pas-de-Calais",
+ "Département du Nord":"Nord","Département du Pas-de-Calais":"Pas-de-Calais",
  "Région Hauts-de-France":"Hauts-de-France",
- "National":"National",
- "International":"International",
- "Nouvelle compétition":"Nouvelle compétition",
- "Date ou lieu modifié":"Date / lieu modifiés",
- "Date limite d'inscription":"Date limite",
- "Date limite non publiée":"Limite non publiée",
- "Résumé du lundi":"Chaque lundi"
+ "Date ou lieu modifié":"Modification","Date limite d'inscription":"Date limite",
+ "Date limite non publiée":"Limite inconnue",
+ "Nouvelle compétition":"Nouveauté"
 };
 const defaults={
  zones:["Département du Nord","Région Hauts-de-France"],
@@ -138,49 +136,66 @@ const defaults={
  types:["Coupe","Championnat"],
  alerts:options.alerts.slice(),
  reminders:options.reminders.slice(),
- digest:["Résumé du lundi"]
+ recapDays:"7"
 };
 let state=JSON.parse(JSON.stringify(defaults));
 try{
+const stored=JSON.parse(localStorage.getItem("wkc-radar-v2")||"null");
+if(stored&&typeof stored==="object"){
+for(const k of Object.keys(options)){if(Array.isArray(stored[k]))state[k]=stored[k].filter(x=>options[k].includes(x));}
+if(["0","1","3","7","14","30"].includes(String(stored.recapDays)))state.recapDays=String(stored.recapDays);
+}else{
  const old=JSON.parse(localStorage.getItem("wkc-radar-v1")||"null");
  if(old&&typeof old==="object"){
-  for(const k of Object.keys(options)){const source=k==="reminders"?old.reminderChoices:old[k];if(Array.isArray(source))state[k]=source.filter(v=>options[k].includes(v));}
+  for(const k of Object.keys(options)){const arr=k==="reminders"?(old.reminders||old.reminderChoices):old[k];if(Array.isArray(arr))state[k]=arr.filter(x=>options[k].includes(x));}
+  if(Array.isArray(old.digest)&&!old.digest.includes("Résumé du lundi"))state.recapDays="0";
  }
+}
 }catch(e){}
-function store(){try{localStorage.setItem("wkc-radar-v1",JSON.stringify({...state,reminderChoices:state.reminders}));}catch(e){}}
-function render(key){
- const group=document.getElementById(key);
- for(const option of options[key]){
-  const label=document.createElement("label");label.className="pill";
-  const input=document.createElement("input");input.type="checkbox";input.checked=state[key].includes(option);input.setAttribute("aria-label",option);
-  const span=document.createElement("span");span.textContent=labels[option]||option;
-  input.addEventListener("change",()=>{
-   state[key]=options[key].filter(v=>v===option?input.checked:state[key].includes(v));
-   store();summary();
-  });
-  label.append(input,span);group.append(label);
- }
+function persist(){try{localStorage.setItem("wkc-radar-v2",JSON.stringify(state));}catch(e){}}
+function showSummary(){
+const noun=(k,s)=>state[k].length+" "+s+(state[k].length>1?"s":"");
+document.getElementById("summaryText").textContent=noun("zones","zone")+" · "+noun("ages","catégorie")+" · "+noun("disciplines","discipline")+" · Récap. "+(state.recapDays==="0"?"désactivé":state.recapDays+" j");
 }
-Object.keys(options).forEach(render);
-function summary(){
- const n=(k,w)=>state[k].length+" "+w+(state[k].length>1?"s":"");
- document.getElementById("summaryText").textContent=n("zones","zone")+" · "+n("ages","catégorie")+" · "+n("disciplines","discipline")+" sélectionnées";
+function checkboxChoices(key){
+const target=document.getElementById(key);
+for(const choice of options[key]){
+ const label=document.createElement("label");label.className="pill";
+ const input=document.createElement("input");input.type="checkbox";input.checked=state[key].includes(choice);input.setAttribute("aria-label",choice);
+ const span=document.createElement("span");span.textContent=labels[choice]||choice;
+ input.addEventListener("change",()=>{
+  state[key]=options[key].filter(x=>x===choice?input.checked:state[key].includes(x));
+  persist();showSummary();
+ });
+ label.append(input,span);target.append(label);
 }
-summary();
+}
+Object.keys(options).forEach(checkboxChoices);
+const recapOptions=[["0","Aucun"],["1","1 jour"],["3","3 jours"],["7","7 jours"],["14","14 jours"],["30","30 jours"]];
+const recap=document.getElementById("recap");
+recapOptions.forEach(([days,text])=>{
+ const label=document.createElement("label");label.className="pill";
+ const input=document.createElement("input");input.type="radio";input.name="recapDays";input.value=days;input.checked=state.recapDays===days;
+ input.setAttribute("aria-label",days==="0"?"Désactiver le récapitulatif":"Récapitulatif tous les "+days+" jours");
+ const span=document.createElement("span");span.textContent=text;
+ input.addEventListener("change",()=>{state.recapDays=days;persist();showSummary();});
+ label.append(input,span);recap.append(label);
+});
+showSummary();
 document.getElementById("apply").addEventListener("click",()=>{
- const msg=document.getElementById("status");
- if(!state.zones.length||!state.ages.length||!state.disciplines.length){msg.textContent="Sélectionnez au moins une zone, une catégorie et une discipline.";return;}
- const config={
-  version:1,clubs:["Wattignies Karaté Club"],
-  zones:state.zones,categories:state.ages,disciplines:state.disciplines,
-  types:state.types,alerts:state.alerts,rappels:state.reminders,
-  recap_lundi:state.digest.includes("Résumé du lundi")
- };
- const payload="WKC_CONFIG_V1\n"+JSON.stringify(config,null,2)+"\nFIN_WKC_CONFIG_V1";
- const url="https://orbivia.fr/outils/veille-karate/";
- const body="Bonjour,\n\nMerci d'appliquer cette configuration à la veille du Wattignies Karaté Club.\n\n"+payload+"\n\nPage de configuration : "+url+"\n\nMessage généré depuis le Radar des tatamis.";
- window.location.href="mailto:pierre.charlier@orbivia.fr?subject="+encodeURIComponent("[WKC-CONFIG] Mise à jour des filtres")+"&body="+encodeURIComponent(body);
- msg.textContent="Un brouillon est prêt. Envoyez-le depuis votre compte Orbivia pour activer ces réglages.";
+const info=document.getElementById("status");
+if(!state.zones.length||!state.ages.length||!state.disciplines.length){info.textContent="Sélectionnez au moins une zone, une catégorie et une discipline.";return;}
+const config={
+ version:2,clubs:["Wattignies Karaté Club"],zones:state.zones,categories:state.ages,
+ disciplines:state.disciplines,types:state.types,alerts:state.alerts,
+ rappels:state.reminders,recap_jours:Number(state.recapDays),
+ recap_lundi:state.recapDays!=="0"
+};
+const payload="WKC_CONFIG_V1\n"+JSON.stringify(config,null,2)+"\nFIN_WKC_CONFIG_V1";
+const page="https://orbivia.fr/outils/veille-karate/";
+const message="Bonjour,\n\nMerci d'appliquer cette configuration à la veille du Wattignies Karaté Club.\n\n"+payload+"\n\nPage de configuration : "+page+"\n\nMessage généré depuis le Radar des tatamis.";
+window.location.href="mailto:pierre.charlier@orbivia.fr?subject="+encodeURIComponent("[WKC-CONFIG] Mise à jour des filtres")+"&body="+encodeURIComponent(message);
+info.textContent="Le brouillon est prêt. Envoyez-le depuis votre compte Orbivia pour appliquer les choix à la veille.";
 });
 })();
 </script>
