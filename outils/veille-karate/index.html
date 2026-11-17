@@ -120,6 +120,18 @@
 .radar-page .tracker-status{font-size:11px;color:#516d85;min-height:0;margin:8px 0 0}
 @media(max-width:650px){.radar-page .tracker-event{align-items:stretch;flex-direction:column;gap:9px}.radar-page .tracker-event-actions{width:100%}.radar-page .tracker-event-actions .tracker-action{flex:1}.radar-page .tracker-counter{font-size:9px}}
 
+
+.radar-page .radar-mailer{margin:10px 0 0;background:white;border:1px solid #e3e7ee;border-radius:15px;overflow:hidden}
+.radar-page .radar-mailer>summary{display:flex;align-items:center;gap:9px;list-style:none;padding:12px 17px;cursor:pointer;color:#1d3149;font-size:12px;font-weight:740}
+.radar-page .radar-mailer>summary::-webkit-details-marker{display:none}
+.radar-page .radar-mailer .mailer-tag{color:#768597;font-size:10px;font-weight:600;margin-left:auto}
+.radar-page .radar-mailer .mailer-body{border-top:1px solid #ebeff4;padding:12px 16px 15px}
+.radar-page .radar-mailer .mailer-body p{font-size:11px;color:#617084;line-height:1.55;margin:0 0 10px}
+.radar-page .radar-mailer .mailer-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d29a25;background:#fff8eb;color:#8a5e11;border-radius:8px;font-size:11px;font-weight:750;padding:8px 13px;cursor:pointer}
+.radar-page .radar-mailer .mailer-button:disabled{opacity:.5;cursor:default}
+.radar-page .radar-mailer .mailer-body a{color:#a16d13;text-decoration:underline;text-underline-offset:3px;font-size:11px}
+.radar-page .radar-mailer .mailer-body .mailer-feedback{margin:9px 0 0}
+
 </style>
 </head>
 <body class="radar-page" data-locked="true">
@@ -177,6 +189,16 @@
 <div id="competitionList" class="tracker-list" aria-live="polite"><p class="tracker-empty">Les compétitions seront chargées après connexion.</p></div>
 <p id="trackingStatus" class="tracker-status" role="status" aria-live="polite"></p>
 </div></details>
+
+<details id="mailer" class="radar-mailer">
+<summary><icon aria-hidden="true">✉</icon><span>E-mails HTML via IONOS</span><span class="mailer-tag" id="mailerTag">Vérification…</span></summary>
+<div class="mailer-body">
+<p id="mailerInfo">Les rapports HTML seront envoyés depuis votre boîte IONOS avec les couleurs du Radar.</p>
+<button id="mailerTest" type="button" class="mailer-button" disabled>Envoyer un rapport HTML de test</button>
+<p id="mailerFeedback" class="mailer-feedback" role="status" aria-live="polite"></p>
+<p id="mailerSetup" hidden>Configuration unique : dans les secrets des Edge Functions Supabase, ajoutez <code>WKC_SMTP_PASSWORD</code> avec le mot de passe de la boîte <code>pierre.charlier@orbivia.fr</code>. <a href="https://supabase.com/dashboard/project/yejzxsrmqudhvaikaitb/settings/functions" target="_blank" rel="noopener noreferrer">Ouvrir les secrets Supabase</a>. Ne renseignez pas votre mot de passe dans cet outil.</p>
+<button id="mailerRefresh" type="button" class="mailer-button">Actualiser l'état</button>
+</div></details>
 </main>
 <dialog class="radar-admin-dialog" id="adminDialog" aria-labelledby="adminTitle" aria-modal="true">
 <form id="adminForm">
@@ -218,6 +240,48 @@ const defaults={
 let state=JSON.parse(JSON.stringify(defaults));
 let recipientList=[];
 let loaded=false, busy=false;
+
+const MAIL_API="https://yejzxsrmqudhvaikaitb.supabase.co/functions/v1/wkc-radar-mail";
+const mailerTag=document.getElementById("mailerTag"),mailerInfo=document.getElementById("mailerInfo");
+const mailerTest=document.getElementById("mailerTest"),mailerFeedback=document.getElementById("mailerFeedback");
+const mailerSetup=document.getElementById("mailerSetup"),mailerRefresh=document.getElementById("mailerRefresh");
+let mailReady=false,mailBusy=false;
+async function checkMail(){
+ if(!loaded||mailBusy)return;
+ const key=getStoredKey();if(!key)return;
+ mailerTag.textContent="Vérification…";mailerRefresh.disabled=true;
+ try{
+  const res=await fetch(MAIL_API,{method:"GET",cache:"no-store",headers:{"x-wkc-admin-key":key}});
+  const data=await res.json().catch(()=>({}));
+  if(res.status===401){lock();return;}
+  if(!res.ok)throw Error(data.error||"Service indisponible");
+  mailReady=!!data.ready;
+  mailerTag.textContent=mailReady?"Prêt":"À configurer";
+  mailerSetup.hidden=mailReady;
+  mailerInfo.textContent=mailReady?
+   "Expéditeur : "+data.from+". Le test sera envoyé aux "+data.recipients+" destinataire(s) enregistrés.":
+   "La passerelle HTML est prête. Il reste seulement à renseigner le mot de passe SMTP IONOS.";
+  mailerTest.disabled=!mailReady;
+ }catch(err){mailerTag.textContent="Indisponible";mailerFeedback.textContent=err.message||"Vérification impossible";mailerTest.disabled=true;}
+ finally{mailerRefresh.disabled=false;}
+}
+async function sendHtmlTest(){
+ if(!loaded||mailBusy||!mailReady)return;
+ const key=getStoredKey();if(!key){lock();return;}
+ mailBusy=true;mailerTest.disabled=true;mailerRefresh.disabled=true;
+ mailerFeedback.textContent="Vérification IONOS et envoi du rapport…";
+ try{
+  const res=await fetch(MAIL_API,{method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","x-wkc-admin-key":key},body:JSON.stringify({action:"send_html_test"})});
+  const data=await res.json().catch(()=>({}));
+  if(res.status===401){lock();return;}
+  if(!res.ok||data.sent!==true)throw Error(data.error||"Envoi refusé");
+  mailerFeedback.textContent="Rapport HTML envoyé aux "+data.recipients+" adresse(s).";
+ }catch(err){mailerFeedback.textContent="Envoi non effectué : "+(err.message||"erreur réseau");}
+ finally{mailBusy=false;mailerRefresh.disabled=false;mailerTest.disabled=!mailReady;}
+}
+mailerTest.addEventListener("click",()=>{void sendHtmlTest();});
+mailerRefresh.addEventListener("click",()=>{void checkMail();});
+
 
 const tracker=document.getElementById("tracking"),trackerList=document.getElementById("competitionList");
 const trackerCounts=document.getElementById("trackingCounts"),trackerStatus=document.getElementById("trackingStatus");
@@ -364,6 +428,7 @@ async function loadSettings(key,initial=false){
   document.body.removeAttribute("data-locked");
   apply.disabled=false;
   status.textContent="Configuration actuelle chargée.";
+  void checkMail();
   if(dialog.open)dialog.close();
   codeInput.value="";feedback.textContent="";
  }catch(err){
