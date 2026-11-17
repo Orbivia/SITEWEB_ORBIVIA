@@ -196,7 +196,7 @@
 <p id="mailerInfo">Les rapports HTML seront envoyés depuis votre boîte IONOS avec les couleurs du Radar.</p>
 <button id="mailerTest" type="button" class="mailer-button" disabled>Envoyer un rapport HTML de test</button>
 <p id="mailerFeedback" class="mailer-feedback" role="status" aria-live="polite"></p>
-<p id="mailerSetup" hidden>Configuration unique : dans les secrets des Edge Functions Supabase, ajoutez <code>WKC_SMTP_PASSWORD</code> avec le mot de passe de la boîte <code>pierre.charlier@orbivia.fr</code>. <a href="https://supabase.com/dashboard/project/yejzxsrmqudhvaikaitb/settings/functions" target="_blank" rel="noopener noreferrer">Ouvrir les secrets Supabase</a>. Ne renseignez pas votre mot de passe dans cet outil.</p>
+<p id="mailerSetup" hidden>Configuration unique : dans les secrets des Edge Functions Supabase, ajoutez <code>WKC_SMTP_PASSWORD</code> avec le mot de passe de la boîte <code>pierre.charlier@orbivia.fr</code>. <a href="https://supabase.com/dashboard/project/yejzxsrmqudhvaikaitb/functions/secrets" target="_blank" rel="noopener noreferrer">Ouvrir les secrets Supabase</a>. Ne renseignez pas votre mot de passe dans cet outil.</p>
 <button id="mailerRefresh" type="button" class="mailer-button">Actualiser l'état</button>
 </div></details>
 </main>
@@ -256,7 +256,7 @@ async function checkMail(){
   if(res.status===401){lock();return;}
   if(!res.ok)throw Error(data.error||"Service indisponible");
   mailReady=!!data.ready;
-  mailerTag.textContent=mailReady?"Prêt":"À configurer";
+  mailerTag.textContent=mailReady?"Configuré · à tester":"À configurer";
   mailerSetup.hidden=mailReady;
   mailerInfo.textContent=mailReady?
    "Expéditeur : "+data.from+". Le test sera envoyé aux "+data.recipients+" destinataire(s) enregistrés.":
