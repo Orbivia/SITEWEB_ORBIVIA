@@ -61,23 +61,6 @@
 }
 @media(max-width:430px){.radar-page .radar-hero h1{font-size:29px}.radar-page .radar-eyebrow{font-size:10px}.radar-page .radar-card .pill span{font-size:11px;padding:7px 10px}.radar-page .radar-card .sub{font-size:10px}}
 
-/* Fenêtre de validation, visible uniquement au premier enregistrement de la session. */
-.radar-page .primary:disabled{opacity:.55;cursor:wait}
-.radar-admin-dialog{width:min(420px,calc(100% - 36px));max-width:420px;max-height:calc(100dvh - 30px);overflow:auto;border:1px solid #e3e8ee;border-radius:20px;box-shadow:0 28px 75px #081e3550;padding:27px 27px 25px;background:#fff;color:#17263a}
-.radar-admin-dialog::backdrop{background:#111e2eb8;backdrop-filter:blur(3px)}
-.radar-admin-dialog .radar-admin-icon{height:42px;width:42px;border-radius:12px;background:#fff5e4;color:#d98d08;display:grid;place-items:center;margin-bottom:14px}
-.radar-admin-dialog .radar-admin-icon svg{height:22px;width:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linejoin:round;stroke-linecap:round}
-.radar-admin-dialog h2{font-size:21px;line-height:1.2;letter-spacing:-.025em;font-weight:750;margin:0 0 9px}
-.radar-admin-dialog .radar-admin-help{font-size:12px;line-height:1.6;color:#67778b;margin:0 0 19px}
-.radar-admin-dialog label{display:block;font-size:12px;font-weight:700;margin-bottom:8px}
-.radar-admin-dialog input{width:100%;border:1px solid #d4dce5;border-radius:10px;padding:12px 14px;min-height:43px;background:#fff;font-size:13px;outline:none}
-.radar-admin-dialog input:focus{border-color:#e7a116;box-shadow:0 0 0 3px #e7a11624}
-.radar-admin-dialog .radar-admin-feedback{min-height:18px;font-size:12px;color:#ad5218;margin:9px 0}
-.radar-admin-dialog .radar-admin-actions{display:flex;gap:10px}
-.radar-admin-dialog .radar-admin-actions button{border-radius:9px;padding:11px 15px;font-size:12px;font-weight:750;flex:1;cursor:pointer}
-.radar-admin-dialog .radar-cancel{background:#fff;border:1px solid #d8e0e8;color:#39495d}
-.radar-admin-dialog .radar-confirm{background:#17263a;color:#fff;border:1px solid #17263a}
-.radar-admin-dialog .radar-confirm:disabled{opacity:.6;cursor:wait}
 </style>
 </head>
 <body class="radar-page">
@@ -116,20 +99,6 @@
 <button id="apply" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Appliquer mes choix</button>
 <p class="status" id="status" role="status" aria-live="polite"></p>
 </div></main>
-<dialog class="radar-admin-dialog" id="adminDialog" aria-labelledby="adminTitle">
-<form id="adminForm">
-<div class="radar-admin-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-<h2 id="adminTitle">Enregistrer les réglages</h2>
-<p class="radar-admin-help">Saisissez votre code administrateur pour enregistrer directement les paramètres. Aucun e-mail n'est nécessaire.</p>
-<label for="adminCode">Code administrateur</label>
-<input id="adminCode" name="adminCode" type="password" required autocomplete="off" spellcheck="false" placeholder="WKC-…" aria-describedby="adminFeedback">
-<p class="radar-admin-feedback" id="adminFeedback" role="status" aria-live="polite"></p>
-<div class="radar-admin-actions">
-<button type="button" id="cancelAdmin" class="radar-cancel">Annuler</button>
-<button type="submit" class="radar-confirm" id="confirmAdmin">Enregistrer</button>
-</div>
-</form>
-</dialog>
 <footer class="radar-footer">Wattignies Karaté Club · Bot de Pierre Charlier – Orbivia</footer>
 <script>
 (function(){
@@ -158,10 +127,20 @@ const defaults={
 let state=JSON.parse(JSON.stringify(defaults));
 let loaded=false, busy=false;
 const status=document.getElementById("status"),apply=document.getElementById("apply");
-const dialog=document.getElementById("adminDialog"),form=document.getElementById("adminForm");
-const codeInput=document.getElementById("adminCode"),feedback=document.getElementById("adminFeedback");
-const confirmButton=document.getElementById("confirmAdmin");
-const keyStore="wkc-radar-admin-key";
+const accessStore="wkc-radar-private-access";
+function activatePrivateAccess(){
+ try {
+  const params=new URLSearchParams(window.location.hash.replace(/^#/,""));
+  const access=params.get("acces");
+  if(access){
+   if(/^WKC_[A-Za-z0-9_-]{35,}$/.test(access))localStorage.setItem(accessStore,access);
+   window.history.replaceState(null,"",window.location.pathname+window.location.search);
+  }
+  sessionStorage.removeItem("wkc-radar-admin-key");
+ }catch(err){console.warn("Accès privé non mémorisé",err);}
+}
+activatePrivateAccess();
+function privateAccess(){try{return localStorage.getItem(accessStore)||"";}catch(err){return "";}}
 function renderCheckboxes(key){
  const group=document.getElementById(key);
  for(const option of options[key]){
@@ -218,47 +197,38 @@ function buildSettings(){
  return {zones:state.zones,categories:state.ages,disciplines:state.disciplines,types:state.types,
   alerts:state.alerts,rappels:state.reminders,recap_jours:Number(state.recapDays)};
 }
-async function save(key){
+async function save(){
  if(!loaded||busy)return;
- busy=true;apply.disabled=true;confirmButton.disabled=true;feedback.textContent="";
- status.textContent="Enregistrement sécurisé en cours…";
+ const access=privateAccess();
+ if(!access){
+  status.textContent="Enregistrement réservé : ouvrez votre lien privé d’administration pour modifier les paramètres.";
+  return;
+ }
+ busy=true;apply.disabled=true;
+ status.textContent="Enregistrement en cours…";
  try{
-  const response=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","x-wkc-admin-key":key},
+  const response=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","x-wkc-admin-key":access},
    cache:"no-store",body:JSON.stringify({settings:buildSettings()})});
   const data=await response.json().catch(()=>({}));
-  if(response.status===401){
-   try{sessionStorage.removeItem(keyStore);}catch(e){}
-   if(!dialog.open)dialog.showModal();
-   feedback.textContent="Code incorrect. Vérifiez le code administrateur.";
-   status.textContent="Enregistrement refusé : code incorrect.";
+  if(response.status===401||response.status===403){
+   try{localStorage.removeItem(accessStore);}catch(err){}
+   status.textContent="Accès privé expiré ou invalide. Ouvrez à nouveau votre lien privé.";
    return;
   }
   if(!response.ok||data.saved!==true)throw new Error(data.error||"Enregistrement impossible");
   unpack(data.settings);
-  try{sessionStorage.setItem(keyStore,key);}catch(e){}
-  if(dialog.open)dialog.close();
-  codeInput.value="";
   status.textContent="✓ Paramètres enregistrés. La prochaine veille utilisera ces choix.";
  }catch(err){
   status.textContent="Impossible d'enregistrer : "+(err.message||"erreur réseau");
-  feedback.textContent="Réessayez ou vérifiez votre connexion.";
- }finally{busy=false;apply.disabled=false;confirmButton.disabled=false;}
+ }finally{busy=false;apply.disabled=false;}
 }
 apply.addEventListener("click",()=>{
  if(!loaded)return;
  if(!state.zones.length||!state.ages.length||!state.disciplines.length){
   status.textContent="Choisissez au moins une zone, une catégorie et une discipline.";return;
  }
- let key="";try{key=sessionStorage.getItem(keyStore)||"";}catch(e){}
- if(key){void save(key);}else{feedback.textContent="";dialog.showModal();codeInput.focus();}
+ void save();
 });
-form.addEventListener("submit",event=>{
- event.preventDefault();
- const key=codeInput.value.trim();
- if(!key){feedback.textContent="Veuillez saisir votre code.";return;}
- void save(key);
-});
-document.getElementById("cancelAdmin").addEventListener("click",()=>{if(!busy)dialog.close();});
 void loadSettings();
 })();
 </script>
