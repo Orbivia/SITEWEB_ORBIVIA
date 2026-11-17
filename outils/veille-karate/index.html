@@ -126,7 +126,7 @@
 <section class="radar-recipient" aria-labelledby="emailTitle">
 <span class="iconbox"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></svg></span>
 <div><label for="recipientEmails" id="emailTitle">E-mails de réception des notifications</label>
-<textarea id="recipientEmails" rows="1" placeholder="charlier@hotmail.fr" spellcheck="false" autocomplete="off" aria-describedby="recipientHelp"></textarea>
+<textarea id="recipientEmails" rows="1" placeholder="adresse@exemple.fr" spellcheck="false" autocomplete="off" aria-describedby="recipientHelp"></textarea>
 <span class="recipient-hint" id="recipientHelp">Une ou plusieurs adresses, séparées par une virgule ou un retour à la ligne.</span></div>
 </section>
 <button id="apply" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Appliquer mes choix</button>
@@ -170,7 +170,7 @@ const defaults={
  types:["Coupe","Championnat"], alerts:options.alerts.slice(), reminders:options.reminders.slice(), recapDays:"7"
 };
 let state=JSON.parse(JSON.stringify(defaults));
-let recipientList=["charlier@hotmail.fr"];
+let recipientList=[];
 let loaded=false, busy=false;
 const status=document.getElementById("status"),apply=document.getElementById("apply");
 const dialog=document.getElementById("adminDialog"),form=document.getElementById("adminForm");
