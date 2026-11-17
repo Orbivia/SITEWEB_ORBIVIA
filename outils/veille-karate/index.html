@@ -121,16 +121,14 @@
 @media(max-width:650px){.radar-page .tracker-event{align-items:stretch;flex-direction:column;gap:9px}.radar-page .tracker-event-actions{width:100%}.radar-page .tracker-event-actions .tracker-action{flex:1}.radar-page .tracker-counter{font-size:9px}}
 
 
-.radar-page .radar-mailer{margin:10px 0 0;background:white;border:1px solid #e3e7ee;border-radius:15px;overflow:hidden}
-.radar-page .radar-mailer>summary{display:flex;align-items:center;gap:9px;list-style:none;padding:12px 17px;cursor:pointer;color:#1d3149;font-size:12px;font-weight:740}
-.radar-page .radar-mailer>summary::-webkit-details-marker{display:none}
-.radar-page .radar-mailer .mailer-tag{color:#768597;font-size:10px;font-weight:600;margin-left:auto}
-.radar-page .radar-mailer .mailer-body{border-top:1px solid #ebeff4;padding:12px 16px 15px}
-.radar-page .radar-mailer .mailer-body p{font-size:11px;color:#617084;line-height:1.55;margin:0 0 10px}
-.radar-page .radar-mailer .mailer-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d29a25;background:#fff8eb;color:#8a5e11;border-radius:8px;font-size:11px;font-weight:750;padding:8px 13px;cursor:pointer}
-.radar-page .radar-mailer .mailer-button:disabled{opacity:.5;cursor:default}
-.radar-page .radar-mailer .mailer-body a{color:#a16d13;text-decoration:underline;text-underline-offset:3px;font-size:11px}
-.radar-page .radar-mailer .mailer-body .mailer-feedback{margin:9px 0 0}
+.radar-page .radar-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;align-items:stretch}
+.radar-page .report-button{display:flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:9px 12px;border:1px solid #dba02b;border-radius:10px;background:#fff8ec;color:#86590b;cursor:pointer;font-size:13px;font-weight:780}
+.radar-page .report-button svg{height:18px;width:18px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.9}
+.radar-page .report-button:hover{background:#fff0d0}
+.radar-page .report-button:focus-visible{outline:3px solid #79a9dc;outline-offset:3px}
+.radar-page .report-button:disabled{opacity:.55;cursor:default}
+.radar-page .report-feedback{margin:7px 0 0;font-size:11px;line-height:1.45;color:#59738b}
+@media(max-width:570px){.radar-page .radar-actions{grid-template-columns:1fr}}
 
 </style>
 </head>
@@ -173,8 +171,12 @@
 <textarea id="recipientEmails" rows="1" placeholder="adresse@exemple.fr" spellcheck="false" autocomplete="off" aria-describedby="recipientHelp"></textarea>
 <span class="recipient-hint" id="recipientHelp">Une ou plusieurs adresses, séparées par une virgule ou un retour à la ligne.</span></div>
 </section>
+<div class="radar-actions">
 <button id="apply" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Appliquer mes choix</button>
+<button id="receiveReport" class="report-button" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg> Recevoir le rapport</button>
+</div>
 <p class="status" id="status" role="status" aria-live="polite"></p>
+<p class="report-feedback" id="reportFeedback" role="status" aria-live="polite"></p>
 </div>
 <details id="tracking" class="radar-tracker">
 <summary><span class="tracker-main-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/><circle cx="12" cy="12" r="9"/></svg></span><span>Compétitions à suivre</span><span class="tracker-counter" id="trackingCounts">Chargement…</span><span class="tracker-caret" aria-hidden="true">⌄</span></summary>
@@ -190,15 +192,7 @@
 <p id="trackingStatus" class="tracker-status" role="status" aria-live="polite"></p>
 </div></details>
 
-<details id="mailer" class="radar-mailer">
-<summary><icon aria-hidden="true">✉</icon><span>E-mails HTML via IONOS</span><span class="mailer-tag" id="mailerTag">Vérification…</span></summary>
-<div class="mailer-body">
-<p id="mailerInfo">Les rapports HTML seront envoyés depuis votre boîte IONOS avec les couleurs du Radar.</p>
-<button id="mailerTest" type="button" class="mailer-button" disabled>Envoyer un rapport HTML de test</button>
-<p id="mailerFeedback" class="mailer-feedback" role="status" aria-live="polite"></p>
-<p id="mailerSetup" hidden>Configuration unique : dans les secrets des Edge Functions Supabase, ajoutez <code>WKC_SMTP_PASSWORD</code> avec le mot de passe de la boîte <code>pierre.charlier@orbivia.fr</code>. <a href="https://supabase.com/dashboard/project/yejzxsrmqudhvaikaitb/functions/secrets" target="_blank" rel="noopener noreferrer">Ouvrir les secrets Supabase</a>. Ne renseignez pas votre mot de passe dans cet outil.</p>
-<button id="mailerRefresh" type="button" class="mailer-button">Actualiser l'état</button>
-</div></details>
+
 </main>
 <dialog class="radar-admin-dialog" id="adminDialog" aria-labelledby="adminTitle" aria-modal="true">
 <form id="adminForm">
@@ -241,47 +235,49 @@ let state=JSON.parse(JSON.stringify(defaults));
 let recipientList=[];
 let loaded=false, busy=false;
 
-const MAIL_API="https://yejzxsrmqudhvaikaitb.supabase.co/functions/v1/wkc-radar-mail";
-const mailerTag=document.getElementById("mailerTag"),mailerInfo=document.getElementById("mailerInfo");
-const mailerTest=document.getElementById("mailerTest"),mailerFeedback=document.getElementById("mailerFeedback");
-const mailerSetup=document.getElementById("mailerSetup"),mailerRefresh=document.getElementById("mailerRefresh");
-let mailReady=false,mailBusy=false;
-async function checkMail(){
- if(!loaded||mailBusy)return;
- const key=getStoredKey();if(!key)return;
- mailerTag.textContent="Vérification…";mailerRefresh.disabled=true;
- try{
-  const res=await fetch(MAIL_API,{method:"GET",cache:"no-store",headers:{"x-wkc-admin-key":key}});
-  const data=await res.json().catch(()=>({}));
-  if(res.status===401){lock();return;}
-  if(!res.ok)throw Error(data.error||"Service indisponible");
-  mailReady=!!data.ready;
-  mailerTag.textContent=mailReady?"Configuré · à tester":"À configurer";
-  mailerSetup.hidden=mailReady;
-  mailerInfo.textContent=mailReady?
-   "Expéditeur : "+data.from+". Le test sera envoyé aux "+data.recipients+" destinataire(s) enregistrés.":
-   "La passerelle HTML est prête. Il reste seulement à renseigner le mot de passe SMTP IONOS.";
-  mailerTest.disabled=!mailReady;
- }catch(err){mailerTag.textContent="Indisponible";mailerFeedback.textContent=err.message||"Vérification impossible";mailerTest.disabled=true;}
- finally{mailerRefresh.disabled=false;}
-}
-async function sendHtmlTest(){
- if(!loaded||mailBusy||!mailReady)return;
- const key=getStoredKey();if(!key){lock();return;}
- mailBusy=true;mailerTest.disabled=true;mailerRefresh.disabled=true;
- mailerFeedback.textContent="Vérification IONOS et envoi du rapport…";
- try{
-  const res=await fetch(MAIL_API,{method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","x-wkc-admin-key":key},body:JSON.stringify({action:"send_html_test"})});
-  const data=await res.json().catch(()=>({}));
-  if(res.status===401){lock();return;}
-  if(!res.ok||data.sent!==true)throw Error(data.error||"Envoi refusé");
-  mailerFeedback.textContent="Rapport HTML envoyé aux "+data.recipients+" adresse(s).";
- }catch(err){mailerFeedback.textContent="Envoi non effectué : "+(err.message||"erreur réseau");}
- finally{mailBusy=false;mailerRefresh.disabled=false;mailerTest.disabled=!mailReady;}
-}
-mailerTest.addEventListener("click",()=>{void sendHtmlTest();});
-mailerRefresh.addEventListener("click",()=>{void checkMail();});
 
+const MAIL_API="https://yejzxsrmqudhvaikaitb.supabase.co/functions/v1/wkc-radar-mail";
+const reportButton=document.getElementById("receiveReport");
+const reportFeedback=document.getElementById("reportFeedback");
+let reportReady=false,reportBusy=false,settingsDirty=false;
+async function checkReportAvailability(){
+ if(!loaded||reportBusy)return;
+ reportButton.disabled=true;
+ try{
+  const key=getStoredKey();if(!key){lock();return;}
+  const response=await fetch(MAIL_API,{method:"GET",cache:"no-store",headers:{"x-wkc-admin-key":key}});
+  const data=await response.json().catch(()=>({}));
+  if(response.status===401){lock();return;}
+  if(!response.ok)throw Error(data.error||"Service de rapports indisponible.");
+  reportReady=!!data.ready;
+  if(!reportReady)reportFeedback.textContent="Envoi indisponible : la connexion à la messagerie n'est pas configurée.";
+  else if(reportFeedback.textContent.startsWith("Envoi indisponible"))reportFeedback.textContent="";
+ }catch(err){reportReady=false;reportFeedback.textContent="Impossible de vérifier l'envoi des rapports."; }
+ finally{reportButton.disabled=!loaded||!reportReady||reportBusy;}
+}
+async function receiveReport(){
+ if(!loaded||!reportReady||reportBusy||busy)return;
+ if(settingsDirty){
+  reportFeedback.textContent="Enregistrez d'abord vos modifications avec « Appliquer mes choix ».";
+  return;
+ }
+ const key=getStoredKey();if(!key){lock();return;}
+ reportBusy=true;reportButton.disabled=true;
+ reportFeedback.textContent="Envoi du rapport aux adresses enregistrées…";
+ try{
+  const response=await fetch(MAIL_API,{
+   method:"POST",cache:"no-store",
+   headers:{"Content-Type":"application/json","x-wkc-admin-key":key},
+   body:JSON.stringify({action:"send_html_manual"})
+  });
+  const data=await response.json().catch(()=>({}));
+  if(response.status===401){lock();return;}
+  if(!response.ok||data.sent!==true)throw Error(data.error||"L'envoi n'a pas pu être confirmé.");
+  reportFeedback.textContent="Rapport envoyé aux "+data.recipients+" adresse(s) enregistrée(s).";
+ }catch(err){reportFeedback.textContent="Rapport non confirmé : "+(err.message||"erreur de connexion");}
+ finally{reportBusy=false;reportButton.disabled=!loaded||!reportReady;}
+}
+reportButton.addEventListener("click",()=>{void receiveReport();});
 
 const tracker=document.getElementById("tracking"),trackerList=document.getElementById("competitionList");
 const trackerCounts=document.getElementById("trackingCounts"),trackerStatus=document.getElementById("trackingStatus");
@@ -362,7 +358,7 @@ const confirmButton=document.getElementById("confirmAdmin"),recipientInput=docum
 function getStoredKey(){try{return sessionStorage.getItem(keyStore)||"";}catch(e){return "";}}
 function setStoredKey(key){try{sessionStorage.setItem(keyStore,key);}catch(e){}}
 function clearStoredKey(){try{sessionStorage.removeItem(keyStore);}catch(e){}}
-function markDirty(){status.textContent="Modifications non enregistrées.";}
+function markDirty(){settingsDirty=true;status.textContent="Modifications non enregistrées.";}
 function renderCheckboxes(key){
  const group=document.getElementById(key);
  for(const option of options[key]){
@@ -403,6 +399,7 @@ function unpack(data){
  if(!["0","1","3","7","14","30"].includes(state.recapDays))throw Error("Fréquence enregistrée incorrecte.");
  if(!Array.isArray(data.recipient_emails)||!data.recipient_emails.length)throw Error("Destinataires enregistrés invalides.");
  recipientList=data.recipient_emails.slice();
+ settingsDirty=false;
  updateInputs();
  updateEvents(data);
 }
@@ -428,7 +425,7 @@ async function loadSettings(key,initial=false){
   document.body.removeAttribute("data-locked");
   apply.disabled=false;
   status.textContent="Configuration actuelle chargée.";
-  void checkMail();
+  void checkReportAvailability();
   if(dialog.open)dialog.close();
   codeInput.value="";feedback.textContent="";
  }catch(err){
@@ -441,7 +438,7 @@ function buildSettings(){
  alerts:state.alerts,rappels:state.reminders,recap_jours:Number(state.recapDays)};
 }
 function lock(){
- clearStoredKey();loaded=false;apply.disabled=true;
+ clearStoredKey();loaded=false;apply.disabled=true;reportButton.disabled=true;reportReady=false;
  document.body.setAttribute("data-locked","true");
  if(!dialog.open)dialog.showModal();
  feedback.textContent="Votre session a expiré. Entrez à nouveau le code.";
