@@ -88,6 +88,38 @@
 .radar-page .radar-recipient textarea:focus-visible{outline:2px solid #d99c2c;outline-offset:1px}
 .radar-admin-dialog .radar-admin-actions .radar-confirm{flex:1}
 .radar-admin-dialog .radar-admin-feedback{line-height:1.4}
+
+/* Suivi individuel des compétitions : panneau discret, replié par défaut. */
+.radar-page .radar-tracker{margin:10px 0 0;border:1px solid #e3e7ee;background:#fff;border-radius:15px;box-shadow:0 5px 18px #26364a0d;overflow:hidden}
+.radar-page .radar-tracker>summary{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;list-style:none;font-size:13px;font-weight:760;color:#203247;outline-offset:-3px}
+.radar-page .radar-tracker>summary::-webkit-details-marker{display:none}
+.radar-page .tracker-main-icon{display:grid;place-items:center;width:29px;height:29px;flex-shrink:0;background:#fff5e6;border-radius:9px;color:#d28b0b}
+.radar-page .tracker-main-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.radar-page .tracker-counter{margin-left:auto;font-size:10px;color:#677687;font-weight:620}
+.radar-page .tracker-caret{font-size:15px;color:#718093;transform:rotate(0deg);transition:transform .15s}
+.radar-page .radar-tracker[open] .tracker-caret{transform:rotate(180deg)}
+.radar-page .tracker-panel{border-top:1px solid #e9edf2;padding:13px 17px 17px}
+.radar-page .tracker-explain{font-size:11px;color:#6b7989;margin:0 0 10px;line-height:1.5}
+.radar-page .tracker-filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.radar-page .tracker-filter{border:1px solid #dce2e9;color:#3a495c;background:#fff;padding:7px 12px;font-size:11px;font-weight:650;border-radius:999px;cursor:pointer;line-height:1.3}
+.radar-page .tracker-filter[aria-pressed="true"]{background:#17263a;color:#fff;border-color:#17263a}
+.radar-page .tracker-list{display:grid;gap:8px}
+.radar-page .tracker-event{border:1px solid #e1e6ed;border-radius:11px;padding:12px 13px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.radar-page .tracker-event[data-focused="true"]{border-color:#e4a22d;background:#fffaf1;box-shadow:0 0 0 2px #f0bd5830}
+.radar-page .tracker-event-title{font-size:12px;font-weight:750;line-height:1.4;margin:0 0 5px;letter-spacing:0}
+.radar-page .tracker-event-meta{font-size:10px;line-height:1.5;color:#738091;margin:0 0 5px}
+.radar-page .tracker-event-source{font-size:10px;color:#b07300;text-decoration:underline;text-underline-offset:3px}
+.radar-page .tracker-event-choice{font-size:10px;color:#667688;margin:5px 0 0}
+.radar-page .tracker-event-actions{flex-shrink:0;display:flex;gap:7px;align-items:center}
+.radar-page .tracker-action{padding:8px 11px;min-height:31px;border-radius:8px;border:1px solid #d7dfe8;color:#384c61;background:#fff;font-size:11px;font-weight:720;cursor:pointer}
+.radar-page .tracker-action[data-kind="follow"]{border-color:#e6a52f;background:#fff6e8;color:#96600c}
+.radar-page .tracker-action[data-kind="follow"][aria-pressed="true"]{border-color:#dba022;background:#e8a322;color:#fff}
+.radar-page .tracker-action[data-kind="ignore"][aria-pressed="true"]{border-color:#5d6c7b;background:#5d6c7b;color:#fff}
+.radar-page .tracker-action:disabled{opacity:.55;cursor:wait}
+.radar-page .tracker-empty{font-size:12px;color:#82909f;margin:13px 0}
+.radar-page .tracker-status{font-size:11px;color:#516d85;min-height:0;margin:8px 0 0}
+@media(max-width:650px){.radar-page .tracker-event{align-items:stretch;flex-direction:column;gap:9px}.radar-page .tracker-event-actions{width:100%}.radar-page .tracker-event-actions .tracker-action{flex:1}.radar-page .tracker-counter{font-size:9px}}
+
 </style>
 </head>
 <body class="radar-page" data-locked="true">
@@ -131,7 +163,21 @@
 </section>
 <button id="apply" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Appliquer mes choix</button>
 <p class="status" id="status" role="status" aria-live="polite"></p>
-</div></main>
+</div>
+<details id="tracking" class="radar-tracker">
+<summary><span class="tracker-main-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/><circle cx="12" cy="12" r="9"/></svg></span><span>Compétitions à suivre</span><span class="tracker-counter" id="trackingCounts">Chargement…</span><span class="tracker-caret" aria-hidden="true">⌄</span></summary>
+<div class="tracker-panel">
+<p class="tracker-explain">Sélectionnez les compétitions du club. Seules celles marquées « Suivre » déclencheront des rappels. Les nouvelles restent dans le récapitulatif.</p>
+<div id="trackingFilters" class="tracker-filters" role="group" aria-label="Afficher les compétitions">
+<button type="button" class="tracker-filter" data-status="all" aria-pressed="true">Toutes</button>
+<button type="button" class="tracker-filter" data-status="discover" aria-pressed="false">À décider</button>
+<button type="button" class="tracker-filter" data-status="follow" aria-pressed="false">Suivies</button>
+<button type="button" class="tracker-filter" data-status="ignore" aria-pressed="false">Ignorées</button>
+</div>
+<div id="competitionList" class="tracker-list" aria-live="polite"><p class="tracker-empty">Les compétitions seront chargées après connexion.</p></div>
+<p id="trackingStatus" class="tracker-status" role="status" aria-live="polite"></p>
+</div></details>
+</main>
 <dialog class="radar-admin-dialog" id="adminDialog" aria-labelledby="adminTitle" aria-modal="true">
 <form id="adminForm">
 <div class="radar-admin-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
@@ -172,6 +218,79 @@ const defaults={
 let state=JSON.parse(JSON.stringify(defaults));
 let recipientList=[];
 let loaded=false, busy=false;
+
+const tracker=document.getElementById("tracking"),trackerList=document.getElementById("competitionList");
+const trackerCounts=document.getElementById("trackingCounts"),trackerStatus=document.getElementById("trackingStatus");
+const trackerFilters=document.getElementById("trackingFilters");
+const linkParams=new URLSearchParams(location.search);
+const requestedEvent=linkParams.get("competition")||"";
+const requestedAction=["follow","ignore"].includes(linkParams.get("action"))?linkParams.get("action"):"";
+let eventItems=[],trackerView="all",eventRequestBusy=false;
+function trackerDate(iso){
+  const d=new Date(iso+"T12:00:00");return Number.isNaN(d.getTime())?iso:d.toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+}
+function renderTracker(){
+  const counts={discover:0,follow:0,ignore:0};
+  eventItems.forEach(event=>{if(Object.prototype.hasOwnProperty.call(counts,event.status))counts[event.status]++;});
+  trackerCounts.textContent=counts.follow+" suivie"+(counts.follow>1?"s":"")+" · "+counts.discover+" à décider";
+  trackerFilters.querySelectorAll("button[data-status]").forEach(btn=>btn.setAttribute("aria-pressed",String(btn.dataset.status===trackerView)));
+  trackerList.replaceChildren();
+  const visible=eventItems.filter(event=>trackerView==="all"||event.status===trackerView);
+  if(!visible.length){const msg=document.createElement("p");msg.className="tracker-empty";msg.textContent=eventItems.length?"Aucune compétition dans cette catégorie.":"Aucune compétition référencée pour le moment.";trackerList.append(msg);return;}
+  for(const ev of visible){
+    const row=document.createElement("article");row.className="tracker-event";row.id="comp-"+ev.id;row.dataset.focused=String(ev.id===requestedEvent);
+    const left=document.createElement("div"),title=document.createElement("h3"),meta=document.createElement("p");
+    title.className="tracker-event-title";title.textContent=ev.title;
+    meta.className="tracker-event-meta";meta.textContent=trackerDate(ev.event_date)+" · "+(ev.location||"Lieu non précisé")+(ev.registration_deadline?" · Clôture : "+trackerDate(ev.registration_deadline):"");
+    left.append(title,meta);
+    const source=document.createElement("a");source.className="tracker-event-source";source.href=ev.source_url;source.target="_blank";source.rel="noopener noreferrer";source.textContent="Fiche officielle";left.append(source);
+    const choices=document.createElement("div");choices.className="tracker-event-actions";
+    for(const [value,text] of [["follow","Suivre"],["ignore","Ignorer"]]){
+      const button=document.createElement("button");button.type="button";button.className="tracker-action";button.dataset.kind=value;button.dataset.eventId=ev.id;button.dataset.statusValue=value;
+      button.setAttribute("aria-pressed",String(ev.status===value));button.textContent=text;button.disabled=eventRequestBusy;
+      if(ev.id===requestedEvent&&requestedAction===value&&ev.status!==value){button.style.outline="2px solid #e7a116";button.style.outlineOffset="2px";}
+      choices.append(button);
+    }
+    if(ev.status!=="discover"){
+      const reset=document.createElement("button");reset.type="button";reset.className="tracker-action";reset.dataset.eventId=ev.id;reset.dataset.statusValue="discover";reset.textContent="Réinitialiser";reset.disabled=eventRequestBusy;choices.append(reset);
+    }
+    row.append(left,choices);trackerList.append(row);
+  }
+}
+async function changeEventStatus(eventId,newStatus){
+ if(eventRequestBusy||!loaded)return;
+ const key=getStoredKey();if(!key){lock();return;}
+ eventRequestBusy=true;trackerStatus.textContent="Enregistrement…";renderTracker();
+ try{
+  const response=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","x-wkc-admin-key":key},cache:"no-store",body:JSON.stringify({event_action:{id:eventId,status:newStatus}})});
+  const body=await response.json().catch(()=>({}));
+  if(response.status===401){lock();return;}
+  if(!response.ok||body.saved!==true||body.event?.id!==eventId)throw Error(body.error||"Modification impossible");
+  const event=eventItems.find(item=>item.id===eventId);if(event)event.status=body.event.status;
+  trackerStatus.textContent=newStatus==="follow"?"Cette compétition est suivie : les rappels sont activés.":newStatus==="ignore"?"Cette compétition est ignorée : plus de rappels.":"Compétition remise dans la liste des événements à décider.";
+ }catch(err){trackerStatus.textContent="Impossible de modifier le suivi : "+(err.message||"erreur réseau");}
+ finally{eventRequestBusy=false;renderTracker();}
+}
+trackerFilters.addEventListener("click",event=>{
+ const button=event.target.closest("button[data-status]");if(!button)return;
+ trackerView=button.dataset.status;renderTracker();
+});
+trackerList.addEventListener("click",event=>{
+ const button=event.target.closest("button[data-status-value]");
+ if(!button)return;void changeEventStatus(button.dataset.eventId,button.dataset.statusValue);
+});
+function updateEvents(data){
+ if(!Array.isArray(data.events))return;
+ eventItems=data.events.filter(ev=>ev&&typeof ev.id==="string"&&typeof ev.title==="string"&&typeof ev.event_date==="string"&&typeof ev.source_url==="string"&&["discover","follow","ignore"].includes(ev.status));
+ renderTracker();
+ if(requestedEvent){
+  trackerView="all";tracker.open=true;renderTracker();
+  const selected=eventItems.find(ev=>ev.id===requestedEvent);
+  trackerStatus.textContent=selected?(requestedAction?"Choisissez « "+(requestedAction==="follow"?"Suivre":"Ignorer")+" » pour confirmer ce choix.":"Choisissez Suivre ou Ignorer pour cette compétition."):"Cette compétition n'est pas dans la liste actuelle.";
+  if(selected){setTimeout(()=>document.getElementById("comp-"+requestedEvent)?.scrollIntoView({behavior:"smooth",block:"center"}),160);}
+ }
+}
+
 const status=document.getElementById("status"),apply=document.getElementById("apply");
 const dialog=document.getElementById("adminDialog"),form=document.getElementById("adminForm");
 const codeInput=document.getElementById("adminCode"),feedback=document.getElementById("adminFeedback");
@@ -221,6 +340,7 @@ function unpack(data){
  if(!Array.isArray(data.recipient_emails)||!data.recipient_emails.length)throw Error("Destinataires enregistrés invalides.");
  recipientList=data.recipient_emails.slice();
  updateInputs();
+ updateEvents(data);
 }
 function validateRecipients(){
  const emails=recipientInput.value.split(/[,;\n]+/).map(v=>v.trim().toLowerCase()).filter(Boolean);
