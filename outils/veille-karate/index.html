@@ -60,6 +60,24 @@
 .radar-page .extra-grid{grid-template-columns:1fr;gap:11px}
 }
 @media(max-width:430px){.radar-page .radar-hero h1{font-size:29px}.radar-page .radar-eyebrow{font-size:10px}.radar-page .radar-card .pill span{font-size:11px;padding:7px 10px}.radar-page .radar-card .sub{font-size:10px}}
+
+/* Fenêtre de validation, visible uniquement au premier enregistrement de la session. */
+.radar-page .primary:disabled{opacity:.55;cursor:wait}
+.radar-admin-dialog{width:min(420px,calc(100% - 36px));max-width:420px;max-height:calc(100dvh - 30px);overflow:auto;border:1px solid #e3e8ee;border-radius:20px;box-shadow:0 28px 75px #081e3550;padding:27px 27px 25px;background:#fff;color:#17263a}
+.radar-admin-dialog::backdrop{background:#111e2eb8;backdrop-filter:blur(3px)}
+.radar-admin-dialog .radar-admin-icon{height:42px;width:42px;border-radius:12px;background:#fff5e4;color:#d98d08;display:grid;place-items:center;margin-bottom:14px}
+.radar-admin-dialog .radar-admin-icon svg{height:22px;width:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linejoin:round;stroke-linecap:round}
+.radar-admin-dialog h2{font-size:21px;line-height:1.2;letter-spacing:-.025em;font-weight:750;margin:0 0 9px}
+.radar-admin-dialog .radar-admin-help{font-size:12px;line-height:1.6;color:#67778b;margin:0 0 19px}
+.radar-admin-dialog label{display:block;font-size:12px;font-weight:700;margin-bottom:8px}
+.radar-admin-dialog input{width:100%;border:1px solid #d4dce5;border-radius:10px;padding:12px 14px;min-height:43px;background:#fff;font-size:13px;outline:none}
+.radar-admin-dialog input:focus{border-color:#e7a116;box-shadow:0 0 0 3px #e7a11624}
+.radar-admin-dialog .radar-admin-feedback{min-height:18px;font-size:12px;color:#ad5218;margin:9px 0}
+.radar-admin-dialog .radar-admin-actions{display:flex;gap:10px}
+.radar-admin-dialog .radar-admin-actions button{border-radius:9px;padding:11px 15px;font-size:12px;font-weight:750;flex:1;cursor:pointer}
+.radar-admin-dialog .radar-cancel{background:#fff;border:1px solid #d8e0e8;color:#39495d}
+.radar-admin-dialog .radar-confirm{background:#17263a;color:#fff;border:1px solid #17263a}
+.radar-admin-dialog .radar-confirm:disabled{opacity:.6;cursor:wait}
 </style>
 </head>
 <body class="radar-page">
@@ -93,15 +111,30 @@
 <div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M7 12h10M11 17h2"/></svg> Types de compétitions</p><div id="types" class="pills"></div></div>
 <div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h12l-2-3V9a4 4 0 0 0-8 0v5l-2 3Zm4 3h4"/></svg> Alertes à recevoir</p><div id="alerts" class="pills"></div></div>
 <div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Rappels avant clôture</p><div id="reminders" class="pills"></div></div>
-<div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></svg> Récapitulatif</p><div id="recap" class="pills" role="radiogroup" aria-label="Fréquence du récapitulatif"></div><p class="extra-note">Récapitulatif des compétitions sur les 90 prochains jours.</p></div>
+<div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></svg> Récapitulatif</p><div id="recap" class="pills" role="radiogroup" aria-label="Fréquence du récapitulatif"></div><p class="extra-note">Veille continue, récapitulatif des 90 jours à venir.</p></div>
 </div>
 <button id="apply" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Appliquer mes choix</button>
 <p class="status" id="status" role="status" aria-live="polite"></p>
 </div></main>
+<dialog class="radar-admin-dialog" id="adminDialog" aria-labelledby="adminTitle">
+<form id="adminForm">
+<div class="radar-admin-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+<h2 id="adminTitle">Enregistrer les réglages</h2>
+<p class="radar-admin-help">Saisissez votre code administrateur pour enregistrer directement les paramètres. Aucun e-mail n'est nécessaire.</p>
+<label for="adminCode">Code administrateur</label>
+<input id="adminCode" name="adminCode" type="password" required autocomplete="off" spellcheck="false" placeholder="WKC-…" aria-describedby="adminFeedback">
+<p class="radar-admin-feedback" id="adminFeedback" role="status" aria-live="polite"></p>
+<div class="radar-admin-actions">
+<button type="button" id="cancelAdmin" class="radar-cancel">Annuler</button>
+<button type="submit" class="radar-confirm" id="confirmAdmin">Enregistrer</button>
+</div>
+</form>
+</dialog>
 <footer class="radar-footer">Wattignies Karaté Club · Bot de Pierre Charlier – Orbivia</footer>
 <script>
 (function(){
 "use strict";
+const API="https://yejzxsrmqudhvaikaitb.supabase.co/functions/v1/wkc-radar-config";
 const options={
  zones:["Département du Nord","Département du Pas-de-Calais","Région Hauts-de-France","National","International"],
  ages:["Poussins","Pupilles","Benjamins","Minimes","Cadets","Juniors","Seniors","Vétérans"],
@@ -114,72 +147,119 @@ const labels={
  "Département du Nord":"Nord","Département du Pas-de-Calais":"Pas-de-Calais",
  "Région Hauts-de-France":"Hauts-de-France",
  "Date ou lieu modifié":"Modification","Date limite d'inscription":"Date limite",
- "Date limite non publiée":"Limite inconnue",
- "Nouvelle compétition":"Nouveauté"
+ "Date limite non publiée":"Limite inconnue","Nouvelle compétition":"Nouveauté"
 };
 const defaults={
  zones:["Département du Nord","Région Hauts-de-France"],
  ages:["Pupilles","Benjamins","Minimes","Cadets","Juniors","Seniors"],
  disciplines:["Kumité","Kata"],
- types:["Coupe","Championnat"],
- alerts:options.alerts.slice(),
- reminders:options.reminders.slice(),
- recapDays:"7"
+ types:["Coupe","Championnat"],alerts:options.alerts.slice(),reminders:options.reminders.slice(),recapDays:"7"
 };
 let state=JSON.parse(JSON.stringify(defaults));
-try{
-const stored=JSON.parse(localStorage.getItem("wkc-radar-v2")||"null");
-if(stored&&typeof stored==="object"){
-for(const k of Object.keys(options)){if(Array.isArray(stored[k]))state[k]=stored[k].filter(x=>options[k].includes(x));}
-if(["0","1","3","7","14","30"].includes(String(stored.recapDays)))state.recapDays=String(stored.recapDays);
-}else{
- const old=JSON.parse(localStorage.getItem("wkc-radar-v1")||"null");
- if(old&&typeof old==="object"){
-  for(const k of Object.keys(options)){const arr=k==="reminders"?(old.reminders||old.reminderChoices):old[k];if(Array.isArray(arr))state[k]=arr.filter(x=>options[k].includes(x));}
-  if(Array.isArray(old.digest)&&!old.digest.includes("Résumé du lundi"))state.recapDays="0";
+let loaded=false, busy=false;
+const status=document.getElementById("status"),apply=document.getElementById("apply");
+const dialog=document.getElementById("adminDialog"),form=document.getElementById("adminForm");
+const codeInput=document.getElementById("adminCode"),feedback=document.getElementById("adminFeedback");
+const confirmButton=document.getElementById("confirmAdmin");
+const keyStore="wkc-radar-admin-key";
+function renderCheckboxes(key){
+ const group=document.getElementById(key);
+ for(const option of options[key]){
+  const label=document.createElement("label");label.className="pill";
+  const input=document.createElement("input");input.type="checkbox";input.value=option;input.checked=state[key].includes(option);
+  input.setAttribute("aria-label",option);
+  const span=document.createElement("span");span.textContent=labels[option]||option;
+  input.addEventListener("change",()=>{state[key]=options[key].filter(v=>v===option?input.checked:state[key].includes(v));status.textContent="Modifications non enregistrées.";});
+  label.append(input,span);group.appendChild(label);
  }
 }
-}catch(e){}
-function persist(){try{localStorage.setItem("wkc-radar-v2",JSON.stringify(state));}catch(e){}}
-function checkboxChoices(key){
-const target=document.getElementById(key);
-for(const choice of options[key]){
- const label=document.createElement("label");label.className="pill";
- const input=document.createElement("input");input.type="checkbox";input.checked=state[key].includes(choice);input.setAttribute("aria-label",choice);
- const span=document.createElement("span");span.textContent=labels[choice]||choice;
- input.addEventListener("change",()=>{
-  state[key]=options[key].filter(x=>x===choice?input.checked:state[key].includes(x));
-  persist();
- });
- label.append(input,span);target.append(label);
-}
-}
-Object.keys(options).forEach(checkboxChoices);
-const recapOptions=[["0","Aucun"],["1","1 jour"],["3","3 jours"],["7","7 jours"],["14","14 jours"],["30","30 jours"]];
+Object.keys(options).forEach(renderCheckboxes);
 const recap=document.getElementById("recap");
-recapOptions.forEach(([days,text])=>{
+[["0","Aucun"],["1","1 jour"],["3","3 jours"],["7","7 jours"],["14","14 jours"],["30","30 jours"]].forEach(([days,text])=>{
  const label=document.createElement("label");label.className="pill";
  const input=document.createElement("input");input.type="radio";input.name="recapDays";input.value=days;input.checked=state.recapDays===days;
- input.setAttribute("aria-label",days==="0"?"Désactiver le récapitulatif":"Récapitulatif tous les "+days+" jours");
+ input.setAttribute("aria-label",days==="0"?"Aucun récapitulatif":"Récapitulatif tous les "+days+" jours");
  const span=document.createElement("span");span.textContent=text;
- input.addEventListener("change",()=>{state.recapDays=days;persist();});
- label.append(input,span);recap.append(label);
+ input.addEventListener("change",()=>{state.recapDays=days;status.textContent="Modifications non enregistrées.";});
+ label.append(input,span);recap.appendChild(label);
 });
-document.getElementById("apply").addEventListener("click",()=>{
-const info=document.getElementById("status");
-if(!state.zones.length||!state.ages.length||!state.disciplines.length){info.textContent="Sélectionnez au moins une zone, une catégorie et une discipline.";return;}
-const config={
- version:2,clubs:["Wattignies Karaté Club"],zones:state.zones,categories:state.ages,
- disciplines:state.disciplines,types:state.types,alerts:state.alerts,
- rappels:state.reminders,recap_jours:Number(state.recapDays),
- recap_lundi:state.recapDays!=="0"
-};
-const payload="WKC_CONFIG_V1\n"+JSON.stringify(config,null,2)+"\nFIN_WKC_CONFIG_V1";
-const page="https://orbivia.fr/outils/veille-karate/";
-const message="Bonjour,\n\nMerci d'appliquer cette configuration à la veille du Wattignies Karaté Club.\n\n"+payload+"\n\nPage de configuration : "+page+"\n\nMessage généré depuis le Radar des tatamis.";
-window.location.href="mailto:pierre.charlier@orbivia.fr?subject="+encodeURIComponent("[WKC-CONFIG] Mise à jour des filtres")+"&body="+encodeURIComponent(message);
-info.textContent="Le brouillon est prêt. Envoyez-le depuis votre compte Orbivia pour appliquer les choix à la veille.";
+function updateInputs(){
+ for(const key of Object.keys(options)){
+  document.querySelectorAll("#"+key+" input").forEach(input=>{input.checked=state[key].includes(input.value);});
+ }
+ document.querySelectorAll("#recap input").forEach(input=>{input.checked=input.value===state.recapDays;});
+}
+function unpack(saved){
+ if(!saved || typeof saved!=="object")throw new Error("Réglages reçus invalides.");
+ for(const [key,list] of Object.entries(options)){
+  const incoming=saved[key==="ages"?"categories":key==="reminders"?"rappels":key];
+  if(!Array.isArray(incoming)||incoming.some(v=>!list.includes(v)))throw new Error("Réglages reçus incomplets.");
+  state[key]=list.filter(v=>incoming.includes(v));
+ }
+ state.recapDays=String(saved.recap_jours);
+ if(!["0","1","3","7","14","30"].includes(state.recapDays))throw new Error("Fréquence non reconnue.");
+ updateInputs();
+}
+async function loadSettings(){
+ apply.disabled=true;
+ status.textContent="Chargement de la configuration enregistrée…";
+ try{
+  const response=await fetch(API,{method:"GET",cache:"no-store"});
+  if(!response.ok)throw new Error("Erreur serveur "+response.status);
+  const data=await response.json();
+  unpack(data.settings);
+  loaded=true;status.textContent="Configuration actuelle chargée.";
+ }catch(err){
+  console.error("Radar WKC",err);
+  status.textContent="Impossible de charger les réglages. Actualisez la page pour réessayer.";
+ }finally{apply.disabled=!loaded;}
+}
+function buildSettings(){
+ return {zones:state.zones,categories:state.ages,disciplines:state.disciplines,types:state.types,
+  alerts:state.alerts,rappels:state.reminders,recap_jours:Number(state.recapDays)};
+}
+async function save(key){
+ if(!loaded||busy)return;
+ busy=true;apply.disabled=true;confirmButton.disabled=true;feedback.textContent="";
+ status.textContent="Enregistrement sécurisé en cours…";
+ try{
+  const response=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","x-wkc-admin-key":key},
+   cache:"no-store",body:JSON.stringify({settings:buildSettings()})});
+  const data=await response.json().catch(()=>({}));
+  if(response.status===401){
+   try{sessionStorage.removeItem(keyStore);}catch(e){}
+   if(!dialog.open)dialog.showModal();
+   feedback.textContent="Code incorrect. Vérifiez le code administrateur.";
+   status.textContent="Enregistrement refusé : code incorrect.";
+   return;
+  }
+  if(!response.ok||data.saved!==true)throw new Error(data.error||"Enregistrement impossible");
+  unpack(data.settings);
+  try{sessionStorage.setItem(keyStore,key);}catch(e){}
+  if(dialog.open)dialog.close();
+  codeInput.value="";
+  status.textContent="✓ Paramètres enregistrés. La prochaine veille utilisera ces choix.";
+ }catch(err){
+  status.textContent="Impossible d'enregistrer : "+(err.message||"erreur réseau");
+  feedback.textContent="Réessayez ou vérifiez votre connexion.";
+ }finally{busy=false;apply.disabled=false;confirmButton.disabled=false;}
+}
+apply.addEventListener("click",()=>{
+ if(!loaded)return;
+ if(!state.zones.length||!state.ages.length||!state.disciplines.length){
+  status.textContent="Choisissez au moins une zone, une catégorie et une discipline.";return;
+ }
+ let key="";try{key=sessionStorage.getItem(keyStore)||"";}catch(e){}
+ if(key){void save(key);}else{feedback.textContent="";dialog.showModal();codeInput.focus();}
 });
+form.addEventListener("submit",event=>{
+ event.preventDefault();
+ const key=codeInput.value.trim();
+ if(!key){feedback.textContent="Veuillez saisir votre code.";return;}
+ void save(key);
+});
+document.getElementById("cancelAdmin").addEventListener("click",()=>{if(!busy)dialog.close();});
+void loadSettings();
 })();
 </script>
 </body></html>
