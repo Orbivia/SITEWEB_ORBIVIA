@@ -14,22 +14,22 @@
 :root{--radar-ink:#17263a;--radar-gold:#e7a116;--radar-line:#e8eaf0}
 .radar-page{background:#f7f8fb;color:#17263a}
 .radar-page .wrap{width:min(1080px,calc(100% - 48px));margin-inline:auto}
-.radar-page .radar-hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(95deg,#fffdfa 2%,#fbf6ef 63%,#e3d5c6 100%);padding:26px 0 64px}
+.radar-page .radar-hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(95deg,#fffdfa 2%,#fbf6ef 63%,#e3d5c6 100%);padding:17px 0 43px}
 .radar-page .radar-hero:before{content:"";position:absolute;z-index:-2;right:0;top:-33%;height:175%;width:45%;background-image:url("https://images.unsplash.com/photo-1656653121475-e33829581294?auto=format&fit=crop&w=1100&q=82");background-size:cover;background-position:52% 55%;opacity:.43;filter:brightness(1.35) contrast(.83) sepia(.1);mask-image:linear-gradient(90deg,transparent,rgba(0,0,0,.55) 40%,#000 72%)}
 .radar-page .radar-hero:after{content:"";position:absolute;z-index:-1;right:18%;top:-180px;width:390px;height:390px;border-radius:50%;border:21px solid #e7a11635;transform:translateX(70%);pointer-events:none}
 .radar-page .radar-eyebrow{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:720;color:#3b4654;margin:0 0 11px}
 .radar-page .radar-eyebrow:before{content:"";display:block;width:3px;height:18px;border-radius:3px;background:var(--radar-gold)}
 .radar-page .radar-hero h1{color:#17263a;font-size:clamp(28px,3.9vw,44px);letter-spacing:-.048em;font-weight:780;margin:0;line-height:1.16}
 .radar-page .radar-hero h1 span{color:#dd9100}
-.radar-page .radar-intro{max-width:570px;font-size:13px;line-height:1.5;color:#59687a;margin:10px 0 0}
-.radar-page .radar-tool{position:relative;margin-top:-38px;margin-bottom:16px}
-.radar-page .radar-card{background:#fff;border:1px solid #e9e9ef;border-radius:20px;box-shadow:0 12px 38px #26364a17;padding:17px 28px 16px}
-.radar-page .radar-card .section{display:grid;grid-template-columns:36px 1fr;gap:13px;padding:13px 0 15px;border-bottom:1px solid var(--radar-line)}
+.radar-page .radar-intro{max-width:570px;font-size:12px;line-height:1.45;color:#59687a;margin:7px 0 0}
+.radar-page .radar-tool{position:relative;margin-top:-28px;margin-bottom:10px}
+.radar-page .radar-card{background:#fff;border:1px solid #e9e9ef;border-radius:20px;box-shadow:0 12px 38px #26364a17;padding:13px 25px 14px}
+.radar-page .radar-card .section{display:grid;grid-template-columns:34px 1fr;gap:11px;padding:10px 0 11px;border-bottom:1px solid var(--radar-line)}
 .radar-page .radar-card .section:first-child{padding-top:0}
 .radar-page .radar-card .iconbox{width:34px;height:34px;display:grid;place-items:center;background:#fff3e0;color:#df910a;border-radius:10px}
 .radar-page .radar-card .iconbox svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;fill:none}
 .radar-page .radar-card h2{font-size:15px;letter-spacing:-.015em;font-weight:750;line-height:1.2;margin:1px 0 4px}
-.radar-page .radar-card .sub{font-size:11px;color:#85909c;line-height:1.4;margin:0 0 10px}
+.radar-page .radar-card .sub{font-size:10px;color:#85909c;line-height:1.3;margin:0 0 8px}
 .radar-page .radar-card .pills{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
 .radar-page .radar-card .pill{cursor:pointer;position:relative;display:inline-flex;user-select:none}
 .radar-page .radar-card .pill input{position:absolute;opacity:0;width:1px;height:1px}
@@ -38,32 +38,26 @@
 .radar-page .radar-card .pill input:checked+span:after{content:"✓";font-weight:900}
 .radar-page .radar-card .pill input:focus-visible+span{outline:3px solid #79a9dc;outline-offset:2px}
 .radar-page .radar-card .pill:hover span{border-color:#dfaa40}
-.radar-page .extra-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px 24px;padding:15px 0 8px;border-bottom:1px solid var(--radar-line)}
-.radar-page .extra-head{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:760;margin:0 0 9px}
+.radar-page .extra-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;padding:12px 0 13px;border-bottom:0}
+.radar-page .extra-head{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:760;margin:0 0 7px}
 .radar-page .extra-head svg{width:16px;height:16px;color:#cf8505;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round}
 .radar-page .extra-note{font-size:10px;color:#7d8997;line-height:1.4;margin:5px 0 0}
-.radar-page .summary{border-radius:10px;background:#fff8e9;color:#27374c;padding:9px 13px;margin:13px 0 10px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:11px;line-height:1.4}
-.radar-page .summary svg{height:17px;width:17px;color:#d88d00;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
-.radar-page .primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:10px 12px;min-height:43px;border-radius:10px;border:0;background:linear-gradient(90deg,#f1ae25,#d78b00);color:#fff;font-size:13px;font-weight:780;cursor:pointer}
+.radar-page .primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:9px 12px;min-height:42px;border-radius:10px;border:0;background:linear-gradient(90deg,#f1ae25,#d78b00);color:#fff;font-size:13px;font-weight:780;cursor:pointer}
 .radar-page .primary svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
 .radar-page .primary:hover{filter:brightness(.97)}
 .radar-page .primary:focus-visible{outline:3px solid #79a9dc;outline-offset:3px}
-.radar-page .footnotes{display:grid;gap:4px;margin:11px 0 0}
-.radar-page .footnote{display:flex;align-items:center;gap:8px;color:#647383;font-size:10px;line-height:1.4}
-.radar-page .footnote svg{width:14px;height:14px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8}
-.radar-page .footnote a{color:#b97600;text-decoration:underline;text-decoration-color:#f0cc80}
 .radar-page .status{min-height:0;margin:8px 0 0;font-size:11px;line-height:1.5;color:#59738b}
-.radar-page .radar-footer{display:block;background:transparent;color:#8a98a5;text-align:center;font-size:10px;padding:0 12px 18px}
+.radar-page .radar-footer{display:block;background:transparent;color:#8a98a5;text-align:center;font-size:10px;padding:0 12px 10px}
 @media(max-width:769px){
 .radar-page .wrap{width:calc(100% - 24px)}
-.radar-page .radar-hero{padding:24px 0 60px}
+.radar-page .radar-hero{padding:20px 0 45px}
 .radar-page .radar-hero:before{width:70%;opacity:.25}
 .radar-page .radar-intro{max-width:370px}
-.radar-page .radar-card{padding:16px;border-radius:16px}
-.radar-page .radar-card .section{grid-template-columns:30px 1fr;gap:9px;padding:12px 0}
+.radar-page .radar-card{padding:13px;border-radius:16px}
+.radar-page .radar-card .section{grid-template-columns:30px 1fr;gap:9px;padding:10px 0}
 .radar-page .radar-card .iconbox{width:29px;height:29px}
 .radar-page .radar-card .iconbox svg{width:17px;height:17px}
-.radar-page .extra-grid{grid-template-columns:1fr;gap:15px}
+.radar-page .extra-grid{grid-template-columns:1fr;gap:11px}
 }
 @media(max-width:430px){.radar-page .radar-hero h1{font-size:29px}.radar-page .radar-eyebrow{font-size:10px}.radar-page .radar-card .pill span{font-size:11px;padding:7px 10px}.radar-page .radar-card .sub{font-size:10px}}
 </style>
@@ -101,13 +95,7 @@
 <div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Rappels avant clôture</p><div id="reminders" class="pills"></div></div>
 <div class="extra-block"><p class="extra-head"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></svg> Récapitulatif</p><div id="recap" class="pills" role="radiogroup" aria-label="Fréquence du récapitulatif"></div><p class="extra-note">Récapitulatif des compétitions sur les 90 prochains jours.</p></div>
 </div>
-<div class="summary"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m7.5 12 3 3 6-6"/></svg><span id="summaryText">2 zones · 6 catégories · 2 disciplines sélectionnées</span></div>
 <button id="apply" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Appliquer mes choix</button>
-<div class="footnotes">
-<div class="footnote"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.2 0l2-2a5 5 0 0 0-7-7l-1.1 1.1M14 11a5 5 0 0 0-7.2 0l-2 2a5 5 0 0 0 7 7l1.1-1.1"/></svg><span>Les e-mails incluent le lien du site : <a href="https://orbivia.fr/outils/veille-karate/">orbivia.fr/outils/veille-karate/</a></span></div>
-<div class="footnote"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></svg><span>Les alertes ne remplacent pas l'inscription sur FFK Competition.</span></div>
-<div class="footnote"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg><span>Le bouton prépare un e-mail : envoyez-le depuis votre messagerie Orbivia pour valider les changements.</span></div>
-</div>
 <p class="status" id="status" role="status" aria-live="polite"></p>
 </div></main>
 <footer class="radar-footer">Wattignies Karaté Club · Bot de Pierre Charlier – Orbivia</footer>
@@ -153,10 +141,6 @@ if(["0","1","3","7","14","30"].includes(String(stored.recapDays)))state.recapDay
 }
 }catch(e){}
 function persist(){try{localStorage.setItem("wkc-radar-v2",JSON.stringify(state));}catch(e){}}
-function showSummary(){
-const noun=(k,s)=>state[k].length+" "+s+(state[k].length>1?"s":"");
-document.getElementById("summaryText").textContent=noun("zones","zone")+" · "+noun("ages","catégorie")+" · "+noun("disciplines","discipline")+" · Récap. "+(state.recapDays==="0"?"désactivé":state.recapDays+" j");
-}
 function checkboxChoices(key){
 const target=document.getElementById(key);
 for(const choice of options[key]){
@@ -165,7 +149,7 @@ for(const choice of options[key]){
  const span=document.createElement("span");span.textContent=labels[choice]||choice;
  input.addEventListener("change",()=>{
   state[key]=options[key].filter(x=>x===choice?input.checked:state[key].includes(x));
-  persist();showSummary();
+  persist();
  });
  label.append(input,span);target.append(label);
 }
@@ -178,10 +162,9 @@ recapOptions.forEach(([days,text])=>{
  const input=document.createElement("input");input.type="radio";input.name="recapDays";input.value=days;input.checked=state.recapDays===days;
  input.setAttribute("aria-label",days==="0"?"Désactiver le récapitulatif":"Récapitulatif tous les "+days+" jours");
  const span=document.createElement("span");span.textContent=text;
- input.addEventListener("change",()=>{state.recapDays=days;persist();showSummary();});
+ input.addEventListener("change",()=>{state.recapDays=days;persist();});
  label.append(input,span);recap.append(label);
 });
-showSummary();
 document.getElementById("apply").addEventListener("click",()=>{
 const info=document.getElementById("status");
 if(!state.zones.length||!state.ages.length||!state.disciplines.length){info.textContent="Sélectionnez au moins une zone, une catégorie et une discipline.";return;}
